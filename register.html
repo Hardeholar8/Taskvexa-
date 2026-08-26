@@ -12,16 +12,24 @@
   <main>
     <h1>Create TaskVexa Account</h1>
 
+    <div id="message"></div>
+
     <form id="registerForm">
 
       <label>Full Name</label>
-      <input type="text" id="fullName" required>
+      <input type="text" id="fullName" autocomplete="name" required>
 
       <label>Email</label>
-      <input type="email" id="email" required>
+      <input type="email" id="email" autocomplete="email" required>
 
       <label>Password</label>
-      <input type="password" id="password" minlength="6" required>
+      <input
+        type="password"
+        id="password"
+        autocomplete="new-password"
+        minlength="6"
+        required
+      >
 
       <label>Account Type</label>
       <select id="accountType" required>
@@ -30,19 +38,36 @@
         <option value="promoter">Promoter</option>
       </select>
 
-      <button type="submit">Create Account</button>
+      <button type="submit" id="registerButton">
+        Create Account
+      </button>
 
     </form>
+
+    <div id="successBox" style="display:none;">
+      <h2>Account Created!</h2>
+      <p>
+        Your account has been created successfully.
+        Please check your email and click the confirmation link
+        before logging in.
+      </p>
+
+      <button onclick="window.location.href='login.html'">
+        Go to Login
+      </button>
+    </div>
 
     <p>
       Already have an account?
       <a href="login.html">Login</a>
     </p>
+
   </main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
+
     const SUPABASE_URL = https://dxtlnrthlpdaobnbazny.supabase.co/rest/v1/
     const SUPABASE_KEY = sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY
 
@@ -52,39 +77,100 @@
     );
 
     const form = document.getElementById("registerForm");
+    const button = document.getElementById("registerButton");
+    const message = document.getElementById("message");
+    const successBox = document.getElementById("successBox");
+
 
     form.addEventListener("submit", async (event) => {
+
       event.preventDefault();
 
-      const name = document.getElementById("fullName").value.trim();
-      const email = document.getElementById("email").value.trim().toLowerCase();
-      const password = document.getElementById("password").value;
-      const accountType = document.getElementById("accountType").value;
+      const name = document
+        .getElementById("fullName")
+        .value
+        .trim();
+
+      const email = document
+        .getElementById("email")
+        .value
+        .trim()
+        .toLowerCase();
+
+      const password = document
+        .getElementById("password")
+        .value;
+
+      const accountType = document
+        .getElementById("accountType")
+        .value;
+
 
       if (!name || !email || !password || !accountType) {
-        alert("Please complete all fields.");
+        message.textContent = "Please complete all fields.";
         return;
       }
 
-      const { data, error } = await supabaseClient.auth.signUp({
-        email: email,
-        password: password,
-        options: {
-          data: {
-            full_name: name,
-            account_type: accountType
-          }
+
+      if (password.length < 6) {
+        message.textContent =
+          "Password must be at least 6 characters.";
+        return;
+      }
+
+
+      button.disabled = true;
+      button.textContent = "Creating Account...";
+      message.textContent = "";
+
+
+      try {
+
+        const { data, error } =
+          await supabaseClient.auth.signUp({
+
+            email: email,
+
+            password: password,
+
+            options: {
+              emailRedirectTo:
+                window.location.origin + "/login.html",
+
+              data: {
+                full_name: name,
+                account_type: accountType
+              }
+            }
+
+          });
+
+
+        if (error) {
+          message.textContent = error.message;
+          button.disabled = false;
+          button.textContent = "Create Account";
+          return;
         }
-      });
 
-      if (error) {
-        alert(error.message);
-        return;
+
+        form.style.display = "none";
+
+        successBox.style.display = "block";
+
+
+      } catch (error) {
+
+        message.textContent =
+          "Something went wrong. Please try again.";
+
+        button.disabled = false;
+        button.textContent = "Create Account";
+
       }
 
-      alert("Account created successfully. Check your email if verification is required.");
-      window.location.href = "login.html";
     });
+
   </script>
 
 </body>

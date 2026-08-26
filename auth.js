@@ -10,6 +10,7 @@ const supabaseClient = window.supabase.createClient(
 );
 
 
+
 // ===============================
 // REGISTER
 // ===============================
@@ -25,89 +26,71 @@ if (registerForm) {
     const button = document.getElementById("registerButton");
     const message = document.getElementById("message");
 
-    const fullName =
-      document.getElementById("fullName").value.trim();
-
-    const email =
-      document.getElementById("email").value.trim().toLowerCase();
-
-    const password =
-      document.getElementById("password").value;
-
-    const accountType =
-      document.getElementById("accountType").value;
-
+    const fullName = document.getElementById("fullName").value.trim();
+    const email = document.getElementById("email").value.trim().toLowerCase();
+    const password = document.getElementById("password").value;
+    const accountType = document.getElementById("accountType").value;
 
     message.textContent = "";
-
 
     if (!fullName || !email || !password || !accountType) {
       message.textContent = "Please fill in all fields.";
       return;
     }
 
-
-    if (password.length < 6) {
-      message.textContent =
-        "Password must be at least 6 characters.";
-      return;
-    }
-
-
     button.disabled = true;
     button.textContent = "Creating Account...";
 
-
     try {
 
-      const { data, error } =
-        await supabaseClient.auth.signUp({
-
-          email: email,
-
-          password: password,
-
-          options: {
-            emailRedirectTo:
-              window.location.origin + "/login.html",
-
-            data: {
-              full_name: fullName,
-              account_type: accountType
-            }
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            full_name: fullName,
+            account_type: accountType
           }
+        }
+      });
 
-        });
-
+      console.log("Supabase response:", data, error);
 
       if (error) {
-
         message.textContent = error.message;
-
         button.disabled = false;
         button.textContent = "Create Account";
-
         return;
       }
 
+      if (data.user) {
 
-      registerForm.style.display = "none";
+        registerForm.style.display = "none";
 
+        const successBox = document.getElementById("successBox");
 
-      const successBox =
-        document.getElementById("successBox");
+        if (successBox) {
+          successBox.style.display = "block";
+        }
 
-      if (successBox) {
-        successBox.style.display = "block";
+        message.textContent =
+          "Registration successful. Check your email to confirm your account.";
+
+      } else {
+
+        message.textContent =
+          "Registration did not complete. Please try again.";
+
+        button.disabled = false;
+        button.textContent = "Create Account";
       }
-
 
     } catch (error) {
 
-      console.error(error);
+      console.error("Registration error:", error);
 
       message.textContent =
-        "Registration failed. Please try again.";
+        "Connection error: " + error.message;
 
       button.disabled = false;
       button.textContent = "Create Account";
@@ -116,7 +99,6 @@ if (registerForm) {
   });
 
 }
-
 
 
 // ===============================

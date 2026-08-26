@@ -337,7 +337,7 @@ if (!window.supabase) {
 
 
       const button =
-        document.getElementById("forgotButton");
+        document.getElementById("forgotpassword");
 
       const email =
         document.getElementById("email").value.trim().toLowerCase();

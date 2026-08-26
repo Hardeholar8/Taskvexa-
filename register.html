@@ -10,22 +10,36 @@
 <body>
 
 <main>
+
   <h1>Create TaskVexa Account</h1>
 
-  <div id="message" style="margin-bottom:15px;"></div>
+  <div id="message"></div>
 
   <form id="registerForm">
 
-    <label>Full Name</label>
-    <input type="text" id="fullName" required>
+    <label for="fullName">Full Name</label>
+    <input
+      type="text"
+      id="fullName"
+      required
+    >
 
-    <label>Email</label>
-    <input type="email" id="email" required>
+    <label for="email">Email</label>
+    <input
+      type="email"
+      id="email"
+      required
+    >
 
-    <label>Password</label>
-    <input type="password" id="password" minlength="6" required>
+    <label for="password">Password</label>
+    <input
+      type="password"
+      id="password"
+      minlength="6"
+      required
+    >
 
-    <label>Account Type</label>
+    <label for="accountType">Account Type</label>
     <select id="accountType" required>
       <option value="">Select account type</option>
       <option value="worker">Worker</option>
@@ -39,103 +53,34 @@
   </form>
 
   <div id="successBox" style="display:none;">
+
     <h2>Account Created Successfully!</h2>
 
     <p>
-      Please check your email and click the confirmation link.
-      After confirming your email, return here and log in.
+      Your account has been created.
+      Please check your email and confirm your email address.
     </p>
 
-    <button type="button" onclick="location.href='login.html'">
+    <button
+      type="button"
+      onclick="window.location.href='login.html'">
       Go to Login
     </button>
+
   </div>
 
   <p>
     Already have an account?
     <a href="login.html">Login</a>
   </p>
+
 </main>
 
+<!-- Supabase library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <script src="auth.js"></script>
-  
-<script>
-const SUPABASE_URL = "https://dxtlnrthlpdaobnbazny.supabase.co";
-const SUPABASE_KEY = sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY
-
-const supabaseClient = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-const form = document.getElementById("registerForm");
-const button = document.getElementById("registerButton");
-const message = document.getElementById("message");
-const successBox = document.getElementById("successBox");
-
-form.addEventListener("submit", async function(event) {
-
-  event.preventDefault();
-
-  const name = document.getElementById("fullName").value.trim();
-  const email = document.getElementById("email").value.trim().toLowerCase();
-  const password = document.getElementById("password").value;
-  const accountType = document.getElementById("accountType").value;
-
-  message.textContent = "";
-
-  if (!name || !email || !password || !accountType) {
-    message.textContent = "Please fill in all fields.";
-    return;
-  }
-
-  if (password.length < 6) {
-    message.textContent = "Password must be at least 6 characters.";
-    return;
-  }
-
-  button.disabled = true;
-  button.textContent = "Creating Account...";
-
-  try {
-
-    const result = await supabaseClient.auth.signUp({
-      email: email,
-      password: password,
-      options: {
-        emailRedirectTo: window.location.origin + "/login.html",
-        data: {
-          full_name: name,
-          account_type: accountType
-        }
-      }
-    });
-
-    if (result.error) {
-      message.textContent = result.error.message;
-      button.disabled = false;
-      button.textContent = "Create Account";
-      return;
-    }
-
-    form.style.display = "none";
-    successBox.style.display = "block";
-
-  } catch (error) {
-
-    console.error(error);
-
-    message.textContent =
-      "Registration failed. Please check your internet connection and try again.";
-
-    button.disabled = false;
-    button.textContent = "Create Account";
-  }
-
-});
-</script>
+<!-- TaskVexa authentication -->
+<script src="auth.js"></script>
 
 </body>
 </html>

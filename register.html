@@ -21,7 +21,7 @@
       <input type="email" id="email" required>
 
       <label>Password</label>
-      <input type="password" id="password" required>
+      <input type="password" id="password" minlength="6" required>
 
       <label>Account Type</label>
       <select id="accountType" required>
@@ -40,7 +40,52 @@
     </p>
   </main>
 
-  <script src="script.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    const SUPABASE_URL = https://dxtlnrthlpdaobnbazny.supabase.co/rest/v1/
+    const SUPABASE_KEY = sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY
+
+    const supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
+
+    const form = document.getElementById("registerForm");
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const name = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+      const accountType = document.getElementById("accountType").value;
+
+      if (!name || !email || !password || !accountType) {
+        alert("Please complete all fields.");
+        return;
+      }
+
+      const { data, error } = await supabaseClient.auth.signUp({
+        email: email,
+        password: password,
+        options: {
+          data: {
+            full_name: name,
+            account_type: accountType
+          }
+        }
+      });
+
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      alert("Account created successfully. Check your email if verification is required.");
+      window.location.href = "login.html";
+    });
+  </script>
 
 </body>
 </html>

@@ -9,86 +9,54 @@
 
 <body>
 
-  <main>
-    <h1>Welcome Back</h1>
+<main>
 
-    <form id="loginForm">
+  <h1>Welcome Back</h1>
 
-      <label>Email</label>
-      <input type="email" id="loginEmail" required>
+  <div id="message"></div>
 
-      <label>Password</label>
-      <input type="password" id="loginPassword" required>
+  <form id="loginForm">
 
-      <button type="submit">Login</button>
+    <label for="email">Email</label>
+    <input
+      type="email"
+      id="email"
+      autocomplete="email"
+      required
+    >
 
-    </form>
+    <label for="password">Password</label>
+    <input
+      type="password"
+      id="password"
+      autocomplete="current-password"
+      required
+    >
 
-    <p>
-      <a href="#" id="forgotPassword">Forgot Password?</a>
-    </p>
+    <button type="submit" id="loginButton">
+      Login
+    </button>
 
-    <p>
-      Don't have an account?
-      <a href="register.html">Create Account</a>
-    </p>
-  </main>
+  </form>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <p>
+    <a href="forgot-password.html">
+      Forgot Password?
+    </a>
+  </p>
 
-  <script>
-    const SUPABASE_URL = https://dxtlnrthlpdaobnbazny.supabase.co/rest/v1/
-    const SUPABASE_KEY = sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY
+  <p>
+    Don't have an account?
+    <a href="register.html">Create Account</a>
+  </p>
 
-    const supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_KEY
-    );
+</main>
 
-    // LOGIN
-    document.getElementById("loginForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
+<!-- Supabase library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-      const email = document.getElementById("loginEmail").value.trim().toLowerCase();
-      const password = document.getElementById("loginPassword").value;
-
-      const { error } = await supabaseClient.auth.signInWithPassword({
-        email,
-        password
-      });
-
-      if (error) {
-        alert(error.message);
-        return;
-      }
-
-      window.location.href = "dashboard.html";
-    });
-
-
-    // FORGOT PASSWORD
-    document.getElementById("forgotPassword").addEventListener("click", async (event) => {
-      event.preventDefault();
-
-      const email = prompt("Enter your registered email:");
-
-      if (!email) return;
-
-      const { error } = await supabaseClient.auth.resetPasswordForEmail(
-        email.trim().toLowerCase(),
-        {
-          redirectTo: window.location.origin + "/reset-password.html"
-        }
-      );
-
-      if (error) {
-        alert(error.message);
-        return;
-      }
-
-      alert("Password reset link sent. Check your email.");
-    });
-  </script>
+<!-- TaskVexa authentication -->
+<script src="auth.js"></script>
 
 </body>
 </html>

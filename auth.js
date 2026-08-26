@@ -5,7 +5,7 @@
 
 const SUPABASE_URL = "https://dxtlnrthlpdaobnbazny.supabase.co";
 
-const SUPABASE_KEY = sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY
+const SUPABASE_KEY =  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 
 // ------------------------------------------

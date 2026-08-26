@@ -2,7 +2,7 @@
 // Uses Supabase Auth
 
 const SUPABASE_URL = "https://dxtlnrthlpdaobnbazny.supabase.co";
-const SUPABASE_KEY = const SUPABASE_URL = sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY
+const SUPABASE_KEY = const SUPABASE_URL = sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ
 
 const supabaseClient = window.supabase.createClient(
   SUPABASE_URL,

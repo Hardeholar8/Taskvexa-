@@ -5,10 +5,6 @@
 
 const SUPABASE_URL = "https://dxtlnrthlpdaobnbazny.supabase.co";
 
-// IMPORTANT:
-// Replace the value below with your COMPLETE
-// Supabase Publishable key.
-// Keep sb_publishable_ and the quotation marks.
 const SUPABASE_KEY = sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY
 
 

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskVexa - Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+
+  <header>
+    <h1>TaskVexa</h1>
+    <button id="logoutButton">Logout</button>
+  </header>
+
+  <main>
+
+    <section>
+      <h2>Welcome, <span id="userName">User</span>!</h2>
+      <p>Account type: <strong id="userType">Worker</strong></p>
+    </section>
+
+    <section>
+      <h2>Dashboard</h2>
+      <p>Available Balance</p>
+      <h2>₦0.00</h2>
+
+      <button onclick="window.location.href='tasks.html'">
+        View Tasks
+      </button>
+
+      <button>My Referrals</button>
+      <button>My Profile</button>
+    </section>
+
+  </main>
+
+</body>
+</html>

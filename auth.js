@@ -211,219 +211,90 @@ if (!window.supabase) {
   // ========================================
   // LOGIN
   // ========================================
+  
+document.getElementById("loginForm").addEventListener("submit", async function(event) {
 
-  const loginForm =
-    document.getElementById("loginForm");
+  event.preventDefault();
 
+  const email = document.getElementById("loginEmail").value.trim().toLowerCase();
+  const password = document.getElementById("loginPassword").value;
+  const button = document.getElementById("loginButton");
 
-  if (loginForm) {
+  button.disabled = true;
+  button.textContent = "Logging in...";
 
-    loginForm.addEventListener("submit", async function(event) {
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
 
-      event.preventDefault();
+  if (error) {
+    alert(error.message);
+    button.disabled = false;
+    button.textContent = "Login";
+    return;
+  }
 
+  window.location.href = "dashboard.html";
 
-      const button =
-        document.getElementById("loginButton");
-
-      const email =
-        document.getElementById("email").value.trim().toLowerCase();
-
-      const password =
-        document.getElementById("password").value;
-
-
-      showMessage("");
-
-
-      if (!email || !password) {
-
-        showMessage(
-          "Please enter your email and password."
-        );
-
-        return;
-      }
-
-
-      button.disabled = true;
-      button.textContent = "Logging in...";
-
-
-      try {
-
-        const { data, error } =
-          await supabaseClient.auth.signInWithPassword({
-
-            email: email,
-            password: password
-
-          });
-
-
-        console.log(
-          "Login response:",
-          data,
-          error
-        );
-
-
-        if (error) {
-
-          showMessage(
-            error.message
-          );
-
-          button.disabled = false;
-          button.textContent = "Login";
-
-          return;
-        }
-
-
-        if (data && data.session) {
-
-          window.location.href =
-            "dashboard.html";
-
-          return;
-        }
-
-
-        showMessage(
-          "Login could not be completed. Please try again."
-        );
-
-        button.disabled = false;
-        button.textContent = "Login";
-
-
-      } catch (error) {
-
-        console.error(
-          "Login error:",
-          error
-        );
-
-        showMessage(
-          "Login error: " +
-          error.message
-        );
-
-        button.disabled = false;
-        button.textContent = "Login";
-
-      }
-
-    });
+});
 
   }
 
 
 
   // ========================================
-  // FORGOT PASSWORD
-  // ========================================
+// FORGOT PASSWORD
+// ========================================
 
-  const forgotForm =
-    document.getElementById("forgotForm");
+const forgotButton = document.getElementById("forgotPassword");
 
+if (forgotButton) {
 
-  if (forgotForm) {
+  forgotButton.addEventListener("click", async function(event) {
 
-    forgotForm.addEventListener("submit", async function(event) {
+    event.preventDefault();
 
-      event.preventDefault();
+    const email = prompt("Enter your registered email:");
 
+    if (!email) return;
 
-      const button =
-        document.getElementById("forgotpassword");
+    try {
 
-      const email =
-        document.getElementById("email").value.trim().toLowerCase();
+      forgotButton.textContent = "Sending...";
+      forgotButton.style.pointerEvents = "none";
 
-
-      showMessage("");
-
-
-      if (!email) {
-
-        showMessage(
-          "Please enter your email address."
+      const { error } =
+        await supabaseClient.auth.resetPasswordForEmail(
+          email.trim().toLowerCase(),
+          {
+            redirectTo:
+              window.location.origin + "/reset-password.html"
+          }
         );
 
+      if (error) {
+        alert(error.message);
         return;
       }
 
+      alert("Password reset link sent. Please check your email.");
 
-      button.disabled = true;
-      button.textContent = "Sending...";
+    } catch (error) {
 
+      console.error("Password reset error:", error);
+      alert("Password reset error: " + error.message);
 
-      try {
+    } finally {
 
-        const { error } =
-          await supabaseClient.auth.resetPasswordForEmail(
+      forgotButton.textContent = "Forgot Password?";
+      forgotButton.style.pointerEvents = "auto";
 
-            email,
+    }
 
-            {
-              redirectTo:
-                window.location.origin +
-                "/reset-password.html"
-            }
+  });
 
-          );
-
-
-        console.log(
-          "Password reset response:",
-          error
-        );
-
-
-        if (error) {
-
-          showMessage(
-            error.message
-          );
-
-          button.disabled = false;
-          button.textContent = "Reset Password";
-
-          return;
-        }
-
-
-        showMessage(
-          "Password reset link sent. Please check your email."
-        );
-
-
-        button.disabled = false;
-        button.textContent = "Reset Password";
-
-
-      } catch (error) {
-
-        console.error(
-          "Password reset error:",
-          error
-        );
-
-        showMessage(
-          "Password reset error: " +
-          error.message
-        );
-
-        button.disabled = false;
-        button.textContent = "Reset Password";
-
-      }
-
-    });
-
-  }
+}
 
 
 

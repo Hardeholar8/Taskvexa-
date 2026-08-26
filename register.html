@@ -48,11 +48,10 @@
       <h2>Account Created!</h2>
       <p>
         Your account has been created successfully.
-        Please check your email and click the confirmation link
-        before logging in.
+        Please check your email and confirm your account.
       </p>
 
-      <button onclick="window.location.href='login.html'">
+      <button type="button" onclick="window.location.href='login.html'">
         Go to Login
       </button>
     </div>
@@ -67,8 +66,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script>
-
-    const SUPABASE_URL = https://dxtlnrthlpdaobnbazny.supabase.co
+    const SUPABASE_URL = "https://dxtlnrthlpdaobnbazny.supabase.co";
     const SUPABASE_KEY = sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY
 
     const supabaseClient = window.supabase.createClient(
@@ -81,70 +79,40 @@
     const message = document.getElementById("message");
     const successBox = document.getElementById("successBox");
 
-
-    form.addEventListener("submit", async (event) => {
-
+    form.addEventListener("submit", async function(event) {
       event.preventDefault();
 
-      const name = document
-        .getElementById("fullName")
-        .value
-        .trim();
-
-      const email = document
-        .getElementById("email")
-        .value
-        .trim()
-        .toLowerCase();
-
-      const password = document
-        .getElementById("password")
-        .value;
-
-      const accountType = document
-        .getElementById("accountType")
-        .value;
-
+      const name = document.getElementById("fullName").value.trim();
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+      const accountType = document.getElementById("accountType").value;
 
       if (!name || !email || !password || !accountType) {
         message.textContent = "Please complete all fields.";
         return;
       }
 
-
       if (password.length < 6) {
-        message.textContent =
-          "Password must be at least 6 characters.";
+        message.textContent = "Password must be at least 6 characters.";
         return;
       }
-
 
       button.disabled = true;
       button.textContent = "Creating Account...";
       message.textContent = "";
 
-
       try {
-
-        const { data, error } =
-          await supabaseClient.auth.signUp({
-
-            email: email,
-
-            password: password,
-
-            options: {
-              emailRedirectTo:
-                window.location.origin + "/login.html",
-
-              data: {
-                full_name: name,
-                account_type: accountType
-              }
+        const { error } = await supabaseClient.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            emailRedirectTo: window.location.origin + "/login.html",
+            data: {
+              full_name: name,
+              account_type: accountType
             }
-
-          });
-
+          }
+        });
 
         if (error) {
           message.textContent = error.message;
@@ -153,24 +121,15 @@
           return;
         }
 
-
         form.style.display = "none";
-
         successBox.style.display = "block";
 
-
       } catch (error) {
-
-        message.textContent =
-          "Something went wrong. Please try again.";
-
+        message.textContent = "Connection error. Please try again.";
         button.disabled = false;
         button.textContent = "Create Account";
-
       }
-
     });
-
   </script>
 
 </body>

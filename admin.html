@@ -1,236 +1,315 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
+<!DOCTYPE html><html lang="en"><head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>
-    TaskVexa - Admin Dashboard
-  </title>
-
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
-
-  <style>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>TaskVexa - Admin Dashboard</title>  <link rel="stylesheet" href="style.css">  <style>
     .admin-card {
-
       padding: 20px;
-
       margin: 15px 0;
-
       border-radius: 16px;
-
       background: #ffffff;
-
-      box-shadow:
-        0 4px 15px
-        rgba(0, 0, 0, 0.08);
-
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     }
-
 
     .admin-card h3 {
-
       margin-top: 0;
-
     }
-
 
     .admin-button {
-
       display: inline-block;
-
       padding: 11px 18px;
-
       border-radius: 8px;
-
       text-decoration: none;
-
       font-weight: 600;
-
       background: #111827;
-
       color: white;
-
+      border: none;
+      cursor: pointer;
     }
-
 
     .admin-button:hover {
-
       opacity: 0.9;
-
     }
 
-  </style>
+    .form-group {
+      margin-bottom: 15px;
+    }
 
-</head>
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
 
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 15px;
+    }
 
-<body>
+    .form-group textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
 
+    .success {
+      color: #15803d;
+      font-weight: 600;
+    }
 
-<header>
+    .error {
+      color: #dc2626;
+      font-weight: 600;
+    }
 
-  <h1>
+    .info-box {
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+  </style></head><body><header>  <h1>
     TaskVexa Admin
-  </h1>
-
-  <a href="dashboard.html">
-    Dashboard
-  </a>
-
-</header>
-
-
-<main>
-
-  <h2>
+  </h1>  <!-- Worker dashboard link removed -->  <button id="logoutButton" class="admin-button">
+    Logout
+  </button></header><main>  <h2>
     Admin Dashboard
-  </h2>
-
-
-  <p id="message">
+  </h2>  <p id="message">
     Checking admin access...
-  </p>
-
-
-  <section
+  </p>  <section
     id="adminContent"
     style="display:none;"
+  ><!-- PROMOTER PAYMENT DETAILS -->
+
+<div class="admin-card">
+
+  <h3>
+    Promoter Deposit Payment Details
+  </h3>
+
+  <p>
+    These details are shown to promoters when they press
+    <strong>Add Funds</strong>.
+  </p>
+
+  <div class="info-box">
+
+    <p>
+      <strong>Important:</strong>
+      Enter the account where promoters should make their deposit payment.
+    </p>
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label for="bankName">
+      Bank Name
+    </label>
+
+    <input
+      type="text"
+      id="bankName"
+      placeholder="e.g. Opay"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label for="accountName">
+      Account Name
+    </label>
+
+    <input
+      type="text"
+      id="accountName"
+      placeholder="Enter account name"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label for="accountNumber">
+      Account Number
+    </label>
+
+    <input
+      type="text"
+      id="accountNumber"
+      inputmode="numeric"
+      placeholder="Enter account number"
+    >
+
+  </div>
+
+
+  <div class="form-group">
+
+    <label for="paymentInstructions">
+      Payment Instructions
+    </label>
+
+    <textarea
+      id="paymentInstructions"
+      placeholder="Enter instructions promoters should follow after making payment"
+    ></textarea>
+
+  </div>
+
+
+  <button
+    id="savePaymentDetailsButton"
+    class="admin-button"
   >
+    Save Payment Details
+  </button>
 
 
-    <!-- TASK MANAGEMENT -->
+  <p id="paymentDetailsMessage"></p>
 
-    <div class="admin-card">
-
-      <h3>
-        Task Management
-      </h3>
-
-      <p>
-        Create and manage TaskVexa tasks.
-      </p>
-
-      <a
-        href="tasks.html"
-        class="admin-button"
-      >
-        View Tasks
-      </a>
-
-    </div>
+</div>
 
 
-    <!-- TASK SUBMISSIONS -->
+<!-- TASK MANAGEMENT -->
 
-    <div class="admin-card">
+<div class="admin-card">
 
-      <h3>
-        Task Submissions
-      </h3>
+  <h3>
+    Task Management
+  </h3>
 
-      <p>
-        Review worker task proofs.
-      </p>
+  <p>
+    Create and manage TaskVexa tasks.
+  </p>
 
-      <a
-        href="admin-submissions.html"
-        class="admin-button"
-      >
-        Review Submissions
-      </a>
+  <a
+    href="tasks.html"
+    class="admin-button"
+  >
+    View Tasks
+  </a>
 
-    </div>
-
-
-    <!-- WITHDRAWALS -->
-
-    <div class="admin-card">
-
-      <h3>
-        Withdrawal Requests
-      </h3>
-
-      <p>
-        View and manage worker withdrawal requests.
-      </p>
-
-      <a
-        href="admin-withdrawals.html"
-        class="admin-button"
-      >
-        Manage Withdrawals
-      </a>
-
-    </div>
+</div>
 
 
-    <!-- WORKERS -->
+<!-- TASK SUBMISSIONS -->
 
-    <div class="admin-card">
+<div class="admin-card">
 
-      <h3>
-        Workers
-      </h3>
+  <h3>
+    Task Submissions
+  </h3>
 
-      <p>
-        Manage worker accounts.
-      </p>
+  <p>
+    Review worker task proofs.
+  </p>
 
-    </div>
+  <a
+    href="admin-submissions.html"
+    class="admin-button"
+  >
+    Review Submissions
+  </a>
 
-
-    <!-- PROMOTERS -->
-
-    <div class="admin-card">
-
-      <h3>
-        Promoters
-      </h3>
-
-      <p>
-        Manage promoter accounts and tasks.
-      </p>
-
-    </div>
+</div>
 
 
-    <!-- SETTINGS -->
+<!-- WITHDRAWALS -->
 
-    <div class="admin-card">
+<div class="admin-card">
 
-      <h3>
-        Settings
-      </h3>
+  <h3>
+    Withdrawal Requests
+  </h3>
 
-      <p>
-        Manage TaskVexa platform settings.
-      </p>
+  <p>
+    View and manage worker withdrawal requests.
+  </p>
 
-    </div>
+  <a
+    href="admin-withdrawals.html"
+    class="admin-button"
+  >
+    Manage Withdrawals
+  </a>
 
-
-  </section>
-
-
-</main>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</div>
 
 
-<script>
+<!-- PROMOTER WALLET -->
 
+<div class="admin-card">
+
+  <h3>
+    Promoter Wallet & Deposits
+  </h3>
+
+  <p>
+    Manage promoter deposit requests and wallet balances.
+  </p>
+
+  <a
+    href="admin-promoter-wallet.html"
+    class="admin-button"
+  >
+    Manage Promoter Wallet
+  </a>
+
+</div>
+
+
+<!-- WORKERS -->
+
+<div class="admin-card">
+
+  <h3>
+    Workers
+  </h3>
+
+  <p>
+    Manage worker accounts.
+  </p>
+
+</div>
+
+
+<!-- PROMOTERS -->
+
+<div class="admin-card">
+
+  <h3>
+    Promoters
+  </h3>
+
+  <p>
+    Manage promoter accounts and tasks.
+  </p>
+
+</div>
+
+
+<!-- SETTINGS -->
+
+<div class="admin-card">
+
+  <h3>
+    Settings
+  </h3>
+
+  <p>
+    Manage TaskVexa platform settings.
+  </p>
+
+</div>
+
+  </section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
@@ -247,9 +326,62 @@ const supabaseClient =
   );
 
 
-/* =========================
+/* ==========================================
+   ELEMENTS
+========================================== */
+
+const message =
+  document.getElementById(
+    "message"
+  );
+
+const adminContent =
+  document.getElementById(
+    "adminContent"
+  );
+
+const logoutButton =
+  document.getElementById(
+    "logoutButton"
+  );
+
+const bankName =
+  document.getElementById(
+    "bankName"
+  );
+
+const accountName =
+  document.getElementById(
+    "accountName"
+  );
+
+const accountNumber =
+  document.getElementById(
+    "accountNumber"
+  );
+
+const paymentInstructions =
+  document.getElementById(
+    "paymentInstructions"
+  );
+
+const savePaymentDetailsButton =
+  document.getElementById(
+    "savePaymentDetailsButton"
+  );
+
+const paymentDetailsMessage =
+  document.getElementById(
+    "paymentDetailsMessage"
+  );
+
+
+let currentUser = null;
+
+
+/* ==========================================
    CHECK ADMIN
-========================= */
+========================================== */
 
 async function checkAdmin() {
 
@@ -270,9 +402,13 @@ async function checkAdmin() {
       window.location.href =
         "login.html";
 
-      return;
+      return false;
 
     }
+
+
+    currentUser =
+      user;
 
 
     const {
@@ -296,69 +432,306 @@ async function checkAdmin() {
     }
 
 
-    if (!profile) {
-
-      document.getElementById(
-        "message"
-      ).textContent =
-        "Admin profile not found. Logged-in User ID: " +
-        user.id;
-
-      return;
-
-    }
-
-
     if (
-      profile.role !==
-      "admin"
+      !profile ||
+      profile.role !== "admin"
     ) {
 
-      document.getElementById(
-        "message"
-      ).textContent =
+      message.textContent =
         "Access denied. Admin account required.";
 
-      return;
+      message.className =
+        "error";
+
+      return false;
 
     }
 
 
-    document.getElementById(
-      "message"
-    ).textContent =
+    message.textContent =
       "Admin access confirmed.";
 
+    message.className =
+      "success";
 
-    document.getElementById(
-      "adminContent"
-    ).style.display =
+
+    adminContent.style.display =
       "block";
+
+
+    await loadPaymentDetails();
+
+
+    return true;
 
 
   } catch (error) {
 
     console.error(
+      "ADMIN ACCESS ERROR:",
       error
     );
 
 
-    document.getElementById(
-      "message"
-    ).textContent =
+    message.textContent =
       "Error: " +
       error.message;
+
+    message.className =
+      "error";
+
+
+    return false;
 
   }
 
 }
 
 
+/* ==========================================
+   LOAD PAYMENT DETAILS
+========================================== */
+
+async function loadPaymentDetails() {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("promoter_payment_details")
+        .select(
+          "bank_name, account_name, account_number, instructions"
+        )
+        .order(
+          "updated_at",
+          {
+            ascending: false
+          }
+        )
+        .limit(1)
+        .maybeSingle();
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    if (!data) {
+
+      return;
+
+    }
+
+
+    bankName.value =
+      data.bank_name || "";
+
+
+    accountName.value =
+      data.account_name || "";
+
+
+    accountNumber.value =
+      data.account_number || "";
+
+
+    paymentInstructions.value =
+      data.instructions || "";
+
+
+  } catch (error) {
+
+    console.error(
+      "LOAD PAYMENT DETAILS ERROR:",
+      error
+    );
+
+
+    paymentDetailsMessage.textContent =
+      "Unable to load payment details.";
+
+    paymentDetailsMessage.className =
+      "error";
+
+  }
+
+}
+
+
+/* ==========================================
+   SAVE PAYMENT DETAILS
+========================================== */
+
+savePaymentDetailsButton.addEventListener(
+  "click",
+  async function() {
+
+    const bank =
+      bankName.value.trim();
+
+    const account =
+      accountName.value.trim();
+
+    const number =
+      accountNumber.value.trim();
+
+    const instructions =
+      paymentInstructions.value.trim();
+
+
+    if (!bank) {
+
+      paymentDetailsMessage.textContent =
+        "Please enter the bank name.";
+
+      paymentDetailsMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    if (!account) {
+
+      paymentDetailsMessage.textContent =
+        "Please enter the account name.";
+
+      paymentDetailsMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    if (!number) {
+
+      paymentDetailsMessage.textContent =
+        "Please enter the account number.";
+
+      paymentDetailsMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    try {
+
+      savePaymentDetailsButton.disabled =
+        true;
+
+      savePaymentDetailsButton.textContent =
+        "Saving...";
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.rpc(
+          "admin_update_promoter_payment_details",
+          {
+            p_bank_name:
+              bank,
+
+            p_account_name:
+              account,
+
+            p_account_number:
+              number,
+
+            p_instructions:
+              instructions || null
+          }
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      if (
+        !data ||
+        data.success !== true
+      ) {
+
+        throw new Error(
+          data?.message ||
+          "Unable to save payment details."
+        );
+
+      }
+
+
+      paymentDetailsMessage.textContent =
+        "Payment details saved successfully.";
+
+      paymentDetailsMessage.className =
+        "success";
+
+
+    } catch (error) {
+
+      console.error(
+        "SAVE PAYMENT DETAILS ERROR:",
+        error
+      );
+
+
+      paymentDetailsMessage.textContent =
+        "Error: " +
+        error.message;
+
+      paymentDetailsMessage.className =
+        "error";
+
+    } finally {
+
+      savePaymentDetailsButton.disabled =
+        false;
+
+      savePaymentDetailsButton.textContent =
+        "Save Payment Details";
+
+    }
+
+  }
+);
+
+
+/* ==========================================
+   LOGOUT
+========================================== */
+
+logoutButton.addEventListener(
+  "click",
+  async function() {
+
+    await supabaseClient.auth.signOut();
+
+    window.location.href =
+      "login.html";
+
+  }
+);
+
+
+/* ==========================================
+   START
+========================================== */
+
 checkAdmin();
 
-</script>
-
-
-</body>
-
-</html>
+</script></body></html>

@@ -1,69 +1,244 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaskVexa - Admin Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    TaskVexa - Admin Dashboard
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <style>
+
+    .admin-card {
+
+      padding: 20px;
+
+      margin: 15px 0;
+
+      border-radius: 16px;
+
+      background: #ffffff;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.08);
+
+    }
+
+
+    .admin-card h3 {
+
+      margin-top: 0;
+
+    }
+
+
+    .admin-button {
+
+      display: inline-block;
+
+      padding: 11px 18px;
+
+      border-radius: 8px;
+
+      text-decoration: none;
+
+      font-weight: 600;
+
+      background: #111827;
+
+      color: white;
+
+    }
+
+
+    .admin-button:hover {
+
+      opacity: 0.9;
+
+    }
+
+  </style>
+
 </head>
+
 
 <body>
 
+
 <header>
-  <h1>TaskVexa Admin</h1>
-  <a href="dashboard.html">Dashboard</a>
+
+  <h1>
+    TaskVexa Admin
+  </h1>
+
+  <a href="dashboard.html">
+    Dashboard
+  </a>
+
 </header>
+
 
 <main>
 
-  <h2>Admin Dashboard</h2>
+  <h2>
+    Admin Dashboard
+  </h2>
 
-  <p id="message">Checking admin access...</p>
 
-  <section id="adminContent" style="display:none;">
+  <p id="message">
+    Checking admin access...
+  </p>
 
-    <div class="task-card">
-      <h3>Task Management</h3>
-      <p>Create and manage TaskVexa tasks.</p>
-      <a href="tasks.html" class="task-button">View Tasks</a>
+
+  <section
+    id="adminContent"
+    style="display:none;"
+  >
+
+
+    <!-- TASK MANAGEMENT -->
+
+    <div class="admin-card">
+
+      <h3>
+        Task Management
+      </h3>
+
+      <p>
+        Create and manage TaskVexa tasks.
+      </p>
+
+      <a
+        href="tasks.html"
+        class="admin-button"
+      >
+        View Tasks
+      </a>
+
     </div>
 
-    <div class="task-card">
-      <h3>Task Submissions</h3>
-      <p>Review worker task proofs.</p>
-      <a href="admin-submissions.html" class="task-button">
+
+    <!-- TASK SUBMISSIONS -->
+
+    <div class="admin-card">
+
+      <h3>
+        Task Submissions
+      </h3>
+
+      <p>
+        Review worker task proofs.
+      </p>
+
+      <a
+        href="admin-submissions.html"
+        class="admin-button"
+      >
         Review Submissions
       </a>
+
     </div>
 
-    <div class="task-card">
-      <h3>Workers</h3>
-      <p>Manage worker accounts.</p>
+
+    <!-- WITHDRAWALS -->
+
+    <div class="admin-card">
+
+      <h3>
+        Withdrawal Requests
+      </h3>
+
+      <p>
+        View and manage worker withdrawal requests.
+      </p>
+
+      <a
+        href="admin-withdrawals.html"
+        class="admin-button"
+      >
+        Manage Withdrawals
+      </a>
+
     </div>
 
-    <div class="task-card">
-      <h3>Promoters</h3>
-      <p>Manage promoter accounts and tasks.</p>
+
+    <!-- WORKERS -->
+
+    <div class="admin-card">
+
+      <h3>
+        Workers
+      </h3>
+
+      <p>
+        Manage worker accounts.
+      </p>
+
     </div>
 
-    <div class="task-card">
-      <h3>Settings</h3>
-      <p>Manage TaskVexa platform settings.</p>
+
+    <!-- PROMOTERS -->
+
+    <div class="admin-card">
+
+      <h3>
+        Promoters
+      </h3>
+
+      <p>
+        Manage promoter accounts and tasks.
+      </p>
+
     </div>
+
+
+    <!-- SETTINGS -->
+
+    <div class="admin-card">
+
+      <h3>
+        Settings
+      </h3>
+
+      <p>
+        Manage TaskVexa platform settings.
+      </p>
+
+    </div>
+
 
   </section>
 
+
 </main>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
+
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
 
+
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -72,6 +247,10 @@ const supabaseClient =
   );
 
 
+/* =========================
+   CHECK ADMIN
+========================= */
+
 async function checkAdmin() {
 
   try {
@@ -79,60 +258,96 @@ async function checkAdmin() {
     const {
       data: { user },
       error: userError
-    } = await supabaseClient.auth.getUser();
+    } =
+      await supabaseClient.auth.getUser();
 
-    if (userError || !user) {
 
-      window.location.href = "login.html";
+    if (
+      userError ||
+      !user
+    ) {
+
+      window.location.href =
+        "login.html";
+
       return;
+
     }
 
 
-    const { data: profile, error } =
-  await supabaseClient
-    .from("profiles")
-    .select("role")
-    .eq("id", user.id)
-    .maybeSingle();
-
-if (error) {
-  throw error;
-}
-
-if (!profile) {
-  document.getElementById("message").textContent =
-    "Admin profile not found. Logged-in User ID: " + user.id;
-  return;
-}
+    const {
+      data: profile,
+      error
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq(
+          "id",
+          user.id
+        )
+        .maybeSingle();
 
 
     if (error) {
+
       throw error;
+
     }
 
 
-    if (profile.role !== "admin") {
+    if (!profile) {
 
-      document.getElementById("message").textContent =
+      document.getElementById(
+        "message"
+      ).textContent =
+        "Admin profile not found. Logged-in User ID: " +
+        user.id;
+
+      return;
+
+    }
+
+
+    if (
+      profile.role !==
+      "admin"
+    ) {
+
+      document.getElementById(
+        "message"
+      ).textContent =
         "Access denied. Admin account required.";
 
       return;
+
     }
 
 
-    document.getElementById("message").textContent =
+    document.getElementById(
+      "message"
+    ).textContent =
       "Admin access confirmed.";
 
-    document.getElementById("adminContent")
-      .style.display = "block";
+
+    document.getElementById(
+      "adminContent"
+    ).style.display =
+      "block";
 
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
 
-    document.getElementById("message").textContent =
-      "Error: " + error.message;
+
+    document.getElementById(
+      "message"
+    ).textContent =
+      "Error: " +
+      error.message;
 
   }
 
@@ -143,5 +358,7 @@ checkAdmin();
 
 </script>
 
+
 </body>
+
 </html>

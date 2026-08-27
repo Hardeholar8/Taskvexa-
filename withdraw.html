@@ -24,19 +24,13 @@
     .balance-card {
 
       padding: 24px;
-
       margin: 20px 0;
-
       border-radius: 18px;
-
       background: #111827;
-
       color: white;
-
       box-shadow:
         0 8px 25px
         rgba(0, 0, 0, 0.15);
-
       text-align: center;
 
     }
@@ -45,9 +39,7 @@
     .balance-card p {
 
       margin: 5px 0;
-
       font-size: 15px;
-
       opacity: 0.8;
 
     }
@@ -56,11 +48,8 @@
     .balance-card h2 {
 
       font-size: 34px;
-
       margin: 12px 0;
-
       font-weight: 700;
-
       color: white;
 
     }
@@ -69,13 +58,9 @@
     .withdraw-card {
 
       padding: 20px;
-
       margin: 20px 0;
-
       border-radius: 16px;
-
       background: #ffffff;
-
       box-shadow:
         0 4px 15px
         rgba(0, 0, 0, 0.08);
@@ -86,11 +71,8 @@
     .withdraw-card label {
 
       display: block;
-
       margin-top: 14px;
-
       margin-bottom: 6px;
-
       font-weight: 600;
 
     }
@@ -99,15 +81,10 @@
     .withdraw-card input {
 
       width: 100%;
-
       box-sizing: border-box;
-
       padding: 12px;
-
       border-radius: 8px;
-
       border: 1px solid #ccc;
-
       font-size: 16px;
 
     }
@@ -116,19 +93,12 @@
     .withdraw-button {
 
       width: 100%;
-
       margin-top: 20px;
-
       padding: 13px;
-
       border: none;
-
       border-radius: 8px;
-
       cursor: pointer;
-
       font-size: 16px;
-
       font-weight: 600;
 
     }
@@ -137,7 +107,6 @@
     #withdrawMessage {
 
       margin-top: 15px;
-
       font-weight: 600;
 
     }
@@ -145,40 +114,46 @@
 
     .history-card {
 
-      padding: 16px;
-
-      margin: 12px 0;
-
-      border-radius: 12px;
-
+      padding: 18px;
+      margin: 14px 0;
+      border-radius: 14px;
       background: #f5f5f5;
+      border: 1px solid #e5e7eb;
 
     }
 
 
-    .pending {
+    .history-card p {
+
+      margin: 8px 0;
+
+    }
+
+
+    .status {
+
+      font-weight: 700;
+
+    }
+
+
+    .status.pending {
 
       color: #b7791f;
 
-      font-weight: bold;
-
     }
 
 
-    .approved {
+    .status.approved {
 
       color: #2f855a;
 
-      font-weight: bold;
-
     }
 
 
-    .rejected {
+    .status.rejected {
 
       color: #c53030;
-
-      font-weight: bold;
 
     }
 
@@ -308,9 +283,11 @@
       Withdrawal History
     </h2>
 
+
     <div id="historyMessage">
       Loading withdrawal history...
     </div>
+
 
     <div id="withdrawalHistory"></div>
 
@@ -319,8 +296,6 @@
 
 </main>
 
-
-<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -386,9 +361,7 @@ const withdrawalHistory =
    FORMAT MONEY
 ========================= */
 
-function formatMoney(
-  amount
-) {
+function formatMoney(amount) {
 
   return "₦" +
     Number(
@@ -468,15 +441,9 @@ async function loadBalance() {
     }
 
 
-    const balance =
-      wallet
-        ? wallet.balance
-        : 0;
-
-
     balanceElement.textContent =
       formatMoney(
-        balance
+        wallet?.balance || 0
       );
 
 
@@ -500,7 +467,7 @@ async function loadBalance() {
 
 
 /* =========================
-   LOAD HISTORY
+   LOAD WITHDRAWAL HISTORY
 ========================= */
 
 async function loadHistory() {
@@ -513,9 +480,15 @@ async function loadHistory() {
     } =
       await supabaseClient
         .from("withdrawals")
-        .select(
-          "id, amount, bank_name, account_name, account_number, status, created_at"
-        )
+        .select(`
+          id,
+          amount,
+          bank_name,
+          account_name,
+          account_number,
+          status,
+          created_at
+        `)
         .eq(
           "worker_id",
           currentUser.id
@@ -584,6 +557,32 @@ async function loadHistory() {
           ).toLowerCase();
 
 
+        let statusText =
+          "Pending";
+
+
+        if (
+          status ===
+          "approved"
+        ) {
+
+          statusText =
+            "Approved";
+
+        }
+
+
+        if (
+          status ===
+          "rejected"
+        ) {
+
+          statusText =
+            "Rejected";
+
+        }
+
+
         card.innerHTML = `
 
           <p>
@@ -615,7 +614,7 @@ async function loadHistory() {
           <p>
 
             <strong>
-              Account:
+              Account Name:
             </strong>
 
             ${escapeHTML(
@@ -644,11 +643,10 @@ async function loadHistory() {
               Status:
             </strong>
 
-            <span class="${status}">
-              ${escapeHTML(
-                status.charAt(0).toUpperCase() +
-                status.slice(1)
-              )}
+            <span
+              class="status ${status}"
+            >
+              ${statusText}
             </span>
 
           </p>
@@ -826,15 +824,22 @@ withdrawButton.addEventListener(
 
 
       withdrawMessage.textContent =
-        "Withdrawal request submitted successfully. Waiting for admin review.";
+        "Withdrawal request submitted successfully. Status: Pending";
 
 
       document.getElementById(
         "amount"
-      ).value = "";
+      ).value =
+        "";
 
+
+      /*
+        Reload history immediately.
+      */
 
       await loadHistory();
+
+      await loadBalance();
 
 
     } catch (error) {

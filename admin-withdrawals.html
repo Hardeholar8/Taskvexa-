@@ -40,7 +40,7 @@
 
     .withdrawal-card p {
 
-      margin: 8px 0;
+      margin: 9px 0;
 
       word-break: break-word;
 
@@ -81,7 +81,7 @@
 
       gap: 10px;
 
-      margin-top: 15px;
+      margin-top: 18px;
 
       flex-wrap: wrap;
 
@@ -285,16 +285,38 @@ async function loadWithdrawals() {
       "";
 
 
-    /*
-      Get worker emails from
-      Supabase Auth through the
-      admin-safe RPC below.
-    */
-
     for (
       const withdrawal
       of withdrawals
     ) {
+
+
+      /* =========================
+         GET WORKER EMAIL
+      ========================= */
+
+      const {
+        data: workerEmail,
+        error: emailError
+      } =
+        await supabaseClient.rpc(
+          "get_withdrawal_worker_email",
+          {
+            p_worker_id:
+              withdrawal.worker_id
+          }
+        );
+
+
+      if (emailError) {
+
+        console.error(
+          "Email lookup error:",
+          emailError
+        );
+
+      }
+
 
       const card =
         document.createElement(
@@ -329,19 +351,38 @@ async function loadWithdrawals() {
 
 
         <p>
+
           <strong>
-            Worker ID:
-          </strong><br>
+            Worker Email:
+          </strong>
+
           ${escapeHTML(
-            withdrawal.worker_id
+            workerEmail ||
+            "Email unavailable"
           )}
+
         </p>
 
 
         <p>
+
+          <strong>
+            Worker ID:
+          </strong>
+
+          ${escapeHTML(
+            withdrawal.worker_id
+          )}
+
+        </p>
+
+
+        <p>
+
           <strong>
             Amount:
           </strong>
+
           ₦${Number(
             withdrawal.amount || 0
           ).toLocaleString(
@@ -351,40 +392,51 @@ async function loadWithdrawals() {
               maximumFractionDigits: 2
             }
           )}
+
         </p>
 
 
         <p>
+
           <strong>
             Bank:
           </strong>
+
           ${escapeHTML(
             withdrawal.bank_name
           )}
+
         </p>
 
 
         <p>
+
           <strong>
             Account Name:
           </strong>
+
           ${escapeHTML(
             withdrawal.account_name
           )}
+
         </p>
 
 
         <p>
+
           <strong>
             Account Number:
           </strong>
+
           ${escapeHTML(
             withdrawal.account_number
           )}
+
         </p>
 
 
         <p>
+
           <strong>
             Status:
           </strong>
@@ -402,19 +454,23 @@ async function loadWithdrawals() {
 
 
         <p>
+
           <strong>
             Requested:
           </strong>
-          ${escapeHTML(date)}
+
+          ${escapeHTML(
+            date
+          )}
+
         </p>
 
       `;
 
 
-      /*
-        Only show action buttons
-        for pending requests.
-      */
+      /* =========================
+         ACTION BUTTONS
+      ========================= */
 
       if (
         status ===
@@ -445,18 +501,6 @@ async function loadWithdrawals() {
           "Approve";
 
 
-        approveButton.addEventListener(
-          "click",
-          () =>
-            reviewWithdrawal(
-              withdrawal.id,
-              "approve",
-              approveButton,
-              rejectButton
-            )
-        );
-
-
         const rejectButton =
           document.createElement(
             "button"
@@ -469,6 +513,18 @@ async function loadWithdrawals() {
 
         rejectButton.textContent =
           "Reject";
+
+
+        approveButton.addEventListener(
+          "click",
+          () =>
+            reviewWithdrawal(
+              withdrawal.id,
+              "approve",
+              approveButton,
+              rejectButton
+            )
+        );
 
 
         rejectButton.addEventListener(
@@ -541,13 +597,11 @@ async function reviewWithdrawal(
       : "reject";
 
 
-  const confirmed =
-    confirm(
+  if (
+    !confirm(
       `Are you sure you want to ${actionText} this withdrawal?`
-    );
-
-
-  if (!confirmed) {
+    )
+  ) {
 
     return;
 
@@ -563,16 +617,19 @@ async function reviewWithdrawal(
       true;
 
 
-    approveButton.textContent =
+    if (
       action === "approve"
-        ? "Processing..."
-        : "Approve";
+    ) {
 
+      approveButton.textContent =
+        "Processing...";
 
-    rejectButton.textContent =
-      action === "reject"
-        ? "Processing..."
-        : "Reject";
+    } else {
+
+      rejectButton.textContent =
+        "Processing...";
+
+    }
 
 
     const {
@@ -651,6 +708,12 @@ async function reviewWithdrawal(
     rejectButton.disabled =
       false;
 
+    approveButton.textContent =
+      "Approve";
+
+    rejectButton.textContent =
+      "Reject";
+
   }
 
 }
@@ -707,4 +770,4 @@ loadWithdrawals();
 
 </body>
 
-  </html>
+</html>

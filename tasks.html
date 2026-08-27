@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>TaskVexa - Tasks</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,55 +13,81 @@
 
 <header>
   <h1>TaskVexa</h1>
-  <a href="dashboard.html">Dashboard</a>
+
+  <a href="dashboard.html">
+    Dashboard
+  </a>
 </header>
+
 
 <main>
 
-  <!-- TASK LIST -->
+  <!-- =========================
+       TASK LIST
+  ========================== -->
+
   <section id="taskListSection">
 
     <h2>Available Tasks</h2>
-    <p>Choose a task you want to complete.</p>
 
-    <div id="message">Loading tasks...</div>
+    <p>
+      Choose a task you want to complete.
+    </p>
+
+    <div id="message">
+      Loading tasks...
+    </div>
 
     <div id="taskList"></div>
 
   </section>
 
 
-  <!-- TASK DETAILS -->
-  <section id="taskDetailsSection" style="display:none;">
+  <!-- =========================
+       TASK DETAILS
+  ========================== -->
+
+  <section
+    id="taskDetailsSection"
+    style="display:none;"
+  >
 
     <button id="backButton">
       ← Back to Tasks
     </button>
 
+
     <h2 id="detailTitle"></h2>
+
 
     <p>
       <strong>Platform:</strong>
       <span id="detailPlatform"></span>
     </p>
 
+
     <p>
       <strong>Task Reward:</strong>
       ₦<span id="detailReward"></span>
     </p>
+
 
     <p>
       <strong>Workers Needed:</strong>
       <span id="detailWorkers"></span>
     </p>
 
+
     <hr>
+
 
     <h3>Instructions</h3>
 
     <p id="detailDescription"></p>
 
+
     <br>
+
 
     <a
       id="openTaskButton"
@@ -71,13 +99,17 @@
       Open Task
     </a>
 
+
     <hr>
 
+
     <h3>Submit Proof</h3>
+
 
     <p>
       Upload a screenshot showing that you completed the task.
     </p>
+
 
     <input
       type="file"
@@ -85,11 +117,14 @@
       accept="image/*"
     >
 
+
     <br><br>
+
 
     <button id="submitProofButton">
       Submit Proof
     </button>
+
 
     <p id="proofMessage"></p>
 
@@ -98,15 +133,20 @@
 </main>
 
 
+<!-- SUPABASE -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
 
+
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -118,25 +158,34 @@ const supabaseClient =
 const taskList =
   document.getElementById("taskList");
 
+
 const message =
   document.getElementById("message");
+
 
 const taskListSection =
   document.getElementById("taskListSection");
 
+
 const taskDetailsSection =
   document.getElementById("taskDetailsSection");
+
 
 const backButton =
   document.getElementById("backButton");
 
+
 const submitProofButton =
   document.getElementById("submitProofButton");
+
 
 const proofMessage =
   document.getElementById("proofMessage");
 
+
 let selectedTask = null;
+
+let currentUser = null;
 
 
 /* =========================
@@ -150,16 +199,31 @@ async function loadTasks() {
     const {
       data: { user },
       error: userError
-    } = await supabaseClient.auth.getUser();
+    } =
+      await supabaseClient.auth.getUser();
+
 
     if (userError || !user) {
 
-      window.location.href = "login.html";
+      window.location.href =
+        "login.html";
+
       return;
+
     }
 
 
-    const { data: tasks, error } =
+    currentUser = user;
+
+
+    /*
+      Load active tasks.
+    */
+
+    const {
+      data: tasks,
+      error: taskError
+    } =
       await supabaseClient
         .from("tasks")
         .select("*")
@@ -169,85 +233,257 @@ async function loadTasks() {
         });
 
 
-    if (error) {
-      throw error;
+    if (taskError) {
+
+      throw taskError;
+
     }
+
+
+    /*
+      Load this worker's submissions.
+
+      We check the status of every submission:
+
+      pending  = task stays visible
+      approved = task disappears
+      rejected = task becomes available again
+    */
+
+    const {
+      data: submissions,
+      error: submissionError
+    } =
+      await supabaseClient
+        .from("task_submissions")
+        .select(
+          "task_id, status"
+        )
+        .eq(
+          "worker_id",
+          user.id
+        );
+
+
+    if (submissionError) {
+
+      throw submissionError;
+
+    }
+
+
+    /*
+      Create a map of task statuses.
+    */
+
+    const submissionMap = {};
+
+
+    (submissions || []).forEach(
+      submission => {
+
+        submissionMap[
+          submission.task_id
+        ] = submission.status;
+
+      }
+    );
 
 
     taskList.innerHTML = "";
 
 
-    if (!tasks || tasks.length === 0) {
+    /*
+      Remove APPROVED tasks.
+
+      Pending tasks remain visible.
+      Rejected tasks remain visible.
+    */
+
+    const visibleTasks =
+      (tasks || []).filter(
+        task => {
+
+          const status =
+            submissionMap[task.id];
+
+          return status !== "approved";
+
+        }
+      );
+
+
+    if (visibleTasks.length === 0) {
 
       message.textContent =
         "No tasks are currently available.";
 
       return;
+
     }
 
 
     message.textContent = "";
 
 
-    tasks.forEach(task => {
+    visibleTasks.forEach(
+      task => {
 
-      const card =
-        document.createElement("section");
-
-      card.className = "task-card";
-
-
-      card.innerHTML = `
-
-        <h3>${escapeHTML(task.title)}</h3>
-
-        <p>
-          ${escapeHTML(task.description)}
-        </p>
-
-        <p>
-          <strong>Platform:</strong>
-          ${escapeHTML(task.platform || "Not specified")}
-        </p>
-
-        <p>
-          <strong>Task Reward:</strong>
-          ₦${Number(task.reward).toLocaleString()}
-        </p>
-
-        <p>
-          <strong>Workers Needed:</strong>
-          ${task.workers_needed}
-        </p>
-
-        <button class="task-button">
-          View Task
-        </button>
-
-      `;
+        const submissionStatus =
+          submissionMap[task.id];
 
 
-      const viewButton =
-        card.querySelector("button");
+        const card =
+          document.createElement("section");
 
 
-      viewButton.addEventListener(
-        "click",
-        () => showTaskDetails(task)
-      );
+        card.className =
+          "task-card";
 
 
-      taskList.appendChild(card);
+        let statusHTML = "";
 
-    });
+
+        /*
+          PENDING
+        */
+
+        if (
+          submissionStatus ===
+          "pending"
+        ) {
+
+          statusHTML = `
+
+            <p>
+              <strong>Status:</strong>
+              <span>
+                Pending Review
+              </span>
+            </p>
+
+          `;
+
+        }
+
+
+        /*
+          REJECTED
+        */
+
+        if (
+          submissionStatus ===
+          "rejected"
+        ) {
+
+          statusHTML = `
+
+            <p>
+              <strong>Status:</strong>
+              <span>
+                Rejected — You can try again
+              </span>
+            </p>
+
+          `;
+
+        }
+
+
+        card.innerHTML = `
+
+          <h3>
+            ${escapeHTML(task.title)}
+          </h3>
+
+
+          <p>
+            ${escapeHTML(task.description)}
+          </p>
+
+
+          <p>
+            <strong>Platform:</strong>
+            ${escapeHTML(
+              task.platform ||
+              "Not specified"
+            )}
+          </p>
+
+
+          <p>
+            <strong>Task Reward:</strong>
+            ₦${Number(
+              task.reward || 0
+            ).toLocaleString()}
+          </p>
+
+
+          <p>
+            <strong>Workers Needed:</strong>
+            ${Number(
+              task.workers_needed || 0
+            )}
+          </p>
+
+
+          ${statusHTML}
+
+
+          <button
+            class="task-button view-task-button"
+          >
+            ${
+              submissionStatus ===
+              "pending"
+                ? "View Task"
+                : "View Task"
+            }
+          </button>
+
+        `;
+
+
+        const viewButton =
+          card.querySelector(
+            ".view-task-button"
+          );
+
+
+        /*
+          Pending tasks can still be viewed,
+          but their submit button will be disabled.
+        */
+
+        viewButton.addEventListener(
+          "click",
+          () => {
+
+            showTaskDetails(
+              task,
+              submissionStatus
+            );
+
+          }
+        );
+
+
+        taskList.appendChild(
+          card
+        );
+
+      }
+    );
 
 
   } catch (error) {
 
     console.error(error);
 
+
     message.textContent =
-      "ERROR: " + error.message;
+      "ERROR: " +
+      error.message;
 
   }
 
@@ -258,51 +494,114 @@ async function loadTasks() {
    SHOW TASK DETAILS
 ========================= */
 
-function showTaskDetails(task) {
+function showTaskDetails(
+  task,
+  submissionStatus
+) {
 
   selectedTask = task;
 
 
-  document.getElementById("detailTitle")
-    .textContent = task.title;
+  document.getElementById(
+    "detailTitle"
+  ).textContent =
+    task.title;
 
 
-  document.getElementById("detailPlatform")
-    .textContent =
-      task.platform || "Not specified";
+  document.getElementById(
+    "detailPlatform"
+  ).textContent =
+    task.platform ||
+    "Not specified";
 
 
-  document.getElementById("detailReward")
-    .textContent =
-      Number(task.reward).toLocaleString();
+  document.getElementById(
+    "detailReward"
+  ).textContent =
+    Number(
+      task.reward || 0
+    ).toLocaleString();
 
 
-  document.getElementById("detailWorkers")
-    .textContent =
-      task.workers_needed;
+  document.getElementById(
+    "detailWorkers"
+  ).textContent =
+    task.workers_needed;
 
 
-  document.getElementById("detailDescription")
-    .textContent =
-      task.description;
+  document.getElementById(
+    "detailDescription"
+  ).textContent =
+    task.description;
 
 
-  document.getElementById("openTaskButton")
-    .href =
-      task.task_url;
+  document.getElementById(
+    "openTaskButton"
+  ).href =
+    task.task_url || "#";
 
 
-  proofMessage.textContent = "";
-
-  document.getElementById("proofFile").value = "";
-
-
-  taskListSection.style.display = "none";
-
-  taskDetailsSection.style.display = "block";
+  proofMessage.textContent =
+    "";
 
 
-  window.scrollTo(0, 0);
+  document.getElementById(
+    "proofFile"
+  ).value =
+    "";
+
+
+  /*
+    PENDING TASK
+  */
+
+  if (
+    submissionStatus ===
+    "pending"
+  ) {
+
+    proofMessage.textContent =
+      "Your proof is pending admin review.";
+
+
+    submitProofButton.disabled =
+      true;
+
+
+    submitProofButton.textContent =
+      "Pending Review";
+
+  }
+
+
+  /*
+    REJECTED OR NEW TASK
+  */
+
+  else {
+
+    submitProofButton.disabled =
+      false;
+
+
+    submitProofButton.textContent =
+      "Submit Proof";
+
+  }
+
+
+  taskListSection.style.display =
+    "none";
+
+
+  taskDetailsSection.style.display =
+    "block";
+
+
+  window.scrollTo(
+    0,
+    0
+  );
 
 }
 
@@ -317,11 +616,26 @@ backButton.addEventListener(
 
     selectedTask = null;
 
-    taskDetailsSection.style.display = "none";
 
-    taskListSection.style.display = "block";
+    taskDetailsSection.style.display =
+      "none";
 
-    proofMessage.textContent = "";
+
+    taskListSection.style.display =
+      "block";
+
+
+    proofMessage.textContent =
+      "";
+
+
+    /*
+      Reload tasks so that if the
+      admin approved the task,
+      it disappears immediately.
+    */
+
+    loadTasks();
 
   }
 );
@@ -341,12 +655,14 @@ submitProofButton.addEventListener(
         "Please select a task.";
 
       return;
+
     }
 
 
     const file =
-      document.getElementById("proofFile")
-        .files[0];
+      document.getElementById(
+        "proofFile"
+      ).files[0];
 
 
     if (!file) {
@@ -355,12 +671,15 @@ submitProofButton.addEventListener(
         "Please upload a screenshot first.";
 
       return;
+
     }
 
 
     try {
 
-      submitProofButton.disabled = true;
+      submitProofButton.disabled =
+        true;
+
 
       submitProofButton.textContent =
         "Submitting...";
@@ -379,34 +698,116 @@ submitProofButton.addEventListener(
           "login.html";
 
         return;
+
       }
 
 
       /*
-        Check if this worker already
-        submitted this task.
+        Check the latest submission.
+
+        Approved submissions should never
+        reach this point because approved
+        tasks are hidden.
+
+        Pending submissions are blocked.
+
+        Rejected submissions are allowed
+        to submit again.
       */
 
-      const { data: existingSubmission } =
+      const {
+        data: existingSubmissions,
+        error: existingError
+      } =
         await supabaseClient
           .from("task_submissions")
-          .select("id")
-          .eq("task_id", selectedTask.id)
-          .eq("worker_id", user.id)
-          .maybeSingle();
+          .select(
+            "id, status"
+          )
+          .eq(
+            "task_id",
+            selectedTask.id
+          )
+          .eq(
+            "worker_id",
+            user.id
+          )
+          .order(
+            "created_at",
+            {
+              ascending: false
+            }
+          );
 
 
-      if (existingSubmission) {
+      if (existingError) {
+
+        throw existingError;
+
+      }
+
+
+      const latestSubmission =
+        existingSubmissions &&
+        existingSubmissions.length
+          ? existingSubmissions[0]
+          : null;
+
+
+      /*
+        PENDING = cannot submit again
+      */
+
+      if (
+        latestSubmission &&
+        latestSubmission.status ===
+        "pending"
+      ) {
 
         proofMessage.textContent =
-          "You have already submitted this task.";
+          "Your previous submission is still pending review.";
 
-        submitProofButton.disabled = true;
+
+        submitProofButton.disabled =
+          true;
+
 
         submitProofButton.textContent =
-          "Already Submitted";
+          "Pending Review";
+
 
         return;
+
+      }
+
+
+      /*
+        APPROVED = already completed
+
+        This is also protected in case
+        the page has not refreshed yet.
+      */
+
+      if (
+        latestSubmission &&
+        latestSubmission.status ===
+        "approved"
+      ) {
+
+        proofMessage.textContent =
+          "You have already completed this task.";
+
+
+        submitProofButton.disabled =
+          true;
+
+
+        submitProofButton.textContent =
+          "Already Completed";
+
+
+        return;
+
       }
 
 
@@ -414,27 +815,48 @@ submitProofButton.addEventListener(
         Upload screenshot.
       */
 
+      const safeFileName =
+        file.name
+          .replace(
+            /[^a-zA-Z0-9._-]/g,
+            "_"
+          );
+
+
       const fileName =
-        `${user.id}/${selectedTask.id}-${Date.now()}-${file.name}`;
+        `${user.id}/${selectedTask.id}-${Date.now()}-${safeFileName}`;
 
 
-      const { error: uploadError } =
+      const {
+        error: uploadError
+      } =
         await supabaseClient.storage
           .from("task-proofs")
-          .upload(fileName, file);
+          .upload(
+            fileName,
+            file
+          );
 
 
       if (uploadError) {
+
         throw uploadError;
+
       }
 
+
+      /*
+        Get proof URL.
+      */
 
       const {
         data: publicUrlData
       } =
         supabaseClient.storage
           .from("task-proofs")
-          .getPublicUrl(fileName);
+          .getPublicUrl(
+            fileName
+          );
 
 
       const proofUrl =
@@ -443,9 +865,14 @@ submitProofButton.addEventListener(
 
       /*
         Save submission.
+
+        A rejected submission is allowed
+        to create a new submission.
       */
 
-      const { error: submissionError } =
+      const {
+        error: submissionError
+      } =
         await supabaseClient
           .from("task_submissions")
           .insert({
@@ -460,35 +887,50 @@ submitProofButton.addEventListener(
               proofUrl,
 
             reward_amount:
-              selectedTask.reward
+              selectedTask.reward,
+
+            status:
+              "pending"
 
           });
 
 
       if (submissionError) {
+
         throw submissionError;
+
       }
 
+
+      /*
+        Success
+      */
 
       proofMessage.textContent =
         "Proof submitted successfully. Waiting for admin review.";
 
 
-      submitProofButton.disabled = true;
+      submitProofButton.disabled =
+        true;
+
 
       submitProofButton.textContent =
-        "Proof Submitted";
+        "Pending Review";
 
 
     } catch (error) {
 
       console.error(error);
 
+
       proofMessage.textContent =
-        "Error: " + error.message;
+        "Error: " +
+        error.message;
 
 
-      submitProofButton.disabled = false;
+      submitProofButton.disabled =
+        false;
+
 
       submitProofButton.textContent =
         "Submit Proof";
@@ -503,23 +945,50 @@ submitProofButton.addEventListener(
    SECURITY
 ========================= */
 
-function escapeHTML(value) {
+function escapeHTML(
+  value
+) {
 
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  return String(
+    value ?? ""
+  )
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
-/* START */
+/* =========================
+   START
+========================= */
 
 loadTasks();
 
 </script>
 
 </body>
-  </html>
+
+</html>

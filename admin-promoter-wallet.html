@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskVexa - Promoter Wallet Management</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .wallet-card {
+      background: #f3f4f6;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .deposit-card {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 15px;
+    }
+
+    .amount {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .pending {
+      color: #b45309;
+      font-weight: bold;
+    }
+
+    .approved {
+      color: #15803d;
+      font-weight: bold;
+    }
+
+    .rejected {
+      color: #dc2626;
+      font-weight: bold;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .success {
+      color: #15803d;
+    }
+
+    textarea {
+      width: 100%;
+      box-sizing: border-box;
+      min-height: 70px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+
+    .approve-button {
+      background: #15803d;
+      color: white;
+    }
+
+    .reject-button {
+      background: #dc2626;
+      color: white;
+    }
+
+    .refresh-button {
+      background: #374151;
+      color: white;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>TaskVexa</h1>
+  <a href="dashboard.html">Dashboard</a>
+</header>
+
+<main>
+
+  <h2>Promoter Wallet Management</h2>
+
+  <p id="accessMessage">
+    Checking admin access...
+  </p>
+
+  <button
+    id="refreshButton"
+    class="refresh-button"
+    style="display:none;"
+  >
+    Refresh
+  </button>
+
+  <p id="pageMessage"></p>
+
+
+  <!-- PENDING DEPOSITS -->
+
+  <section
+    id="pendingSection"
+    style="display:none;"
+  >
+
+    <h3>Pending Deposits</h3>
+
+    <div id="pendingList">
+      Loading...
+    </div>
+
+  </section>
+
+
+  <!-- REVIEWED DEPOSITS -->
+
+  <section
+    id="historySection"
+    style="display:none;"
+  >
+
+    <h3>Deposit History</h3>
+
+    <div id="historyList">
+      Loading...
+    </div>
+
+  </section>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+let currentUser = null;
+
+
+const accessMessage =
+  document.getElementById(
+    "accessMessage"
+  );
+
+const pendingSection =
+  document.getElementById(
+    "pendingSection"
+  );
+
+const historySection =
+  document.getElementById(
+    "historySection"
+  );
+
+const pendingList =
+  document.getElementById(
+    "pendingList"
+  );
+
+const historyList =
+  document.getElementById(
+    "historyList"
+  );
+
+const pageMessage =
+  document.getElementById(
+    "pageMessage"
+  );
+
+const refreshButton =
+  document.getElementById(
+    "refreshButton"
+  );
+
+
+/* ==========================================
+   CHECK ADMIN
+========================================== */
+
+async function checkAdmin() {
+
+  try {
+
+    const {
+      data: {
+        user
+      },
+      error: userError
+    } =
+      await supabaseClient.auth.getUser();
+
+
+    if (userError || !user) {
+
+      window.location.href =
+        "login.html";
+
+      return false;
+
+    }
+
+
+    currentUser =
+      user;
+
+
+    const {
+      data: profile,
+      error
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq(
+          "id",
+          user.id
+        )
+        .maybeSingle();
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    if (
+      !profile ||
+      profile.role !== "admin"
+    ) {
+
+      accessMessage.textContent =
+        "Access denied. Admin account required.";
+
+      accessMessage.className =
+        "error";
+
+      return false;
+
+    }
+
+
+    accessMessage.textContent =
+      "Admin access confirmed.";
+
+    accessMessage.className =
+      "success";
+
+
+    pendingSection.style.display =
+      "block";
+
+    historySection.style.display =
+      "block";
+
+    refreshButton.style.display =
+      "inline-block";
+
+
+    return true;
+
+
+  } catch (error) {
+
+    console.error(
+      "ADMIN ACCESS ERROR:",
+      error
+    );
+
+    accessMessage.textContent =
+      "Access Error: " +
+      error.message;
+
+    accessMessage.className =
+      "error";
+
+    return false;
+
+  }
+
+}
+
+
+/* ==========================================
+   LOAD DEPOSITS
+========================================== */
+
+async function loadDeposits() {
+
+  pendingList.textContent =
+    "Loading...";
+
+  historyList.textContent =
+    "Loading...";
+
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("promoter_deposit_requests")
+        .select(
+          "id, promoter_id, amount, payment_reference, proof_url, status, admin_note, created_at, reviewed_at"
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    const deposits =
+      data || [];
+
+
+    const pending =
+      deposits.filter(
+        item =>
+          item.status ===
+          "pending"
+      );
+
+
+    const reviewed =
+      deposits.filter(
+        item =>
+          item.status !==
+          "pending"
+      );
+
+
+    renderPending(
+      pending
+    );
+
+    renderHistory(
+      reviewed
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "LOAD DEPOSITS ERROR:",
+      error
+    );
+
+    pendingList.innerHTML =
+      `<p class="error">
+        Unable to load deposits:
+        ${escapeHTML(error.message)}
+      </p>`;
+
+    historyList.innerHTML =
+      `<p class="error">
+        Unable to load history.
+      </p>`;
+
+  }
+
+}
+
+
+/* ==========================================
+   RENDER PENDING
+========================================== */
+
+function renderPending(
+  deposits
+) {
+
+  pendingList.innerHTML =
+    "";
+
+
+  if (
+    deposits.length === 0
+  ) {
+
+    pendingList.innerHTML =
+      "<p>No pending deposits.</p>";
+
+    return;
+
+  }
+
+
+  deposits.forEach(
+    deposit => {
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+      card.className =
+        "deposit-card";
+
+
+      card.innerHTML = `
+
+        <h4>
+          Promoter
+        </h4>
+
+        <p>
+          ID:
+          <strong>
+            ${escapeHTML(
+              deposit.promoter_id
+            )}
+          </strong>
+        </p>
+
+        <p class="amount">
+          ₦${Number(
+            deposit.amount
+          ).toLocaleString(
+            "en-NG"
+          )}
+        </p>
+
+        <p>
+          <strong>
+            Payment Reference:
+          </strong>
+          ${escapeHTML(
+            deposit.payment_reference
+          )}
+        </p>
+
+        ${
+          deposit.proof_url
+            ? `
+              <p>
+                <a
+                  href="${escapeAttribute(
+                    deposit.proof_url
+                  )}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Payment Proof
+                </a>
+              </p>
+            `
+            : ""
+        }
+
+        <small>
+          Submitted:
+          ${new Date(
+            deposit.created_at
+          ).toLocaleString()}
+        </small>
+
+        <textarea
+          id="note-${deposit.id}"
+          placeholder="Optional admin note"
+        ></textarea>
+
+        <br>
+
+        <button
+          class="approve-button"
+          onclick="approveDeposit('${deposit.id}')"
+        >
+          Approve
+        </button>
+
+        <button
+          class="reject-button"
+          onclick="rejectDeposit('${deposit.id}')"
+        >
+          Reject
+        </button>
+
+      `;
+
+
+      pendingList.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+/* ==========================================
+   APPROVE
+========================================== */
+
+window.approveDeposit =
+  async function(
+    requestId
+  ) {
+
+    if (
+      !confirm(
+        "Approve this deposit and credit the promoter wallet?"
+      )
+    ) {
+
+      return;
+
+    }
+
+
+    const note =
+      document.getElementById(
+        "note-" +
+        requestId
+      )?.value.trim() || null;
+
+
+    try {
+
+      pageMessage.textContent =
+        "Approving deposit...";
+
+      pageMessage.className =
+        "";
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.rpc(
+          "approve_promoter_deposit",
+          {
+            p_request_id:
+              requestId,
+
+            p_note:
+              note
+
+          }
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      if (
+        !data ||
+        data.success !== true
+      ) {
+
+        throw new Error(
+          data?.message ||
+          "Deposit approval failed."
+        );
+
+      }
+
+
+      pageMessage.textContent =
+        "Deposit approved and promoter wallet credited.";
+
+      pageMessage.className =
+        "success";
+
+
+      await loadDeposits();
+
+
+    } catch (error) {
+
+      console.error(
+        "APPROVE ERROR:",
+        error
+      );
+
+      pageMessage.textContent =
+        "Error: " +
+        error.message;
+
+      pageMessage.className =
+        "error";
+
+    }
+
+  };
+
+
+/* ==========================================
+   REJECT
+========================================== */
+
+window.rejectDeposit =
+  async function(
+    requestId
+  ) {
+
+    if (
+      !confirm(
+        "Reject this deposit?"
+      )
+    ) {
+
+      return;
+
+    }
+
+
+    const note =
+      document.getElementById(
+        "note-" +
+        requestId
+      )?.value.trim() || null;
+
+
+    try {
+
+      pageMessage.textContent =
+        "Rejecting deposit...";
+
+      pageMessage.className =
+        "";
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.rpc(
+          "reject_promoter_deposit",
+          {
+            p_request_id:
+              requestId,
+
+            p_note:
+              note
+
+          }
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      if (
+        !data ||
+        data.success !== true
+      ) {
+
+        throw new Error(
+          data?.message ||
+          "Deposit rejection failed."
+        );
+
+      }
+
+
+      pageMessage.textContent =
+        "Deposit rejected.";
+
+      pageMessage.className =
+        "success";
+
+
+      await loadDeposits();
+
+
+    } catch (error) {
+
+      console.error(
+        "REJECT ERROR:",
+        error
+      );
+
+      pageMessage.textContent =
+        "Error: " +
+        error.message;
+
+      pageMessage.className =
+        "error";
+
+    }
+
+  };
+
+
+/* ==========================================
+   HISTORY
+========================================== */
+
+function renderHistory(
+  deposits
+) {
+
+  historyList.innerHTML =
+    "";
+
+
+  if (
+    deposits.length === 0
+  ) {
+
+    historyList.innerHTML =
+      "<p>No reviewed deposits yet.</p>";
+
+    return;
+
+  }
+
+
+  deposits.forEach(
+    deposit => {
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+      card.className =
+        "deposit-card";
+
+
+      card.innerHTML = `
+
+        <p>
+          Promoter ID:
+          <strong>
+            ${escapeHTML(
+              deposit.promoter_id
+            )}
+          </strong>
+        </p>
+
+        <p class="amount">
+          ₦${Number(
+            deposit.amount
+          ).toLocaleString(
+            "en-NG"
+          )}
+        </p>
+
+        <p>
+          Reference:
+          ${escapeHTML(
+            deposit.payment_reference
+          )}
+        </p>
+
+        <p class="${escapeHTML(
+          deposit.status
+        )}">
+          Status:
+          ${escapeHTML(
+            deposit.status
+          )}
+        </p>
+
+        ${
+          deposit.admin_note
+            ? `
+              <p>
+                Admin Note:
+                ${escapeHTML(
+                  deposit.admin_note
+                )}
+              </p>
+            `
+            : ""
+        }
+
+        <small>
+          Submitted:
+          ${new Date(
+            deposit.created_at
+          ).toLocaleString()}
+        </small>
+
+      `;
+
+
+      historyList.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+/* ==========================================
+   REFRESH
+========================================== */
+
+refreshButton.addEventListener(
+  "click",
+  async function() {
+
+    refreshButton.disabled =
+      true;
+
+    refreshButton.textContent =
+      "Refreshing...";
+
+
+    await loadDeposits();
+
+
+    refreshButton.disabled =
+      false;
+
+    refreshButton.textContent =
+      "Refresh";
+
+  }
+);
+
+
+/* ==========================================
+   ESCAPE HTML
+========================================== */
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+function escapeAttribute(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    );
+
+}
+
+
+/* ==========================================
+   START
+========================================== */
+
+async function initialize() {
+
+  const allowed =
+    await checkAdmin();
+
+
+  if (!allowed) {
+
+    return;
+
+  }
+
+
+  await loadDeposits();
+
+}
+
+
+initialize();
+
+</script>
+
+</body>
+  </html>

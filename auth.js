@@ -1,7 +1,7 @@
 // ==========================================
 // TASKVEXA AUTHENTICATION
 // Registration + Login + Forgot Password
-// Email confirmation OFF
+// Role-based Dashboard Routing
 // ==========================================
 
 const SUPABASE_URL =
@@ -10,16 +10,13 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
-
 // ------------------------------------------
 // START SUPABASE
 // ------------------------------------------
 
 if (!window.supabase) {
 
-  console.error(
-    "Supabase library did not load."
-  );
+  console.error("Supabase library did not load.");
 
 } else {
 
@@ -31,25 +28,18 @@ if (!window.supabase) {
 
 
   // ========================================
-  // SHOW MESSAGE
+  // HELPER: SHOW MESSAGE
   // ========================================
 
   function showMessage(text) {
 
     const message =
-      document.getElementById(
-        "message"
-      );
+      document.getElementById("message");
 
     if (message) {
-
-      message.textContent =
-        text;
-
+      message.textContent = text;
     } else {
-
       console.log(text);
-
     }
 
   }
@@ -60,10 +50,7 @@ if (!window.supabase) {
   // ========================================
 
   const registerForm =
-    document.getElementById(
-      "registerForm"
-    );
-
+    document.getElementById("registerForm");
 
   if (registerForm) {
 
@@ -73,40 +60,31 @@ if (!window.supabase) {
 
         event.preventDefault();
 
-
         const button =
           document.getElementById(
             "registerButton"
           );
-
 
         const fullName =
           document.getElementById(
             "fullName"
           ).value.trim();
 
-
         const email =
           document.getElementById(
             "email"
           ).value.trim().toLowerCase();
-
 
         const password =
           document.getElementById(
             "password"
           ).value;
 
-
         const accountType =
           document.getElementById(
             "accountType"
           ).value;
 
-
-        // --------------------------------
-        // VALIDATION
-        // --------------------------------
 
         if (
           !fullName ||
@@ -124,9 +102,7 @@ if (!window.supabase) {
         }
 
 
-        if (
-          password.length < 6
-        ) {
+        if (password.length < 6) {
 
           showMessage(
             "Password must be at least 6 characters."
@@ -137,24 +113,9 @@ if (!window.supabase) {
         }
 
 
-        if (
-          accountType !== "worker" &&
-          accountType !== "promoter"
-        ) {
-
-          showMessage(
-            "Please select Worker or Promoter."
-          );
-
-          return;
-
-        }
-
-
         if (button) {
 
-          button.disabled =
-            true;
+          button.disabled = true;
 
           button.textContent =
             "Creating Account...";
@@ -164,21 +125,15 @@ if (!window.supabase) {
 
         try {
 
-          // --------------------------------
-          // CREATE AUTH ACCOUNT
-          // --------------------------------
-
           const {
             data,
             error
           } =
             await supabaseClient.auth.signUp({
 
-              email:
-                email,
+              email: email,
 
-              password:
-                password,
+              password: password,
 
               options: {
 
@@ -210,6 +165,7 @@ if (!window.supabase) {
               error.message
             );
 
+
             if (button) {
 
               button.disabled =
@@ -226,59 +182,53 @@ if (!window.supabase) {
 
 
           if (
-            !data ||
-            !data.user
+            data &&
+            data.user
           ) {
 
-            showMessage(
-              "Account could not be created. Please try again."
-            );
+            registerForm.style.display =
+              "none";
 
-            if (button) {
 
-              button.disabled =
-                false;
+            const successBox =
+              document.getElementById(
+                "successBox"
+              );
 
-              button.textContent =
-                "Create Account";
+
+            if (successBox) {
+
+              successBox.style.display =
+                "block";
+
+            } else {
+
+              showMessage(
+                "Account created successfully."
+              );
 
             }
 
             return;
 
           }
-
-
-          // --------------------------------
-          // EMAIL CONFIRMATION IS OFF
-          // --------------------------------
-          //
-          // The user should have an active
-          // session immediately.
-          //
-          // Send them to the correct dashboard.
-          // --------------------------------
 
 
           showMessage(
-            "Account created successfully."
+            "Registration could not be completed. Please try again."
           );
 
 
-          if (
-            accountType ===
-            "promoter"
-          ) {
+          if (button) {
 
-            window.location.href =
-              "promoter-dashboard.html";
+            button.disabled =
+              false;
 
-          } else {
-
-            window.location.href =
-              "dashboard.html";
+            button.textContent =
+              "Create Account";
 
           }
+
 
         } catch (error) {
 
@@ -349,17 +299,6 @@ if (!window.supabase) {
           );
 
 
-        if (!email || !password) {
-
-          showMessage(
-            "Please enter your email and password."
-          );
-
-          return;
-
-        }
-
-
         if (button) {
 
           button.disabled =
@@ -372,6 +311,10 @@ if (!window.supabase) {
 
 
         try {
+
+          // --------------------------------
+          // SIGN IN
+          // --------------------------------
 
           const {
             data,
@@ -395,6 +338,77 @@ if (!window.supabase) {
               error.message
             );
 
+
+            if (button) {
+
+              button.disabled =
+                false;
+
+              button.textContent =
+                "Login";
+
+            }
+
+            return;
+
+          }
+
+
+          if (
+            !data ||
+            !data.user
+          ) {
+
+            throw new Error(
+              "Login could not be completed."
+            );
+
+          }
+
+
+          // --------------------------------
+          // GET USER PROFILE
+          // --------------------------------
+
+          const {
+            data: profile,
+            error: profileError
+          } =
+            await supabaseClient
+              .from("profiles")
+              .select("role")
+              .eq(
+                "id",
+                data.user.id
+              )
+              .maybeSingle();
+
+
+          if (profileError) {
+
+            console.error(
+              "PROFILE ERROR:",
+              profileError
+            );
+
+            await supabaseClient.auth
+              .signOut();
+
+            throw profileError;
+
+          }
+
+
+          if (!profile) {
+
+            await supabaseClient.auth
+              .signOut();
+
+            showMessage(
+              "Account profile not found. Please contact support."
+            );
+
+
             if (button) {
 
               button.disabled =
@@ -411,75 +425,83 @@ if (!window.supabase) {
 
 
           // --------------------------------
-          // CHECK USER ROLE
+          // ROLE-BASED REDIRECT
           // --------------------------------
 
-          const user =
-            data.user;
+          const role =
+            String(
+              profile.role || ""
+            ).toLowerCase();
 
 
-          if (!user) {
-
-            window.location.href =
-              "login.html";
-
-            return;
-
-          }
+          console.log(
+            "Logged in role:",
+            role
+          );
 
 
-          const {
-            data: profile,
-            error: profileError
-          } =
-            await supabaseClient
-              .from("profiles")
-              .select("role")
-              .eq(
-                "id",
-                user.id
-              )
-              .maybeSingle();
-
-
-          if (profileError) {
-
-            console.error(
-              "Profile error:",
-              profileError
-            );
-
-          }
-
-
-          // --------------------------------
-          // SEND TO CORRECT DASHBOARD
-          // --------------------------------
-
+          // PROMOTER
           if (
-            profile &&
-            profile.role ===
+            role ===
             "promoter"
           ) {
 
             window.location.href =
               "promoter-dashboard.html";
 
-          } else if (
-            profile &&
-            profile.role ===
+            return;
+
+          }
+
+
+          // ADMIN
+          if (
+            role ===
             "admin"
           ) {
 
             window.location.href =
-              "admin-dashboard.html";
+              "admin.html";
 
-          } else {
+            return;
+
+          }
+
+
+          // WORKER
+          if (
+            role ===
+            "worker"
+          ) {
 
             window.location.href =
               "dashboard.html";
 
+            return;
+
           }
+
+
+          // UNKNOWN ROLE
+          await supabaseClient.auth
+            .signOut();
+
+
+          showMessage(
+            "Your account type is not recognized. Please contact support."
+          );
+
+
+          if (button) {
+
+            button.disabled =
+              false;
+
+            button.textContent =
+              "Login";
+
+          }
+
 
         } catch (error) {
 
@@ -670,8 +692,83 @@ if (!window.supabase) {
         window.location.href =
           "login.html";
 
+        return false;
+
+      }
+
+
+      return true;
+
+    };
+
+
+  // ========================================
+  // GET CURRENT USER ROLE
+  // ========================================
+
+  window.getCurrentUserRole =
+    async function() {
+
+      try {
+
+        const {
+          data: {
+            user
+          }
+        } =
+          await supabaseClient.auth
+            .getUser();
+
+
+        if (!user) {
+
+          return null;
+
+        }
+
+
+        const {
+          data: profile,
+          error
+        } =
+          await supabaseClient
+            .from("profiles")
+            .select("role")
+            .eq(
+              "id",
+              user.id
+            )
+            .maybeSingle();
+
+
+        if (error) {
+
+          console.error(
+            "ROLE CHECK ERROR:",
+            error
+          );
+
+          return null;
+
+        }
+
+
+        return profile
+          ? profile.role
+          : null;
+
+
+      } catch (error) {
+
+        console.error(
+          "GET ROLE ERROR:",
+          error
+        );
+
+        return null;
+
       }
 
     };
 
-          }
+}

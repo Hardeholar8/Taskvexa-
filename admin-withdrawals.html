@@ -234,27 +234,16 @@ async function loadWithdrawals() {
 
 
     const {
-      data: withdrawals,
-      error
-    } =
-      await supabaseClient
-        .from("withdrawals")
-        .select(`
-          id,
-          worker_id,
-          amount,
-          bank_name,
-          account_name,
-          account_number,
-          status,
-          created_at
-        `)
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
+  data: withdrawals,
+  error
+} =
+  await supabaseClient.rpc(
+    "admin_get_withdrawals"
+  );
+
+if (error) {
+  throw error;
+}
 
 
     if (error) {

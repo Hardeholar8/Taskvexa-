@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    TaskVexa - Withdraw
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <style>
+
+    .balance-card {
+
+      padding: 24px;
+
+      margin: 20px 0;
+
+      border-radius: 18px;
+
+      background: #111827;
+
+      color: white;
+
+      box-shadow:
+        0 8px 25px
+        rgba(0, 0, 0, 0.15);
+
+      text-align: center;
+
+    }
+
+
+    .balance-card p {
+
+      margin: 5px 0;
+
+      font-size: 15px;
+
+      opacity: 0.8;
+
+    }
+
+
+    .balance-card h2 {
+
+      font-size: 34px;
+
+      margin: 12px 0;
+
+      font-weight: 700;
+
+      color: white;
+
+    }
+
+
+    .withdraw-card {
+
+      padding: 20px;
+
+      margin: 20px 0;
+
+      border-radius: 16px;
+
+      background: #ffffff;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.08);
+
+    }
+
+
+    .withdraw-card label {
+
+      display: block;
+
+      margin-top: 14px;
+
+      margin-bottom: 6px;
+
+      font-weight: 600;
+
+    }
+
+
+    .withdraw-card input {
+
+      width: 100%;
+
+      box-sizing: border-box;
+
+      padding: 12px;
+
+      border-radius: 8px;
+
+      border: 1px solid #ccc;
+
+      font-size: 16px;
+
+    }
+
+
+    .withdraw-button {
+
+      width: 100%;
+
+      margin-top: 20px;
+
+      padding: 13px;
+
+      border: none;
+
+      border-radius: 8px;
+
+      cursor: pointer;
+
+      font-size: 16px;
+
+      font-weight: 600;
+
+    }
+
+
+    #withdrawMessage {
+
+      margin-top: 15px;
+
+      font-weight: 600;
+
+    }
+
+
+    .history-card {
+
+      padding: 16px;
+
+      margin: 12px 0;
+
+      border-radius: 12px;
+
+      background: #f5f5f5;
+
+    }
+
+
+    .pending {
+
+      color: #b7791f;
+
+      font-weight: bold;
+
+    }
+
+
+    .approved {
+
+      color: #2f855a;
+
+      font-weight: bold;
+
+    }
+
+
+    .rejected {
+
+      color: #c53030;
+
+      font-weight: bold;
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+  <h1>
+    TaskVexa
+  </h1>
+
+  <a href="dashboard.html">
+    Dashboard
+  </a>
+
+</header>
+
+
+<main>
+
+
+  <h2>
+    Withdraw
+  </h2>
+
+
+  <!-- BALANCE -->
+
+  <section class="balance-card">
+
+    <p>
+      Available Balance
+    </p>
+
+    <h2 id="balance">
+      ₦0.00
+    </h2>
+
+    <p id="balanceMessage">
+      Loading balance...
+    </p>
+
+  </section>
+
+
+  <!-- WITHDRAW FORM -->
+
+  <section class="withdraw-card">
+
+    <h3>
+      Withdrawal Details
+    </h3>
+
+
+    <label for="amount">
+      Withdrawal Amount
+    </label>
+
+    <input
+      type="number"
+      id="amount"
+      min="1"
+      step="0.01"
+      placeholder="Enter amount"
+    >
+
+
+    <label for="bankName">
+      Bank Name
+    </label>
+
+    <input
+      type="text"
+      id="bankName"
+      placeholder="Enter bank name"
+    >
+
+
+    <label for="accountName">
+      Account Name
+    </label>
+
+    <input
+      type="text"
+      id="accountName"
+      placeholder="Enter account name"
+    >
+
+
+    <label for="accountNumber">
+      Account Number
+    </label>
+
+    <input
+      type="text"
+      id="accountNumber"
+      inputmode="numeric"
+      maxlength="20"
+      placeholder="Enter account number"
+    >
+
+
+    <button
+      id="withdrawButton"
+      class="withdraw-button"
+    >
+      Request Withdrawal
+    </button>
+
+
+    <p id="withdrawMessage"></p>
+
+  </section>
+
+
+  <!-- WITHDRAWAL HISTORY -->
+
+  <section>
+
+    <h2>
+      Withdrawal History
+    </h2>
+
+    <div id="historyMessage">
+      Loading withdrawal history...
+    </div>
+
+    <div id="withdrawalHistory"></div>
+
+  </section>
+
+
+</main>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+
+const SUPABASE_URL =
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
+
+
+const SUPABASE_KEY =
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+let currentUser = null;
+
+
+const balanceElement =
+  document.getElementById(
+    "balance"
+  );
+
+
+const balanceMessage =
+  document.getElementById(
+    "balanceMessage"
+  );
+
+
+const withdrawButton =
+  document.getElementById(
+    "withdrawButton"
+  );
+
+
+const withdrawMessage =
+  document.getElementById(
+    "withdrawMessage"
+  );
+
+
+const historyMessage =
+  document.getElementById(
+    "historyMessage"
+  );
+
+
+const withdrawalHistory =
+  document.getElementById(
+    "withdrawalHistory"
+  );
+
+
+/* =========================
+   FORMAT MONEY
+========================= */
+
+function formatMoney(
+  amount
+) {
+
+  return "₦" +
+    Number(
+      amount || 0
+    ).toLocaleString(
+      "en-NG",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    );
+
+}
+
+
+/* =========================
+   LOAD USER
+========================= */
+
+async function loadUser() {
+
+  const {
+    data: { user },
+    error
+  } =
+    await supabaseClient.auth.getUser();
+
+
+  if (
+    error ||
+    !user
+  ) {
+
+    window.location.href =
+      "login.html";
+
+    return null;
+
+  }
+
+
+  currentUser =
+    user;
+
+
+  return user;
+
+}
+
+
+/* =========================
+   LOAD BALANCE
+========================= */
+
+async function loadBalance() {
+
+  try {
+
+    const {
+      data: wallet,
+      error
+    } =
+      await supabaseClient
+        .from("wallets")
+        .select("balance")
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .maybeSingle();
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    const balance =
+      wallet
+        ? wallet.balance
+        : 0;
+
+
+    balanceElement.textContent =
+      formatMoney(
+        balance
+      );
+
+
+    balanceMessage.textContent =
+      "Balance updated.";
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    balanceMessage.textContent =
+      "Unable to load balance.";
+
+  }
+
+}
+
+
+/* =========================
+   LOAD HISTORY
+========================= */
+
+async function loadHistory() {
+
+  try {
+
+    const {
+      data: withdrawals,
+      error
+    } =
+      await supabaseClient
+        .from("withdrawals")
+        .select(
+          "id, amount, bank_name, account_name, account_number, status, created_at"
+        )
+        .eq(
+          "worker_id",
+          currentUser.id
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    withdrawalHistory.innerHTML =
+      "";
+
+
+    if (
+      !withdrawals ||
+      withdrawals.length === 0
+    ) {
+
+      historyMessage.textContent =
+        "No withdrawal requests yet.";
+
+      return;
+
+    }
+
+
+    historyMessage.textContent =
+      "";
+
+
+    withdrawals.forEach(
+      withdrawal => {
+
+        const card =
+          document.createElement(
+            "div"
+          );
+
+
+        card.className =
+          "history-card";
+
+
+        const date =
+          new Date(
+            withdrawal.created_at
+          ).toLocaleString(
+            "en-NG"
+          );
+
+
+        const status =
+          String(
+            withdrawal.status ||
+            "pending"
+          ).toLowerCase();
+
+
+        card.innerHTML = `
+
+          <p>
+
+            <strong>
+              Amount:
+            </strong>
+
+            ${formatMoney(
+              withdrawal.amount
+            )}
+
+          </p>
+
+
+          <p>
+
+            <strong>
+              Bank:
+            </strong>
+
+            ${escapeHTML(
+              withdrawal.bank_name
+            )}
+
+          </p>
+
+
+          <p>
+
+            <strong>
+              Account:
+            </strong>
+
+            ${escapeHTML(
+              withdrawal.account_name
+            )}
+
+          </p>
+
+
+          <p>
+
+            <strong>
+              Account Number:
+            </strong>
+
+            ${escapeHTML(
+              withdrawal.account_number
+            )}
+
+          </p>
+
+
+          <p>
+
+            <strong>
+              Status:
+            </strong>
+
+            <span class="${status}">
+              ${escapeHTML(
+                status.charAt(0).toUpperCase() +
+                status.slice(1)
+              )}
+            </span>
+
+          </p>
+
+
+          <p>
+
+            <strong>
+              Date:
+            </strong>
+
+            ${escapeHTML(
+              date
+            )}
+
+          </p>
+
+        `;
+
+
+        withdrawalHistory.appendChild(
+          card
+        );
+
+      }
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    historyMessage.textContent =
+      "Unable to load withdrawal history.";
+
+  }
+
+}
+
+
+/* =========================
+   REQUEST WITHDRAWAL
+========================= */
+
+withdrawButton.addEventListener(
+  "click",
+  async function () {
+
+    const amount =
+      Number(
+        document.getElementById(
+          "amount"
+        ).value
+      );
+
+
+    const bankName =
+      document.getElementById(
+        "bankName"
+      ).value.trim();
+
+
+    const accountName =
+      document.getElementById(
+        "accountName"
+      ).value.trim();
+
+
+    const accountNumber =
+      document.getElementById(
+        "accountNumber"
+      ).value.trim();
+
+
+    withdrawMessage.textContent =
+      "";
+
+
+    if (
+      !amount ||
+      amount <= 0
+    ) {
+
+      withdrawMessage.textContent =
+        "Enter a valid withdrawal amount.";
+
+      return;
+
+    }
+
+
+    if (!bankName) {
+
+      withdrawMessage.textContent =
+        "Enter your bank name.";
+
+      return;
+
+    }
+
+
+    if (!accountName) {
+
+      withdrawMessage.textContent =
+        "Enter your account name.";
+
+      return;
+
+    }
+
+
+    if (!accountNumber) {
+
+      withdrawMessage.textContent =
+        "Enter your account number.";
+
+      return;
+
+    }
+
+
+    try {
+
+      withdrawButton.disabled =
+        true;
+
+
+      withdrawButton.textContent =
+        "Submitting...";
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.rpc(
+          "request_withdrawal",
+          {
+            p_amount:
+              amount,
+
+            p_bank_name:
+              bankName,
+
+            p_account_name:
+              accountName,
+
+            p_account_number:
+              accountNumber
+          }
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      if (
+        !data ||
+        data.success !== true
+      ) {
+
+        throw new Error(
+          data?.message ||
+          "Withdrawal request failed."
+        );
+
+      }
+
+
+      withdrawMessage.textContent =
+        "Withdrawal request submitted successfully. Waiting for admin review.";
+
+
+      document.getElementById(
+        "amount"
+      ).value = "";
+
+
+      await loadHistory();
+
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+
+      withdrawMessage.textContent =
+        "Error: " +
+        error.message;
+
+    }
+
+
+    withdrawButton.disabled =
+      false;
+
+
+    withdrawButton.textContent =
+      "Request Withdrawal";
+
+  }
+);
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+async function initialize() {
+
+  const user =
+    await loadUser();
+
+
+  if (!user) {
+
+    return;
+
+  }
+
+
+  await loadBalance();
+
+  await loadHistory();
+
+}
+
+
+initialize();
+
+</script>
+
+
+</body>
+
+  </html>

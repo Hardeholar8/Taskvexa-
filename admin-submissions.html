@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>TaskVexa - Admin Submissions</title>
+
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,28 +13,38 @@
 
 <header>
   <h1>TaskVexa Admin</h1>
-  <a href="dashboard.html">Dashboard</a>
+
+  <a href="dashboard.html">
+    Dashboard
+  </a>
 </header>
+
 
 <main>
 
   <h2>Task Submissions</h2>
 
-  <div id="message">Loading submissions...</div>
+  <div id="message">
+    Loading submissions...
+  </div>
 
   <div id="submissionList"></div>
 
 </main>
 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 
 <script>
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
 
+
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -40,12 +52,22 @@ const supabaseClient =
     SUPABASE_KEY
   );
 
+
 const message =
-  document.getElementById("message");
+  document.getElementById(
+    "message"
+  );
+
 
 const submissionList =
-  document.getElementById("submissionList");
+  document.getElementById(
+    "submissionList"
+  );
 
+
+/* =========================
+   LOAD PENDING SUBMISSIONS
+========================= */
 
 async function loadSubmissions() {
 
@@ -57,148 +79,197 @@ async function loadSubmissions() {
     } =
       await supabaseClient.auth.getUser();
 
+
     if (userError || !user) {
 
-      window.location.href = "login.html";
+      window.location.href =
+        "login.html";
+
       return;
+
     }
 
 
-    const { data: submissions, error } =
-      await supabaseClient
-        .from("task_submissions")
-        .select(`
-          *,
-          tasks (
-            title,
-            platform,
-            reward
-          )
-        `)
-        .eq("status", "pending")
-        .order("created_at", {
-          ascending: false
-        });
+    /*
+      Secure RPC gets pending
+      submissions + worker email.
+    */
+
+    const {
+      data: submissions,
+      error
+    } =
+      await supabaseClient.rpc(
+        "get_admin_pending_submissions"
+      );
 
 
     if (error) {
+
       throw error;
+
     }
 
 
-    submissionList.innerHTML = "";
+    submissionList.innerHTML =
+      "";
 
 
-    if (!submissions || submissions.length === 0) {
+    if (
+      !submissions ||
+      submissions.length === 0
+    ) {
 
       message.textContent =
         "No pending submissions.";
 
       return;
+
     }
 
 
-    message.textContent = "";
+    message.textContent =
+      "";
 
 
-    submissions.forEach(submission => {
+    submissions.forEach(
+      submission => {
 
-      const card =
-        document.createElement("section");
-
-      card.className = "task-card";
-
-
-      const task =
-        submission.tasks;
+        const card =
+          document.createElement(
+            "section"
+          );
 
 
-      card.innerHTML = `
+        card.className =
+          "task-card";
 
-        <h3>
-          ${escapeHTML(task?.title || "Task")}
-        </h3>
 
-        <p>
-          <strong>Platform:</strong>
-          ${escapeHTML(task?.platform || "Not specified")}
-        </p>
+        card.innerHTML = `
 
-        <p>
-          <strong>Reward:</strong>
-          ₦${Number(
-            submission.reward_amount ||
-            task?.reward ||
-            0
-          ).toLocaleString()}
-        </p>
+          <h3>
+            ${escapeHTML(
+              submission.task_title ||
+              "Task"
+            )}
+          </h3>
 
-        <p>
-          <strong>Worker ID:</strong>
-          ${escapeHTML(submission.worker_id)}
-        </p>
 
-        <p>
-          <strong>Status:</strong>
-          Pending
-        </p>
-
-        ${
-          submission.proof_url
-          ?
-          `
           <p>
-            <a
-              href="${escapeHTML(submission.proof_url)}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="task-button"
-            >
-              View Screenshot
-            </a>
+            <strong>Platform:</strong>
+            ${escapeHTML(
+              submission.task_platform ||
+              "Not specified"
+            )}
           </p>
-          `
-          :
-          ""
-        }
-
-        <button
-          onclick="reviewSubmission(
-            '${submission.id}',
-            'approved'
-          )"
-        >
-          Approve
-        </button>
-
-        <button
-          onclick="reviewSubmission(
-            '${submission.id}',
-            'rejected'
-          )"
-        >
-          Reject
-        </button>
-
-      `;
 
 
-      submissionList.appendChild(card);
+          <p>
+            <strong>Reward:</strong>
+            ₦${Number(
+              submission.reward_amount ||
+              submission.task_reward ||
+              0
+            ).toLocaleString()}
+          </p>
 
-    });
+
+          <p>
+            <strong>Worker Email:</strong>
+            ${escapeHTML(
+              submission.worker_email ||
+              "Email unavailable"
+            )}
+          </p>
+
+
+          <p>
+            <strong>Worker ID:</strong>
+            ${escapeHTML(
+              submission.worker_id
+            )}
+          </p>
+
+
+          <p>
+            <strong>Status:</strong>
+            Pending
+          </p>
+
+
+          ${
+            submission.proof_url
+              ?
+              `
+              <p>
+
+                <a
+                  href="${escapeHTML(
+                    submission.proof_url
+                  )}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="task-button"
+                >
+                  View Screenshot
+                </a>
+
+              </p>
+              `
+              :
+              ""
+          }
+
+
+          <button
+            onclick="reviewSubmission(
+              '${submission.id}',
+              'approved'
+            )"
+          >
+            Approve
+          </button>
+
+
+          <button
+            onclick="reviewSubmission(
+              '${submission.id}',
+              'rejected'
+            )"
+          >
+            Reject
+          </button>
+
+        `;
+
+
+        submissionList.appendChild(
+          card
+        );
+
+      }
+    );
 
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
+
 
     message.textContent =
-      "ERROR: " + error.message;
+      "ERROR: " +
+      error.message;
 
   }
 
 }
 
+
+/* =========================
+   SAFE REVIEW
+========================= */
 
 async function reviewSubmission(
   submissionId,
@@ -216,7 +287,9 @@ async function reviewSubmission(
       `Are you sure you want to ${action} this submission?`
     )
   ) {
+
     return;
+
   }
 
 
@@ -229,38 +302,61 @@ async function reviewSubmission(
       await supabaseClient.auth.getUser();
 
 
-    if (userError || !user) {
+    if (
+      userError ||
+      !user
+    ) {
 
       window.location.href =
         "login.html";
 
       return;
+
     }
 
 
-    const { data, error } =
+    /*
+      Use the safe database function.
+    */
+
+    const {
+      data,
+      error
+    } =
       await supabaseClient.rpc(
         "review_task_submission",
         {
-          p_submission_id: submissionId,
-          p_action: action
+          p_submission_id:
+            submissionId,
+
+          p_action:
+            action
         }
       );
 
 
     if (error) {
+
       throw error;
+
     }
 
 
-    if (!data || data.success !== true) {
+    if (
+      !data ||
+      data.success !== true
+    ) {
+
       throw new Error(
         "The submission could not be reviewed."
       );
+
     }
 
 
-    if (action === "approve") {
+    if (
+      action === "approve"
+    ) {
 
       alert(
         "Submission approved and reward credited successfully."
@@ -280,32 +376,69 @@ async function reviewSubmission(
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      error
+    );
+
 
     alert(
-      "Error: " + error.message
+      "Error: " +
+      error.message
     );
 
   }
 
-  }
+}
 
 
-function escapeHTML(value) {
+/* =========================
+   SECURITY
+========================= */
 
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
 
+/* =========================
+   START
+========================= */
+
 loadSubmissions();
 
 </script>
+
 
 </body>
 </html>

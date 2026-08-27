@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaskVexa - Task Management</title>
+  <title>TaskVexa - Admin Task Management</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -22,7 +22,7 @@
 
   <section id="adminContent" style="display:none;">
 
-    <h3>Create New Task</h3>
+    <h3 id="formTitle">Create New Task</h3>
 
     <form id="taskForm">
 
@@ -45,7 +45,6 @@
       <input type="number" id="workersNeeded" min="1" value="1" required>
 
       <label>Target Level</label>
-
       <select id="targetLevel">
         <option value="level_1">Level 1</option>
         <option value="level_2">Level 2</option>
@@ -54,8 +53,16 @@
 
       <br><br>
 
-      <button type="submit" id="createButton">
+      <button type="submit" id="saveButton">
         Create Task
+      </button>
+
+      <button
+        type="button"
+        id="cancelButton"
+        style="display:none;"
+      >
+        Cancel Edit
       </button>
 
     </form>
@@ -107,11 +114,19 @@ const formMessage =
 const taskList =
   document.getElementById("taskList");
 
-const createButton =
-  document.getElementById("createButton");
+const saveButton =
+  document.getElementById("saveButton");
+
+const cancelButton =
+  document.getElementById("cancelButton");
+
+const formTitle =
+  document.getElementById("formTitle");
 
 
 let currentUser = null;
+
+let editingTaskId = null;
 
 
 /* =========================
@@ -181,7 +196,7 @@ async function checkAdmin() {
 
 
 /* =========================
-   CREATE TASK
+   CREATE / UPDATE TASK
 ========================= */
 
 taskForm.addEventListener(
@@ -193,10 +208,12 @@ taskForm.addEventListener(
 
     try {
 
-      createButton.disabled = true;
+      saveButton.disabled = true;
 
-      createButton.textContent =
-        "Creating...";
+      saveButton.textContent =
+        editingTaskId
+          ? "Saving..."
+          : "Creating...";
 
       formMessage.textContent = "";
 
@@ -234,65 +251,86 @@ taskForm.addEventListener(
           .value;
 
 
-      let targetLevels;
+      const targetLevels =
+        targetLevel === "both"
+          ? ["level_1", "level_2"]
+          : [targetLevel];
 
 
-      if (targetLevel === "both") {
+      const taskData = {
 
-        targetLevels =
-          ["level_1", "level_2"];
+        title: title,
 
-      } else {
+        description: description,
 
-        targetLevels =
-          [targetLevel];
+        platform: platform,
+
+        task_url: taskUrl,
+
+        reward: reward,
+
+        workers_needed: workersNeeded,
+
+        target_levels: targetLevels
+
+      };
+
+
+      /* UPDATE */
+
+      if (editingTaskId) {
+
+        const { error } =
+          await supabaseClient
+            .from("tasks")
+            .update(taskData)
+            .eq("id", editingTaskId);
+
+
+        if (error) {
+          throw error;
+        }
+
+
+        formMessage.textContent =
+          "Task updated successfully.";
+
 
       }
 
 
-      const { error } =
-        await supabaseClient
-          .from("tasks")
-          .insert({
+      /* CREATE */
 
-            title: title,
+      else {
 
-            description: description,
+        const { error } =
+          await supabaseClient
+            .from("tasks")
+            .insert({
 
-            platform: platform,
+              ...taskData,
 
-            task_url: taskUrl,
+              status: "active",
 
-            reward: reward,
+              created_by: currentUser.id,
 
-            workers_needed: workersNeeded,
+              source: "admin"
 
-            target_levels: targetLevels,
-
-            status: "active",
-
-            created_by: currentUser.id,
-
-            source: "admin"
-
-          });
+            });
 
 
-      if (error) {
-        throw error;
+        if (error) {
+          throw error;
+        }
+
+
+        formMessage.textContent =
+          "Task created successfully.";
+
       }
 
 
-      formMessage.textContent =
-        "Task created successfully.";
-
-
-      taskForm.reset();
-
-
-      document.getElementById("workersNeeded")
-        .value = 1;
-
+      resetForm();
 
       loadTasks();
 
@@ -307,10 +345,12 @@ taskForm.addEventListener(
     }
 
 
-    createButton.disabled = false;
+    saveButton.disabled = false;
 
-    createButton.textContent =
-      "Create Task";
+    saveButton.textContent =
+      editingTaskId
+        ? "Save Changes"
+        : "Create Task";
 
   }
 );
@@ -361,7 +401,9 @@ async function loadTasks() {
 
       card.innerHTML = `
 
-        <h3>${escapeHTML(task.title)}</h3>
+        <h3>
+          ${escapeHTML(task.title)}
+        </h3>
 
         <p>
           ${escapeHTML(task.description)}
@@ -385,7 +427,9 @@ async function loadTasks() {
         <p>
           <strong>Level:</strong>
           ${escapeHTML(
-            task.target_levels.join(", ")
+            Array.isArray(task.target_levels)
+              ? task.target_levels.join(", ")
+              : ""
           )}
         </p>
 
@@ -394,12 +438,115 @@ async function loadTasks() {
           ${escapeHTML(task.status)}
         </p>
 
+        <button
+          class="edit-button"
+          data-id="${task.id}"
+        >
+          Edit
+        </button>
+
+        <button
+          class="delete-button"
+          data-id="${task.id}"
+        >
+          Delete
+        </button>
+
+        <button
+          class="status-button"
+          data-id="${task.id}"
+          data-status="${
+            task.status === "active"
+              ? "paused"
+              : "active"
+          }"
+        >
+          ${
+            task.status === "active"
+              ? "Pause"
+              : "Activate"
+          }
+        </button>
+
+        ${
+          task.status !== "closed"
+          ?
+          `
+          <button
+            class="close-button"
+            data-id="${task.id}"
+          >
+            Close
+          </button>
+          `
+          :
+          ""
+        }
+
       `;
 
 
       taskList.appendChild(card);
 
     });
+
+
+    document
+      .querySelectorAll(".edit-button")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () =>
+            editTask(button.dataset.id, tasks)
+        );
+
+      });
+
+
+    document
+      .querySelectorAll(".delete-button")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () =>
+            deleteTask(button.dataset.id)
+        );
+
+      });
+
+
+    document
+      .querySelectorAll(".status-button")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () =>
+            changeStatus(
+              button.dataset.id,
+              button.dataset.status
+            )
+        );
+
+      });
+
+
+    document
+      .querySelectorAll(".close-button")
+      .forEach(button => {
+
+        button.addEventListener(
+          "click",
+          () =>
+            changeStatus(
+              button.dataset.id,
+              "closed"
+            )
+        );
+
+      });
 
 
   } catch (error) {
@@ -412,6 +559,228 @@ async function loadTasks() {
       "</p>";
 
   }
+
+}
+
+
+/* =========================
+   EDIT TASK
+========================= */
+
+function editTask(taskId, tasks) {
+
+  const task =
+    tasks.find(
+      item => item.id === taskId
+    );
+
+
+  if (!task) {
+    return;
+  }
+
+
+  editingTaskId =
+    task.id;
+
+
+  document.getElementById("title")
+    .value =
+      task.title || "";
+
+
+  document.getElementById("description")
+    .value =
+      task.description || "";
+
+
+  document.getElementById("platform")
+    .value =
+      task.platform || "";
+
+
+  document.getElementById("taskUrl")
+    .value =
+      task.task_url || "";
+
+
+  document.getElementById("reward")
+    .value =
+      task.reward || 0;
+
+
+  document.getElementById("workersNeeded")
+    .value =
+      task.workers_needed || 1;
+
+
+  const levels =
+    task.target_levels || [];
+
+
+  if (
+    levels.includes("level_1") &&
+    levels.includes("level_2")
+  ) {
+
+    document.getElementById("targetLevel")
+      .value = "both";
+
+  }
+
+  else if (
+    levels.includes("level_2")
+  ) {
+
+    document.getElementById("targetLevel")
+      .value = "level_2";
+
+  }
+
+  else {
+
+    document.getElementById("targetLevel")
+      .value = "level_1";
+
+  }
+
+
+  formTitle.textContent =
+    "Edit Task";
+
+  saveButton.textContent =
+    "Save Changes";
+
+  cancelButton.style.display =
+    "inline-block";
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+}
+
+
+/* =========================
+   DELETE TASK
+========================= */
+
+async function deleteTask(taskId) {
+
+  if (
+    !confirm(
+      "Are you sure you want to delete this task?"
+    )
+  ) {
+    return;
+  }
+
+
+  try {
+
+    const { error } =
+      await supabaseClient
+        .from("tasks")
+        .delete()
+        .eq("id", taskId);
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    alert(
+      "Task deleted successfully."
+    );
+
+
+    loadTasks();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Error: " + error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   CHANGE STATUS
+========================= */
+
+async function changeStatus(
+  taskId,
+  newStatus
+) {
+
+  try {
+
+    const { error } =
+      await supabaseClient
+        .from("tasks")
+        .update({
+          status: newStatus
+        })
+        .eq("id", taskId);
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    loadTasks();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Error: " + error.message
+    );
+
+  }
+
+}
+
+
+/* =========================
+   CANCEL EDIT
+========================= */
+
+cancelButton.addEventListener(
+  "click",
+  resetForm
+);
+
+
+function resetForm() {
+
+  editingTaskId = null;
+
+  taskForm.reset();
+
+  document.getElementById("workersNeeded")
+    .value = 1;
+
+  formTitle.textContent =
+    "Create New Task";
+
+  saveButton.textContent =
+    "Create Task";
+
+  cancelButton.style.display =
+    "none";
 
 }
 
@@ -437,4 +806,4 @@ checkAdmin();
 </script>
 
 </body>
-  </html>
+</html>

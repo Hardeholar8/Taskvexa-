@@ -238,23 +238,14 @@ async function reviewSubmission(
     }
 
 
-    const { error } =
-      await supabaseClient
-        .from("task_submissions")
-        .update({
-
-          status:
-            newStatus,
-
-          reviewed_by:
-            user.id,
-
-          reviewed_at:
-            new Date().toISOString()
-
-        })
-        .eq("id", submissionId)
-        .eq("status", "pending");
+    const { data, error } =
+      await supabaseClient.rpc(
+        "review_task_submission",
+        {
+          p_submission_id: submissionId,
+          p_action: action
+        }
+      );
 
 
     if (error) {
@@ -262,11 +253,26 @@ async function reviewSubmission(
     }
 
 
-    alert(
-      newStatus === "approved"
-        ? "Submission approved."
-        : "Submission rejected."
-    );
+    if (!data || data.success !== true) {
+      throw new Error(
+        "The submission could not be reviewed."
+      );
+    }
+
+
+    if (action === "approve") {
+
+      alert(
+        "Submission approved and reward credited successfully."
+      );
+
+    } else {
+
+      alert(
+        "Submission rejected successfully."
+      );
+
+    }
 
 
     loadSubmissions();
@@ -282,7 +288,7 @@ async function reviewSubmission(
 
   }
 
-}
+  }
 
 
 function escapeHTML(value) {

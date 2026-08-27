@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskVexa - Task Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>TaskVexa Admin</h1>
+  <a href="admin.html">Admin Dashboard</a>
+</header>
+
+<main>
+
+  <h2>Task Management</h2>
+
+  <p id="message">Checking admin access...</p>
+
+  <section id="adminContent" style="display:none;">
+
+    <h3>Create New Task</h3>
+
+    <form id="taskForm">
+
+      <label>Task Title</label>
+      <input type="text" id="title" required>
+
+      <label>Description / Instructions</label>
+      <textarea id="description" required></textarea>
+
+      <label>Platform</label>
+      <input type="text" id="platform" placeholder="Telegram" required>
+
+      <label>Task Link</label>
+      <input type="url" id="taskUrl" placeholder="https://..." required>
+
+      <label>Worker Reward</label>
+      <input type="number" id="reward" min="0" step="0.01" required>
+
+      <label>Workers Needed</label>
+      <input type="number" id="workersNeeded" min="1" value="1" required>
+
+      <label>Target Level</label>
+
+      <select id="targetLevel">
+        <option value="level_1">Level 1</option>
+        <option value="level_2">Level 2</option>
+        <option value="both">Both Levels</option>
+      </select>
+
+      <br><br>
+
+      <button type="submit" id="createButton">
+        Create Task
+      </button>
+
+    </form>
+
+    <p id="formMessage"></p>
+
+    <hr>
+
+    <h3>Existing Tasks</h3>
+
+    <div id="taskList">
+      Loading tasks...
+    </div>
+
+  </section>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+const message =
+  document.getElementById("message");
+
+const adminContent =
+  document.getElementById("adminContent");
+
+const taskForm =
+  document.getElementById("taskForm");
+
+const formMessage =
+  document.getElementById("formMessage");
+
+const taskList =
+  document.getElementById("taskList");
+
+const createButton =
+  document.getElementById("createButton");
+
+
+let currentUser = null;
+
+
+/* =========================
+   CHECK ADMIN
+========================= */
+
+async function checkAdmin() {
+
+  try {
+
+    const {
+      data: { user },
+      error: userError
+    } =
+      await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+
+      window.location.href = "login.html";
+      return;
+    }
+
+    currentUser = user;
+
+
+    const { data: profile, error } =
+      await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .maybeSingle();
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    if (!profile || profile.role !== "admin") {
+
+      message.textContent =
+        "Access denied. Admin account required.";
+
+      return;
+    }
+
+
+    message.textContent =
+      "Admin access confirmed.";
+
+    adminContent.style.display =
+      "block";
+
+
+    loadTasks();
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      "Error: " + error.message;
+
+  }
+
+}
+
+
+/* =========================
+   CREATE TASK
+========================= */
+
+taskForm.addEventListener(
+  "submit",
+  async (event) => {
+
+    event.preventDefault();
+
+
+    try {
+
+      createButton.disabled = true;
+
+      createButton.textContent =
+        "Creating...";
+
+      formMessage.textContent = "";
+
+
+      const title =
+        document.getElementById("title")
+          .value.trim();
+
+      const description =
+        document.getElementById("description")
+          .value.trim();
+
+      const platform =
+        document.getElementById("platform")
+          .value.trim();
+
+      const taskUrl =
+        document.getElementById("taskUrl")
+          .value.trim();
+
+      const reward =
+        Number(
+          document.getElementById("reward")
+            .value
+        );
+
+      const workersNeeded =
+        Number(
+          document.getElementById("workersNeeded")
+            .value
+        );
+
+      const targetLevel =
+        document.getElementById("targetLevel")
+          .value;
+
+
+      let targetLevels;
+
+
+      if (targetLevel === "both") {
+
+        targetLevels =
+          ["level_1", "level_2"];
+
+      } else {
+
+        targetLevels =
+          [targetLevel];
+
+      }
+
+
+      const { error } =
+        await supabaseClient
+          .from("tasks")
+          .insert({
+
+            title: title,
+
+            description: description,
+
+            platform: platform,
+
+            task_url: taskUrl,
+
+            reward: reward,
+
+            workers_needed: workersNeeded,
+
+            target_levels: targetLevels,
+
+            status: "active",
+
+            created_by: currentUser.id,
+
+            source: "admin"
+
+          });
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      formMessage.textContent =
+        "Task created successfully.";
+
+
+      taskForm.reset();
+
+
+      document.getElementById("workersNeeded")
+        .value = 1;
+
+
+      loadTasks();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      formMessage.textContent =
+        "Error: " + error.message;
+
+    }
+
+
+    createButton.disabled = false;
+
+    createButton.textContent =
+      "Create Task";
+
+  }
+);
+
+
+/* =========================
+   LOAD TASKS
+========================= */
+
+async function loadTasks() {
+
+  try {
+
+    const { data: tasks, error } =
+      await supabaseClient
+        .from("tasks")
+        .select("*")
+        .order("created_at", {
+          ascending: false
+        });
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    if (!tasks || tasks.length === 0) {
+
+      taskList.innerHTML =
+        "<p>No tasks found.</p>";
+
+      return;
+    }
+
+
+    taskList.innerHTML = "";
+
+
+    tasks.forEach(task => {
+
+      const card =
+        document.createElement("section");
+
+      card.className =
+        "task-card";
+
+
+      card.innerHTML = `
+
+        <h3>${escapeHTML(task.title)}</h3>
+
+        <p>
+          ${escapeHTML(task.description)}
+        </p>
+
+        <p>
+          <strong>Platform:</strong>
+          ${escapeHTML(task.platform)}
+        </p>
+
+        <p>
+          <strong>Reward:</strong>
+          ₦${Number(task.reward).toLocaleString()}
+        </p>
+
+        <p>
+          <strong>Workers Needed:</strong>
+          ${task.workers_needed}
+        </p>
+
+        <p>
+          <strong>Level:</strong>
+          ${escapeHTML(
+            task.target_levels.join(", ")
+          )}
+        </p>
+
+        <p>
+          <strong>Status:</strong>
+          ${escapeHTML(task.status)}
+        </p>
+
+      `;
+
+
+      taskList.appendChild(card);
+
+    });
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    taskList.innerHTML =
+      "<p>Error loading tasks: " +
+      escapeHTML(error.message) +
+      "</p>";
+
+  }
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+checkAdmin();
+
+</script>
+
+</body>
+  </html>

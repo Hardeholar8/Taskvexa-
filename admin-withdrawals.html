@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>
+    TaskVexa - Admin Withdrawals
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
+
+  <style>
+
+    .withdrawal-card {
+
+      background: #ffffff;
+
+      padding: 20px;
+
+      margin: 15px 0;
+
+      border-radius: 15px;
+
+      box-shadow:
+        0 4px 15px
+        rgba(0, 0, 0, 0.08);
+
+    }
+
+
+    .withdrawal-card p {
+
+      margin: 8px 0;
+
+      word-break: break-word;
+
+    }
+
+
+    .status {
+
+      font-weight: 700;
+
+    }
+
+
+    .status.pending {
+
+      color: #b7791f;
+
+    }
+
+
+    .status.approved {
+
+      color: #2f855a;
+
+    }
+
+
+    .status.rejected {
+
+      color: #c53030;
+
+    }
+
+
+    .action-buttons {
+
+      display: flex;
+
+      gap: 10px;
+
+      margin-top: 15px;
+
+      flex-wrap: wrap;
+
+    }
+
+
+    .approve-button {
+
+      background: #15803d;
+
+      color: white;
+
+      border: none;
+
+      padding: 11px 18px;
+
+      border-radius: 8px;
+
+      cursor: pointer;
+
+      font-weight: 600;
+
+    }
+
+
+    .reject-button {
+
+      background: #b91c1c;
+
+      color: white;
+
+      border: none;
+
+      padding: 11px 18px;
+
+      border-radius: 8px;
+
+      cursor: pointer;
+
+      font-weight: 600;
+
+    }
+
+
+    button:disabled {
+
+      opacity: 0.6;
+
+      cursor: not-allowed;
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+  <h1>
+    TaskVexa Admin
+  </h1>
+
+  <a href="admin.html">
+    Admin Dashboard
+  </a>
+
+</header>
+
+
+<main>
+
+  <h2>
+    Withdrawal Requests
+  </h2>
+
+
+  <div id="message">
+    Loading withdrawal requests...
+  </div>
+
+
+  <div id="withdrawalList"></div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+
+const SUPABASE_URL =
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
+
+
+const SUPABASE_KEY =
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+const message =
+  document.getElementById(
+    "message"
+  );
+
+
+const withdrawalList =
+  document.getElementById(
+    "withdrawalList"
+  );
+
+
+/* =========================
+   LOAD WITHDRAWALS
+========================= */
+
+async function loadWithdrawals() {
+
+  try {
+
+    const {
+      data: { user },
+      error: userError
+    } =
+      await supabaseClient.auth.getUser();
+
+
+    if (
+      userError ||
+      !user
+    ) {
+
+      window.location.href =
+        "login.html";
+
+      return;
+
+    }
+
+
+    const {
+      data: withdrawals,
+      error
+    } =
+      await supabaseClient
+        .from("withdrawals")
+        .select(`
+          id,
+          worker_id,
+          amount,
+          bank_name,
+          account_name,
+          account_number,
+          status,
+          created_at
+        `)
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    withdrawalList.innerHTML =
+      "";
+
+
+    if (
+      !withdrawals ||
+      withdrawals.length === 0
+    ) {
+
+      message.textContent =
+        "No withdrawal requests.";
+
+      return;
+
+    }
+
+
+    message.textContent =
+      "";
+
+
+    /*
+      Get worker emails from
+      Supabase Auth through the
+      admin-safe RPC below.
+    */
+
+    for (
+      const withdrawal
+      of withdrawals
+    ) {
+
+      const card =
+        document.createElement(
+          "section"
+        );
+
+
+      card.className =
+        "withdrawal-card";
+
+
+      const status =
+        String(
+          withdrawal.status ||
+          "pending"
+        ).toLowerCase();
+
+
+      const date =
+        new Date(
+          withdrawal.created_at
+        ).toLocaleString(
+          "en-NG"
+        );
+
+
+      card.innerHTML = `
+
+        <h3>
+          Withdrawal Request
+        </h3>
+
+
+        <p>
+          <strong>
+            Worker ID:
+          </strong><br>
+          ${escapeHTML(
+            withdrawal.worker_id
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Amount:
+          </strong>
+          ₦${Number(
+            withdrawal.amount || 0
+          ).toLocaleString(
+            "en-NG",
+            {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2
+            }
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Bank:
+          </strong>
+          ${escapeHTML(
+            withdrawal.bank_name
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Account Name:
+          </strong>
+          ${escapeHTML(
+            withdrawal.account_name
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Account Number:
+          </strong>
+          ${escapeHTML(
+            withdrawal.account_number
+          )}
+        </p>
+
+
+        <p>
+          <strong>
+            Status:
+          </strong>
+
+          <span
+            class="status ${status}"
+          >
+            ${escapeHTML(
+              status.charAt(0).toUpperCase() +
+              status.slice(1)
+            )}
+          </span>
+
+        </p>
+
+
+        <p>
+          <strong>
+            Requested:
+          </strong>
+          ${escapeHTML(date)}
+        </p>
+
+      `;
+
+
+      /*
+        Only show action buttons
+        for pending requests.
+      */
+
+      if (
+        status ===
+        "pending"
+      ) {
+
+        const buttons =
+          document.createElement(
+            "div"
+          );
+
+
+        buttons.className =
+          "action-buttons";
+
+
+        const approveButton =
+          document.createElement(
+            "button"
+          );
+
+
+        approveButton.className =
+          "approve-button";
+
+
+        approveButton.textContent =
+          "Approve";
+
+
+        approveButton.addEventListener(
+          "click",
+          () =>
+            reviewWithdrawal(
+              withdrawal.id,
+              "approve",
+              approveButton,
+              rejectButton
+            )
+        );
+
+
+        const rejectButton =
+          document.createElement(
+            "button"
+          );
+
+
+        rejectButton.className =
+          "reject-button";
+
+
+        rejectButton.textContent =
+          "Reject";
+
+
+        rejectButton.addEventListener(
+          "click",
+          () =>
+            reviewWithdrawal(
+              withdrawal.id,
+              "reject",
+              approveButton,
+              rejectButton
+            )
+        );
+
+
+        buttons.appendChild(
+          approveButton
+        );
+
+
+        buttons.appendChild(
+          rejectButton
+        );
+
+
+        card.appendChild(
+          buttons
+        );
+
+      }
+
+
+      withdrawalList.appendChild(
+        card
+      );
+
+    }
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    message.textContent =
+      "ERROR: " +
+      error.message;
+
+  }
+
+}
+
+
+/* =========================
+   REVIEW WITHDRAWAL
+========================= */
+
+async function reviewWithdrawal(
+  withdrawalId,
+  action,
+  approveButton,
+  rejectButton
+) {
+
+
+  const actionText =
+    action === "approve"
+      ? "approve"
+      : "reject";
+
+
+  const confirmed =
+    confirm(
+      `Are you sure you want to ${actionText} this withdrawal?`
+    );
+
+
+  if (!confirmed) {
+
+    return;
+
+  }
+
+
+  try {
+
+    approveButton.disabled =
+      true;
+
+    rejectButton.disabled =
+      true;
+
+
+    approveButton.textContent =
+      action === "approve"
+        ? "Processing..."
+        : "Approve";
+
+
+    rejectButton.textContent =
+      action === "reject"
+        ? "Processing..."
+        : "Reject";
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.rpc(
+        "review_withdrawal",
+        {
+          p_withdrawal_id:
+            withdrawalId,
+
+          p_action:
+            action
+        }
+      );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    if (
+      !data ||
+      data.success !== true
+    ) {
+
+      throw new Error(
+        data?.message ||
+        "Withdrawal review failed."
+      );
+
+    }
+
+
+    if (
+      action ===
+      "approve"
+    ) {
+
+      alert(
+        "Withdrawal approved and worker balance deducted successfully."
+      );
+
+    } else {
+
+      alert(
+        "Withdrawal rejected successfully."
+      );
+
+    }
+
+
+    await loadWithdrawals();
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    alert(
+      "Error: " +
+      error.message
+    );
+
+
+    approveButton.disabled =
+      false;
+
+    rejectButton.disabled =
+      false;
+
+  }
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadWithdrawals();
+
+</script>
+
+
+</body>
+
+  </html>

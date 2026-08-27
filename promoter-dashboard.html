@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskVexa - Promoter Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    .task-card {
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    .setting-box {
+      background: #f3f4f6;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 15px 0;
+    }
+
+    .status {
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .live {
+      color: #15803d;
+    }
+
+    .pending {
+      color: #b45309;
+    }
+
+    .error {
+      color: #dc2626;
+    }
+
+    .success {
+      color: #15803d;
+    }
+
+    button {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>TaskVexa</h1>
+  <a href="dashboard.html">Dashboard</a>
+</header>
+
+<main>
+
+  <section>
+    <h2>Promoter Dashboard</h2>
+
+    <p>
+      Create and manage your promoter tasks.
+    </p>
+
+    <p id="accessMessage">
+      Checking promoter access...
+    </p>
+  </section>
+
+
+  <!-- CREATE TASK -->
+
+  <section
+    id="createTaskSection"
+    class="task-card"
+    style="display:none;"
+  >
+
+    <h2>Create Task</h2>
+
+    <p>
+      Admin settings automatically control the worker reward,
+      worker level and number of workers.
+    </p>
+
+    <div class="form-group">
+      <label for="taskTitle">
+        Task Title
+      </label>
+
+      <input
+        type="text"
+        id="taskTitle"
+        placeholder="Enter task title"
+      >
+    </div>
+
+
+    <div class="form-group">
+      <label for="taskDescription">
+        Task Instructions
+      </label>
+
+      <textarea
+        id="taskDescription"
+        placeholder="Enter the instructions workers should follow"
+      ></textarea>
+    </div>
+
+
+    <div class="form-group">
+      <label for="taskPlatform">
+        Platform
+      </label>
+
+      <select id="taskPlatform">
+        <option value="">
+          Loading platforms...
+        </option>
+      </select>
+    </div>
+
+
+    <div class="form-group">
+      <label for="taskUrl">
+        Task Link
+      </label>
+
+      <input
+        type="url"
+        id="taskUrl"
+        placeholder="https://example.com/task"
+      >
+    </div>
+
+
+    <!-- ADMIN CONTROLLED SETTINGS -->
+
+    <div
+      id="settingPreview"
+      class="setting-box"
+      style="display:none;"
+    >
+
+      <h3>Task Settings</h3>
+
+      <p>
+        <strong>Worker Reward:</strong>
+        ₦<span id="previewReward">0</span>
+      </p>
+
+      <p>
+        <strong>Workers Needed:</strong>
+        <span id="previewWorkers">0</span>
+      </p>
+
+      <p>
+        <strong>Worker Level:</strong>
+        <span id="previewLevels">-</span>
+      </p>
+
+      <p>
+        <strong>Publishing:</strong>
+        <span id="previewPublish">-</span>
+      </p>
+
+    </div>
+
+
+    <button id="submitTaskButton">
+      Submit Task
+    </button>
+
+    <p id="taskMessage"></p>
+
+  </section>
+
+
+  <!-- MY TASKS -->
+
+  <section
+    id="myTasksSection"
+    class="task-card"
+    style="display:none;"
+  >
+
+    <h2>My Tasks</h2>
+
+    <p id="myTasksMessage">
+      Loading your tasks...
+    </p>
+
+    <div id="myTasksList"></div>
+
+  </section>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+
+const accessMessage =
+  document.getElementById(
+    "accessMessage"
+  );
+
+const createTaskSection =
+  document.getElementById(
+    "createTaskSection"
+  );
+
+const myTasksSection =
+  document.getElementById(
+    "myTasksSection"
+  );
+
+const taskPlatform =
+  document.getElementById(
+    "taskPlatform"
+  );
+
+const submitTaskButton =
+  document.getElementById(
+    "submitTaskButton"
+  );
+
+const taskMessage =
+  document.getElementById(
+    "taskMessage"
+  );
+
+const settingPreview =
+  document.getElementById(
+    "settingPreview"
+  );
+
+const myTasksMessage =
+  document.getElementById(
+    "myTasksMessage"
+  );
+
+const myTasksList =
+  document.getElementById(
+    "myTasksList"
+  );
+
+
+let currentUser = null;
+
+let settings = [];
+
+
+/* =========================
+   CHECK PROMOTER
+========================= */
+
+async function checkPromoter() {
+
+  try {
+
+    const {
+      data: { user },
+      error: userError
+    } =
+      await supabaseClient.auth.getUser();
+
+
+    if (
+      userError ||
+      !user
+    ) {
+
+      window.location.href =
+        "login.html";
+
+      return false;
+
+    }
+
+
+    currentUser = user;
+
+
+    const {
+      data: profile,
+      error
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq(
+          "id",
+          user.id
+        )
+        .maybeSingle();
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    if (
+      !profile ||
+      profile.role !== "promoter"
+    ) {
+
+      accessMessage.textContent =
+        "Access denied. Promoter account required.";
+
+      accessMessage.className =
+        "error";
+
+      return false;
+
+    }
+
+
+    accessMessage.textContent =
+      "Promoter access confirmed.";
+
+    accessMessage.className =
+      "success";
+
+
+    createTaskSection.style.display =
+      "block";
+
+    myTasksSection.style.display =
+      "block";
+
+
+    return true;
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    accessMessage.textContent =
+      "Error: " +
+      error.message;
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================
+   LOAD ADMIN SETTINGS
+========================= */
+
+async function loadSettings() {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("promoter_task_settings")
+        .select(`
+          id,
+          platform,
+          promoter_price,
+          worker_reward,
+          target_levels,
+          workers_needed,
+          auto_publish
+        `)
+        .order(
+          "platform",
+          {
+            ascending: true
+          }
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    settings =
+      data || [];
+
+
+    taskPlatform.innerHTML =
+      "";
+
+
+    if (
+      settings.length === 0
+    ) {
+
+      taskPlatform.innerHTML = `
+        <option value="">
+          No platforms configured
+        </option>
+      `;
+
+      submitTaskButton.disabled =
+        true;
+
+      return;
+
+    }
+
+
+    taskPlatform.innerHTML = `
+      <option value="">
+        Select platform
+      </option>
+    `;
+
+
+    settings.forEach(
+      setting => {
+
+        const option =
+          document.createElement(
+            "option"
+          );
+
+        option.value =
+          setting.platform;
+
+        option.textContent =
+          setting.platform;
+
+        taskPlatform.appendChild(
+          option
+        );
+
+      }
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    taskPlatform.innerHTML = `
+      <option value="">
+        Unable to load platforms
+      </option>
+    `;
+
+    taskMessage.textContent =
+      "Unable to load admin settings.";
+
+  }
+
+}
+
+
+/* =========================
+   SHOW SETTINGS
+========================= */
+
+taskPlatform.addEventListener(
+  "change",
+  function () {
+
+    const selected =
+      settings.find(
+        setting =>
+          setting.platform ===
+          taskPlatform.value
+      );
+
+
+    if (!selected) {
+
+      settingPreview.style.display =
+        "none";
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      "previewReward"
+    ).textContent =
+      Number(
+        selected.worker_reward || 0
+      ).toLocaleString(
+        "en-NG"
+      );
+
+
+    document.getElementById(
+      "previewWorkers"
+    ).textContent =
+      selected.workers_needed;
+
+
+    document.getElementById(
+      "previewLevels"
+    ).textContent =
+      (
+        selected.target_levels || []
+      ).join(", ");
+
+
+    document.getElementById(
+      "previewPublish"
+    ).textContent =
+      selected.auto_publish
+        ? "Automatically LIVE"
+        : "Pending Admin Review";
+
+
+    settingPreview.style.display =
+      "block";
+
+  }
+);
+
+
+/* =========================
+   SUBMIT TASK
+========================= */
+
+submitTaskButton.addEventListener(
+  "click",
+  async function () {
+
+    const title =
+      document.getElementById(
+        "taskTitle"
+      ).value.trim();
+
+    const description =
+      document.getElementById(
+        "taskDescription"
+      ).value.trim();
+
+    const platform =
+      taskPlatform.value;
+
+    const taskUrl =
+      document.getElementById(
+        "taskUrl"
+      ).value.trim();
+
+
+    if (!title) {
+
+      taskMessage.textContent =
+        "Please enter a task title.";
+
+      return;
+
+    }
+
+
+    if (!description) {
+
+      taskMessage.textContent =
+        "Please enter task instructions.";
+
+      return;
+
+    }
+
+
+    if (!platform) {
+
+      taskMessage.textContent =
+        "Please select a platform.";
+
+      return;
+
+    }
+
+
+    if (!taskUrl) {
+
+      taskMessage.textContent =
+        "Please enter the task link.";
+
+      return;
+
+    }
+
+
+    try {
+
+      submitTaskButton.disabled =
+        true;
+
+      submitTaskButton.textContent =
+        "Submitting...";
+
+
+      /*
+        IMPORTANT:
+
+        The promoter does NOT send
+        reward, price, level or
+        worker limit.
+
+        Supabase gets those values
+        from admin settings.
+      */
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.rpc(
+          "create_promoter_task",
+          {
+            p_title:
+              title,
+
+            p_description:
+              description,
+
+            p_platform:
+              platform,
+
+            p_task_url:
+              taskUrl
+          }
+        );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      if (
+        !data ||
+        data.success !== true
+      ) {
+
+        throw new Error(
+          data?.message ||
+          "Task could not be created."
+        );
+
+      }
+
+
+      const status =
+        data.status ===
+        "active"
+          ? "LIVE"
+          : "Pending Admin Review";
+
+
+      taskMessage.textContent =
+        `Task submitted successfully. Status: ${status}.`;
+
+
+      taskMessage.className =
+        "success";
+
+
+      /*
+        Clear form.
+      */
+
+      document.getElementById(
+        "taskTitle"
+      ).value = "";
+
+      document.getElementById(
+        "taskDescription"
+      ).value = "";
+
+      document.getElementById(
+        "taskUrl"
+      ).value = "";
+
+      taskPlatform.value =
+        "";
+
+      settingPreview.style.display =
+        "none";
+
+
+      submitTaskButton.disabled =
+        false;
+
+      submitTaskButton.textContent =
+        "Submit Task";
+
+
+      loadMyTasks();
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      taskMessage.textContent =
+        "Error: " +
+        error.message;
+
+      taskMessage.className =
+        "error";
+
+
+      submitTaskButton.disabled =
+        false;
+
+      submitTaskButton.textContent =
+        "Submit Task";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   LOAD MY TASKS
+========================= */
+
+async function loadMyTasks() {
+
+  try {
+
+    const {
+      data: tasks,
+      error
+    } =
+      await supabaseClient
+        .from("tasks")
+        .select(`
+          id,
+          title,
+          description,
+          platform,
+          reward,
+          workers_needed,
+          target_levels,
+          status,
+          source,
+          created_at
+        `)
+        .eq(
+          "created_by",
+          currentUser.id
+        )
+        .eq(
+          "source",
+          "promoter"
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    myTasksList.innerHTML =
+      "";
+
+
+    if (
+      !tasks ||
+      tasks.length === 0
+    ) {
+
+      myTasksMessage.textContent =
+        "You have not created any tasks yet.";
+
+      return;
+
+    }
+
+
+    myTasksMessage.textContent =
+      "";
+
+
+    tasks.forEach(
+      task => {
+
+        const card =
+          document.createElement(
+            "div"
+          );
+
+        card.className =
+          "task-card";
+
+
+        const statusClass =
+          task.status ===
+          "active"
+            ? "live"
+            : "pending";
+
+
+        const statusText =
+          task.status ===
+          "active"
+            ? "LIVE"
+            : task.status;
+
+
+        card.innerHTML = `
+
+          <h3>
+            ${escapeHTML(
+              task.title
+            )}
+          </h3>
+
+          <p>
+            <strong>Platform:</strong>
+            ${escapeHTML(
+              task.platform
+            )}
+          </p>
+
+          <p>
+            <strong>Worker Reward:</strong>
+            ₦${Number(
+              task.reward || 0
+            ).toLocaleString(
+              "en-NG"
+            )}
+          </p>
+
+          <p>
+            <strong>Workers Needed:</strong>
+            ${Number(
+              task.workers_needed || 0
+            )}
+          </p>
+
+          <p>
+            <strong>Levels:</strong>
+            ${escapeHTML(
+              (
+                task.target_levels ||
+                []
+              ).join(", ")
+            )}
+          </p>
+
+          <p class="status ${statusClass}">
+            Status: ${escapeHTML(
+              statusText
+            )}
+          </p>
+
+        `;
+
+
+        myTasksList.appendChild(
+          card
+        );
+
+      }
+    );
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    myTasksMessage.textContent =
+      "Unable to load your tasks.";
+
+  }
+
+}
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(
+  value
+) {
+
+  return String(
+    value ?? ""
+  )
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+    .replace(
+      /</g,
+      "&lt;"
+    )
+    .replace(
+      />/g,
+      "&gt;"
+    )
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+    .replace(
+      /'/g,
+      "&#039;"
+    );
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+async function initialize() {
+
+  const allowed =
+    await checkPromoter();
+
+
+  if (!allowed) {
+    return;
+  }
+
+
+  await loadSettings();
+
+  await loadMyTasks();
+
+}
+
+
+initialize();
+
+</script>
+
+</body>
+  </html>

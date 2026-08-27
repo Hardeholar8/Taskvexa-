@@ -3,39 +3,383 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>TaskVexa - Dashboard</title>
+
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
+
+  <style>
+    .balance-card {
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 12px;
+      background: #f5f5f5;
+    }
+
+    .balance-card h2 {
+      font-size: 32px;
+      margin: 10px 0;
+    }
+
+    .button-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    #message {
+      margin-top: 10px;
+    }
+  </style>
 </head>
 
 <body>
 
   <header>
     <h1>TaskVexa</h1>
-    <button id="logoutButton">Logout</button>
+
+    <button id="logoutButton">
+      Logout
+    </button>
   </header>
+
 
   <main>
 
+    <!-- USER INFORMATION -->
+
     <section>
-      <h2>Welcome, <span id="userName">User</span>!</h2>
-      <p>Account type: <strong id="userType">Worker</strong></p>
+
+      <h2>
+        Welcome,
+        <span id="userName">User</span>!
+      </h2>
+
+      <p>
+        Account type:
+        <strong id="userType">Worker</strong>
+      </p>
+
     </section>
 
-    <section>
-      <h2>Dashboard</h2>
+
+    <!-- BALANCE -->
+
+    <section class="balance-card">
+
       <p>Available Balance</p>
-      <h2>₦0.00</h2>
 
-      <button onclick="window.location.href='tasks.html'">
-        View Tasks
-      </button>
+      <h2 id="balance">
+        ₦0.00
+      </h2>
 
-      <button>My Referrals</button>
-      <button>My Profile</button>
+      <p id="message">
+        Loading balance...
+      </p>
+
+    </section>
+
+
+    <!-- DASHBOARD BUTTONS -->
+
+    <section>
+
+      <div class="button-group">
+
+        <button
+          onclick="window.location.href='tasks.html'">
+          View Tasks
+        </button>
+
+
+        <button
+          onclick="window.location.href='referrals.html'">
+          My Referrals
+        </button>
+
+
+        <button
+          onclick="window.location.href='profile.html'">
+          My Profile
+        </button>
+
+      </div>
+
     </section>
 
   </main>
+
+
+  <!-- SUPABASE -->
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+  <script>
+
+    const SUPABASE_URL =
+      "https://dxtlnrthlpdaobnbazny.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+
+    const supabaseClient =
+      window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+      );
+
+
+    /*
+      LOAD LOGGED-IN USER
+    */
+
+    async function loadUser() {
+
+      try {
+
+        const {
+          data: { user },
+          error
+        } =
+          await supabaseClient.auth.getUser();
+
+
+        if (error || !user) {
+
+          window.location.href =
+            "login.html";
+
+          return null;
+        }
+
+
+        /*
+          GET PROFILE
+        */
+
+        const {
+          data: profile
+        } =
+          await supabaseClient
+            .from("profiles")
+            .select("*")
+            .eq("id", user.id)
+            .maybeSingle();
+
+
+        if (profile) {
+
+          const name =
+            profile.full_name ||
+            profile.name ||
+            user.email
+              .split("@")[0];
+
+
+          document.getElementById(
+            "userName"
+          ).textContent = name;
+
+
+          if (profile.role) {
+
+            document.getElementById(
+              "userType"
+            ).textContent =
+              profile.role;
+
+          }
+
+        } else {
+
+          document.getElementById(
+            "userName"
+          ).textContent =
+            user.email.split("@")[0];
+
+        }
+
+
+        return user;
+
+      } catch (error) {
+
+        console.error(
+          "User loading error:",
+          error
+        );
+
+        return null;
+
+      }
+
+    }
+
+
+    /*
+      LOAD WALLET BALANCE
+    */
+
+    async function loadWalletBalance(user) {
+
+      const balanceElement =
+        document.getElementById(
+          "balance"
+        );
+
+      const messageElement =
+        document.getElementById(
+          "message"
+        );
+
+
+      try {
+
+        const {
+          data: wallet,
+          error
+        } =
+          await supabaseClient
+            .from("wallets")
+            .select("balance")
+            .eq("user_id", user.id)
+            .maybeSingle();
+
+
+        if (error) {
+
+          throw error;
+
+        }
+
+
+        /*
+          If wallet doesn't exist,
+          create it.
+        */
+
+        if (!wallet) {
+
+          const {
+            data: newWallet,
+            error: createError
+          } =
+            await supabaseClient
+              .from("wallets")
+              .insert({
+                user_id: user.id,
+                balance: 0
+              })
+              .select("balance")
+              .single();
+
+
+          if (createError) {
+
+            throw createError;
+
+          }
+
+
+          balanceElement.textContent =
+            "₦" +
+            Number(
+              newWallet.balance || 0
+            ).toLocaleString(
+              "en-NG",
+              {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }
+            );
+
+        } else {
+
+          balanceElement.textContent =
+            "₦" +
+            Number(
+              wallet.balance || 0
+            ).toLocaleString(
+              "en-NG",
+              {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+              }
+            );
+
+        }
+
+
+        messageElement.textContent =
+          "Balance updated.";
+
+
+      } catch (error) {
+
+        console.error(
+          "Wallet error:",
+          error
+        );
+
+
+        messageElement.textContent =
+          "Unable to load balance.";
+
+      }
+
+    }
+
+
+    /*
+      LOGOUT
+    */
+
+    document
+      .getElementById("logoutButton")
+      .addEventListener(
+        "click",
+        async function () {
+
+          await supabaseClient.auth.signOut();
+
+          window.location.href =
+            "login.html";
+
+        }
+      );
+
+
+    /*
+      START DASHBOARD
+    */
+
+    async function initializeDashboard() {
+
+      const user =
+        await loadUser();
+
+
+      if (!user) {
+        return;
+      }
+
+
+      await loadWalletBalance(
+        user
+      );
+
+    }
+
+
+    initializeDashboard();
+
+  </script>
 
 </body>
 </html>

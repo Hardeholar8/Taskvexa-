@@ -3,9 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>TaskVexa - Promoter Dashboard</title>
-
   <link rel="stylesheet" href="style.css">
 
   <style>
@@ -48,8 +46,9 @@
     }
 
     .wallet-balance {
-      font-size: 24px;
+      font-size: 28px;
       font-weight: bold;
+      margin: 8px 0 15px;
     }
 
     .total-cost {
@@ -83,6 +82,10 @@
       cursor: not-allowed;
       opacity: 0.6;
     }
+
+    .hidden {
+      display: none !important;
+    }
   </style>
 </head>
 
@@ -92,18 +95,26 @@
   <h1>TaskVexa</h1>
 
   <nav>
-    <a href="promoter-dashboard.html">Promoter Dashboard</a>
-    <a href="admin-promoter-wallet.html">Wallet</a>
-    <button id="logoutButton">Logout</button>
+    <a href="promoter-dashboard.html">
+      Promoter Dashboard
+    </a>
+
+    <a href="promoter-wallet.html">
+      Wallet
+    </a>
+
+    <button id="logoutButton">
+      Logout
+    </button>
   </nav>
 </header>
 
+
 <main>
 
-  <!-- PROMOTER ACCESS -->
+  <!-- ACCESS -->
 
   <section>
-
     <h2>Promoter Dashboard</h2>
 
     <p>
@@ -113,7 +124,6 @@
     <p id="accessMessage">
       Checking promoter access...
     </p>
-
   </section>
 
 
@@ -121,11 +131,14 @@
 
   <section
     id="walletSection"
-    class="wallet-box"
-    style="display:none;"
+    class="wallet-box hidden"
   >
 
     <h3>Promoter Wallet</h3>
+
+    <p>
+      Available Balance
+    </p>
 
     <p class="wallet-balance">
       ₦<span id="walletBalance">0</span>
@@ -135,7 +148,7 @@
       type="button"
       onclick="window.location.href='promoter-wallet.html'"
     >
-      Add Funds / Wallet
+      Add Funds / Manage Wallet
     </button>
 
   </section>
@@ -145,19 +158,18 @@
 
   <section
     id="createTaskSection"
-    class="task-card"
-    style="display:none;"
+    class="task-card hidden"
   >
 
     <h2>Create Task</h2>
 
     <p>
-      Choose your platform and the number of workers you need.
-      Pricing is automatically controlled by admin.
+      Select a platform and enter the number of workers you need.
+      The price is controlled automatically by admin.
     </p>
 
 
-    <!-- TASK TITLE -->
+    <!-- TITLE -->
 
     <div class="form-group">
 
@@ -175,7 +187,7 @@
     </div>
 
 
-    <!-- TASK INSTRUCTIONS -->
+    <!-- DESCRIPTION -->
 
     <div class="form-group">
 
@@ -210,7 +222,7 @@
     </div>
 
 
-    <!-- NUMBER OF WORKERS -->
+    <!-- WORKERS -->
 
     <div class="form-group">
 
@@ -224,28 +236,44 @@
         min="1"
         step="1"
         value="1"
-        placeholder="Enter number of workers"
+        inputmode="numeric"
       >
 
     </div>
 
 
-    <!-- PROMOTER PRICE -->
+    <!-- PRICE -->
 
     <div
       id="priceBox"
-      class="cost-box"
-      style="display:none;"
+      class="cost-box hidden"
     >
 
       <p>
-        <strong>Price Per Worker:</strong>
-        ₦<span id="pricePerWorker">0</span>
+        <strong>
+          Price Per Worker:
+        </strong>
+
+        ₦<span id="pricePerWorker">
+          0
+        </span>
       </p>
 
       <p class="total-cost">
-        <strong>Total Cost:</strong>
-        ₦<span id="totalCost">0</span>
+
+        <strong>
+          Total Cost:
+        </strong>
+
+        ₦<span id="totalCost">
+          0
+        </span>
+
+      </p>
+
+      <p>
+        This amount will be deducted from your promoter wallet
+        when the task is successfully submitted.
       </p>
 
     </div>
@@ -284,8 +312,7 @@
 
   <section
     id="myTasksSection"
-    class="task-card"
-    style="display:none;"
+    class="task-card hidden"
   >
 
     <h2>My Tasks</h2>
@@ -310,7 +337,6 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
-
 
 const supabaseClient =
   window.supabase.createClient(
@@ -446,9 +472,7 @@ async function checkPromoter() {
 
 
     if (error) {
-
       throw error;
-
     }
 
 
@@ -475,14 +499,17 @@ async function checkPromoter() {
       "success";
 
 
-    walletSection.style.display =
-      "block";
+    walletSection.classList.remove(
+      "hidden"
+    );
 
-    createTaskSection.style.display =
-      "block";
+    createTaskSection.classList.remove(
+      "hidden"
+    );
 
-    myTasksSection.style.display =
-      "block";
+    myTasksSection.classList.remove(
+      "hidden"
+    );
 
 
     return true;
@@ -534,9 +561,7 @@ async function loadWallet() {
 
 
     if (error) {
-
       throw error;
-
     }
 
 
@@ -569,24 +594,30 @@ async function loadWallet() {
 
 
 /* ==========================================
-   LOAD ADMIN SETTINGS
+   LOAD PROMOTER SETTINGS
 ========================================== */
 
 async function loadSettings() {
+
+  taskPlatform.innerHTML = `
+    <option value="">
+      Loading platforms...
+    </option>
+  `;
+
 
   try {
 
     /*
       IMPORTANT:
 
-      We deliberately call the secure RPC
-      that only returns:
+      This RPC returns ONLY:
 
       platform
       promoter_price
       auto_publish
 
-      Worker reward is NOT returned.
+      It DOES NOT return worker_reward.
     */
 
     const {
@@ -599,9 +630,7 @@ async function loadSettings() {
 
 
     if (error) {
-
       throw error;
-
     }
 
 
@@ -685,9 +714,7 @@ async function loadSettings() {
 
 
     taskMessage.textContent =
-      "Settings Error: " +
-      error.message;
-
+      "Unable to load promoter settings.";
 
     taskMessage.className =
       "error";
@@ -702,7 +729,7 @@ async function loadSettings() {
 
 
 /* ==========================================
-   CALCULATE COST
+   UPDATE COST
 ========================================== */
 
 function updateCost() {
@@ -727,12 +754,13 @@ function updateCost() {
 
   if (
     !selectedSetting ||
-    !workers ||
+    !Number.isInteger(workers) ||
     workers < 1
   ) {
 
-    priceBox.style.display =
-      "none";
+    priceBox.classList.add(
+      "hidden"
+    );
 
     submitTaskButton.disabled =
       true;
@@ -746,6 +774,22 @@ function updateCost() {
     Number(
       selectedSetting.promoter_price || 0
     );
+
+
+  if (
+    price < 0
+  ) {
+
+    priceBox.classList.add(
+      "hidden"
+    );
+
+    submitTaskButton.disabled =
+      true;
+
+    return;
+
+  }
 
 
   const total =
@@ -764,8 +808,9 @@ function updateCost() {
     );
 
 
-  priceBox.style.display =
-    "block";
+  priceBox.classList.remove(
+    "hidden"
+  );
 
 
   submitTaskButton.disabled =
@@ -906,47 +951,56 @@ submitTaskButton.addEventListener(
       submitTaskButton.textContent =
         "Submitting...";
 
+      taskMessage.textContent =
+        "Checking wallet and creating task...";
+
+      taskMessage.className =
+        "";
+
 
       /*
-        SECURE DATABASE FUNCTION
+        THE DATABASE IS THE FINAL AUTHORITY.
 
-        The database calculates the real price,
-        checks the wallet and deducts the money.
+        It:
+        - checks promoter role
+        - gets admin platform price
+        - calculates total cost
+        - checks wallet
+        - deducts wallet
+        - creates the task
+        - stores worker reward internally
+        - records the wallet transaction
 
-        The worker reward is NEVER supplied
-        by this page.
+        Worker reward is NEVER sent from this page.
       */
 
       const {
         data,
         error
       } =
-        await supabaseClient.rpc(
-          "create_promoter_task_v2",
-          {
-            p_title:
-              title,
+      await supabaseClient.rpc(
+        "create_promoter_task_v2",
+        {
+          p_title:
+            title,
 
-            p_description:
-              description,
+          p_description:
+            description,
 
-            p_platform:
-              platform,
+          p_platform:
+            platform,
 
-            p_task_url:
-              taskUrl,
+          p_task_url:
+            taskUrl,
 
-            p_workers_needed:
-              workers
-
-          }
-        );
+          p_workers_needed:
+            workers
+        }
+      );
 
 
       if (error) {
-
         throw error;
-
       }
 
 
@@ -974,13 +1028,12 @@ submitTaskButton.addEventListener(
         "Task submitted successfully. Status: " +
         status;
 
-
       taskMessage.className =
         "success";
 
 
       /*
-        Clear form.
+        CLEAR FORM
       */
 
       document.getElementById(
@@ -1006,8 +1059,9 @@ submitTaskButton.addEventListener(
         "";
 
 
-      priceBox.style.display =
-        "none";
+      priceBox.classList.add(
+        "hidden"
+      );
 
 
       selectedSetting =
@@ -1015,10 +1069,12 @@ submitTaskButton.addEventListener(
 
 
       /*
-        Refresh wallet balance.
+        REFRESH WALLET
       */
 
       await loadWallet();
+
+      await loadMyTasks();
 
 
       submitTaskButton.disabled =
@@ -1026,9 +1082,6 @@ submitTaskButton.addEventListener(
 
       submitTaskButton.textContent =
         "Submit Task";
-
-
-      await loadMyTasks();
 
 
     } catch (error) {
@@ -1039,10 +1092,30 @@ submitTaskButton.addEventListener(
       );
 
 
-      taskMessage.textContent =
-        "Error: " +
-        error.message;
+      /*
+        Show a clean message.
+      */
 
+      let message =
+        error.message ||
+        "Task could not be created.";
+
+
+      if (
+        message.toLowerCase()
+          .includes(
+            "insufficient wallet"
+          )
+      ) {
+
+        message =
+          "Insufficient wallet balance. Please add funds before posting this task.";
+
+      }
+
+
+      taskMessage.textContent =
+        message;
 
       taskMessage.className =
         "error";
@@ -1072,31 +1145,13 @@ async function loadMyTasks() {
       data: tasks,
       error
     } =
-      await supabaseClient
-        .from("tasks")
-        .select(
-          "id, title, description, platform, workers_needed, status, source, created_at, promoter_charge"
-        )
-        .eq(
-          "created_by",
-          currentUser.id
-        )
-        .eq(
-          "source",
-          "promoter"
-        )
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
+      await supabaseClient.rpc(
+        "get_my_promoter_tasks"
+      );
 
 
     if (error) {
-
       throw error;
-
     }
 
 
@@ -1157,21 +1212,30 @@ async function loadMyTasks() {
           </h3>
 
           <p>
-            <strong>Platform:</strong>
+            <strong>
+              Platform:
+            </strong>
+
             ${escapeHTML(
               task.platform
             )}
           </p>
 
           <p>
-            <strong>Workers Requested:</strong>
+            <strong>
+              Workers Requested:
+            </strong>
+
             ${Number(
               task.workers_needed || 0
             )}
           </p>
 
           <p>
-            <strong>Amount Charged:</strong>
+            <strong>
+              Amount Charged:
+            </strong>
+
             ₦${Number(
               task.promoter_charge || 0
             ).toLocaleString(
@@ -1206,8 +1270,7 @@ async function loadMyTasks() {
 
 
     myTasksMessage.textContent =
-      "Unable to load your tasks: " +
-      error.message;
+      "Unable to load your tasks.";
 
   }
 
@@ -1218,9 +1281,7 @@ async function loadMyTasks() {
    ESCAPE HTML
 ========================================== */
 
-function escapeHTML(
-  value
-) {
+function escapeHTML(value) {
 
   return String(
     value ?? ""
@@ -1255,6 +1316,27 @@ function escapeHTML(
 
 
 /* ==========================================
+   LOGOUT
+========================================== */
+
+document
+  .getElementById(
+    "logoutButton"
+  )
+  .addEventListener(
+    "click",
+    async function() {
+
+      await supabaseClient.auth.signOut();
+
+      window.location.href =
+        "login.html";
+
+    }
+  );
+
+
+/* ==========================================
    START
 ========================================== */
 
@@ -1265,9 +1347,7 @@ async function initialize() {
 
 
   if (!allowed) {
-
     return;
-
   }
 
 

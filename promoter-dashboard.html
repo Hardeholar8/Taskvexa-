@@ -49,7 +49,8 @@
       margin-top: 8px;
     }
 
-    .live {
+    .live,
+    .success {
       color: #15803d;
     }
 
@@ -59,10 +60,6 @@
 
     .error {
       color: #dc2626;
-    }
-
-    .success {
-      color: #15803d;
     }
 
     button {
@@ -83,9 +80,7 @@
   <section>
     <h2>Promoter Dashboard</h2>
 
-    <p>
-      Create and manage your promoter tasks.
-    </p>
+    <p>Create and manage your promoter tasks.</p>
 
     <p id="accessMessage">
       Checking promoter access...
@@ -109,6 +104,7 @@
     </p>
 
     <div class="form-group">
+
       <label for="taskTitle">
         Task Title
       </label>
@@ -118,10 +114,12 @@
         id="taskTitle"
         placeholder="Enter task title"
       >
+
     </div>
 
 
     <div class="form-group">
+
       <label for="taskDescription">
         Task Instructions
       </label>
@@ -130,23 +128,29 @@
         id="taskDescription"
         placeholder="Enter the instructions workers should follow"
       ></textarea>
+
     </div>
 
 
     <div class="form-group">
+
       <label for="taskPlatform">
         Platform
       </label>
 
       <select id="taskPlatform">
+
         <option value="">
           Loading platforms...
         </option>
+
       </select>
+
     </div>
 
 
     <div class="form-group">
+
       <label for="taskUrl">
         Task Link
       </label>
@@ -156,6 +160,7 @@
         id="taskUrl"
         placeholder="https://example.com/task"
       >
+
     </div>
 
 
@@ -192,7 +197,10 @@
     </div>
 
 
-    <button id="submitTaskButton">
+    <button
+      id="submitTaskButton"
+      disabled
+    >
       Submit Task
     </button>
 
@@ -231,6 +239,7 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -290,16 +299,18 @@ let currentUser = null;
 let settings = [];
 
 
-/* =========================
+/* ==========================================
    CHECK PROMOTER
-========================= */
+========================================== */
 
 async function checkPromoter() {
 
   try {
 
     const {
-      data: { user },
+      data: {
+        user
+      },
       error: userError
     } =
       await supabaseClient.auth.getUser();
@@ -318,7 +329,8 @@ async function checkPromoter() {
     }
 
 
-    currentUser = user;
+    currentUser =
+      user;
 
 
     const {
@@ -377,11 +389,19 @@ async function checkPromoter() {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "PROMOTER ACCESS ERROR:",
+      error
+    );
+
 
     accessMessage.textContent =
-      "Error: " +
+      "Access Error: " +
       error.message;
+
+    accessMessage.className =
+      "error";
+
 
     return false;
 
@@ -390,11 +410,15 @@ async function checkPromoter() {
 }
 
 
-/* =========================
+/* ==========================================
    LOAD ADMIN SETTINGS
-========================= */
+========================================== */
 
 async function loadSettings() {
+
+  taskMessage.textContent =
+    "Loading admin settings...";
+
 
   try {
 
@@ -404,15 +428,9 @@ async function loadSettings() {
     } =
       await supabaseClient
         .from("promoter_task_settings")
-        .select(`
-          id,
-          platform,
-          promoter_price,
-          worker_reward,
-          target_levels,
-          workers_needed,
-          auto_publish
-        `)
+        .select(
+          "id, platform, promoter_price, worker_reward, target_levels, workers_needed, auto_publish"
+        )
         .order(
           "platform",
           {
@@ -422,6 +440,11 @@ async function loadSettings() {
 
 
     if (error) {
+
+      console.error(
+        "SUPABASE SETTINGS ERROR:",
+        error
+      );
 
       throw error;
 
@@ -449,6 +472,12 @@ async function loadSettings() {
       submitTaskButton.disabled =
         true;
 
+      taskMessage.textContent =
+        "No promoter platforms have been configured by admin.";
+
+      taskMessage.className =
+        "error";
+
       return;
 
     }
@@ -469,11 +498,14 @@ async function loadSettings() {
             "option"
           );
 
+
         option.value =
           setting.platform;
 
+
         option.textContent =
           setting.platform;
+
 
         taskPlatform.appendChild(
           option
@@ -483,9 +515,20 @@ async function loadSettings() {
     );
 
 
+    taskMessage.textContent =
+      "Admin settings loaded successfully.";
+
+    taskMessage.className =
+      "success";
+
+
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "LOAD SETTINGS ERROR:",
+      error
+    );
+
 
     taskPlatform.innerHTML = `
       <option value="">
@@ -493,21 +536,31 @@ async function loadSettings() {
       </option>
     `;
 
+
     taskMessage.textContent =
-      "Unable to load admin settings.";
+      "Settings Error: " +
+      error.message;
+
+
+    taskMessage.className =
+      "error";
+
+
+    submitTaskButton.disabled =
+      true;
 
   }
 
 }
 
 
-/* =========================
-   SHOW SETTINGS
-========================= */
+/* ==========================================
+   SHOW SELECTED SETTINGS
+========================================== */
 
 taskPlatform.addEventListener(
   "change",
-  function () {
+  function() {
 
     const selected =
       settings.find(
@@ -521,6 +574,9 @@ taskPlatform.addEventListener(
 
       settingPreview.style.display =
         "none";
+
+      submitTaskButton.disabled =
+        true;
 
       return;
 
@@ -540,7 +596,9 @@ taskPlatform.addEventListener(
     document.getElementById(
       "previewWorkers"
     ).textContent =
-      selected.workers_needed;
+      Number(
+        selected.workers_needed || 0
+      );
 
 
     document.getElementById(
@@ -562,30 +620,41 @@ taskPlatform.addEventListener(
     settingPreview.style.display =
       "block";
 
+
+    submitTaskButton.disabled =
+      false;
+
+
+    taskMessage.textContent =
+      "";
+
   }
 );
 
 
-/* =========================
+/* ==========================================
    SUBMIT TASK
-========================= */
+========================================== */
 
 submitTaskButton.addEventListener(
   "click",
-  async function () {
+  async function() {
 
     const title =
       document.getElementById(
         "taskTitle"
       ).value.trim();
 
+
     const description =
       document.getElementById(
         "taskDescription"
       ).value.trim();
 
+
     const platform =
       taskPlatform.value;
+
 
     const taskUrl =
       document.getElementById(
@@ -642,17 +711,6 @@ submitTaskButton.addEventListener(
         "Submitting...";
 
 
-      /*
-        IMPORTANT:
-
-        The promoter does NOT send
-        reward, price, level or
-        worker limit.
-
-        Supabase gets those values
-        from admin settings.
-      */
-
       const {
         data,
         error
@@ -671,11 +729,17 @@ submitTaskButton.addEventListener(
 
             p_task_url:
               taskUrl
+
           }
         );
 
 
       if (error) {
+
+        console.error(
+          "CREATE TASK RPC ERROR:",
+          error
+        );
 
         throw error;
 
@@ -703,38 +767,40 @@ submitTaskButton.addEventListener(
 
 
       taskMessage.textContent =
-        `Task submitted successfully. Status: ${status}.`;
+        "Task submitted successfully. Status: " +
+        status;
 
 
       taskMessage.className =
         "success";
 
 
-      /*
-        Clear form.
-      */
-
       document.getElementById(
         "taskTitle"
       ).value = "";
+
 
       document.getElementById(
         "taskDescription"
       ).value = "";
 
+
       document.getElementById(
         "taskUrl"
       ).value = "";
 
+
       taskPlatform.value =
         "";
+
 
       settingPreview.style.display =
         "none";
 
 
       submitTaskButton.disabled =
-        false;
+        true;
+
 
       submitTaskButton.textContent =
         "Submit Task";
@@ -745,11 +811,16 @@ submitTaskButton.addEventListener(
 
     } catch (error) {
 
-      console.error(error);
+      console.error(
+        "SUBMIT TASK ERROR:",
+        error
+      );
+
 
       taskMessage.textContent =
         "Error: " +
         error.message;
+
 
       taskMessage.className =
         "error";
@@ -767,9 +838,9 @@ submitTaskButton.addEventListener(
 );
 
 
-/* =========================
+/* ==========================================
    LOAD MY TASKS
-========================= */
+========================================== */
 
 async function loadMyTasks() {
 
@@ -781,18 +852,9 @@ async function loadMyTasks() {
     } =
       await supabaseClient
         .from("tasks")
-        .select(`
-          id,
-          title,
-          description,
-          platform,
-          reward,
-          workers_needed,
-          target_levels,
-          status,
-          source,
-          created_at
-        `)
+        .select(
+          "id, title, description, platform, reward, workers_needed, target_levels, status, source, created_at"
+        )
         .eq(
           "created_by",
           currentUser.id
@@ -844,6 +906,7 @@ async function loadMyTasks() {
           document.createElement(
             "div"
           );
+
 
         card.className =
           "task-card";
@@ -905,7 +968,8 @@ async function loadMyTasks() {
           </p>
 
           <p class="status ${statusClass}">
-            Status: ${escapeHTML(
+            Status:
+            ${escapeHTML(
               statusText
             )}
           </p>
@@ -923,43 +987,51 @@ async function loadMyTasks() {
 
   } catch (error) {
 
-    console.error(error);
+    console.error(
+      "LOAD MY TASKS ERROR:",
+      error
+    );
+
 
     myTasksMessage.textContent =
-      "Unable to load your tasks.";
+      "Unable to load your tasks: " +
+      error.message;
 
   }
 
 }
 
 
-/* =========================
+/* ==========================================
    ESCAPE HTML
-========================= */
+========================================== */
 
-function escapeHTML(
-  value
-) {
+function escapeHTML(value) {
 
   return String(
     value ?? ""
   )
+
     .replace(
       /&/g,
       "&amp;"
     )
+
     .replace(
       /</g,
       "&lt;"
     )
+
     .replace(
       />/g,
       "&gt;"
     )
+
     .replace(
       /"/g,
       "&quot;"
     )
+
     .replace(
       /'/g,
       "&#039;"
@@ -968,9 +1040,9 @@ function escapeHTML(
 }
 
 
-/* =========================
+/* ==========================================
    START
-========================= */
+========================================== */
 
 async function initialize() {
 
@@ -979,7 +1051,9 @@ async function initialize() {
 
 
   if (!allowed) {
+
     return;
+
   }
 
 
@@ -995,4 +1069,4 @@ initialize();
 </script>
 
 </body>
-  </html>
+</html>

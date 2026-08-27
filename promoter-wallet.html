@@ -1,380 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>TaskVexa - Promoter Wallet</title>
+<title>TaskVexa - Promoter Wallet</title>
 
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-  <style>
-    .wallet-box,
-    .payment-box,
-    .deposit-box,
-    .history-box {
-      background: #f3f4f6;
-      padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 20px;
-    }
+<style>
+.wallet-box,
+.payment-box,
+.deposit-box,
+.history-box {
+  background:#f3f4f6;
+  padding:20px;
+  border-radius:12px;
+  margin-bottom:20px;
+}
 
-    .balance {
-      font-size: 30px;
-      font-weight: bold;
-    }
+.payment-box {
+  background:#eef6ff;
+  border:1px solid #bfdbfe;
+}
 
-    .payment-box {
-      background: #eef6ff;
-      border: 1px solid #bfdbfe;
-    }
+.balance {
+  font-size:30px;
+  font-weight:bold;
+}
 
-    .payment-detail {
-      background: white;
-      padding: 12px;
-      border-radius: 8px;
-      margin: 10px 0;
-    }
+.payment-detail {
+  background:white;
+  padding:12px;
+  border-radius:8px;
+  margin:10px 0;
+}
 
-    .payment-detail strong {
-      display: block;
-      margin-bottom: 5px;
-    }
+.payment-detail strong {
+  display:block;
+  margin-bottom:5px;
+}
 
-    .account-number {
-      font-size: 20px;
-      font-weight: bold;
-      letter-spacing: 1px;
-    }
+.account-number {
+  font-size:20px;
+  font-weight:bold;
+  letter-spacing:1px;
+}
 
-    .form-group {
-      margin-bottom: 15px;
-    }
+.form-group {
+  margin-bottom:15px;
+}
 
-    label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
+label {
+  display:block;
+  font-weight:bold;
+  margin-bottom:6px;
+}
 
-    input {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-    }
+input {
+  width:100%;
+  box-sizing:border-box;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:15px;
+}
 
-    input[type="file"] {
-      background: white;
-    }
+input[type="file"] {
+  background:white;
+}
 
-    .file-note {
-      font-size: 13px;
-      color: #555;
-      margin-top: 5px;
-    }
+button {
+  padding:12px 18px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
 
-    .screenshot-preview {
-      max-width: 100%;
-      max-height: 250px;
-      margin-top: 10px;
-      border-radius: 8px;
-      display: none;
-    }
+button:disabled {
+  cursor:not-allowed;
+  opacity:.6;
+}
 
-    button {
-      padding: 12px 18px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+.success {
+  color:#15803d;
+}
 
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
+.error {
+  color:#dc2626;
+}
 
-    .success {
-      color: #15803d;
-    }
+.pending {
+  color:#b45309;
+}
 
-    .error {
-      color: #dc2626;
-    }
+.deposit-item {
+  background:white;
+  padding:14px;
+  border-radius:8px;
+  margin-bottom:10px;
+}
 
-    .pending {
-      color: #b45309;
-    }
+.screenshot-preview {
+  max-width:100%;
+  max-height:250px;
+  margin-top:10px;
+  border-radius:8px;
+  display:none;
+}
 
-    .deposit-item {
-      background: white;
-      padding: 14px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
+.copy-button {
+  margin-top:5px;
+  padding:8px 12px;
+  font-size:13px;
+}
 
-    .status {
-      font-weight: bold;
-    }
+.file-note {
+  font-size:13px;
+  color:#555;
+}
 
-    .copy-button {
-      margin-top: 5px;
-      padding: 8px 12px;
-      font-size: 13px;
-    }
-
-    .loading {
-      color: #555;
-    }
-  </style>
-
+.loading {
+  color:#555;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-
   <h1>TaskVexa</h1>
 
   <a href="promoter-dashboard.html">
     Promoter Dashboard
   </a>
-
 </header>
-
 
 <main>
 
-  <h2>Promoter Wallet</h2>
+<h2>Promoter Wallet</h2>
 
-  <p id="accessMessage">
-    Checking account...
+<p id="accessMessage" class="loading">
+  Checking account...
+</p>
+
+
+<!-- WALLET -->
+
+<section id="walletSection"
+         class="wallet-box"
+         style="display:none;">
+
+  <h3>Available Balance</h3>
+
+  <p class="balance">
+    ₦<span id="walletBalance">0</span>
+  </p>
+
+</section>
+
+
+<!-- ADMIN PAYMENT DETAILS -->
+
+<section id="paymentSection"
+         class="payment-box"
+         style="display:none;">
+
+  <h3>Payment Details</h3>
+
+  <p>
+    Send your deposit to the account below.
+    After payment, enter your payment reference
+    and upload your payment screenshot.
+  </p>
+
+  <div class="payment-detail">
+    <strong>Bank Name</strong>
+    <span id="bankName">Loading...</span>
+  </div>
+
+  <div class="payment-detail">
+    <strong>Account Name</strong>
+    <span id="accountName">Loading...</span>
+  </div>
+
+  <div class="payment-detail">
+
+    <strong>Account Number</strong>
+
+    <span id="accountNumber"
+          class="account-number">
+      Loading...
+    </span>
+
+    <br>
+
+    <button type="button"
+            class="copy-button"
+            id="copyAccountButton">
+      Copy Account Number
+    </button>
+
+  </div>
+
+  <div id="paymentInstructionsBox"
+       class="payment-detail"
+       style="display:none;">
+
+    <strong>Payment Instructions</strong>
+
+    <span id="paymentInstructions"></span>
+
+  </div>
+
+</section>
+
+
+<!-- ADD FUNDS -->
+
+<section id="depositSection"
+         class="deposit-box"
+         style="display:none;">
+
+  <h3>Add Funds</h3>
+
+  <p>
+    Complete your payment using the account details above.
   </p>
 
 
-  <!-- WALLET BALANCE -->
+  <div class="form-group">
 
-  <section
-    id="walletSection"
-    class="wallet-box"
-    style="display:none;"
-  >
+    <label for="depositAmount">
+      Amount
+    </label>
 
-    <h3>Available Balance</h3>
-
-    <p class="balance">
-      ₦<span id="walletBalance">0</span>
-    </p>
-
-  </section>
-
-
-  <!-- ADMIN PAYMENT DETAILS -->
-
-  <section
-    id="paymentSection"
-    class="payment-box"
-    style="display:none;"
-  >
-
-    <h3>Payment Details</h3>
-
-    <p>
-      Send your deposit to the account below.
-      After payment, enter your payment reference
-      and upload the payment screenshot.
-    </p>
-
-
-    <div class="payment-detail">
-
-      <strong>Bank / Payment Platform</strong>
-
-      <span id="bankName">
-        Loading...
-      </span>
-
-    </div>
-
-
-    <div class="payment-detail">
-
-      <strong>Account Name</strong>
-
-      <span id="accountName">
-        Loading...
-      </span>
-
-    </div>
-
-
-    <div class="payment-detail">
-
-      <strong>Account Number</strong>
-
-      <span
-        id="accountNumber"
-        class="account-number"
-      >
-        Loading...
-      </span>
-
-      <br>
-
-      <button
-        type="button"
-        class="copy-button"
-        id="copyAccountButton"
-      >
-        Copy Account Number
-      </button>
-
-    </div>
-
-
-    <div
-      id="paymentInstructionsBox"
-      class="payment-detail"
-      style="display:none;"
+    <input
+      type="number"
+      id="depositAmount"
+      min="1"
+      step="1"
+      placeholder="Enter amount"
     >
 
-      <strong>
-        Payment Instructions
-      </strong>
-
-      <span id="paymentInstructions"></span>
-
-    </div>
-
-  </section>
+  </div>
 
 
-  <!-- DEPOSIT -->
+  <div class="form-group">
 
-  <section
-    id="depositSection"
-    class="deposit-box"
-    style="display:none;"
-  >
+    <label for="paymentReference">
+      Payment Reference
+    </label>
 
-    <h3>Add Funds</h3>
+    <input
+      type="text"
+      id="paymentReference"
+      maxlength="150"
+      placeholder="Enter your payment reference"
+    >
 
-    <p>
-      Complete your payment using the account details above,
-      then submit your deposit below.
+  </div>
+
+
+  <div class="form-group">
+
+    <label for="paymentScreenshot">
+      Payment Screenshot
+    </label>
+
+    <input
+      type="file"
+      id="paymentScreenshot"
+      accept="image/jpeg,image/png,image/webp"
+    >
+
+    <p class="file-note">
+      Upload a clear screenshot showing your payment.
+      Payment screenshot is required.
     </p>
 
-
-    <!-- AMOUNT -->
-
-    <div class="form-group">
-
-      <label for="depositAmount">
-        Amount
-      </label>
-
-      <input
-        type="number"
-        id="depositAmount"
-        min="1"
-        step="1"
-        placeholder="Enter amount"
-      >
-
-    </div>
-
-
-    <!-- PAYMENT REFERENCE -->
-
-    <div class="form-group">
-
-      <label for="paymentReference">
-        Payment Reference
-      </label>
-
-      <input
-        type="text"
-        id="paymentReference"
-        placeholder="Enter your payment reference"
-        maxlength="150"
-      >
-
-    </div>
-
-
-    <!-- PAYMENT SCREENSHOT -->
-
-    <div class="form-group">
-
-      <label for="paymentScreenshot">
-        Payment Screenshot
-      </label>
-
-      <input
-        type="file"
-        id="paymentScreenshot"
-        accept="image/jpeg,image/png,image/webp"
-      >
-
-      <p class="file-note">
-        Upload a clear screenshot of your payment receipt.
-        Payment screenshot is required.
-      </p>
-
-      <img
-        id="screenshotPreview"
-        class="screenshot-preview"
-        alt="Payment screenshot preview"
-      >
-
-    </div>
-
-
-    <button
-      id="submitDepositButton"
-      disabled
+    <img
+      id="screenshotPreview"
+      class="screenshot-preview"
+      alt="Payment screenshot preview"
     >
-      Submit Deposit
-    </button>
 
-    <p id="depositMessage"></p>
-
-  </section>
+  </div>
 
 
-  <!-- DEPOSIT HISTORY -->
+  <button id="submitDepositButton"
+          disabled>
+    Submit Deposit
+  </button>
 
-  <section
-    id="historySection"
-    class="history-box"
-    style="display:none;"
-  >
+  <p id="depositMessage"></p>
 
-    <h3>Deposit History</h3>
+</section>
 
-    <div id="depositHistory">
-      Loading...
-    </div>
 
-  </section>
+<!-- HISTORY -->
+
+<section id="historySection"
+         class="history-box"
+         style="display:none;">
+
+  <h3>Deposit History</h3>
+
+  <div id="depositHistory">
+    Loading...
+  </div>
+
+</section>
 
 </main>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
 
-
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+const PROOF_BUCKET =
+  "task-proofs";
 
 
 const supabaseClient =
@@ -384,140 +336,138 @@ const supabaseClient =
   );
 
 
-const PROOF_BUCKET =
-  "task-proofs";
-
-
 let currentUser = null;
 
 
-/* ==========================================
-   ELEMENTS
-========================================== */
+/* ELEMENTS */
 
 const accessMessage =
-  document.getElementById(
-    "accessMessage"
-  );
-
+  document.getElementById("accessMessage");
 
 const walletSection =
-  document.getElementById(
-    "walletSection"
-  );
-
+  document.getElementById("walletSection");
 
 const paymentSection =
-  document.getElementById(
-    "paymentSection"
-  );
-
+  document.getElementById("paymentSection");
 
 const depositSection =
-  document.getElementById(
-    "depositSection"
-  );
-
+  document.getElementById("depositSection");
 
 const historySection =
-  document.getElementById(
-    "historySection"
-  );
-
+  document.getElementById("historySection");
 
 const walletBalance =
-  document.getElementById(
-    "walletBalance"
-  );
-
+  document.getElementById("walletBalance");
 
 const depositMessage =
-  document.getElementById(
-    "depositMessage"
-  );
-
+  document.getElementById("depositMessage");
 
 const depositHistory =
-  document.getElementById(
-    "depositHistory"
-  );
-
+  document.getElementById("depositHistory");
 
 const submitDepositButton =
-  document.getElementById(
-    "submitDepositButton"
-  );
-
+  document.getElementById("submitDepositButton");
 
 const paymentScreenshot =
-  document.getElementById(
-    "paymentScreenshot"
-  );
-
+  document.getElementById("paymentScreenshot");
 
 const screenshotPreview =
-  document.getElementById(
-    "screenshotPreview"
-  );
+  document.getElementById("screenshotPreview");
 
 
-/* ==========================================
-   ESCAPE HTML
-========================================== */
+/* ESCAPE HTML */
 
 function escapeHTML(value) {
 
   return String(value ?? "")
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-/* ==========================================
-   CHECK PROMOTER
-========================================== */
+/* SHOW ERROR */
+
+function showError(message) {
+
+  accessMessage.textContent =
+    message;
+
+  accessMessage.className =
+    "error";
+
+}
+
+
+/* CHECK LOGIN + PROMOTER */
 
 async function checkPromoter() {
 
   try {
 
+    accessMessage.textContent =
+      "Checking account...";
+
+
+    /*
+      First check the existing browser session.
+    */
+
     const {
-      data: {
-        user
-      },
-      error
+      data: sessionData,
+      error: sessionError
+    } =
+      await supabaseClient.auth.getSession();
+
+
+    if (sessionError) {
+
+      throw sessionError;
+
+    }
+
+
+    const session =
+      sessionData?.session;
+
+
+    if (!session) {
+
+      window.location.href =
+        "login.html";
+
+      return false;
+
+    }
+
+
+    /*
+      Now ask Supabase Auth to verify
+      the logged-in user.
+    */
+
+    const {
+      data: userData,
+      error: userError
     } =
       await supabaseClient.auth.getUser();
 
 
-    if (
-      error ||
-      !user
-    ) {
+    if (userError) {
+
+      throw userError;
+
+    }
+
+
+    const user =
+      userData?.user;
+
+
+    if (!user) {
 
       window.location.href =
         "login.html";
@@ -531,6 +481,14 @@ async function checkPromoter() {
       user;
 
 
+    accessMessage.textContent =
+      "Checking promoter account...";
+
+
+    /*
+      Check promoter profile.
+    */
+
     const {
       data: profile,
       error: profileError
@@ -538,10 +496,7 @@ async function checkPromoter() {
       await supabaseClient
         .from("profiles")
         .select("role")
-        .eq(
-          "id",
-          user.id
-        )
+        .eq("id", user.id)
         .maybeSingle();
 
 
@@ -552,24 +507,34 @@ async function checkPromoter() {
     }
 
 
-    if (
-      !profile ||
-      profile.role !== "promoter"
-    ) {
+    if (!profile) {
 
-      accessMessage.textContent =
-        "Access denied. Promoter account required.";
-
-      accessMessage.className =
-        "error";
+      showError(
+        "Your profile was not found."
+      );
 
       return false;
 
     }
 
 
+    if (profile.role !== "promoter") {
+
+      showError(
+        "Access denied. Promoter account required."
+      );
+
+      return false;
+
+    }
+
+
+    /*
+      Promoter confirmed.
+    */
+
     accessMessage.textContent =
-      "Promoter access confirmed.";
+      "Promoter account confirmed.";
 
     accessMessage.className =
       "success";
@@ -578,14 +543,11 @@ async function checkPromoter() {
     walletSection.style.display =
       "block";
 
-
     paymentSection.style.display =
       "block";
 
-
     depositSection.style.display =
       "block";
-
 
     historySection.style.display =
       "block";
@@ -593,21 +555,18 @@ async function checkPromoter() {
 
     return true;
 
-
   } catch (error) {
 
     console.error(
-      "PROMOTER ACCESS ERROR:",
+      "PROMOTER CHECK ERROR:",
       error
     );
 
 
-    accessMessage.textContent =
-      "Access Error: " +
-      error.message;
-
-    accessMessage.className =
-      "error";
+    showError(
+      "Account check failed: " +
+      (error.message || "Unknown error")
+    );
 
 
     return false;
@@ -617,9 +576,7 @@ async function checkPromoter() {
 }
 
 
-/* ==========================================
-   LOAD WALLET
-========================================== */
+/* LOAD WALLET */
 
 async function loadWallet() {
 
@@ -632,10 +589,7 @@ async function loadWallet() {
       await supabaseClient
         .from("wallets")
         .select("balance")
-        .eq(
-          "user_id",
-          currentUser.id
-        )
+        .eq("user_id", currentUser.id)
         .maybeSingle();
 
 
@@ -649,18 +603,14 @@ async function loadWallet() {
     walletBalance.textContent =
       Number(
         data?.balance || 0
-      ).toLocaleString(
-        "en-NG"
-      );
-
+      ).toLocaleString("en-NG");
 
   } catch (error) {
 
     console.error(
-      "LOAD WALLET ERROR:",
+      "WALLET ERROR:",
       error
     );
-
 
     walletBalance.textContent =
       "Unable to load";
@@ -670,9 +620,7 @@ async function loadWallet() {
 }
 
 
-/* ==========================================
-   LOAD ADMIN PAYMENT DETAILS
-========================================== */
+/* LOAD ADMIN PAYMENT DETAILS */
 
 async function loadPaymentDetails() {
 
@@ -682,9 +630,13 @@ async function loadPaymentDetails() {
       data,
       error
     } =
-      await supabaseClient.rpc(
-        "get_promoter_payment_details"
-      );
+      await supabaseClient
+        .from("promoter_payment_details")
+        .select(
+          "bank_name, account_name, account_number, instructions"
+        )
+        .limit(1)
+        .maybeSingle();
 
 
     if (error) {
@@ -694,42 +646,28 @@ async function loadPaymentDetails() {
     }
 
 
-    const details =
-      Array.isArray(data)
-        ? data[0]
-        : data;
-
-
-    if (!details) {
+    if (!data) {
 
       document.getElementById(
         "bankName"
       ).textContent =
-        "Payment details not configured.";
-
+        "Not configured";
 
       document.getElementById(
         "accountName"
       ).textContent =
         "-";
 
-
       document.getElementById(
         "accountNumber"
       ).textContent =
         "-";
 
-
-      submitDepositButton.disabled =
-        true;
-
-
       depositMessage.textContent =
-        "Admin payment details are not available yet.";
+        "Admin payment details have not been configured.";
 
       depositMessage.className =
         "error";
-
 
       return;
 
@@ -739,33 +677,27 @@ async function loadPaymentDetails() {
     document.getElementById(
       "bankName"
     ).textContent =
-      details.bank_name ||
-      "-";
+      data.bank_name || "-";
 
 
     document.getElementById(
       "accountName"
     ).textContent =
-      details.account_name ||
-      "-";
+      data.account_name || "-";
 
 
     document.getElementById(
       "accountNumber"
     ).textContent =
-      details.account_number ||
-      "-";
+      data.account_number || "-";
 
 
-    if (
-      details.instructions
-    ) {
+    if (data.instructions) {
 
       document.getElementById(
         "paymentInstructions"
       ).textContent =
-        details.instructions;
-
+        data.instructions;
 
       document.getElementById(
         "paymentInstructionsBox"
@@ -773,7 +705,6 @@ async function loadPaymentDetails() {
         "block";
 
     }
-
 
   } catch (error) {
 
@@ -786,14 +717,12 @@ async function loadPaymentDetails() {
     document.getElementById(
       "bankName"
     ).textContent =
-      "Unable to load payment details.";
-
+      "Unable to load";
 
     document.getElementById(
       "accountName"
     ).textContent =
       "-";
-
 
     document.getElementById(
       "accountNumber"
@@ -812,27 +741,24 @@ async function loadPaymentDetails() {
 }
 
 
-/* ==========================================
-   COPY ACCOUNT NUMBER
-========================================== */
+/* COPY ACCOUNT NUMBER */
 
 document
-  .getElementById(
-    "copyAccountButton"
-  )
+  .getElementById("copyAccountButton")
   .addEventListener(
     "click",
     async function() {
 
-      const accountNumber =
+      const number =
         document.getElementById(
           "accountNumber"
         ).textContent.trim();
 
 
       if (
-        !accountNumber ||
-        accountNumber === "-"
+        !number ||
+        number === "-" ||
+        number === "Loading..."
       ) {
 
         return;
@@ -843,7 +769,7 @@ document
       try {
 
         await navigator.clipboard.writeText(
-          accountNumber
+          number
         );
 
 
@@ -861,13 +787,9 @@ document
           1500
         );
 
-
       } catch (error) {
 
-        console.error(
-          "COPY ERROR:",
-          error
-        );
+        console.error(error);
 
       }
 
@@ -875,9 +797,39 @@ document
   );
 
 
-/* ==========================================
-   SCREENSHOT PREVIEW
-========================================== */
+/* VALIDATE FORM */
+
+function validateDepositForm() {
+
+  const amount =
+    Number(
+      document.getElementById(
+        "depositAmount"
+      ).value
+    );
+
+
+  const reference =
+    document.getElementById(
+      "paymentReference"
+    ).value.trim();
+
+
+  const screenshot =
+    paymentScreenshot.files[0];
+
+
+  submitDepositButton.disabled =
+    !(
+      amount > 0 &&
+      reference &&
+      screenshot
+    );
+
+}
+
+
+/* SCREENSHOT SELECTED */
 
 paymentScreenshot.addEventListener(
   "change",
@@ -913,18 +865,15 @@ paymentScreenshot.addEventListener(
     ) {
 
       depositMessage.textContent =
-        "Please select a JPG, PNG or WEBP image.";
+        "Only JPG, PNG or WEBP screenshots are allowed.";
 
       depositMessage.className =
         "error";
 
-
       this.value = "";
-
 
       screenshotPreview.style.display =
         "none";
-
 
       validateDepositForm();
 
@@ -939,18 +888,15 @@ paymentScreenshot.addEventListener(
     ) {
 
       depositMessage.textContent =
-        "Screenshot must be 6MB or smaller.";
+        "Payment screenshot must be 6MB or smaller.";
 
       depositMessage.className =
         "error";
 
-
       this.value = "";
-
 
       screenshotPreview.style.display =
         "none";
-
 
       validateDepositForm();
 
@@ -969,16 +915,13 @@ paymentScreenshot.addEventListener(
         screenshotPreview.src =
           event.target.result;
 
-
         screenshotPreview.style.display =
           "block";
 
       };
 
 
-    reader.readAsDataURL(
-      file
-    );
+    reader.readAsDataURL(file);
 
 
     depositMessage.textContent =
@@ -991,48 +934,10 @@ paymentScreenshot.addEventListener(
 );
 
 
-/* ==========================================
-   VALIDATE DEPOSIT FORM
-========================================== */
-
-function validateDepositForm() {
-
-  const amount =
-    Number(
-      document.getElementById(
-        "depositAmount"
-      ).value
-    );
-
-
-  const reference =
-    document.getElementById(
-      "paymentReference"
-    ).value.trim();
-
-
-  const screenshot =
-    paymentScreenshot.files[0];
-
-
-  submitDepositButton.disabled =
-    !(
-      amount > 0 &&
-      reference &&
-      screenshot
-    );
-
-}
-
-
-/* ==========================================
-   FORM INPUTS
-========================================== */
+/* INPUT EVENTS */
 
 document
-  .getElementById(
-    "depositAmount"
-  )
+  .getElementById("depositAmount")
   .addEventListener(
     "input",
     validateDepositForm
@@ -1040,18 +945,14 @@ document
 
 
 document
-  .getElementById(
-    "paymentReference"
-  )
+  .getElementById("paymentReference")
   .addEventListener(
     "input",
     validateDepositForm
   );
 
 
-/* ==========================================
-   SUBMIT DEPOSIT
-========================================== */
+/* SUBMIT DEPOSIT */
 
 submitDepositButton.addEventListener(
   "click",
@@ -1075,10 +976,7 @@ submitDepositButton.addEventListener(
       paymentScreenshot.files[0];
 
 
-    if (
-      !amount ||
-      amount <= 0
-    ) {
+    if (!amount || amount <= 0) {
 
       depositMessage.textContent =
         "Please enter a valid amount.";
@@ -1122,7 +1020,6 @@ submitDepositButton.addEventListener(
       submitDepositButton.disabled =
         true;
 
-
       submitDepositButton.textContent =
         "Uploading screenshot...";
 
@@ -1140,20 +1037,26 @@ submitDepositButton.addEventListener(
           "jpeg",
           "png",
           "webp"
-        ].includes(
-          extension
-        )
+        ].includes(extension)
           ? extension
           : "jpg";
 
 
       const fileName =
-        `${crypto.randomUUID()}.${safeExtension}`;
+        crypto.randomUUID() +
+        "." +
+        safeExtension;
 
 
       const filePath =
-        `${currentUser.id}/${fileName}`;
+        currentUser.id +
+        "/" +
+        fileName;
 
+
+      /*
+        Upload payment screenshot.
+      */
 
       const {
         data: uploadData,
@@ -1165,14 +1068,9 @@ submitDepositButton.addEventListener(
             filePath,
             screenshot,
             {
-              cacheControl:
-                "3600",
-
-              contentType:
-                screenshot.type,
-
-              upsert:
-                false
+              cacheControl:"3600",
+              contentType:screenshot.type,
+              upsert:false
             }
           );
 
@@ -1188,6 +1086,10 @@ submitDepositButton.addEventListener(
         "Submitting deposit...";
 
 
+      /*
+        Save deposit request.
+      */
+
       const {
         data,
         error
@@ -1195,8 +1097,7 @@ submitDepositButton.addEventListener(
         await supabaseClient.rpc(
           "create_promoter_deposit_request",
           {
-            p_amount:
-              amount,
+            p_amount: amount,
 
             p_payment_reference:
               reference,
@@ -1223,12 +1124,10 @@ submitDepositButton.addEventListener(
         } catch (cleanupError) {
 
           console.error(
-            "SCREENSHOT CLEANUP ERROR:",
             cleanupError
           );
 
         }
-
 
         throw error;
 
@@ -1251,7 +1150,6 @@ submitDepositButton.addEventListener(
         } catch (cleanupError) {
 
           console.error(
-            "SCREENSHOT CLEANUP ERROR:",
             cleanupError
           );
 
@@ -1295,15 +1193,188 @@ submitDepositButton.addEventListener(
         "none";
 
 
-      submitDepositButton.disabled =
-        true;
-
+      await loadWallet();
 
       await loadDepositHistory();
-
 
     } catch (error) {
 
       console.error(
-        "SUBMIT DEPOSIT ERROR:",
-       
+        "DEPOSIT ERROR:",
+        error
+      );
+
+
+      depositMessage.textContent =
+        "Error: " +
+        error.message;
+
+      depositMessage.className =
+        "error";
+
+    } finally {
+
+      submitDepositButton.textContent =
+        "Submit Deposit";
+
+      validateDepositForm();
+
+    }
+
+  }
+);
+
+
+/* LOAD DEPOSIT HISTORY */
+
+async function loadDepositHistory() {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.rpc(
+        "get_my_promoter_deposits"
+      );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    depositHistory.innerHTML =
+      "";
+
+
+    if (
+      !data ||
+      data.length === 0
+    ) {
+
+      depositHistory.textContent =
+        "No deposit requests yet.";
+
+      return;
+
+    }
+
+
+    data.forEach(
+      item => {
+
+        const div =
+          document.createElement(
+            "div"
+          );
+
+
+        div.className =
+          "deposit-item";
+
+
+        const statusClass =
+          item.status === "approved"
+            ? "success"
+            : item.status === "rejected"
+              ? "error"
+              : "pending";
+
+
+        const statusText =
+          item.status
+            ? item.status
+                .charAt(0)
+                .toUpperCase() +
+              item.status.slice(1)
+            : "Pending";
+
+
+        div.innerHTML = `
+
+          <strong>
+            ₦${Number(
+              item.amount || 0
+            ).toLocaleString("en-NG")}
+          </strong>
+
+          <p>
+            Reference:
+            ${escapeHTML(
+              item.payment_reference
+            )}
+          </p>
+
+          <p class="${statusClass}">
+            Status:
+            ${escapeHTML(
+              statusText
+            )}
+          </p>
+
+          ${
+            item.admin_note
+              ? `
+                <p>
+                  Admin Note:
+                  ${escapeHTML(
+                    item.admin_note
+                  )}
+                </p>
+              `
+              : ""
+          }
+
+          <small>
+            ${new Date(
+              item.created_at
+            ).toLocaleString()}
+          </small>
+
+        `;
+
+
+        depositHistory.appendChild(
+          div
+        );
+
+      }
+    );
+
+  } catch (error) {
+
+    console.error(
+      "HISTORY ERROR:",
+      error
+    );
+
+
+    depositHistory.textContent =
+      "Unable to load deposit history: " +
+      error.message;
+
+  }
+
+}
+
+
+/* START */
+
+async function initialize() {
+
+  /*
+    Give the page a moment to restore
+    the Supabase browser session.
+  */
+
+  await new Promise(
+    resolve =>
+      setTimeout(resolve, 300)
+  );
+
+
+  const allowed 

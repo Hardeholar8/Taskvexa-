@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskVexa - Task Details</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>TaskVexa</h1>
+  <a href="tasks.html">Back to Tasks</a>
+</header>
+
+<main>
+
+  <div id="message">Loading task...</div>
+
+  <section id="taskDetails" style="display:none;">
+
+    <h2 id="taskTitle"></h2>
+
+    <p>
+      <strong>Platform:</strong>
+      <span id="taskPlatform"></span>
+    </p>
+
+    <p>
+      <strong>Task Reward:</strong>
+      ₦<span id="taskReward"></span>
+    </p>
+
+    <p>
+      <strong>Instructions:</strong>
+    </p>
+
+    <div id="taskDescription"></div>
+
+    <p>
+      <a
+        id="taskLink"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="task-button"
+      >
+        Open Task
+      </a>
+    </p>
+
+    <hr>
+
+    <h3>Submit Proof</h3>
+
+    <p>
+      Upload a screenshot showing that you completed the task.
+    </p>
+
+    <input
+      type="file"
+      id="proofFile"
+      accept="image/*"
+      required
+    >
+
+    <br><br>
+
+    <button id="submitButton">
+      Submit Proof
+    </button>
+
+  </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+const message =
+  document.getElementById("message");
+
+const taskDetails =
+  document.getElementById("taskDetails");
+
+const submitButton =
+  document.getElementById("submitButton");
+
+
+const params =
+  new URLSearchParams(window.location.search);
+
+const taskId =
+  params.get("id");
+
+
+async function loadTask() {
+
+  if (!taskId) {
+
+    message.textContent =
+      "Task not found.";
+
+    return;
+  }
+
+  try {
+
+    const {
+      data: { user },
+      error: userError
+    } = await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+
+      window.location.href = "login.html";
+      return;
+    }
+
+    const { data: task, error } =
+      await supabaseClient
+        .from("tasks")
+        .select("*")
+        .eq("id", taskId)
+        .eq("status", "active")
+        .single();
+
+    if (error) {
+      throw error;
+    }
+
+    document.getElementById("taskTitle")
+      .textContent = task.title;
+
+    document.getElementById("taskPlatform")
+      .textContent = task.platform || "Not specified";
+
+    document.getElementById("taskReward")
+      .textContent =
+        Number(task.reward).toLocaleString();
+
+    document.getElementById("taskDescription")
+      .textContent = task.description;
+
+    document.getElementById("taskLink")
+      .href = task.task_url;
+
+    message.textContent = "";
+    taskDetails.style.display = "block";
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      "Unable to load task: " + error.message;
+  }
+
+}
+
+
+submitButton.addEventListener("click", async () => {
+
+  const file =
+    document.getElementById("proofFile").files[0];
+
+  if (!file) {
+
+    message.textContent =
+      "Please upload a screenshot first.";
+
+    return;
+  }
+
+  submitButton.disabled = true;
+  submitButton.textContent = "Submitting...";
+
+  try {
+
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+
+      window.location.href = "login.html";
+      return;
+    }
+
+    const fileName =
+      `${user.id}/${taskId}-${Date.now()}-${file.name}`;
+
+    const { error: uploadError } =
+      await supabaseClient.storage
+        .from("task-proofs")
+        .upload(fileName, file);
+
+    if (uploadError) {
+      throw uploadError;
+    }
+
+    const {
+      data: publicUrlData
+    } =
+      supabaseClient.storage
+        .from("task-proofs")
+        .getPublicUrl(fileName);
+
+    const proofUrl =
+      publicUrlData.publicUrl;
+
+    const { error: submissionError } =
+      await supabaseClient
+        .from("task_submissions")
+        .insert({
+          task_id: taskId,
+          worker_id: user.id,
+          proof_url: proofUrl
+        });
+
+    if (submissionError) {
+      throw submissionError;
+    }
+
+    message.textContent =
+      "Proof submitted successfully. Waiting for review.";
+
+    submitButton.disabled = true;
+    submitButton.textContent = "Proof Submitted";
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      "Error: " + error.message;
+
+    submitButton.disabled = false;
+    submitButton.textContent = "Submit Proof";
+  }
+
+});
+
+
+loadTask();
+
+</script>
+
+</body>
+</html>

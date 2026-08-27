@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskVexa - Admin Submissions</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+  <h1>TaskVexa Admin</h1>
+  <a href="dashboard.html">Dashboard</a>
+</header>
+
+<main>
+
+  <h2>Task Submissions</h2>
+
+  <div id="message">Loading submissions...</div>
+
+  <div id="submissionList"></div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+const message =
+  document.getElementById("message");
+
+const submissionList =
+  document.getElementById("submissionList");
+
+
+async function loadSubmissions() {
+
+  try {
+
+    const {
+      data: { user },
+      error: userError
+    } =
+      await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+
+      window.location.href = "login.html";
+      return;
+    }
+
+
+    const { data: submissions, error } =
+      await supabaseClient
+        .from("task_submissions")
+        .select(`
+          *,
+          tasks (
+            title,
+            platform,
+            reward
+          )
+        `)
+        .eq("status", "pending")
+        .order("created_at", {
+          ascending: false
+        });
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    submissionList.innerHTML = "";
+
+
+    if (!submissions || submissions.length === 0) {
+
+      message.textContent =
+        "No pending submissions.";
+
+      return;
+    }
+
+
+    message.textContent = "";
+
+
+    submissions.forEach(submission => {
+
+      const card =
+        document.createElement("section");
+
+      card.className = "task-card";
+
+
+      const task =
+        submission.tasks;
+
+
+      card.innerHTML = `
+
+        <h3>
+          ${escapeHTML(task?.title || "Task")}
+        </h3>
+
+        <p>
+          <strong>Platform:</strong>
+          ${escapeHTML(task?.platform || "Not specified")}
+        </p>
+
+        <p>
+          <strong>Reward:</strong>
+          ₦${Number(
+            submission.reward_amount ||
+            task?.reward ||
+            0
+          ).toLocaleString()}
+        </p>
+
+        <p>
+          <strong>Worker ID:</strong>
+          ${escapeHTML(submission.worker_id)}
+        </p>
+
+        <p>
+          <strong>Status:</strong>
+          Pending
+        </p>
+
+        ${
+          submission.proof_url
+          ?
+          `
+          <p>
+            <a
+              href="${escapeHTML(submission.proof_url)}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="task-button"
+            >
+              View Screenshot
+            </a>
+          </p>
+          `
+          :
+          ""
+        }
+
+        <button
+          onclick="reviewSubmission(
+            '${submission.id}',
+            'approved'
+          )"
+        >
+          Approve
+        </button>
+
+        <button
+          onclick="reviewSubmission(
+            '${submission.id}',
+            'rejected'
+          )"
+        >
+          Reject
+        </button>
+
+      `;
+
+
+      submissionList.appendChild(card);
+
+    });
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      "ERROR: " + error.message;
+
+  }
+
+}
+
+
+async function reviewSubmission(
+  submissionId,
+  newStatus
+) {
+
+  const action =
+    newStatus === "approved"
+      ? "approve"
+      : "reject";
+
+
+  if (
+    !confirm(
+      `Are you sure you want to ${action} this submission?`
+    )
+  ) {
+    return;
+  }
+
+
+  try {
+
+    const {
+      data: { user },
+      error: userError
+    } =
+      await supabaseClient.auth.getUser();
+
+
+    if (userError || !user) {
+
+      window.location.href =
+        "login.html";
+
+      return;
+    }
+
+
+    const { error } =
+      await supabaseClient
+        .from("task_submissions")
+        .update({
+
+          status:
+            newStatus,
+
+          reviewed_by:
+            user.id,
+
+          reviewed_at:
+            new Date().toISOString()
+
+        })
+        .eq("id", submissionId)
+        .eq("status", "pending");
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    alert(
+      newStatus === "approved"
+        ? "Submission approved."
+        : "Submission rejected."
+    );
+
+
+    loadSubmissions();
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "Error: " + error.message
+    );
+
+  }
+
+}
+
+
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+loadSubmissions();
+
+</script>
+
+</body>
+</html>

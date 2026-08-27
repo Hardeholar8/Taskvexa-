@@ -1,10 +1,14 @@
 // ==========================================
 // TASKVEXA AUTHENTICATION
 // Registration + Login + Forgot Password
+// Email confirmation OFF
 // ==========================================
 
-const SUPABASE_URL = "https://dxtlnrthlpdaobnbazny.supabase.co";
-const SUPABASE_KEY = "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+const SUPABASE_URL =
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 
 // ------------------------------------------
@@ -13,28 +17,39 @@ const SUPABASE_KEY = "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 if (!window.supabase) {
 
-  console.error("Supabase library did not load.");
+  console.error(
+    "Supabase library did not load."
+  );
 
 } else {
 
-  const supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+  const supabaseClient =
+    window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_KEY
+    );
 
 
   // ========================================
-  // HELPER: SHOW MESSAGE
+  // SHOW MESSAGE
   // ========================================
 
   function showMessage(text) {
 
-    const message = document.getElementById("message");
+    const message =
+      document.getElementById(
+        "message"
+      );
 
     if (message) {
-      message.textContent = text;
+
+      message.textContent =
+        text;
+
     } else {
+
       console.log(text);
+
     }
 
   }
@@ -45,146 +60,254 @@ if (!window.supabase) {
   // ========================================
 
   const registerForm =
-    document.getElementById("registerForm");
+    document.getElementById(
+      "registerForm"
+    );
+
 
   if (registerForm) {
 
-    registerForm.addEventListener("submit", async function(event) {
+    registerForm.addEventListener(
+      "submit",
+      async function(event) {
 
-      event.preventDefault();
-
-      const button =
-        document.getElementById("registerButton");
-
-      const fullName =
-        document.getElementById("fullName").value.trim();
-
-      const email =
-        document.getElementById("email").value.trim().toLowerCase();
-
-      const password =
-        document.getElementById("password").value;
-
-      const accountType =
-        document.getElementById("accountType").value;
+        event.preventDefault();
 
 
-      if (!fullName || !email || !password || !accountType) {
-
-        showMessage("Please complete all fields.");
-
-        return;
-      }
+        const button =
+          document.getElementById(
+            "registerButton"
+          );
 
 
-      if (password.length < 6) {
-
-        showMessage("Password must be at least 6 characters.");
-
-        return;
-      }
+        const fullName =
+          document.getElementById(
+            "fullName"
+          ).value.trim();
 
 
-      if (button) {
-        button.disabled = true;
-        button.textContent = "Creating Account...";
-      }
+        const email =
+          document.getElementById(
+            "email"
+          ).value.trim().toLowerCase();
 
 
-      try {
+        const password =
+          document.getElementById(
+            "password"
+          ).value;
 
-        const { data, error } =
-          await supabaseClient.auth.signUp({
 
-            email: email,
+        const accountType =
+          document.getElementById(
+            "accountType"
+          ).value;
 
-            password: password,
 
-            options: {
+        // --------------------------------
+        // VALIDATION
+        // --------------------------------
 
-              data: {
-                full_name: fullName,
-                account_type: accountType
+        if (
+          !fullName ||
+          !email ||
+          !password ||
+          !accountType
+        ) {
+
+          showMessage(
+            "Please complete all fields."
+          );
+
+          return;
+
+        }
+
+
+        if (
+          password.length < 6
+        ) {
+
+          showMessage(
+            "Password must be at least 6 characters."
+          );
+
+          return;
+
+        }
+
+
+        if (
+          accountType !== "worker" &&
+          accountType !== "promoter"
+        ) {
+
+          showMessage(
+            "Please select Worker or Promoter."
+          );
+
+          return;
+
+        }
+
+
+        if (button) {
+
+          button.disabled =
+            true;
+
+          button.textContent =
+            "Creating Account...";
+
+        }
+
+
+        try {
+
+          // --------------------------------
+          // CREATE AUTH ACCOUNT
+          // --------------------------------
+
+          const {
+            data,
+            error
+          } =
+            await supabaseClient.auth.signUp({
+
+              email:
+                email,
+
+              password:
+                password,
+
+              options: {
+
+                data: {
+
+                  full_name:
+                    fullName,
+
+                  account_type:
+                    accountType
+
+                }
+
               }
+
+            });
+
+
+          console.log(
+            "Registration response:",
+            data,
+            error
+          );
+
+
+          if (error) {
+
+            showMessage(
+              error.message
+            );
+
+            if (button) {
+
+              button.disabled =
+                false;
+
+              button.textContent =
+                "Create Account";
 
             }
 
-          });
+            return;
 
-
-        console.log(
-          "Registration response:",
-          data,
-          error
-        );
-
-
-        if (error) {
-
-          showMessage(error.message);
-
-          if (button) {
-            button.disabled = false;
-            button.textContent = "Create Account";
           }
 
-          return;
-        }
+
+          if (
+            !data ||
+            !data.user
+          ) {
+
+            showMessage(
+              "Account could not be created. Please try again."
+            );
+
+            if (button) {
+
+              button.disabled =
+                false;
+
+              button.textContent =
+                "Create Account";
+
+            }
+
+            return;
+
+          }
 
 
-        if (data && data.user) {
+          // --------------------------------
+          // EMAIL CONFIRMATION IS OFF
+          // --------------------------------
+          //
+          // The user should have an active
+          // session immediately.
+          //
+          // Send them to the correct dashboard.
+          // --------------------------------
 
-          registerForm.style.display = "none";
 
-          const successBox =
-            document.getElementById("successBox");
+          showMessage(
+            "Account created successfully."
+          );
 
-          if (successBox) {
 
-            successBox.style.display = "block";
+          if (
+            accountType ===
+            "promoter"
+          ) {
+
+            window.location.href =
+              "promoter-dashboard.html";
 
           } else {
 
-            showMessage(
-              "Account created successfully. Please check your email."
-            );
+            window.location.href =
+              "dashboard.html";
 
           }
 
-          return;
-        }
+        } catch (error) {
+
+          console.error(
+            "Registration error:",
+            error
+          );
 
 
-        showMessage(
-          "Registration could not be completed. Please try again."
-        );
-
-        if (button) {
-          button.disabled = false;
-          button.textContent = "Create Account";
-        }
+          showMessage(
+            "Registration error: " +
+            error.message
+          );
 
 
-      } catch (error) {
+          if (button) {
 
-        console.error(
-          "Registration error:",
-          error
-        );
+            button.disabled =
+              false;
 
-        showMessage(
-          "Registration error: " +
-          error.message
-        );
+            button.textContent =
+              "Create Account";
 
-        if (button) {
-          button.disabled = false;
-          button.textContent = "Create Account";
+          }
+
         }
 
       }
-
-    });
+    );
 
   }
 
@@ -194,78 +317,198 @@ if (!window.supabase) {
   // ========================================
 
   const loginForm =
-    document.getElementById("loginForm");
+    document.getElementById(
+      "loginForm"
+    );
+
 
   if (loginForm) {
 
-    loginForm.addEventListener("submit", async function(event) {
+    loginForm.addEventListener(
+      "submit",
+      async function(event) {
 
-      event.preventDefault();
-
-      const email =
-        document.getElementById("loginEmail").value.trim().toLowerCase();
-
-      const password =
-        document.getElementById("loginPassword").value;
-
-      const button =
-        document.getElementById("loginButton");
+        event.preventDefault();
 
 
-      if (button) {
-        button.disabled = true;
-        button.textContent = "Logging in...";
-      }
+        const email =
+          document.getElementById(
+            "loginEmail"
+          ).value.trim().toLowerCase();
 
 
-      try {
-
-        const { error } =
-          await supabaseClient.auth.signInWithPassword({
-
-            email: email,
-
-            password: password
-
-          });
+        const password =
+          document.getElementById(
+            "loginPassword"
+          ).value;
 
 
-        if (error) {
+        const button =
+          document.getElementById(
+            "loginButton"
+          );
 
-          showMessage(error.message);
 
-          if (button) {
-            button.disabled = false;
-            button.textContent = "Login";
-          }
+        if (!email || !password) {
+
+          showMessage(
+            "Please enter your email and password."
+          );
 
           return;
+
         }
 
 
-        window.location.href = "dashboard.html";
-
-
-      } catch (error) {
-
-        console.error(
-          "Login error:",
-          error
-        );
-
-        showMessage(
-          "Login error: " +
-          error.message
-        );
-
         if (button) {
-          button.disabled = false;
-          button.textContent = "Login";
+
+          button.disabled =
+            true;
+
+          button.textContent =
+            "Logging in...";
+
+        }
+
+
+        try {
+
+          const {
+            data,
+            error
+          } =
+            await supabaseClient.auth
+              .signInWithPassword({
+
+                email:
+                  email,
+
+                password:
+                  password
+
+              });
+
+
+          if (error) {
+
+            showMessage(
+              error.message
+            );
+
+            if (button) {
+
+              button.disabled =
+                false;
+
+              button.textContent =
+                "Login";
+
+            }
+
+            return;
+
+          }
+
+
+          // --------------------------------
+          // CHECK USER ROLE
+          // --------------------------------
+
+          const user =
+            data.user;
+
+
+          if (!user) {
+
+            window.location.href =
+              "login.html";
+
+            return;
+
+          }
+
+
+          const {
+            data: profile,
+            error: profileError
+          } =
+            await supabaseClient
+              .from("profiles")
+              .select("role")
+              .eq(
+                "id",
+                user.id
+              )
+              .maybeSingle();
+
+
+          if (profileError) {
+
+            console.error(
+              "Profile error:",
+              profileError
+            );
+
+          }
+
+
+          // --------------------------------
+          // SEND TO CORRECT DASHBOARD
+          // --------------------------------
+
+          if (
+            profile &&
+            profile.role ===
+            "promoter"
+          ) {
+
+            window.location.href =
+              "promoter-dashboard.html";
+
+          } else if (
+            profile &&
+            profile.role ===
+            "admin"
+          ) {
+
+            window.location.href =
+              "admin-dashboard.html";
+
+          } else {
+
+            window.location.href =
+              "dashboard.html";
+
+          }
+
+        } catch (error) {
+
+          console.error(
+            "Login error:",
+            error
+          );
+
+
+          showMessage(
+            "Login error: " +
+            error.message
+          );
+
+
+          if (button) {
+
+            button.disabled =
+              false;
+
+            button.textContent =
+              "Login";
+
+          }
+
         }
 
       }
-
-    });
+    );
 
   }
 
@@ -275,76 +518,105 @@ if (!window.supabase) {
   // ========================================
 
   const forgotButton =
-    document.getElementById("forgotPassword");
+    document.getElementById(
+      "forgotPassword"
+    );
+
 
   if (forgotButton) {
 
-    forgotButton.addEventListener("click", async function(event) {
+    forgotButton.addEventListener(
+      "click",
+      async function(event) {
 
-      event.preventDefault();
-
-      const email =
-        prompt("Enter your registered email:");
-
-      if (!email) {
-        return;
-      }
+        event.preventDefault();
 
 
-      try {
-
-        forgotButton.disabled = true;
-        forgotButton.textContent = "Sending...";
-
-
-        const { error } =
-          await supabaseClient.auth.resetPasswordForEmail(
-
-            email.trim().toLowerCase(),
-
-            {
-              redirectTo:
-                window.location.origin +
-                "/reset-password.html"
-            }
-
+        const email =
+          prompt(
+            "Enter your registered email:"
           );
 
 
-        if (error) {
-
-          showMessage(error.message);
+        if (!email) {
 
           return;
+
         }
 
 
-        showMessage(
-          "Password reset link sent. Please check your email."
-        );
+        try {
+
+          forgotButton.disabled =
+            true;
+
+          forgotButton.textContent =
+            "Sending...";
 
 
-      } catch (error) {
+          const {
+            error
+          } =
+            await supabaseClient.auth
+              .resetPasswordForEmail(
 
-        console.error(
-          "Password reset error:",
-          error
-        );
+                email
+                  .trim()
+                  .toLowerCase(),
 
-        showMessage(
-          "Password reset error: " +
-          error.message
-        );
+                {
+
+                  redirectTo:
+                    window.location.origin +
+                    "/reset-password.html"
+
+                }
+
+              );
 
 
-      } finally {
+          if (error) {
 
-        forgotButton.disabled = false;
-        forgotButton.textContent = "Forgot Password?";
+            showMessage(
+              error.message
+            );
+
+            return;
+
+          }
+
+
+          showMessage(
+            "Password reset link sent. Please check your email."
+          );
+
+
+        } catch (error) {
+
+          console.error(
+            "Password reset error:",
+            error
+          );
+
+
+          showMessage(
+            "Password reset error: " +
+            error.message
+          );
+
+
+        } finally {
+
+          forgotButton.disabled =
+            false;
+
+          forgotButton.textContent =
+            "Forgot Password?";
+
+        }
 
       }
-
-    });
+    );
 
   }
 
@@ -353,42 +625,53 @@ if (!window.supabase) {
   // LOGOUT
   // ========================================
 
-  window.logoutUser = async function() {
+  window.logoutUser =
+    async function() {
 
-    try {
+      try {
 
-      await supabaseClient.auth.signOut();
+        await supabaseClient.auth
+          .signOut();
 
-    } catch (error) {
+      } catch (error) {
 
-      console.error(
-        "Logout error:",
-        error
-      );
+        console.error(
+          "Logout error:",
+          error
+        );
 
-    }
+      }
 
-    window.location.href = "login.html";
 
-  };
+      window.location.href =
+        "login.html";
+
+    };
 
 
   // ========================================
   // CHECK LOGIN
   // ========================================
 
-  window.requireLogin = async function() {
+  window.requireLogin =
+    async function() {
 
-    const { data } =
-      await supabaseClient.auth.getSession();
+      const {
+        data
+      } =
+        await supabaseClient.auth
+          .getSession();
 
 
-    if (!data.session) {
+      if (
+        !data.session
+      ) {
 
-      window.location.href = "login.html";
+        window.location.href =
+          "login.html";
 
-    }
+      }
 
-  };
+    };
 
-    }
+          }

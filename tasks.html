@@ -136,7 +136,7 @@ async function loadTasks() {
     console.error(error);
 
     message.textContent =
-      "Unable to load tasks. Please try again.";
+  "ERROR: " + error.message;
 
   }
 

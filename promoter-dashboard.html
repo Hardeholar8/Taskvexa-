@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>TaskVexa - Promoter Dashboard</title>
+
   <link rel="stylesheet" href="style.css">
 
   <style>
@@ -37,11 +39,22 @@
       resize: vertical;
     }
 
-    .setting-box {
+    .wallet-box,
+    .cost-box {
       background: #f3f4f6;
       padding: 15px;
       border-radius: 10px;
       margin: 15px 0;
+    }
+
+    .wallet-balance {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .total-cost {
+      font-size: 22px;
+      font-weight: bold;
     }
 
     .status {
@@ -65,6 +78,11 @@
     button {
       cursor: pointer;
     }
+
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
   </style>
 </head>
 
@@ -77,14 +95,44 @@
 
 <main>
 
+  <!-- PROMOTER ACCESS -->
+
   <section>
+
     <h2>Promoter Dashboard</h2>
 
-    <p>Create and manage your promoter tasks.</p>
+    <p>
+      Create and manage your promoter tasks.
+    </p>
 
     <p id="accessMessage">
       Checking promoter access...
     </p>
+
+  </section>
+
+
+  <!-- WALLET -->
+
+  <section
+    id="walletSection"
+    class="wallet-box"
+    style="display:none;"
+  >
+
+    <h3>Promoter Wallet</h3>
+
+    <p class="wallet-balance">
+      ₦<span id="walletBalance">0</span>
+    </p>
+
+    <button
+      type="button"
+      onclick="window.location.href='promoter-wallet.html'"
+    >
+      Add Funds / Wallet
+    </button>
+
   </section>
 
 
@@ -99,9 +147,12 @@
     <h2>Create Task</h2>
 
     <p>
-      Admin settings automatically control the worker reward,
-      worker level and number of workers.
+      Choose your platform and the number of workers you need.
+      Pricing is automatically controlled by admin.
     </p>
+
+
+    <!-- TASK TITLE -->
 
     <div class="form-group">
 
@@ -113,10 +164,13 @@
         type="text"
         id="taskTitle"
         placeholder="Enter task title"
+        maxlength="150"
       >
 
     </div>
 
+
+    <!-- TASK INSTRUCTIONS -->
 
     <div class="form-group">
 
@@ -131,6 +185,8 @@
 
     </div>
 
+
+    <!-- PLATFORM -->
 
     <div class="form-group">
 
@@ -149,6 +205,49 @@
     </div>
 
 
+    <!-- NUMBER OF WORKERS -->
+
+    <div class="form-group">
+
+      <label for="workersNeeded">
+        Number of Workers Needed
+      </label>
+
+      <input
+        type="number"
+        id="workersNeeded"
+        min="1"
+        step="1"
+        value="1"
+        placeholder="Enter number of workers"
+      >
+
+    </div>
+
+
+    <!-- PROMOTER PRICE -->
+
+    <div
+      id="priceBox"
+      class="cost-box"
+      style="display:none;"
+    >
+
+      <p>
+        <strong>Price Per Worker:</strong>
+        ₦<span id="pricePerWorker">0</span>
+      </p>
+
+      <p class="total-cost">
+        <strong>Total Cost:</strong>
+        ₦<span id="totalCost">0</span>
+      </p>
+
+    </div>
+
+
+    <!-- TASK LINK -->
+
     <div class="form-group">
 
       <label for="taskUrl">
@@ -160,39 +259,6 @@
         id="taskUrl"
         placeholder="https://example.com/task"
       >
-
-    </div>
-
-
-    <!-- ADMIN CONTROLLED SETTINGS -->
-
-    <div
-      id="settingPreview"
-      class="setting-box"
-      style="display:none;"
-    >
-
-      <h3>Task Settings</h3>
-
-      <p>
-        <strong>Worker Reward:</strong>
-        ₦<span id="previewReward">0</span>
-      </p>
-
-      <p>
-        <strong>Workers Needed:</strong>
-        <span id="previewWorkers">0</span>
-      </p>
-
-      <p>
-        <strong>Worker Level:</strong>
-        <span id="previewLevels">-</span>
-      </p>
-
-      <p>
-        <strong>Publishing:</strong>
-        <span id="previewPublish">-</span>
-      </p>
 
     </div>
 
@@ -253,6 +319,16 @@ const accessMessage =
     "accessMessage"
   );
 
+const walletSection =
+  document.getElementById(
+    "walletSection"
+  );
+
+const walletBalance =
+  document.getElementById(
+    "walletBalance"
+  );
+
 const createTaskSection =
   document.getElementById(
     "createTaskSection"
@@ -268,6 +344,26 @@ const taskPlatform =
     "taskPlatform"
   );
 
+const workersNeeded =
+  document.getElementById(
+    "workersNeeded"
+  );
+
+const priceBox =
+  document.getElementById(
+    "priceBox"
+  );
+
+const pricePerWorker =
+  document.getElementById(
+    "pricePerWorker"
+  );
+
+const totalCost =
+  document.getElementById(
+    "totalCost"
+  );
+
 const submitTaskButton =
   document.getElementById(
     "submitTaskButton"
@@ -276,11 +372,6 @@ const submitTaskButton =
 const taskMessage =
   document.getElementById(
     "taskMessage"
-  );
-
-const settingPreview =
-  document.getElementById(
-    "settingPreview"
   );
 
 const myTasksMessage =
@@ -297,6 +388,8 @@ const myTasksList =
 let currentUser = null;
 
 let settings = [];
+
+let selectedSetting = null;
 
 
 /* ==========================================
@@ -377,6 +470,9 @@ async function checkPromoter() {
       "success";
 
 
+    walletSection.style.display =
+      "block";
+
     createTaskSection.style.display =
       "block";
 
@@ -411,14 +507,10 @@ async function checkPromoter() {
 
 
 /* ==========================================
-   LOAD ADMIN SETTINGS
+   LOAD WALLET
 ========================================== */
 
-async function loadSettings() {
-
-  taskMessage.textContent =
-    "Loading admin settings...";
-
+async function loadWallet() {
 
   try {
 
@@ -427,24 +519,81 @@ async function loadSettings() {
       error
     } =
       await supabaseClient
-        .from("promoter_task_settings")
-        .select(
-          "id, platform, promoter_price, worker_reward, target_levels, workers_needed, auto_publish"
+        .from("wallets")
+        .select("balance")
+        .eq(
+          "user_id",
+          currentUser.id
         )
-        .order(
-          "platform",
-          {
-            ascending: true
-          }
-        );
+        .maybeSingle();
 
 
     if (error) {
 
-      console.error(
-        "SUPABASE SETTINGS ERROR:",
-        error
+      throw error;
+
+    }
+
+
+    const balance =
+      Number(
+        data?.balance || 0
       );
+
+
+    walletBalance.textContent =
+      balance.toLocaleString(
+        "en-NG"
+      );
+
+
+  } catch (error) {
+
+    console.error(
+      "LOAD WALLET ERROR:",
+      error
+    );
+
+
+    walletBalance.textContent =
+      "Unable to load";
+
+  }
+
+}
+
+
+/* ==========================================
+   LOAD ADMIN SETTINGS
+========================================== */
+
+async function loadSettings() {
+
+  try {
+
+    /*
+      IMPORTANT:
+
+      We deliberately call the secure RPC
+      that only returns:
+
+      platform
+      promoter_price
+      auto_publish
+
+      Worker reward is NOT returned.
+    */
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.rpc(
+        "get_promoter_task_settings"
+      );
+
+
+    if (error) {
 
       throw error;
 
@@ -515,13 +664,6 @@ async function loadSettings() {
     );
 
 
-    taskMessage.textContent =
-      "Admin settings loaded successfully.";
-
-    taskMessage.className =
-      "success";
-
-
   } catch (error) {
 
     console.error(
@@ -555,80 +697,95 @@ async function loadSettings() {
 
 
 /* ==========================================
-   SHOW SELECTED SETTINGS
+   CALCULATE COST
+========================================== */
+
+function updateCost() {
+
+  const platform =
+    taskPlatform.value;
+
+
+  selectedSetting =
+    settings.find(
+      setting =>
+        setting.platform ===
+        platform
+    );
+
+
+  const workers =
+    Number(
+      workersNeeded.value
+    );
+
+
+  if (
+    !selectedSetting ||
+    !workers ||
+    workers < 1
+  ) {
+
+    priceBox.style.display =
+      "none";
+
+    submitTaskButton.disabled =
+      true;
+
+    return;
+
+  }
+
+
+  const price =
+    Number(
+      selectedSetting.promoter_price || 0
+    );
+
+
+  const total =
+    price * workers;
+
+
+  pricePerWorker.textContent =
+    price.toLocaleString(
+      "en-NG"
+    );
+
+
+  totalCost.textContent =
+    total.toLocaleString(
+      "en-NG"
+    );
+
+
+  priceBox.style.display =
+    "block";
+
+
+  submitTaskButton.disabled =
+    false;
+
+}
+
+
+/* ==========================================
+   PLATFORM CHANGE
 ========================================== */
 
 taskPlatform.addEventListener(
   "change",
-  function() {
-
-    const selected =
-      settings.find(
-        setting =>
-          setting.platform ===
-          taskPlatform.value
-      );
+  updateCost
+);
 
 
-    if (!selected) {
+/* ==========================================
+   WORKER COUNT CHANGE
+========================================== */
 
-      settingPreview.style.display =
-        "none";
-
-      submitTaskButton.disabled =
-        true;
-
-      return;
-
-    }
-
-
-    document.getElementById(
-      "previewReward"
-    ).textContent =
-      Number(
-        selected.worker_reward || 0
-      ).toLocaleString(
-        "en-NG"
-      );
-
-
-    document.getElementById(
-      "previewWorkers"
-    ).textContent =
-      Number(
-        selected.workers_needed || 0
-      );
-
-
-    document.getElementById(
-      "previewLevels"
-    ).textContent =
-      (
-        selected.target_levels || []
-      ).join(", ");
-
-
-    document.getElementById(
-      "previewPublish"
-    ).textContent =
-      selected.auto_publish
-        ? "Automatically LIVE"
-        : "Pending Admin Review";
-
-
-    settingPreview.style.display =
-      "block";
-
-
-    submitTaskButton.disabled =
-      false;
-
-
-    taskMessage.textContent =
-      "";
-
-  }
+workersNeeded.addEventListener(
+  "input",
+  updateCost
 );
 
 
@@ -662,10 +819,19 @@ submitTaskButton.addEventListener(
       ).value.trim();
 
 
+    const workers =
+      Number(
+        workersNeeded.value
+      );
+
+
     if (!title) {
 
       taskMessage.textContent =
         "Please enter a task title.";
+
+      taskMessage.className =
+        "error";
 
       return;
 
@@ -677,6 +843,9 @@ submitTaskButton.addEventListener(
       taskMessage.textContent =
         "Please enter task instructions.";
 
+      taskMessage.className =
+        "error";
+
       return;
 
     }
@@ -687,6 +856,25 @@ submitTaskButton.addEventListener(
       taskMessage.textContent =
         "Please select a platform.";
 
+      taskMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    if (
+      !Number.isInteger(workers) ||
+      workers < 1
+    ) {
+
+      taskMessage.textContent =
+        "Please enter a valid number of workers.";
+
+      taskMessage.className =
+        "error";
+
       return;
 
     }
@@ -696,6 +884,9 @@ submitTaskButton.addEventListener(
 
       taskMessage.textContent =
         "Please enter the task link.";
+
+      taskMessage.className =
+        "error";
 
       return;
 
@@ -711,12 +902,22 @@ submitTaskButton.addEventListener(
         "Submitting...";
 
 
+      /*
+        SECURE DATABASE FUNCTION
+
+        The database calculates the real price,
+        checks the wallet and deducts the money.
+
+        The worker reward is NEVER supplied
+        by this page.
+      */
+
       const {
         data,
         error
       } =
         await supabaseClient.rpc(
-          "create_promoter_task",
+          "create_promoter_task_v2",
           {
             p_title:
               title,
@@ -728,18 +929,16 @@ submitTaskButton.addEventListener(
               platform,
 
             p_task_url:
-              taskUrl
+              taskUrl,
+
+            p_workers_needed:
+              workers
 
           }
         );
 
 
       if (error) {
-
-        console.error(
-          "CREATE TASK RPC ERROR:",
-          error
-        );
 
         throw error;
 
@@ -775,6 +974,10 @@ submitTaskButton.addEventListener(
         "success";
 
 
+      /*
+        Clear form.
+      */
+
       document.getElementById(
         "taskTitle"
       ).value = "";
@@ -790,23 +993,37 @@ submitTaskButton.addEventListener(
       ).value = "";
 
 
+      workersNeeded.value =
+        "1";
+
+
       taskPlatform.value =
         "";
 
 
-      settingPreview.style.display =
+      priceBox.style.display =
         "none";
+
+
+      selectedSetting =
+        null;
+
+
+      /*
+        Refresh wallet balance.
+      */
+
+      await loadWallet();
 
 
       submitTaskButton.disabled =
         true;
 
-
       submitTaskButton.textContent =
         "Submit Task";
 
 
-      loadMyTasks();
+      await loadMyTasks();
 
 
     } catch (error) {
@@ -853,7 +1070,7 @@ async function loadMyTasks() {
       await supabaseClient
         .from("tasks")
         .select(
-          "id, title, description, platform, reward, workers_needed, target_levels, status, source, created_at"
+          "id, title, description, platform, workers_needed, status, source, created_at, promoter_charge"
         )
         .eq(
           "created_by",
@@ -942,28 +1159,18 @@ async function loadMyTasks() {
           </p>
 
           <p>
-            <strong>Worker Reward:</strong>
-            ₦${Number(
-              task.reward || 0
-            ).toLocaleString(
-              "en-NG"
-            )}
-          </p>
-
-          <p>
-            <strong>Workers Needed:</strong>
+            <strong>Workers Requested:</strong>
             ${Number(
               task.workers_needed || 0
             )}
           </p>
 
           <p>
-            <strong>Levels:</strong>
-            ${escapeHTML(
-              (
-                task.target_levels ||
-                []
-              ).join(", ")
+            <strong>Amount Charged:</strong>
+            ₦${Number(
+              task.promoter_charge || 0
+            ).toLocaleString(
+              "en-NG"
             )}
           </p>
 
@@ -1006,7 +1213,9 @@ async function loadMyTasks() {
    ESCAPE HTML
 ========================================== */
 
-function escapeHTML(value) {
+function escapeHTML(
+  value
+) {
 
   return String(
     value ?? ""
@@ -1057,6 +1266,8 @@ async function initialize() {
   }
 
 
+  await loadWallet();
+
   await loadSettings();
 
   await loadMyTasks();
@@ -1069,4 +1280,4 @@ initialize();
 </script>
 
 </body>
-</html>
+  </html>

@@ -16,16 +16,87 @@
 
 <main>
 
-  <section>
+  <!-- TASK LIST -->
+  <section id="taskListSection">
+
     <h2>Available Tasks</h2>
     <p>Choose a task you want to complete.</p>
+
+    <div id="message">Loading tasks...</div>
+
+    <div id="taskList"></div>
+
   </section>
 
-  <div id="message">Loading tasks...</div>
 
-  <section id="taskList"></section>
+  <!-- TASK DETAILS -->
+  <section id="taskDetailsSection" style="display:none;">
+
+    <button id="backButton">
+      ← Back to Tasks
+    </button>
+
+    <h2 id="detailTitle"></h2>
+
+    <p>
+      <strong>Platform:</strong>
+      <span id="detailPlatform"></span>
+    </p>
+
+    <p>
+      <strong>Task Reward:</strong>
+      ₦<span id="detailReward"></span>
+    </p>
+
+    <p>
+      <strong>Workers Needed:</strong>
+      <span id="detailWorkers"></span>
+    </p>
+
+    <hr>
+
+    <h3>Instructions</h3>
+
+    <p id="detailDescription"></p>
+
+    <br>
+
+    <a
+      id="openTaskButton"
+      href="#"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="task-button"
+    >
+      Open Task
+    </a>
+
+    <hr>
+
+    <h3>Submit Proof</h3>
+
+    <p>
+      Upload a screenshot showing that you completed the task.
+    </p>
+
+    <input
+      type="file"
+      id="proofFile"
+      accept="image/*"
+    >
+
+    <br><br>
+
+    <button id="submitProofButton">
+      Submit Proof
+    </button>
+
+    <p id="proofMessage"></p>
+
+  </section>
 
 </main>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -43,12 +114,34 @@ const supabaseClient =
     SUPABASE_KEY
   );
 
+
 const taskList =
   document.getElementById("taskList");
 
 const message =
   document.getElementById("message");
 
+const taskListSection =
+  document.getElementById("taskListSection");
+
+const taskDetailsSection =
+  document.getElementById("taskDetailsSection");
+
+const backButton =
+  document.getElementById("backButton");
+
+const submitProofButton =
+  document.getElementById("submitProofButton");
+
+const proofMessage =
+  document.getElementById("proofMessage");
+
+let selectedTask = null;
+
+
+/* =========================
+   LOAD TASKS
+========================= */
 
 async function loadTasks() {
 
@@ -65,6 +158,7 @@ async function loadTasks() {
       return;
     }
 
+
     const { data: tasks, error } =
       await supabaseClient
         .from("tasks")
@@ -74,11 +168,14 @@ async function loadTasks() {
           ascending: false
         });
 
+
     if (error) {
       throw error;
     }
 
+
     taskList.innerHTML = "";
+
 
     if (!tasks || tasks.length === 0) {
 
@@ -88,7 +185,9 @@ async function loadTasks() {
       return;
     }
 
+
     message.textContent = "";
+
 
     tasks.forEach(task => {
 
@@ -97,7 +196,9 @@ async function loadTasks() {
 
       card.className = "task-card";
 
+
       card.innerHTML = `
+
         <h3>${escapeHTML(task.title)}</h3>
 
         <p>
@@ -119,29 +220,288 @@ async function loadTasks() {
           ${task.workers_needed}
         </p>
 
-        <a
-          href="task-details.html?id=${encodeURIComponent(task.id)}"
-          class="task-button"
-        >
+        <button class="task-button">
           View Task
-        </a>
+        </button>
+
       `;
+
+
+      const viewButton =
+        card.querySelector("button");
+
+
+      viewButton.addEventListener(
+        "click",
+        () => showTaskDetails(task)
+      );
+
 
       taskList.appendChild(card);
 
     });
+
 
   } catch (error) {
 
     console.error(error);
 
     message.textContent =
-  "ERROR: " + error.message;
+      "ERROR: " + error.message;
 
   }
 
 }
 
+
+/* =========================
+   SHOW TASK DETAILS
+========================= */
+
+function showTaskDetails(task) {
+
+  selectedTask = task;
+
+
+  document.getElementById("detailTitle")
+    .textContent = task.title;
+
+
+  document.getElementById("detailPlatform")
+    .textContent =
+      task.platform || "Not specified";
+
+
+  document.getElementById("detailReward")
+    .textContent =
+      Number(task.reward).toLocaleString();
+
+
+  document.getElementById("detailWorkers")
+    .textContent =
+      task.workers_needed;
+
+
+  document.getElementById("detailDescription")
+    .textContent =
+      task.description;
+
+
+  document.getElementById("openTaskButton")
+    .href =
+      task.task_url;
+
+
+  proofMessage.textContent = "";
+
+  document.getElementById("proofFile").value = "";
+
+
+  taskListSection.style.display = "none";
+
+  taskDetailsSection.style.display = "block";
+
+
+  window.scrollTo(0, 0);
+
+}
+
+
+/* =========================
+   BACK TO TASKS
+========================= */
+
+backButton.addEventListener(
+  "click",
+  () => {
+
+    selectedTask = null;
+
+    taskDetailsSection.style.display = "none";
+
+    taskListSection.style.display = "block";
+
+    proofMessage.textContent = "";
+
+  }
+);
+
+
+/* =========================
+   SUBMIT PROOF
+========================= */
+
+submitProofButton.addEventListener(
+  "click",
+  async () => {
+
+    if (!selectedTask) {
+
+      proofMessage.textContent =
+        "Please select a task.";
+
+      return;
+    }
+
+
+    const file =
+      document.getElementById("proofFile")
+        .files[0];
+
+
+    if (!file) {
+
+      proofMessage.textContent =
+        "Please upload a screenshot first.";
+
+      return;
+    }
+
+
+    try {
+
+      submitProofButton.disabled = true;
+
+      submitProofButton.textContent =
+        "Submitting...";
+
+
+      const {
+        data: { user },
+        error: userError
+      } =
+        await supabaseClient.auth.getUser();
+
+
+      if (userError || !user) {
+
+        window.location.href =
+          "login.html";
+
+        return;
+      }
+
+
+      /*
+        Check if this worker already
+        submitted this task.
+      */
+
+      const { data: existingSubmission } =
+        await supabaseClient
+          .from("task_submissions")
+          .select("id")
+          .eq("task_id", selectedTask.id)
+          .eq("worker_id", user.id)
+          .maybeSingle();
+
+
+      if (existingSubmission) {
+
+        proofMessage.textContent =
+          "You have already submitted this task.";
+
+        submitProofButton.disabled = true;
+
+        submitProofButton.textContent =
+          "Already Submitted";
+
+        return;
+      }
+
+
+      /*
+        Upload screenshot.
+      */
+
+      const fileName =
+        `${user.id}/${selectedTask.id}-${Date.now()}-${file.name}`;
+
+
+      const { error: uploadError } =
+        await supabaseClient.storage
+          .from("task-proofs")
+          .upload(fileName, file);
+
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+
+      const {
+        data: publicUrlData
+      } =
+        supabaseClient.storage
+          .from("task-proofs")
+          .getPublicUrl(fileName);
+
+
+      const proofUrl =
+        publicUrlData.publicUrl;
+
+
+      /*
+        Save submission.
+      */
+
+      const { error: submissionError } =
+        await supabaseClient
+          .from("task_submissions")
+          .insert({
+
+            task_id:
+              selectedTask.id,
+
+            worker_id:
+              user.id,
+
+            proof_url:
+              proofUrl,
+
+            reward_amount:
+              selectedTask.reward
+
+          });
+
+
+      if (submissionError) {
+        throw submissionError;
+      }
+
+
+      proofMessage.textContent =
+        "Proof submitted successfully. Waiting for admin review.";
+
+
+      submitProofButton.disabled = true;
+
+      submitProofButton.textContent =
+        "Proof Submitted";
+
+
+    } catch (error) {
+
+      console.error(error);
+
+      proofMessage.textContent =
+        "Error: " + error.message;
+
+
+      submitProofButton.disabled = false;
+
+      submitProofButton.textContent =
+        "Submit Proof";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   SECURITY
+========================= */
 
 function escapeHTML(value) {
 
@@ -155,9 +515,11 @@ function escapeHTML(value) {
 }
 
 
+/* START */
+
 loadTasks();
 
 </script>
 
 </body>
-</html>
+  </html>

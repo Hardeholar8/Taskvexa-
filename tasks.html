@@ -21,27 +21,143 @@
     <p>Choose a task you want to complete.</p>
   </section>
 
-  <section class="task-card">
-    <h3>Sample Task</h3>
-    <p>Complete the required instructions.</p>
-    <p><strong>Task Reward: ₦100</strong></p>
+  <div id="message">Loading tasks...</div>
 
-    <a href="task-details.html?task=sample" class="task-button">
-      View Task
-    </a>
-  </section>
-
-  <section class="task-card">
-    <h3>Social Media Task</h3>
-    <p>Complete the instructions and submit your proof.</p>
-    <p><strong>Task Reward: ₦150</strong></p>
-
-    <a href="task-details.html?task=social" class="task-button">
-      View Task
-    </a>
-  </section>
+  <section id="taskList"></section>
 
 </main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
+
+const taskList =
+  document.getElementById("taskList");
+
+const message =
+  document.getElementById("message");
+
+
+async function loadTasks() {
+
+  try {
+
+    const {
+      data: { user },
+      error: userError
+    } = await supabaseClient.auth.getUser();
+
+    if (userError || !user) {
+
+      window.location.href = "login.html";
+      return;
+    }
+
+    const { data: tasks, error } =
+      await supabaseClient
+        .from("tasks")
+        .select("*")
+        .eq("status", "active")
+        .order("created_at", {
+          ascending: false
+        });
+
+    if (error) {
+      throw error;
+    }
+
+    taskList.innerHTML = "";
+
+    if (!tasks || tasks.length === 0) {
+
+      message.textContent =
+        "No tasks are currently available.";
+
+      return;
+    }
+
+    message.textContent = "";
+
+    tasks.forEach(task => {
+
+      const card =
+        document.createElement("section");
+
+      card.className = "task-card";
+
+      card.innerHTML = `
+        <h3>${escapeHTML(task.title)}</h3>
+
+        <p>
+          ${escapeHTML(task.description)}
+        </p>
+
+        <p>
+          <strong>Platform:</strong>
+          ${escapeHTML(task.platform || "Not specified")}
+        </p>
+
+        <p>
+          <strong>Task Reward:</strong>
+          ₦${Number(task.reward).toLocaleString()}
+        </p>
+
+        <p>
+          <strong>Workers Needed:</strong>
+          ${task.workers_needed}
+        </p>
+
+        <a
+          href="task-details.html?id=${encodeURIComponent(task.id)}"
+          class="task-button"
+        >
+          View Task
+        </a>
+      `;
+
+      taskList.appendChild(card);
+
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    message.textContent =
+      "Unable to load tasks. Please try again.";
+
+  }
+
+}
+
+
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+loadTasks();
+
+</script>
 
 </body>
 </html>

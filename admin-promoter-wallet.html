@@ -58,6 +58,10 @@ button {
   margin:5px 5px 5px 0;
 }
 
+button:disabled {
+  opacity:.6;
+}
+
 .approve {
   background:#16a34a;
   color:white;
@@ -90,16 +94,8 @@ button {
   color:#dc2626;
 }
 
-.pending {
-  color:#b45309;
-}
-
 .status {
   font-weight:bold;
-}
-
-.hidden {
-  display:none;
 }
 </style>
 </head>
@@ -131,8 +127,6 @@ Refresh
 </button>
 
 
-<!-- PENDING -->
-
 <section class="box">
 
 <h3>
@@ -145,8 +139,6 @@ Loading...
 
 </section>
 
-
-<!-- HISTORY -->
 
 <section class="box">
 
@@ -184,9 +176,9 @@ window.supabase.createClient(
 );
 
 
-/* ================================
-   ADMIN CHECK
-================================ */
+/* =================================
+   CHECK ADMIN
+================================= */
 
 async function checkAdmin() {
 
@@ -304,9 +296,9 @@ async function checkAdmin() {
 }
 
 
-/* ================================
+/* =================================
    LOAD DEPOSITS
-================================ */
+================================= */
 
 async function loadDeposits() {
 
@@ -329,12 +321,6 @@ async function loadDeposits() {
 
 
   try {
-
-    /*
-      Admin can read the deposit
-      records through the existing
-      admin permissions.
-    */
 
     const {
       data,
@@ -374,10 +360,7 @@ async function loadDeposits() {
     );
 
 
-    /* PENDING */
-
-    pendingBox.innerHTML =
-    "";
+    pendingBox.innerHTML = "";
 
 
     if (pending.length === 0) {
@@ -387,20 +370,21 @@ async function loadDeposits() {
 
     } else {
 
-      for (const item of pending) {
+      for (
+        const item of pending
+      ) {
 
         await renderPendingDeposit(
           item,
           pendingBox
         );
+
       }
+
     }
 
 
-    /* HISTORY */
-
-    historyBox.innerHTML =
-    "";
+    historyBox.innerHTML = "";
 
 
     if (reviewed.length === 0) {
@@ -410,17 +394,23 @@ async function loadDeposits() {
 
     } else {
 
-      for (const item of reviewed) {
+      for (
+        const item of reviewed
+      ) {
 
         await renderHistoryDeposit(
           item,
           historyBox
         );
+
       }
+
     }
 
 
   } catch (error) {
+
+    console.error(error);
 
     pendingBox.innerHTML =
     "<p class='error'>Error loading deposits: " +
@@ -430,14 +420,13 @@ async function loadDeposits() {
     historyBox.textContent =
     "Unable to load deposit history.";
 
-    console.error(error);
   }
 }
 
 
-/* ================================
-   RENDER PENDING
-================================ */
+/* =================================
+   PENDING DEPOSIT
+================================= */
 
 async function renderPendingDeposit(
   item,
@@ -460,8 +449,18 @@ async function renderPendingDeposit(
     </h4>
 
     <p>
+      <strong>Email:</strong>
+      ${escapeHTML(
+        item.promoter_email ||
+        "Not available"
+      )}
+    </p>
+
+    <p>
       <strong>ID:</strong>
-      ${escapeHTML(item.promoter_id)}
+      ${escapeHTML(
+        item.promoter_id
+      )}
     </p>
 
     <p>
@@ -525,7 +524,9 @@ async function renderPendingDeposit(
   );
 
 
-  /* SCREENSHOT */
+  /* ===============================
+     LOAD SCREENSHOT
+  =============================== */
 
   const proofArea =
   card.querySelector(
@@ -575,6 +576,8 @@ async function renderPendingDeposit(
             alt="Payment screenshot"
           >
 
+          <br>
+
           <a
             class="proof-link"
             href="${escapeAttribute(
@@ -592,20 +595,24 @@ async function renderPendingDeposit(
 
         proofArea.innerHTML =
         "<p class='error'>Screenshot URL could not be created.</p>";
+
       }
 
 
     } catch (error) {
 
       console.error(
-        "Proof error:",
+        "Screenshot error:",
         error
       );
 
       proofArea.innerHTML =
       "<p class='error'>Unable to load screenshot: " +
-      escapeHTML(error.message) +
+      escapeHTML(
+        error.message
+      ) +
       "</p>";
+
     }
 
 
@@ -627,6 +634,8 @@ async function renderPendingDeposit(
         alt="Payment screenshot"
       >
 
+      <br>
+
       <a
         class="proof-link"
         href="${escapeAttribute(
@@ -644,10 +653,13 @@ async function renderPendingDeposit(
 
     proofArea.innerHTML =
     "<p class='error'>No payment screenshot attached.</p>";
+
   }
 
 
-  /* APPROVE */
+  /* ===============================
+     APPROVE
+  =============================== */
 
   card.querySelector(
     ".approve"
@@ -662,7 +674,9 @@ async function renderPendingDeposit(
   );
 
 
-  /* REJECT */
+  /* ===============================
+     REJECT
+  =============================== */
 
   card.querySelector(
     ".reject"
@@ -675,12 +689,13 @@ async function renderPendingDeposit(
       card
     )
   );
+
 }
 
 
-/* ================================
-   RENDER HISTORY
-================================ */
+/* =================================
+   HISTORY
+================================= */
 
 async function renderHistoryDeposit(
   item,
@@ -699,8 +714,18 @@ async function renderHistoryDeposit(
   card.innerHTML = `
 
     <p>
+      <strong>Promoter Email:</strong>
+      ${escapeHTML(
+        item.promoter_email ||
+        "Not available"
+      )}
+    </p>
+
+    <p>
       <strong>Promoter ID:</strong>
-      ${escapeHTML(item.promoter_id)}
+      ${escapeHTML(
+        item.promoter_id
+      )}
     </p>
 
     <p>
@@ -720,7 +745,9 @@ async function renderHistoryDeposit(
     <p>
       <strong>Status:</strong>
       <span class="status">
-        ${escapeHTML(item.status)}
+        ${escapeHTML(
+          item.status
+        )}
       </span>
     </p>
 
@@ -729,7 +756,9 @@ async function renderHistoryDeposit(
       ? `
         <p>
           <strong>Admin Note:</strong>
-          ${escapeHTML(item.admin_note)}
+          ${escapeHTML(
+            item.admin_note
+          )}
         </p>
       `
       : ""
@@ -744,9 +773,9 @@ async function renderHistoryDeposit(
 }
 
 
-/* ================================
-   REVIEW DEPOSIT
-================================ */
+/* =================================
+   APPROVE / REJECT
+================================= */
 
 async function reviewDeposit(
   depositId,
@@ -784,12 +813,6 @@ async function reviewDeposit(
 
   try {
 
-    /*
-      Try the existing RPC first.
-      If your admin page already has
-      its own review function, use it.
-    */
-
     const {
       data,
       error
@@ -823,6 +846,7 @@ async function reviewDeposit(
         data.message ||
         "Review failed."
       );
+
     }
 
 
@@ -846,7 +870,6 @@ async function reviewDeposit(
 
     console.error(error);
 
-
     message.textContent =
     "Error: " +
     error.message;
@@ -859,15 +882,19 @@ async function reviewDeposit(
       button =>
       button.disabled = false
     );
+
   }
+
 }
 
 
-/* ================================
+/* =================================
    HELPERS
-================================ */
+================================= */
 
-function formatDate(value) {
+function formatDate(
+  value
+) {
 
   if (!value) {
     return "-";
@@ -875,36 +902,76 @@ function formatDate(value) {
 
   return new Date(value)
     .toLocaleString("en-NG");
+
 }
 
 
-function escapeHTML(value) {
+function escapeHTML(
+  value
+) {
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /'/g,
+    "&#039;"
+  );
+
 }
 
 
-function escapeAttribute(value) {
+function escapeAttribute(
+  value
+) {
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/"/g,"&quot;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;");
+  return String(
+    value ?? ""
+  )
+  .replace(
+    /&/g,
+    "&amp;"
+  )
+  .replace(
+    /"/g,
+    "&quot;"
+  )
+  .replace(
+    /</g,
+    "&lt;"
+  )
+  .replace(
+    />/g,
+    "&gt;"
+  );
+
 }
 
 
-/* ================================
+/* =================================
    REFRESH
-================================ */
+================================= */
 
 document
-.getElementById("refreshButton")
+.getElementById(
+  "refreshButton"
+)
 .addEventListener(
   "click",
   async function() {
@@ -920,13 +987,14 @@ document
 
     this.textContent =
     "Refresh";
+
   }
 );
 
 
-/* ================================
+/* =================================
    START
-================================ */
+================================= */
 
 async function initialize() {
 
@@ -940,6 +1008,7 @@ async function initialize() {
 
 
   await loadDeposits();
+
 }
 
 
@@ -948,4 +1017,4 @@ initialize();
 </script>
 
 </body>
-  </html>
+</html>

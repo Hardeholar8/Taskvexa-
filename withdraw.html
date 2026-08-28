@@ -1,163 +1,537 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 
-  <meta charset="UTF-8">
+<meta charset="UTF-8">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-  <title>
-    TaskVexa - Withdraw
-  </title>
+<title>TaskVexa - Withdraw</title>
 
-  <link
-    rel="stylesheet"
-    href="style.css"
-  >
+<link
+  rel="stylesheet"
+  href="style.css"
+>
 
-  <style>
+<style>
 
-    .balance-card {
+/* ================================
+   PREMIUM DARK WITHDRAWAL PAGE
+================================ */
 
-      padding: 24px;
-      margin: 20px 0;
-      border-radius: 18px;
-      background: #111827;
-      color: white;
-      box-shadow:
-        0 8px 25px
-        rgba(0, 0, 0, 0.15);
-      text-align: center;
+* {
+  box-sizing: border-box;
+}
 
-    }
+:root {
+  --bg: #070b14;
+  --panel: #0d1422;
+  --panel2: #111a2b;
+  --border: #1e2a3d;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --purple: #7c3aed;
+  --purple-light: #a78bfa;
+  --green: #22c55e;
+  --yellow: #f59e0b;
+  --red: #ef4444;
+}
 
-
-    .balance-card p {
-
-      margin: 5px 0;
-      font-size: 15px;
-      opacity: 0.8;
-
-    }
-
-
-    .balance-card h2 {
-
-      font-size: 34px;
-      margin: 12px 0;
-      font-weight: 700;
-      color: white;
-
-    }
-
-
-    .withdraw-card {
-
-      padding: 20px;
-      margin: 20px 0;
-      border-radius: 16px;
-      background: #ffffff;
-      box-shadow:
-        0 4px 15px
-        rgba(0, 0, 0, 0.08);
-
-    }
+body {
+  margin: 0;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(124,58,237,.15),
+      transparent 35%
+    ),
+    var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
 
 
-    .withdraw-card label {
+/* ================================
+   TOP BAR
+================================ */
 
-      display: block;
-      margin-top: 14px;
-      margin-bottom: 6px;
-      font-weight: 600;
+.topbar {
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  background: rgba(7,11,20,.95);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  backdrop-filter: blur(15px);
+}
 
-    }
+.logo {
+  font-size: 23px;
+  font-weight: 800;
+}
 
+.logo span {
+  color: var(--purple-light);
+}
 
-    .withdraw-card input {
-
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-
-    }
-
-
-    .withdraw-button {
-
-      width: 100%;
-      margin-top: 20px;
-      padding: 13px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      font-weight: 600;
-
-    }
-
-
-    #withdrawMessage {
-
-      margin-top: 15px;
-      font-weight: 600;
-
-    }
+.back-button {
+  text-decoration: none;
+  color: #cbd5e1;
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  padding: 9px 14px;
+  border-radius: 9px;
+  font-size: 13px;
+}
 
 
-    .history-card {
+/* ================================
+   MAIN
+================================ */
 
-      padding: 18px;
-      margin: 14px 0;
-      border-radius: 14px;
-      background: #f5f5f5;
-      border: 1px solid #e5e7eb;
+.main {
+  width: 100%;
+  max-width: 760px;
+  margin: auto;
+  padding: 25px 18px 45px;
+}
 
-    }
+.page-title {
+  margin-bottom: 22px;
+}
 
+.page-title h1 {
+  margin: 0 0 7px;
+  font-size: 27px;
+}
 
-    .history-card p {
-
-      margin: 8px 0;
-
-    }
-
-
-    .status {
-
-      font-weight: 700;
-
-    }
-
-
-    .status.pending {
-
-      color: #b7791f;
-
-    }
+.page-title p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
 
 
-    .status.approved {
+/* ================================
+   BALANCE
+================================ */
 
-      color: #2f855a;
+.balance-card {
+  position: relative;
+  overflow: hidden;
+  padding: 25px;
+  border-radius: 20px;
+  margin-bottom: 18px;
 
-    }
+  background:
+    linear-gradient(
+      135deg,
+      #191331,
+      #0d1422 70%
+    );
+
+  border: 1px solid rgba(139,92,246,.3);
+
+  box-shadow:
+    0 15px 45px rgba(0,0,0,.28);
+}
+
+.balance-card::after {
+  content: "";
+  position: absolute;
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  right: -65px;
+  top: -75px;
+  background: rgba(139,92,246,.13);
+}
+
+.balance-label {
+  color: var(--muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+.balance {
+  font-size: 38px;
+  font-weight: 800;
+  margin: 9px 0;
+  letter-spacing: -.5px;
+}
+
+.balance-status {
+  color: #86efac;
+  font-size: 12px;
+}
 
 
-    .status.rejected {
+/* ================================
+   WITHDRAW CARD
+================================ */
 
-      color: #c53030;
+.withdraw-card {
+  background: rgba(13,20,34,.95);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 23px;
+  margin-bottom: 24px;
+  box-shadow:
+    0 12px 35px rgba(0,0,0,.2);
+}
 
-    }
+.card-heading {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 21px;
+}
 
-  </style>
+.card-icon {
+  width: 43px;
+  height: 43px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 11px;
+  background: rgba(124,58,237,.14);
+  font-size: 21px;
+}
+
+.card-heading h2 {
+  margin: 0;
+  font-size: 17px;
+}
+
+.card-heading p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+
+/* ================================
+   FORM
+================================ */
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 7px;
+  color: #cbd5e1;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.input-wrap {
+  position: relative;
+}
+
+.input-wrap span {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--purple-light);
+  font-size: 14px;
+}
+
+.withdraw-card input {
+  width: 100%;
+  padding: 13px 14px;
+  background: #080e19;
+  color: white;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  transition: .2s;
+}
+
+.input-wrap input {
+  padding-left: 39px;
+}
+
+.withdraw-card input:focus {
+  border-color: rgba(167,139,250,.65);
+  box-shadow:
+    0 0 0 3px rgba(124,58,237,.1);
+}
+
+.withdraw-card input::placeholder {
+  color: #64748b;
+}
+
+
+/* ================================
+   QUICK AMOUNT
+================================ */
+
+.quick-title {
+  color: var(--muted);
+  font-size: 11px;
+  margin: -5px 0 9px;
+}
+
+.quick-amounts {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 17px;
+}
+
+.quick-amount {
+  border: 1px solid var(--border);
+  background: var(--panel2);
+  color: #cbd5e1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.quick-amount:hover {
+  border-color: var(--purple-light);
+  color: white;
+}
+
+
+/* ================================
+   ACCOUNT INFO
+================================ */
+
+.account-section {
+  margin-top: 20px;
+  padding-top: 19px;
+  border-top: 1px solid var(--border);
+}
+
+.account-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+
+/* ================================
+   BUTTON
+================================ */
+
+.withdraw-button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 14px;
+  border: 0;
+  border-radius: 11px;
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #8b5cf6
+    );
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow:
+    0 8px 20px rgba(124,58,237,.2);
+  transition: .2s;
+}
+
+.withdraw-button:hover {
+  transform: translateY(-1px);
+}
+
+.withdraw-button:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* ================================
+   MESSAGE
+================================ */
+
+#withdrawMessage {
+  display: none;
+  padding: 11px 13px;
+  border-radius: 9px;
+  margin: 14px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+
+/* ================================
+   HISTORY
+================================ */
+
+.history-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 28px 0 13px;
+}
+
+.history-heading h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.history-heading span {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.history-card {
+  background: rgba(13,20,34,.95);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 17px;
+  margin-bottom: 10px;
+}
+
+.history-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.history-amount {
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.status {
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.status.pending {
+  color: #fbbf24;
+  background: rgba(245,158,11,.1);
+}
+
+.status.approved {
+  color: #86efac;
+  background: rgba(34,197,94,.1);
+}
+
+.status.rejected {
+  color: #fca5a5;
+  background: rgba(239,68,68,.1);
+}
+
+.history-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.history-detail {
+  background: #080e19;
+  padding: 10px;
+  border-radius: 9px;
+}
+
+.history-detail small {
+  display: block;
+  color: #64748b;
+  font-size: 9px;
+  margin-bottom: 4px;
+}
+
+.history-detail strong {
+  font-size: 11px;
+  color: #dbe4f0;
+  word-break: break-word;
+}
+
+.history-date {
+  color: #64748b;
+  font-size: 10px;
+  margin-top: 12px;
+}
+
+
+/* ================================
+   EMPTY STATE
+================================ */
+
+.empty-history {
+  text-align: center;
+  padding: 35px 20px;
+  background: rgba(13,20,34,.8);
+  border: 1px dashed var(--border);
+  border-radius: 15px;
+}
+
+.empty-icon {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.empty-history strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.empty-history p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+
+/* ================================
+   MOBILE
+================================ */
+
+@media (max-width: 520px) {
+
+  .topbar {
+    padding: 0 15px;
+  }
+
+  .main {
+    padding: 20px 14px 35px;
+  }
+
+  .page-title h1 {
+    font-size: 24px;
+  }
+
+  .balance {
+    font-size: 32px;
+  }
+
+  .withdraw-card {
+    padding: 18px;
+  }
+
+  .history-details {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+</style>
 
 </head>
 
@@ -165,42 +539,59 @@
 <body>
 
 
-<header>
+<header class="topbar">
 
-  <h1>
-    TaskVexa
-  </h1>
+  <div class="logo">
+    Task<span>Vexa</span>
+  </div>
 
-  <a href="dashboard.html">
-    Dashboard
+  <a
+    href="dashboard.html"
+    class="back-button"
+  >
+    ← Dashboard
   </a>
 
 </header>
 
 
-<main>
+<main class="main">
 
 
-  <h2>
-    Withdraw
-  </h2>
+  <section class="page-title">
+
+    <h1>
+      Withdraw
+    </h1>
+
+    <p>
+      Request a withdrawal from your available balance.
+    </p>
+
+  </section>
 
 
   <!-- BALANCE -->
 
   <section class="balance-card">
 
-    <p>
+    <p class="balance-label">
       Available Balance
     </p>
 
-    <h2 id="balance">
+    <div
+      id="balance"
+      class="balance"
+    >
       ₦0.00
-    </h2>
+    </div>
 
-    <p id="balanceMessage">
+    <div
+      id="balanceMessage"
+      class="balance-status"
+    >
       Loading balance...
-    </p>
+    </div>
 
   </section>
 
@@ -209,62 +600,157 @@
 
   <section class="withdraw-card">
 
-    <h3>
-      Withdrawal Details
-    </h3>
+    <div class="card-heading">
+
+      <div class="card-icon">
+        💸
+      </div>
+
+      <div>
+
+        <h2>
+          Withdrawal Details
+        </h2>
+
+        <p>
+          Enter the account you want to receive your withdrawal.
+        </p>
+
+      </div>
+
+    </div>
 
 
-    <label for="amount">
-      Withdrawal Amount
-    </label>
+    <!-- AMOUNT -->
 
-    <input
-      type="number"
-      id="amount"
-      min="1"
-      step="0.01"
-      placeholder="Enter amount"
-    >
+    <div class="form-group">
 
+      <label for="amount">
+        Withdrawal Amount
+      </label>
 
-    <label for="bankName">
-      Bank Name
-    </label>
+      <div class="input-wrap">
 
-    <input
-      type="text"
-      id="bankName"
-      placeholder="Enter bank name"
-    >
+        <span>
+          ₦
+        </span>
 
+        <input
+          type="number"
+          id="amount"
+          min="1"
+          step="0.01"
+          placeholder="Enter amount"
+        >
 
-    <label for="accountName">
-      Account Name
-    </label>
+      </div>
 
-    <input
-      type="text"
-      id="accountName"
-      placeholder="Enter account name"
-    >
+    </div>
 
 
-    <label for="accountNumber">
-      Account Number
-    </label>
+    <div class="quick-title">
+      Quick Amount
+    </div>
 
-    <input
-      type="text"
-      id="accountNumber"
-      inputmode="numeric"
-      maxlength="20"
-      placeholder="Enter account number"
-    >
+    <div class="quick-amounts">
+
+      <button
+        type="button"
+        class="quick-amount"
+        data-amount="500"
+      >
+        ₦500
+      </button>
+
+      <button
+        type="button"
+        class="quick-amount"
+        data-amount="1000"
+      >
+        ₦1,000
+      </button>
+
+      <button
+        type="button"
+        class="quick-amount"
+        data-amount="2000"
+      >
+        ₦2,000
+      </button>
+
+      <button
+        type="button"
+        class="quick-amount"
+        data-amount="5000"
+      >
+        ₦5,000
+      </button>
+
+    </div>
+
+
+    <!-- ACCOUNT -->
+
+    <div class="account-section">
+
+      <div class="account-section-title">
+        Bank Account
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="bankName">
+          Bank Name
+        </label>
+
+        <input
+          type="text"
+          id="bankName"
+          placeholder="Enter bank name"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="accountName">
+          Account Name
+        </label>
+
+        <input
+          type="text"
+          id="accountName"
+          placeholder="Enter account name"
+        >
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label for="accountNumber">
+          Account Number
+        </label>
+
+        <input
+          type="text"
+          id="accountNumber"
+          inputmode="numeric"
+          maxlength="20"
+          placeholder="Enter account number"
+        >
+
+      </div>
+
+    </div>
 
 
     <button
       id="withdrawButton"
       class="withdraw-button"
+      type="button"
     >
       Request Withdrawal
     </button>
@@ -275,23 +761,27 @@
   </section>
 
 
-  <!-- WITHDRAWAL HISTORY -->
+  <!-- HISTORY -->
 
-  <section>
+  <div class="history-heading">
 
     <h2>
       Withdrawal History
     </h2>
 
+    <span>
+      Recent requests
+    </span>
 
-    <div id="historyMessage">
-      Loading withdrawal history...
-    </div>
+  </div>
 
 
-    <div id="withdrawalHistory"></div>
+  <div id="historyMessage">
+    Loading withdrawal history...
+  </div>
 
-  </section>
+
+  <div id="withdrawalHistory"></div>
 
 
 </main>
@@ -302,71 +792,50 @@
 
 <script>
 
-
 const SUPABASE_URL =
-  "https://dxtlnrthlpdaobnbazny.supabase.co";
-
+"https://dxtlnrthlpdaobnbazny.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 
 const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 
 let currentUser = null;
 
 
 const balanceElement =
-  document.getElementById(
-    "balance"
-  );
-
+document.getElementById("balance");
 
 const balanceMessage =
-  document.getElementById(
-    "balanceMessage"
-  );
-
+document.getElementById("balanceMessage");
 
 const withdrawButton =
-  document.getElementById(
-    "withdrawButton"
-  );
-
+document.getElementById("withdrawButton");
 
 const withdrawMessage =
-  document.getElementById(
-    "withdrawMessage"
-  );
-
+document.getElementById("withdrawMessage");
 
 const historyMessage =
-  document.getElementById(
-    "historyMessage"
-  );
-
+document.getElementById("historyMessage");
 
 const withdrawalHistory =
-  document.getElementById(
-    "withdrawalHistory"
-  );
+document.getElementById("withdrawalHistory");
 
 
-/* =========================
+/* ================================
    FORMAT MONEY
-========================= */
+================================ */
 
 function formatMoney(amount) {
 
   return "₦" +
-    Number(
-      amount || 0
-    ).toLocaleString(
+    Number(amount || 0).toLocaleString(
       "en-NG",
       {
         minimumFractionDigits: 2,
@@ -377,9 +846,9 @@ function formatMoney(amount) {
 }
 
 
-/* =========================
+/* ================================
    LOAD USER
-========================= */
+================================ */
 
 async function loadUser() {
 
@@ -387,13 +856,10 @@ async function loadUser() {
     data: { user },
     error
   } =
-    await supabaseClient.auth.getUser();
+  await supabaseClient.auth.getUser();
 
 
-  if (
-    error ||
-    !user
-  ) {
+  if (error || !user) {
 
     window.location.href =
       "login.html";
@@ -403,18 +869,16 @@ async function loadUser() {
   }
 
 
-  currentUser =
-    user;
-
+  currentUser = user;
 
   return user;
 
 }
 
 
-/* =========================
+/* ================================
    LOAD BALANCE
-========================= */
+================================ */
 
 async function loadBalance() {
 
@@ -424,14 +888,14 @@ async function loadBalance() {
       data: wallet,
       error
     } =
-      await supabaseClient
-        .from("wallets")
-        .select("balance")
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .maybeSingle();
+    await supabaseClient
+      .from("wallets")
+      .select("balance")
+      .eq(
+        "user_id",
+        currentUser.id
+      )
+      .maybeSingle();
 
 
     if (error) {
@@ -448,15 +912,12 @@ async function loadBalance() {
 
 
     balanceMessage.textContent =
-      "Balance updated.";
+      "Balance updated";
 
 
   } catch (error) {
 
-    console.error(
-      error
-    );
-
+    console.error(error);
 
     balanceMessage.textContent =
       "Unable to load balance.";
@@ -466,9 +927,9 @@ async function loadBalance() {
 }
 
 
-/* =========================
-   LOAD WITHDRAWAL HISTORY
-========================= */
+/* ================================
+   LOAD HISTORY
+================================ */
 
 async function loadHistory() {
 
@@ -478,27 +939,27 @@ async function loadHistory() {
       data: withdrawals,
       error
     } =
-      await supabaseClient
-        .from("withdrawals")
-        .select(`
-          id,
-          amount,
-          bank_name,
-          account_name,
-          account_number,
-          status,
-          created_at
-        `)
-        .eq(
-          "worker_id",
-          currentUser.id
-        )
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
+    await supabaseClient
+      .from("withdrawals")
+      .select(`
+        id,
+        amount,
+        bank_name,
+        account_name,
+        account_number,
+        status,
+        created_at
+      `)
+      .eq(
+        "worker_id",
+        currentUser.id
+      )
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
 
 
     if (error) {
@@ -508,8 +969,7 @@ async function loadHistory() {
     }
 
 
-    withdrawalHistory.innerHTML =
-      "";
+    withdrawalHistory.innerHTML = "";
 
 
     if (
@@ -517,16 +977,20 @@ async function loadHistory() {
       withdrawals.length === 0
     ) {
 
-      historyMessage.textContent =
-        "No withdrawal requests yet.";
+      historyMessage.innerHTML = `
+        <div class="empty-history">
+          <div class="empty-icon">💳</div>
+          <strong>No withdrawals yet</strong>
+          <p>Your withdrawal requests will appear here.</p>
+        </div>
+      `;
 
       return;
 
     }
 
 
-    historyMessage.textContent =
-      "";
+    historyMessage.textContent = "";
 
 
     withdrawals.forEach(
@@ -536,7 +1000,6 @@ async function loadHistory() {
           document.createElement(
             "div"
           );
-
 
         card.className =
           "history-card";
@@ -562,8 +1025,7 @@ async function loadHistory() {
 
 
         if (
-          status ===
-          "approved"
+          status === "approved"
         ) {
 
           statusText =
@@ -573,8 +1035,7 @@ async function loadHistory() {
 
 
         if (
-          status ===
-          "rejected"
+          status === "rejected"
         ) {
 
           statusText =
@@ -585,84 +1046,73 @@ async function loadHistory() {
 
         card.innerHTML = `
 
-          <p>
+          <div class="history-top">
 
-            <strong>
-              Amount:
-            </strong>
+            <div class="history-amount">
+              ${formatMoney(
+                withdrawal.amount
+              )}
+            </div>
 
-            ${formatMoney(
-              withdrawal.amount
-            )}
-
-          </p>
-
-
-          <p>
-
-            <strong>
-              Bank:
-            </strong>
-
-            ${escapeHTML(
-              withdrawal.bank_name
-            )}
-
-          </p>
-
-
-          <p>
-
-            <strong>
-              Account Name:
-            </strong>
-
-            ${escapeHTML(
-              withdrawal.account_name
-            )}
-
-          </p>
-
-
-          <p>
-
-            <strong>
-              Account Number:
-            </strong>
-
-            ${escapeHTML(
-              withdrawal.account_number
-            )}
-
-          </p>
-
-
-          <p>
-
-            <strong>
-              Status:
-            </strong>
-
-            <span
-              class="status ${status}"
-            >
+            <span class="status ${status}">
               ${statusText}
             </span>
 
-          </p>
+          </div>
 
 
-          <p>
+          <div class="history-details">
 
-            <strong>
-              Date:
-            </strong>
+            <div class="history-detail">
 
-            ${escapeHTML(
-              date
-            )}
+              <small>
+                BANK
+              </small>
 
-          </p>
+              <strong>
+                ${escapeHTML(
+                  withdrawal.bank_name
+                )}
+              </strong>
+
+            </div>
+
+
+            <div class="history-detail">
+
+              <small>
+                ACCOUNT NAME
+              </small>
+
+              <strong>
+                ${escapeHTML(
+                  withdrawal.account_name
+                )}
+              </strong>
+
+            </div>
+
+
+            <div class="history-detail">
+
+              <small>
+                ACCOUNT NUMBER
+              </small>
+
+              <strong>
+                ${escapeHTML(
+                  withdrawal.account_number
+                )}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <div class="history-date">
+            ${escapeHTML(date)}
+          </div>
 
         `;
 
@@ -677,10 +1127,7 @@ async function loadHistory() {
 
   } catch (error) {
 
-    console.error(
-      error
-    );
-
+    console.error(error);
 
     historyMessage.textContent =
       "Unable to load withdrawal history.";
@@ -690,13 +1137,81 @@ async function loadHistory() {
 }
 
 
-/* =========================
+/* ================================
+   QUICK AMOUNTS
+================================ */
+
+document
+.querySelectorAll(".quick-amount")
+.forEach(
+  button => {
+
+    button.addEventListener(
+      "click",
+      function() {
+
+        document.getElementById(
+          "amount"
+        ).value =
+          this.dataset.amount;
+
+      }
+    );
+
+  }
+);
+
+
+/* ================================
+   SHOW MESSAGE
+================================ */
+
+function showWithdrawMessage(
+  message,
+  type
+) {
+
+  withdrawMessage.textContent =
+    message;
+
+  withdrawMessage.style.display =
+    "block";
+
+
+  if (type === "success") {
+
+    withdrawMessage.style.color =
+      "#86efac";
+
+    withdrawMessage.style.background =
+      "rgba(34,197,94,.08)";
+
+    withdrawMessage.style.border =
+      "1px solid rgba(34,197,94,.2)";
+
+  } else {
+
+    withdrawMessage.style.color =
+      "#fca5a5";
+
+    withdrawMessage.style.background =
+      "rgba(239,68,68,.08)";
+
+    withdrawMessage.style.border =
+      "1px solid rgba(239,68,68,.2)";
+
+  }
+
+}
+
+
+/* ================================
    REQUEST WITHDRAWAL
-========================= */
+================================ */
 
 withdrawButton.addEventListener(
   "click",
-  async function () {
+  async function() {
 
     const amount =
       Number(
@@ -724,8 +1239,8 @@ withdrawButton.addEventListener(
       ).value.trim();
 
 
-    withdrawMessage.textContent =
-      "";
+    withdrawMessage.style.display =
+      "none";
 
 
     if (
@@ -733,8 +1248,10 @@ withdrawButton.addEventListener(
       amount <= 0
     ) {
 
-      withdrawMessage.textContent =
-        "Enter a valid withdrawal amount.";
+      showWithdrawMessage(
+        "Enter a valid withdrawal amount.",
+        "error"
+      );
 
       return;
 
@@ -743,8 +1260,10 @@ withdrawButton.addEventListener(
 
     if (!bankName) {
 
-      withdrawMessage.textContent =
-        "Enter your bank name.";
+      showWithdrawMessage(
+        "Enter your bank name.",
+        "error"
+      );
 
       return;
 
@@ -753,8 +1272,10 @@ withdrawButton.addEventListener(
 
     if (!accountName) {
 
-      withdrawMessage.textContent =
-        "Enter your account name.";
+      showWithdrawMessage(
+        "Enter your account name.",
+        "error"
+      );
 
       return;
 
@@ -763,8 +1284,10 @@ withdrawButton.addEventListener(
 
     if (!accountNumber) {
 
-      withdrawMessage.textContent =
-        "Enter your account number.";
+      showWithdrawMessage(
+        "Enter your account number.",
+        "error"
+      );
 
       return;
 
@@ -776,7 +1299,6 @@ withdrawButton.addEventListener(
       withdrawButton.disabled =
         true;
 
-
       withdrawButton.textContent =
         "Submitting...";
 
@@ -785,22 +1307,22 @@ withdrawButton.addEventListener(
         data,
         error
       } =
-        await supabaseClient.rpc(
-          "request_withdrawal",
-          {
-            p_amount:
-              amount,
+      await supabaseClient.rpc(
+        "request_withdrawal",
+        {
+          p_amount:
+            amount,
 
-            p_bank_name:
-              bankName,
+          p_bank_name:
+            bankName,
 
-            p_account_name:
-              accountName,
+          p_account_name:
+            accountName,
 
-            p_account_number:
-              accountNumber
-          }
-        );
+          p_account_number:
+            accountNumber
+        }
+      );
 
 
       if (error) {
@@ -823,119 +1345,20 @@ withdrawButton.addEventListener(
       }
 
 
-      withdrawMessage.textContent =
-        "Withdrawal request submitted successfully. Status: Pending";
+      showWithdrawMessage(
+        "Withdrawal request submitted successfully. Your request is pending review.",
+        "success"
+      );
 
 
       document.getElementById(
         "amount"
-      ).value =
-        "";
+      ).value = "";
 
-
-      /*
-        Reload history immediately.
-      */
-
-      await loadHistory();
 
       await loadBalance();
 
-
-    } catch (error) {
-
-      console.error(
-        error
-      );
+      await loadHistory();
 
 
-      withdrawMessage.textContent =
-        "Error: " +
-        error.message;
-
-    }
-
-
-    withdrawButton.disabled =
-      false;
-
-
-    withdrawButton.textContent =
-      "Request Withdrawal";
-
-  }
-);
-
-
-/* =========================
-   ESCAPE HTML
-========================= */
-
-function escapeHTML(
-  value
-) {
-
-  return String(
-    value ?? ""
-  )
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =========================
-   START
-========================= */
-
-async function initialize() {
-
-  const user =
-    await loadUser();
-
-
-  if (!user) {
-
-    return;
-
-  }
-
-
-  await loadBalance();
-
-  await loadHistory();
-
-}
-
-
-initialize();
-
-</script>
-
-
-</body>
-
-  </html>
+    } c

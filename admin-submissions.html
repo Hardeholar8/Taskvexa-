@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TaskVexa - Admin Submissions</title>
-
-<style>
+<title>TaskVexa - Admin Submissions</title><style>
 *{box-sizing:border-box}
 
 :root{
@@ -19,6 +16,7 @@
 --green:#4ade80;
 --red:#f87171;
 --yellow:#facc15;
+--blue:#60a5fa;
 }
 
 body{
@@ -291,6 +289,12 @@ display:block;
 border:1px solid var(--border);
 }
 
+.proof-error{
+margin-top:10px;
+color:var(--red);
+font-size:12px;
+}
+
 .button{
 min-height:42px;
 padding:10px 16px;
@@ -321,8 +325,16 @@ border:1px solid #5b292f;
 }
 
 .refresh{
-background:#f8fafc;
-color:#090d14;
+background:#f8fafc !important;
+color:#090d14 !important;
+}
+
+.open-proof{
+display:inline-block;
+margin-top:10px;
+color:var(--blue);
+font-size:12px;
+text-decoration:none;
 }
 
 .empty,
@@ -389,158 +401,59 @@ display:none;
 overflow-x:auto;
 }
 }
-</style>
-</head>
-
-<body>
-
-<aside class="sidebar" id="sidebar">
-
-<div class="logo">
+</style></head><body><aside class="sidebar" id="sidebar"><div class="logo">
 <h1>TaskVexa</h1>
 <p>Admin Control Panel</p>
-</div>
-
-<div class="nav-title">Overview</div>
-
-<a href="admin.html" class="nav-link">
+</div><div class="nav-title">Overview</div><a href="admin.html" class="nav-link">
 <span class="nav-icon">⌂</span>
 Dashboard
-</a>
-
-<div class="nav-title">Management</div>
-
-<a href="worker.html" class="nav-link">
+</a><div class="nav-title">Management</div><a href="worker.html" class="nav-link">
 <span class="nav-icon">👥</span>
 Workers
-</a>
-
-<a href="promoters.html" class="nav-link">
+</a><a href="promoters.html" class="nav-link">
 <span class="nav-icon">📣</span>
 Promoters
-</a>
-
-<a href="tasks.html" class="nav-link">
+</a><a href="admin-task.html" class="nav-link">
 <span class="nav-icon">✓</span>
 Tasks
-</a>
-
-<a href="admin-submissions.html" class="nav-link active">
+</a><a href="admin-submissions.html" class="nav-link active">
 <span class="nav-icon">📋</span>
 Submissions
-</a>
-
-<a href="admin-withdrawals.html" class="nav-link">
+</a><a href="admin-withdrawals.html" class="nav-link">
 <span class="nav-icon">💳</span>
 Withdrawals
-</a>
-
-<a href="admin-promoter-wallet.html" class="nav-link">
+</a><a href="admin-promoter-wallet.html" class="nav-link">
 <span class="nav-icon">💰</span>
 Promoter Wallet
-</a>
-
-<div class="nav-title">Settings</div>
-
-<a href="settings.html" class="nav-link">
+</a><div class="nav-title">Settings</div><a href="settings.html" class="nav-link">
 <span class="nav-icon">⚙</span>
 Platform Settings
-</a>
-
-<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">
-
-<button id="logoutButton" class="nav-link" style="color:#f87171;">
+</a><div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);"><button id="logoutButton" class="nav-link" style="color:#f87171;">
 <span class="nav-icon">↪</span>
 Logout
-</button>
-
-</div>
-
-</aside>
-
-
-<div class="main">
-
-<div class="topbar">
-
-<button id="mobileMenu" class="mobile-menu">
+</button></div></aside><div class="main"><div class="topbar"><button id="mobileMenu" class="mobile-menu">
 ☰
-</button>
-
-<div class="topbar-title">
+</button><div class="topbar-title">
 Task Submissions
-</div>
-
-<div class="admin-status">
+</div><div class="admin-status">
 Admin
-</div>
-
-</div>
-
-
-<main class="content">
-
-<div class="heading">
-
-<h2>Task Submissions</h2>
-
-<p>
+</div></div><main class="content"><div class="heading"><h2>Task Submissions</h2><p>
 Review worker proofs and approve or reject submitted tasks.
-</p>
-
-</div>
-
-
-<div id="message">
+</p></div><div id="message">
 Checking admin access...
-</div>
-
-
-<div class="filter">
-
-<button
-class="active"
-data-filter="pending">
+</div><div class="filter"><button class="active" data-filter="pending">
 Pending
-</button>
-
-<button data-filter="approved">
+</button><button data-filter="approved">
 Approved
-</button>
-
-<button data-filter="rejected">
+</button><button data-filter="rejected">
 Rejected
-</button>
-
-<button data-filter="all">
+</button><button data-filter="all">
 All
-</button>
-
-<button
-class="refresh"
-id="refreshButton">
+</button><button class="refresh" id="refreshButton">
 ↻ Refresh
-</button>
-
-</div>
-
-
-<div id="submissionList">
-
-<div class="loading">
+</button></div><div id="submissionList"><div class="loading">
 Loading submissions...
-</div>
-
-</div>
-
-</main>
-
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
+</div></div></main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 
 const SUPABASE_URL =
 "https://dxtlnrthlpdaobnbazny.supabase.co";
@@ -579,9 +492,7 @@ let submissions = [];
 let currentFilter = "pending";
 
 
-/* =========================
-MOBILE MENU
-========================= */
+/* MOBILE MENU */
 
 mobileMenu.addEventListener(
 "click",
@@ -592,9 +503,7 @@ sidebar.classList.toggle("open");
 });
 
 
-/* =========================
-ESCAPE HTML
-========================= */
+/* ESCAPE HTML */
 
 function escapeHTML(value){
 
@@ -608,9 +517,7 @@ return String(value ?? "")
 }
 
 
-/* =========================
-MONEY
-========================= */
+/* MONEY */
 
 function formatMoney(value){
 
@@ -626,9 +533,7 @@ maximumFractionDigits:2
 }
 
 
-/* =========================
-DATE
-========================= */
+/* DATE */
 
 function formatDate(value){
 
@@ -654,9 +559,68 @@ timeStyle:"short"
 }
 
 
-/* =========================
-ADMIN CHECK
-========================= */
+/*
+IMPORTANT FIX
+
+The worker currently stores NEW proof files as:
+
+worker-id/task-id-time.jpg
+
+That is a Storage path, NOT a browser URL.
+
+Older submissions may already contain a full URL.
+
+This function handles BOTH.
+*/
+
+function getProofUrl(proofPath){
+
+if(!proofPath){
+return null;
+}
+
+const value =
+String(proofPath).trim();
+
+if(!value){
+return null;
+}
+
+
+/* Already a complete URL */
+
+if(
+value.startsWith("http://") ||
+value.startsWith("https://")
+){
+
+return value;
+
+}
+
+
+/*
+New submissions contain only the
+Storage path.
+
+The bucket is public:
+task-proofs
+*/
+
+const {
+data
+} =
+supabaseClient
+.storage
+.from("task-proofs")
+.getPublicUrl(value);
+
+return data?.publicUrl || null;
+
+}
+
+
+/* ADMIN CHECK */
 
 async function getAdmin(){
 
@@ -670,7 +634,10 @@ if(error){
 throw error;
 }
 
-if(!data || !data.user){
+if(
+!data ||
+!data.user
+){
 
 window.location.href =
 "login.html";
@@ -678,6 +645,7 @@ window.location.href =
 return null;
 
 }
+
 
 const {
 data:profile,
@@ -693,9 +661,11 @@ if(profileError){
 throw profileError;
 }
 
+
 if(
 !profile ||
-String(profile.role).toLowerCase() !== "admin"
+String(profile.role).toLowerCase()
+!== "admin"
 ){
 
 message.textContent =
@@ -716,9 +686,7 @@ return data.user;
 }
 
 
-/* =========================
-LOAD SUBMISSIONS
-========================= */
+/* LOAD SUBMISSIONS */
 
 async function loadSubmissions(){
 
@@ -738,9 +706,7 @@ return;
 }
 
 
-/*
-Load submissions first.
-*/
+/* LOAD SUBMISSIONS */
 
 const {
 data,
@@ -766,9 +732,7 @@ Array.isArray(data)
 : [];
 
 
-/*
-Load task information.
-*/
+/* LOAD TASK INFORMATION */
 
 const taskIds =
 [
@@ -778,7 +742,6 @@ submissions
 .filter(Boolean)
 )
 ];
-
 
 let tasksMap = {};
 
@@ -803,8 +766,9 @@ throw tasksError;
 (tasks || []).forEach(
 task => {
 
-tasksMap[task.id] =
-task;
+tasksMap[
+task.id
+] = task;
 
 }
 );
@@ -812,49 +776,7 @@ task;
 }
 
 
-/*
-Load worker profiles.
-*/
-
-const workerIds =
-[
-...new Set(
-submissions
-.map(item => item.worker_id)
-.filter(Boolean)
-)
-];
-
-
-let workersMap = {};
-
-
-if(workerIds.length > 0){
-
-const {
-data:profiles,
-error:profilesError
-} =
-await supabaseClient
-.from("profiles")
-.select("id,role")
-.in("id",workerIds);
-
-if(profilesError){
-throw profilesError;
-}
-
-(profiles || []).forEach(
-profile => {
-
-workersMap[profile.id] =
-profile;
-
-}
-);
-
-}
-
+/* ATTACH TASK INFORMATION */
 
 submissions =
 submissions.map(
@@ -863,12 +785,9 @@ submission => ({
 ...submission,
 
 task:
-tasksMap[submission.task_id]
-|| null,
-
-worker:
-workersMap[submission.worker_id]
-|| null
+tasksMap[
+submission.task_id
+] || null
 
 })
 );
@@ -876,11 +795,13 @@ workersMap[submission.worker_id]
 
 renderSubmissions();
 
+
 message.textContent =
 "Admin access confirmed.";
 
 message.className =
 "success";
+
 
 }catch(error){
 
@@ -908,13 +829,11 @@ message.className =
 }
 
 
-/* =========================
-RENDER
-========================= */
+/* RENDER */
 
 function renderSubmissions(){
 
-let filtered =
+const filtered =
 submissions.filter(
 submission => {
 
@@ -923,9 +842,10 @@ return true;
 }
 
 return String(
-submission.status || "pending"
-).toLowerCase() ===
-currentFilter;
+submission.status ||
+"pending"
+).toLowerCase()
+=== currentFilter;
 
 }
 );
@@ -935,7 +855,11 @@ if(filtered.length === 0){
 
 submissionList.innerHTML = `
 <div class="empty">
-No ${currentFilter === "all" ? "" : currentFilter + " "}submissions found.
+No ${
+currentFilter === "all"
+? ""
+: currentFilter + " "
+}submissions found.
 </div>
 `;
 
@@ -951,7 +875,9 @@ filtered.forEach(
 submission => {
 
 const card =
-document.createElement("section");
+document.createElement(
+"section"
+);
 
 card.className =
 "submission-card";
@@ -959,7 +885,8 @@ card.className =
 
 const status =
 String(
-submission.status || "pending"
+submission.status ||
+"pending"
 ).toLowerCase();
 
 
@@ -972,6 +899,16 @@ Number(
 submission.reward_amount ||
 task.reward ||
 0
+);
+
+
+/*
+FIXED PROOF URL
+*/
+
+const proofUrl =
+getProofUrl(
+submission.proof_url
 );
 
 
@@ -1099,6 +1036,7 @@ submission.reviewed_at
 Worker Proof
 </div>
 
+
 ${
 submission.proof_text
 ?
@@ -1119,40 +1057,38 @@ No proof text submitted.
 
 
 ${
-submission.proof_url
+proofUrl
 ?
 `
 <a
-href="${escapeHTML(
-submission.proof_url
-)}"
+href="${escapeHTML(proofUrl)}"
 target="_blank"
 rel="noopener noreferrer">
 
 <img
 class="proof-image"
-src="${escapeHTML(
-submission.proof_url
-)}"
-alt="Worker proof"
-onerror="this.style.display='none';">
+src="${escapeHTML(proofUrl)}"
+alt="Worker screenshot proof"
+onerror="handleProofError(this);">
 
 </a>
 
-<br>
-
 <a
-href="${escapeHTML(
-submission.proof_url
-)}"
+class="open-proof"
+href="${escapeHTML(proofUrl)}"
 target="_blank"
-rel="noopener noreferrer"
-style="color:#4ade80;font-size:12px;">
-Open proof
+rel="noopener noreferrer">
+
+Open screenshot proof ↗
+
 </a>
 `
 :
-""
+`
+<div class="proof-error">
+Screenshot proof could not be loaded.
+</div>
+`
 }
 
 </div>
@@ -1197,7 +1133,7 @@ submissionList.appendChild(card);
 );
 
 
-/* APPROVE BUTTONS */
+/* APPROVE */
 
 document
 .querySelectorAll(".approve-button")
@@ -1219,7 +1155,7 @@ button
 );
 
 
-/* REJECT BUTTONS */
+/* REJECT */
 
 document
 .querySelectorAll(".reject-button")
@@ -1243,9 +1179,45 @@ button
 }
 
 
-/* =========================
-APPROVE
-========================= */
+/* IMAGE ERROR */
+
+function handleProofError(image){
+
+image.style.display =
+"none";
+
+const parent =
+image.parentElement;
+
+if(!parent){
+return;
+}
+
+if(
+parent.querySelector(
+".proof-error"
+)
+){
+return;
+}
+
+const error =
+document.createElement(
+"div"
+);
+
+error.className =
+"proof-error";
+
+error.textContent =
+"Screenshot could not be displayed. Use 'Open screenshot proof'.";
+
+parent.appendChild(error);
+
+}
+
+
+/* APPROVE */
 
 async function approveSubmission(
 submissionId,
@@ -1337,9 +1309,7 @@ button.textContent =
 }
 
 
-/* =========================
-REJECT
-========================= */
+/* REJECT */
 
 async function rejectSubmission(
 submissionId,
@@ -1431,9 +1401,7 @@ button.textContent =
 }
 
 
-/* =========================
-FILTERS
-========================= */
+/* FILTERS */
 
 document
 .querySelectorAll(
@@ -1452,10 +1420,14 @@ document
 )
 .forEach(
 item =>
-item.classList.remove("active")
+item.classList.remove(
+"active"
+)
 );
 
-button.classList.add("active");
+button.classList.add(
+"active"
+);
 
 currentFilter =
 button.dataset.filter;
@@ -1468,9 +1440,7 @@ renderSubmissions();
 );
 
 
-/* =========================
-REFRESH
-========================= */
+/* REFRESH */
 
 refreshButton.addEventListener(
 "click",
@@ -1494,9 +1464,7 @@ refreshButton.textContent =
 );
 
 
-/* =========================
-LOGOUT
-========================= */
+/* LOGOUT */
 
 logoutButton.addEventListener(
 "click",
@@ -1535,13 +1503,9 @@ message.className =
 });
 
 
-/* =========================
-START
-========================= */
+/* START */
 
 loadSubmissions();
 
-</script>
-
-</body>
+</script></body>
   </html>

@@ -15,14 +15,11 @@
   --bg: #070a10;
   --sidebar: #0b0f17;
   --card: #111722;
-  --card2: #0d131e;
   --border: #202b3b;
   --text: #f8fafc;
   --muted: #7f8da3;
-  --soft: #cbd5e1;
   --green: #4ade80;
   --red: #f87171;
-  --yellow: #facc15;
 }
 
 html,
@@ -136,7 +133,7 @@ body {
 
 .topbar {
   height: 70px;
-  background: rgba(7,10,16,.95);
+  background: rgba(7,10,16,.97);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -144,8 +141,7 @@ body {
   padding: 0 28px;
   position: sticky;
   top: 0;
-  z-index: 900;
-  backdrop-filter: blur(12px);
+  z-index: 20;
 }
 
 .topbar-title {
@@ -166,18 +162,6 @@ body {
   height: 8px;
   border-radius: 50%;
   background: var(--green);
-  box-shadow: 0 0 10px rgba(74,222,128,.6);
-}
-
-.mobile-menu {
-  display: none;
-  background: #151b28;
-  border: 1px solid var(--border);
-  color: white;
-  border-radius: 9px;
-  padding: 8px 11px;
-  cursor: pointer;
-  font-size: 18px;
 }
 
 /* =========================
@@ -191,7 +175,7 @@ body {
 }
 
 .heading {
-  margin-bottom: 20px;
+  margin-bottom: 25px;
 }
 
 .heading h2 {
@@ -226,15 +210,15 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
-  margin-bottom: 30px;
+  margin-bottom: 28px;
 }
 
 .stat {
-  background: linear-gradient(145deg,#131a27,#0d121b);
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 17px;
   padding: 20px;
-  min-height: 120px;
+  min-height: 105px;
 }
 
 .stat-label {
@@ -243,17 +227,17 @@ body {
 }
 
 .stat-value {
-  font-size: 27px;
+  font-size: 25px;
   font-weight: 800;
-  margin-top: 14px;
+  margin-top: 12px;
 }
 
 /* =========================
-   SECTION
+   SECTIONS
 ========================= */
 
 .section-title {
-  margin: 28px 0 14px;
+  margin: 25px 0 14px;
 }
 
 .section-title h3 {
@@ -276,10 +260,6 @@ body {
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 20px;
-}
-
-.card:hover {
-  border-color: #303d52;
 }
 
 .card-head {
@@ -386,19 +366,9 @@ textarea {
   font-size: 14px;
 }
 
-input:focus,
-textarea:focus {
-  border-color: #59677e;
-}
-
 textarea {
   min-height: 90px;
   resize: vertical;
-}
-
-input::placeholder,
-textarea::placeholder {
-  color: #4f5c70;
 }
 
 #paymentDetailsMessage {
@@ -410,6 +380,17 @@ textarea::placeholder {
 /* =========================
    MOBILE
 ========================= */
+
+.mobile-menu {
+  display: none;
+  background: #151b28;
+  border: 1px solid var(--border);
+  color: white;
+  border-radius: 9px;
+  padding: 8px 11px;
+  cursor: pointer;
+  font-size: 18px;
+}
 
 @media(max-width:1050px) {
 
@@ -470,10 +451,6 @@ textarea::placeholder {
     display: none;
   }
 
-  .heading h2 {
-    font-size: 24px;
-  }
-
 }
 </style>
 </head>
@@ -491,18 +468,14 @@ textarea::placeholder {
     <p>Admin Control Panel</p>
   </div>
 
-  <div class="nav-title">
-    Overview
-  </div>
+  <div class="nav-title">Overview</div>
 
   <a href="admin.html" class="nav-link active">
     <span class="nav-icon">⌂</span>
     Dashboard
   </a>
 
-  <div class="nav-title">
-    Management
-  </div>
+  <div class="nav-title">Management</div>
 
   <a href="worker.html" class="nav-link">
     <span class="nav-icon">👥</span>
@@ -534,9 +507,7 @@ textarea::placeholder {
     Promoter Wallet
   </a>
 
-  <div class="nav-title">
-    Settings
-  </div>
+  <div class="nav-title">Settings</div>
 
   <a href="settings.html" class="nav-link">
     <span class="nav-icon">⚙</span>
@@ -565,7 +536,7 @@ textarea::placeholder {
 
 <div class="main">
 
-  <header class="topbar">
+  <div class="topbar">
 
     <button
       id="mobileMenu"
@@ -584,7 +555,7 @@ textarea::placeholder {
       Admin
     </div>
 
-  </header>
+  </div>
 
 
   <main class="content">
@@ -608,7 +579,7 @@ textarea::placeholder {
 
 
     <!-- =========================
-         DASHBOARD STATISTICS
+         STATISTICS
     ========================= -->
 
     <section class="stats">
@@ -690,6 +661,7 @@ textarea::placeholder {
 
     <section class="management">
 
+
       <div class="card">
 
         <div class="card-head">
@@ -698,9 +670,9 @@ textarea::placeholder {
             👥
           </div>
 
-          <div>
-            <h3>Workers</h3>
-          </div>
+          <h3>
+            Workers
+          </h3>
 
         </div>
 
@@ -726,9 +698,9 @@ textarea::placeholder {
             📣
           </div>
 
-          <div>
-            <h3>Promoters</h3>
-          </div>
+          <h3>
+            Promoters
+          </h3>
 
         </div>
 
@@ -754,9 +726,9 @@ textarea::placeholder {
             ✓
           </div>
 
-          <div>
-            <h3>Task Management</h3>
-          </div>
+          <h3>
+            Task Management
+          </h3>
 
         </div>
 
@@ -782,9 +754,9 @@ textarea::placeholder {
             📋
           </div>
 
-          <div>
-            <h3>Task Submissions</h3>
-          </div>
+          <h3>
+            Task Submissions
+          </h3>
 
         </div>
 
@@ -810,9 +782,9 @@ textarea::placeholder {
             💳
           </div>
 
-          <div>
-            <h3>Withdrawals</h3>
-          </div>
+          <h3>
+            Withdrawals
+          </h3>
 
         </div>
 
@@ -838,9 +810,9 @@ textarea::placeholder {
             💰
           </div>
 
-          <div>
-            <h3>Promoter Wallet</h3>
-          </div>
+          <h3>
+            Promoter Wallet
+          </h3>
 
         </div>
 
@@ -857,6 +829,7 @@ textarea::placeholder {
 
       </div>
 
+
     </section>
 
 
@@ -865,9 +838,11 @@ textarea::placeholder {
     ========================= -->
 
     <div class="section-title">
+
       <h3>
         Promoter Deposit Payment Details
       </h3>
+
     </div>
 
 
@@ -881,6 +856,7 @@ textarea::placeholder {
 
 
       <div class="form-grid">
+
 
         <div class="form-group">
 
@@ -941,6 +917,7 @@ textarea::placeholder {
 
         </div>
 
+
       </div>
 
 
@@ -959,6 +936,7 @@ textarea::placeholder {
       <div id="paymentDetailsMessage"></div>
 
     </section>
+
 
   </main>
 
@@ -1019,11 +997,6 @@ const savePaymentDetailsButton =
     "savePaymentDetailsButton"
   );
 
-const paymentDetailsMessage =
-  document.getElementById(
-    "paymentDetailsMessage"
-  );
-
 
 /* =========================
    MOBILE MENU
@@ -1040,37 +1013,7 @@ mobileMenu.addEventListener(
 
 
 /* =========================
-   GET ADMIN SESSION
-========================= */
-
-async function getAdminSession() {
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.getSession();
-
-  if (error) {
-    throw error;
-  }
-
-  if (!data || !data.session) {
-
-    window.location.href =
-      "login.html";
-
-    return null;
-
-  }
-
-  return data.session;
-
-}
-
-
-/* =========================
-   CHECK ADMIN
+   ADMIN CHECK
 ========================= */
 
 async function checkAdmin() {
@@ -1080,15 +1023,53 @@ async function checkAdmin() {
     message.textContent =
       "Checking admin access...";
 
-    message.className = "";
+
+    /*
+      Get current session.
+    */
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient.auth.getSession();
+
+
+    if (error) {
+
+      throw error;
+
+    }
 
 
     const session =
-      await getAdminSession();
+      data?.session;
 
+
+    /*
+      No session.
+    */
 
     if (!session) {
+
+      message.textContent =
+        "No active login session.";
+
+      message.className =
+        "error";
+
+      setTimeout(
+        function() {
+
+          window.location.href =
+            "login.html";
+
+        },
+        1000
+      );
+
       return;
+
     }
 
 
@@ -1097,19 +1078,18 @@ async function checkAdmin() {
 
 
     /*
-      Check admin role directly
-      through the profiles table.
+      Get profile.
     */
 
     const {
       data: profile,
       error: profileError
     } =
-      await supabaseClient
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .maybeSingle();
+    await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
 
 
     if (profileError) {
@@ -1119,10 +1099,13 @@ async function checkAdmin() {
     }
 
 
+    /*
+      Confirm admin.
+    */
+
     if (
       !profile ||
-      String(profile.role || "").toLowerCase() !==
-      "admin"
+      String(profile.role).toLowerCase() !== "admin"
     ) {
 
       message.textContent =
@@ -1136,6 +1119,10 @@ async function checkAdmin() {
     }
 
 
+    /*
+      Admin confirmed.
+    */
+
     message.textContent =
       "Admin access confirmed.";
 
@@ -1144,8 +1131,7 @@ async function checkAdmin() {
 
 
     /*
-      Load dashboard data after
-      admin authentication succeeds.
+      Load dashboard.
     */
 
     await loadStatistics();
@@ -1160,10 +1146,9 @@ async function checkAdmin() {
       error
     );
 
-
     message.textContent =
-      "Admin access error: " +
-      error.message;
+      "Admin error: " +
+      (error.message || "Unable to verify admin.");
 
     message.className =
       "error";
@@ -1174,76 +1159,13 @@ async function checkAdmin() {
 
 
 /* =========================
-   LOAD STATISTICS
+   STATISTICS
 ========================= */
 
 async function loadStatistics() {
 
   /*
-    First try the secure dashboard RPC.
-  */
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient.rpc(
-      "admin_get_dashboard_stats"
-    );
-
-
-    if (!error && data) {
-
-      const stats =
-        Array.isArray(data)
-          ? data[0]
-          : data;
-
-
-      if (stats) {
-
-        workerCount.textContent =
-          stats.workers ?? 0;
-
-        promoterCount.textContent =
-          stats.promoters ?? 0;
-
-        taskCount.textContent =
-          stats.active_tasks ?? 0;
-
-        submissionCount.textContent =
-          stats.pending_submissions ?? 0;
-
-        return;
-
-      }
-
-    }
-
-    /*
-      If the RPC is unavailable,
-      continue with individual queries.
-    */
-
-    console.warn(
-      "Dashboard RPC unavailable:",
-      error
-    );
-
-  } catch (error) {
-
-    console.warn(
-      "Dashboard RPC error:",
-      error
-    );
-
-  }
-
-
-  /*
-    Fallback worker count.
+    Workers
   */
 
   try {
@@ -1268,10 +1190,13 @@ async function loadStatistics() {
         error
       );
 
+      workerCount.textContent =
+        "0";
+
     } else {
 
       workerCount.textContent =
-        count ?? 0;
+        String(count ?? 0);
 
     }
 
@@ -1282,11 +1207,14 @@ async function loadStatistics() {
       error
     );
 
+    workerCount.textContent =
+      "0";
+
   }
 
 
   /*
-    Fallback promoter count.
+    Promoters
   */
 
   try {
@@ -1311,10 +1239,13 @@ async function loadStatistics() {
         error
       );
 
+      promoterCount.textContent =
+        "0";
+
     } else {
 
       promoterCount.textContent =
-        count ?? 0;
+        String(count ?? 0);
 
     }
 
@@ -1325,11 +1256,14 @@ async function loadStatistics() {
       error
     );
 
+    promoterCount.textContent =
+      "0";
+
   }
 
 
   /*
-    Fallback active task count.
+    Active tasks
   */
 
   try {
@@ -1354,6 +1288,100 @@ async function loadStatistics() {
         error
       );
 
+      taskCount.textContent =
+        "0";
+
     } else {
 
-      taskCount.textCon
+      taskCount.textContent =
+        String(count ?? 0);
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "Task count failed:",
+      error
+    );
+
+    taskCount.textContent =
+      "0";
+
+  }
+
+
+  /*
+    Pending submissions
+  */
+
+  try {
+
+    const {
+      count,
+      error
+    } =
+    await supabaseClient
+      .from("task_submissions")
+      .select("id", {
+        count: "exact",
+        head: true
+      })
+      .eq("status", "pending");
+
+
+    if (error) {
+
+      console.warn(
+        "Submission count error:",
+        error
+      );
+
+      submissionCount.textContent =
+        "0";
+
+    } else {
+
+      submissionCount.textContent =
+        String(count ?? 0);
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "Submission count failed:",
+      error
+    );
+
+    submissionCount.textContent =
+      "0";
+
+  }
+
+}
+
+
+/* =========================
+   PAYMENT DETAILS
+========================= */
+
+async function loadPaymentDetails() {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("promoter_payment_details")
+      .select(
+        "bank_name, account_name, account_number, instructions"
+      )
+      .order(
+        "updated_at",
+        {
+          ascending: false
+        }
+      )

@@ -1,8 +1,12 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TaskVexa - Admin Dashboard</title><style>
+
+<title>TaskVexa - Admin Dashboard</title>
+
+<style>
 *{box-sizing:border-box}
 
 :root{
@@ -353,9 +357,11 @@ cursor:pointer;
 }
 
 @media(max-width:1050px){
+
 .stats{
 grid-template-columns:1fr 1fr;
 }
+
 }
 
 @media(max-width:800px){
@@ -392,6 +398,7 @@ grid-template-columns:1fr;
 .form-group.full{
 grid-column:auto;
 }
+
 }
 
 @media(max-width:500px){
@@ -407,174 +414,345 @@ padding:0 15px;
 .admin-status{
 display:none;
 }
+
 }
-</style></head><body><aside class="sidebar" id="sidebar"><div class="logo">
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar" id="sidebar">
+
+<div class="logo">
 <h1>TaskVexa</h1>
 <p>Admin Control Panel</p>
-</div><div class="nav-title">Overview</div><a href="admin.html" class="nav-link active">
+</div>
+
+<div class="nav-title">Overview</div>
+
+<a href="admin.html" class="nav-link active">
 <span class="nav-icon">⌂</span>
 Dashboard
-</a><div class="nav-title">Management</div><a href="worker.html" class="nav-link">
+</a>
+
+<div class="nav-title">Management</div>
+
+<a href="worker.html" class="nav-link">
 <span class="nav-icon">👥</span>
 Workers
-</a><a href="promoters.html" class="nav-link">
+</a>
+
+<a href="promoters.html" class="nav-link">
 <span class="nav-icon">📣</span>
 Promoters
-</a><!-- FIXED: ADMIN TASK PAGE --><a href="admin-tasks.html" class="nav-link">
+</a>
+
+<a href="admin-tasks.html" class="nav-link">
 <span class="nav-icon">✓</span>
 Tasks Management
-</a><a href="admin-submissions.html" class="nav-link">
+</a>
+
+<a href="admin-submissions.html" class="nav-link">
 <span class="nav-icon">📋</span>
 Submissions
-</a><a href="admin-withdrawals.html" class="nav-link">
+</a>
+
+<a href="admin-withdrawals.html" class="nav-link">
 <span class="nav-icon">💳</span>
 Withdrawals
-</a><a href="admin-promoter-wallet.html" class="nav-link">
+</a>
+
+<a href="admin-promoter-wallet.html" class="nav-link">
 <span class="nav-icon">💰</span>
 Promoter Wallet
-</a><div class="nav-title">Settings</div><a href="settings.html" class="nav-link">
+</a>
+
+<div class="nav-title">Settings</div>
+
+<a href="settings.html" class="nav-link">
 <span class="nav-icon">⚙</span>
 Platform Settings
-</a><div class="logout"><button id="logoutButton" class="nav-link">
+</a>
+
+<div class="logout">
+
+<button id="logoutButton" class="nav-link">
 <span class="nav-icon">↪</span>
 Logout
-</button></div></aside><div class="main"><div class="topbar"><button id="mobileMenu" class="mobile-menu">
+</button>
+
+</div>
+
+</aside>
+
+
+<div class="main">
+
+<div class="topbar">
+
+<button id="mobileMenu" class="mobile-menu">
 ☰
-</button><div class="topbar-title">
+</button>
+
+<div class="topbar-title">
 Admin Dashboard
-</div><div class="admin-status">
+</div>
+
+<div class="admin-status">
 <span class="online-dot"></span>
 Admin
-</div></div><main class="content"><div class="heading"><h2>
-Welcome to TaskVexa
-</h2><p>
+</div>
+
+</div>
+
+
+<main class="content">
+
+<div class="heading">
+
+<h2>Welcome to TaskVexa</h2>
+
+<p>
 Manage workers, promoters, tasks, withdrawals and platform settings.
-</p></div><div id="message">
-Loading dashboard...
-</div><button
+</p>
+
+</div>
+
+
+<div id="message">
+Checking admin access...
+</div>
+
+
+<button
 id="refreshButton"
 class="refresh-button"
-
-«»
-
+>
 ↻ Refresh Dashboard
 </button>
 
-<section class="stats"><div class="stat">
+
+<section class="stats">
+
+<div class="stat">
 <div class="stat-label">Workers</div>
 <div class="stat-value" id="workerCount">—</div>
-</div><div class="stat">
+</div>
+
+<div class="stat">
 <div class="stat-label">Promoters</div>
 <div class="stat-value" id="promoterCount">—</div>
-</div><div class="stat">
+</div>
+
+<div class="stat">
 <div class="stat-label">Active Tasks</div>
 <div class="stat-value" id="taskCount">—</div>
-</div><div class="stat">
+</div>
+
+<div class="stat">
 <div class="stat-label">Pending Submissions</div>
 <div class="stat-value" id="submissionCount">—</div>
-</div></section><div class="section-title">
+</div>
+
+</section>
+
+
+<div class="section-title">
 <h3>Management</h3>
-</div><section class="management"><div class="card"><div class="card-head">
+</div>
+
+
+<section class="management">
+
+<div class="card">
+<div class="card-head">
 <div class="icon">👥</div>
-<div>
 <h3>Workers</h3>
 </div>
-</div><p>
+
+<p>
 View and manage registered worker accounts.
-</p><a href="worker.html" class="button">
+</p>
+
+<a href="worker.html" class="button">
 Manage Workers
-</a></div><div class="card"><div class="card-head">
+</a>
+</div>
+
+
+<div class="card">
+<div class="card-head">
 <div class="icon">📣</div>
-<div>
 <h3>Promoters</h3>
 </div>
-</div><p>
+
+<p>
 Manage promoter accounts and promoter activity.
-</p><a href="promoters.html" class="button">
+</p>
+
+<a href="promoters.html" class="button">
 Manage Promoters
-</a></div><!-- FIXED TASK MANAGEMENT CARD --><div class="card"><div class="card-head">
+</a>
+</div>
+
+
+<div class="card">
+<div class="card-head">
 <div class="icon">✓</div>
-<div>
 <h3>Task Management</h3>
 </div>
-</div><p>
+
+<p>
 Create, edit and manage tasks available to workers.
-</p><a href="admin-tasks.html" class="button">
+</p>
+
+<a href="admin-tasks.html" class="button">
 Manage Tasks
-</a></div><div class="card"><div class="card-head">
+</a>
+</div>
+
+
+<div class="card">
+<div class="card-head">
 <div class="icon">📋</div>
-<div>
 <h3>Task Submissions</h3>
 </div>
-</div><p>
+
+<p>
 Review submitted screenshots and approve or reject worker submissions.
-</p><a href="admin-submissions.html" class="button">
+</p>
+
+<a href="admin-submissions.html" class="button">
 Review Submissions
-</a></div><div class="card"><div class="card-head">
+</a>
+</div>
+
+
+<div class="card">
+<div class="card-head">
 <div class="icon">💳</div>
-<div>
 <h3>Withdrawals</h3>
 </div>
-</div><p>
+
+<p>
 View and manage worker withdrawal requests.
-</p><a href="admin-withdrawals.html" class="button">
+</p>
+
+<a href="admin-withdrawals.html" class="button">
 Manage Withdrawals
-</a></div><div class="card"><div class="card-head">
+</a>
+</div>
+
+
+<div class="card">
+<div class="card-head">
 <div class="icon">💰</div>
-<div>
 <h3>Promoter Wallet</h3>
 </div>
-</div><p>
+
+<p>
 Manage promoter deposits and promoter wallet balances.
-</p><a href="admin-promoter-wallet.html" class="button">
+</p>
+
+<a href="admin-promoter-wallet.html" class="button">
 Manage Wallet
-</a></div></section><div class="section-title">
+</a>
+</div>
+
+</section>
+
+
+<div class="section-title">
 <h3>Promoter Deposit Payment Details</h3>
-</div><section class="payment"><div class="info">
+</div>
+
+
+<section class="payment">
+
+<div class="info">
 These payment details are displayed to promoters when they add funds.
-</div><div class="form-grid"><div class="form-group"><label>Bank Name</label>
+</div>
+
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label>Bank Name</label>
 
 <input
 id="bankName"
 type="text"
 placeholder="e.g. Opay"
+>
 
-«»
+</div>
 
-</div><div class="form-group"><label>Account Name</label>
+
+<div class="form-group">
+
+<label>Account Name</label>
 
 <input
 id="accountName"
 type="text"
 placeholder="Enter account name"
+>
 
-«»
+</div>
 
-</div><div class="form-group"><label>Account Number</label>
+
+<div class="form-group">
+
+<label>Account Number</label>
 
 <input
 id="accountNumber"
 type="text"
 inputmode="numeric"
 placeholder="Enter account number"
+>
 
-«»
+</div>
 
-</div><div class="form-group full"><label>Payment Instructions</label>
+
+<div class="form-group full">
+
+<label>Payment Instructions</label>
 
 <textarea
 id="paymentInstructions"
 placeholder="Enter payment instructions"
-></textarea></div></div><br><button
+></textarea>
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<button
 id="savePaymentDetailsButton"
 class="button"
-
-«»
-
+>
 Save Payment Details
 </button>
 
-<div id="paymentDetailsMessage"></div></section></main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+
+<div id="paymentDetailsMessage"></div>
+
+</section>
+
+</main>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
 
 const SUPABASE_URL =
 "https://dxtlnrthlpdaobnbazny.supabase.co";
@@ -582,11 +760,13 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
+
 const supabaseClient =
 window.supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
+
 
 const message =
 document.getElementById("message");
@@ -609,7 +789,9 @@ document.getElementById(
 );
 
 
-/* MOBILE MENU */
+/* =========================
+MOBILE MENU
+========================= */
 
 mobileMenu.addEventListener(
 "click",
@@ -621,9 +803,11 @@ sidebar.classList.toggle("open");
 );
 
 
-/* GET ADMIN */
+/* =========================
+ADMIN AUTH CHECK
+========================= */
 
-async function getAdmin(){
+async function checkAdmin(){
 
 const {
 data,
@@ -631,9 +815,13 @@ error
 } =
 await supabaseClient.auth.getUser();
 
+
 if(error){
+
 throw error;
+
 }
+
 
 if(!data || !data.user){
 
@@ -643,6 +831,7 @@ window.location.href =
 return null;
 
 }
+
 
 const {
 data:profile,
@@ -657,9 +846,13 @@ data.user.id
 )
 .maybeSingle();
 
+
 if(profileError){
+
 throw profileError;
+
 }
+
 
 if(
 !profile ||
@@ -677,14 +870,19 @@ return null;
 
 }
 
+
 return data.user;
 
 }
 
 
-/* LOAD STATISTICS */
+/* =========================
+LOAD DASHBOARD STATS
+========================= */
 
 async function loadStatistics(){
+
+try{
 
 const {
 data,
@@ -694,97 +892,162 @@ await supabaseClient.rpc(
 "admin_get_dashboard_stats"
 );
 
+
 if(error){
+
 throw error;
+
 }
 
+
 console.log(
-"ADMIN STATS:",
+"Dashboard statistics:",
 data
 );
 
-let stats = null;
 
-if(Array.isArray(data)){
+let stats = data;
 
-if(data.length > 0){
-stats = data[0];
+
+/*
+Some RPCs return an array.
+*/
+
+if(Array.isArray(stats)){
+
+stats =
+stats[0] || {};
+
 }
 
-}else if(
-data &&
-typeof data === "object"
-){
+
+/*
+Some RPCs return JSON
+inside a data property.
+*/
 
 if(
-Array.isArray(data.data) &&
-data.data.length > 0
+stats &&
+typeof stats === "object" &&
+Array.isArray(stats.data)
 ){
 
-stats = data.data[0];
-
-}else{
-
-stats = data;
+stats =
+stats.data[0] || {};
 
 }
 
-}
 
-if(!stats){
-
-throw new Error(
-"No dashboard statistics returned."
-);
-
-}
+/*
+Read all known possible names.
+*/
 
 const workers =
-stats.workers ??
-stats.worker_count ??
-0;
+Number(
+stats?.workers ??
+stats?.worker_count ??
+stats?.workers_count ??
+0
+);
+
 
 const promoters =
-stats.promoters ??
-stats.promoter_count ??
-0;
+Number(
+stats?.promoters ??
+stats?.promoter_count ??
+stats?.promoters_count ??
+0
+);
+
 
 const activeTasks =
-stats.active_tasks ??
-stats.active_task_count ??
-stats.tasks ??
-0;
+Number(
+stats?.active_tasks ??
+stats?.active_task_count ??
+stats?.tasks ??
+0
+);
+
 
 const pendingSubmissions =
-stats.pending_submissions ??
-stats.pending_submission_count ??
-stats.pending ??
-0;
+Number(
+stats?.pending_submissions ??
+stats?.pending_submission_count ??
+stats?.pending ??
+0
+);
+
 
 document.getElementById(
 "workerCount"
 ).textContent =
-Number(workers);
+workers;
+
 
 document.getElementById(
 "promoterCount"
 ).textContent =
-Number(promoters);
+promoters;
+
 
 document.getElementById(
 "taskCount"
 ).textContent =
-Number(activeTasks);
+activeTasks;
+
 
 document.getElementById(
 "submissionCount"
 ).textContent =
-Number(pendingSubmissions);
+pendingSubmissions;
+
+
+return true;
+
+
+}catch(error){
+
+console.error(
+"STATISTICS ERROR:",
+error
+);
+
+
+/*
+Do not block the entire dashboard
+if statistics fail.
+*/
+
+document.getElementById(
+"workerCount"
+).textContent =
+"—";
+
+document.getElementById(
+"promoterCount"
+).textContent =
+"—";
+
+document.getElementById(
+"taskCount"
+).textContent =
+"—";
+
+document.getElementById(
+"submissionCount"
+).textContent =
+"—";
+
+return false;
+
+}
 
 }
 
 
-/* LOAD PAYMENT DETAILS */
+/* =========================
+LOAD PAYMENT DETAILS
+========================= */
 
 async function loadPaymentDetails(){
 
@@ -805,45 +1068,62 @@ await supabaseClient
 ascending:false
 }
 )
-.limit(1)
-.maybeSingle();
+.limit(1);
+
 
 if(error){
 
-console.warn(error);
+console.warn(
+"PAYMENT DETAILS ERROR:",
+error
+);
 
 return;
 
 }
 
-if(!data){
+
+const details =
+Array.isArray(data)
+? data[0]
+: data;
+
+
+if(!details){
+
 return;
+
 }
+
 
 document.getElementById(
 "bankName"
 ).value =
-data.bank_name || "";
+details.bank_name || "";
+
 
 document.getElementById(
 "accountName"
 ).value =
-data.account_name || "";
+details.account_name || "";
+
 
 document.getElementById(
 "accountNumber"
 ).value =
-data.account_number || "";
+details.account_number || "";
+
 
 document.getElementById(
 "paymentInstructions"
 ).value =
-data.instructions || "";
+details.instructions || "";
+
 
 }catch(error){
 
 console.warn(
-"Payment details error:",
+"PAYMENT DETAILS ERROR:",
 error
 );
 
@@ -852,7 +1132,9 @@ error
 }
 
 
-/* SAVE PAYMENT DETAILS */
+/* =========================
+SAVE PAYMENT DETAILS
+========================= */
 
 savePaymentDetailsButton.addEventListener(
 "click",
@@ -863,25 +1145,30 @@ document.getElementById(
 "bankName"
 ).value.trim();
 
+
 const account =
 document.getElementById(
 "accountName"
 ).value.trim();
+
 
 const number =
 document.getElementById(
 "accountNumber"
 ).value.trim();
 
+
 const instructions =
 document.getElementById(
 "paymentInstructions"
 ).value.trim();
 
+
 const result =
 document.getElementById(
 "paymentDetailsMessage"
 );
+
 
 if(
 !bank ||
@@ -899,6 +1186,7 @@ return;
 
 }
 
+
 try{
 
 savePaymentDetailsButton.disabled =
@@ -906,6 +1194,7 @@ true;
 
 savePaymentDetailsButton.textContent =
 "Saving...";
+
 
 const {
 data,
@@ -922,12 +1211,17 @@ instructions || null
 }
 );
 
+
 if(error){
+
 throw error;
+
 }
+
 
 if(
 data &&
+typeof data === "object" &&
 data.success === false
 ){
 
@@ -938,15 +1232,20 @@ data.message ||
 
 }
 
+
 result.textContent =
 "Payment details saved successfully.";
 
 result.className =
 "success";
 
+
 }catch(error){
 
-console.error(error);
+console.error(
+"SAVE PAYMENT ERROR:",
+error
+);
 
 result.textContent =
 "Error: " +
@@ -954,6 +1253,7 @@ error.message;
 
 result.className =
 "error";
+
 
 }finally{
 
@@ -969,7 +1269,9 @@ savePaymentDetailsButton.textContent =
 );
 
 
-/* REFRESH DASHBOARD */
+/* =========================
+REFRESH DASHBOARD
+========================= */
 
 async function refreshDashboard(){
 
@@ -979,44 +1281,50 @@ true;
 refreshButton.textContent =
 "Loading...";
 
-document.getElementById(
-"workerCount"
-).textContent =
-"—";
 
-document.getElementById(
-"promoterCount"
-).textContent =
-"—";
+message.textContent =
+"Checking admin access...";
 
-document.getElementById(
-"taskCount"
-).textContent =
-"—";
+message.className =
+"";
 
-document.getElementById(
-"submissionCount"
-).textContent =
-"—";
 
 try{
 
 const user =
-await getAdmin();
+await checkAdmin();
+
 
 if(!user){
+
 return;
+
 }
 
-await loadStatistics();
 
-await loadPaymentDetails();
+/*
+Show the dashboard immediately.
+*/
 
 message.textContent =
-"Dashboard loaded successfully.";
+"Admin access confirmed.";
 
 message.className =
 "success";
+
+
+/*
+Load statistics and payment details
+independently.
+
+A failure in one will NOT freeze
+the whole dashboard.
+*/
+
+loadStatistics();
+
+loadPaymentDetails();
+
 
 }catch(error){
 
@@ -1045,7 +1353,9 @@ refreshButton.textContent =
 }
 
 
-/* LOGOUT */
+/* =========================
+LOGOUT
+========================= */
 
 logoutButton.addEventListener(
 "click",
@@ -1057,6 +1367,7 @@ true;
 logoutButton.textContent =
 "Logging out...";
 
+
 try{
 
 await supabaseClient.auth.signOut();
@@ -1065,6 +1376,11 @@ window.location.href =
 "login.html";
 
 }catch(error){
+
+console.error(
+"LOGOUT ERROR:",
+error
+);
 
 logoutButton.disabled =
 false;
@@ -1084,9 +1400,13 @@ message.className =
 });
 
 
-/* START */
+/* =========================
+START
+========================= */
 
 refreshDashboard();
 
-</script></body>
+</script>
+
+</body>
   </html>

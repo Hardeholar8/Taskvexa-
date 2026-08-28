@@ -1,12 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>TaskVexa - Task Management</title>
-
-<style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TaskVexa - Task Management</title><style>
 *{box-sizing:border-box}
 
 :root{
@@ -162,6 +157,10 @@ color:var(--green);
 
 .error{
 color:var(--red);
+}
+
+.warning-text{
+color:var(--yellow);
 }
 
 .card{
@@ -370,6 +369,12 @@ padding:35px;
 color:#64748b;
 }
 
+.loading{
+text-align:center;
+padding:30px;
+color:var(--muted);
+}
+
 .mobile-menu{
 display:none;
 background:#151b28;
@@ -378,12 +383,6 @@ color:white;
 border-radius:9px;
 padding:8px 11px;
 cursor:pointer;
-}
-
-.loading{
-text-align:center;
-padding:30px;
-color:var(--muted);
 }
 
 @media(max-width:800px){
@@ -417,177 +416,81 @@ grid-template-columns:1fr;
 grid-column:auto;
 }
 }
-</style>
-</head>
-
-<body>
-
-<aside class="sidebar" id="sidebar">
-
-<div class="logo">
+</style></head><body><aside class="sidebar" id="sidebar"><div class="logo">
 <h1>TaskVexa</h1>
 <p>Admin Control Panel</p>
-</div>
-
-<div class="nav-title">Overview</div>
-
-<a href="admin.html" class="nav-link">
+</div><div class="nav-title">Overview</div><a href="admin.html" class="nav-link">
 <span class="nav-icon">⌂</span>
 Dashboard
-</a>
-
-<div class="nav-title">Management</div>
-
-<a href="worker.html" class="nav-link">
+</a><div class="nav-title">Management</div><a href="worker.html" class="nav-link">
 <span class="nav-icon">👥</span>
 Workers
-</a>
-
-<a href="promoters.html" class="nav-link">
+</a><a href="promoters.html" class="nav-link">
 <span class="nav-icon">📣</span>
 Promoters
-</a>
-
-<a href="admin-tasks.html" class="nav-link active">
+</a><a href="admin-tasks.html" class="nav-link active">
 <span class="nav-icon">✓</span>
 Tasks Management
-</a>
-
-<a href="admin-submissions.html" class="nav-link">
+</a><a href="admin-submissions.html" class="nav-link">
 <span class="nav-icon">📋</span>
 Submissions
-</a>
-
-<a href="admin-withdrawals.html" class="nav-link">
+</a><a href="admin-withdrawals.html" class="nav-link">
 <span class="nav-icon">💳</span>
 Withdrawals
-</a>
-
-<a href="admin-promoter-wallet.html" class="nav-link">
+</a><a href="admin-promoter-wallet.html" class="nav-link">
 <span class="nav-icon">💰</span>
 Promoter Wallet
-</a>
-
-<div class="nav-title">Settings</div>
-
-<a href="settings.html" class="nav-link">
+</a><div class="nav-title">Settings</div><a href="settings.html" class="nav-link">
 <span class="nav-icon">⚙</span>
 Platform Settings
-</a>
-
-<div class="logout">
-
-<button id="logoutButton" class="nav-link">
+</a><div class="logout"><button id="logoutButton" class="nav-link">
 <span class="nav-icon">↪</span>
 Logout
-</button>
-
-</div>
-
-</aside>
-
-
-<div class="main">
-
-<div class="topbar">
-
-<button id="mobileMenu" class="mobile-menu">
+</button></div></aside><div class="main"><div class="topbar"><button id="mobileMenu" class="mobile-menu">
 ☰
-</button>
-
-<div class="topbar-title">
+</button><div class="topbar-title">
 Task Management
-</div>
-
-<div></div>
-
-</div>
-
-
-<main class="content">
-
-<div class="heading">
-
-<h2>Task Management</h2>
-
-<p>
+</div><div></div></div><main class="content"><div class="heading"><h2>Task Management</h2><p>
 Create, edit, activate, pause and close tasks available to workers.
-</p>
-
-</div>
-
-
-<div id="message">
+</p></div><div id="message">
 Checking admin access...
-</div>
-
-
-<section id="adminContent" style="display:none;">
-
-<div class="card">
-
-<h3 id="formTitle">
+</div><section id="adminContent" style="display:none;"><div class="card"><h3 id="formTitle">
 Create New Task
-</h3>
-
-<form id="taskForm">
-
-<div class="form-grid">
-
-<div>
-<label>Task Title</label>
-
-<input
+</h3><form id="taskForm"><div class="form-grid"><div>
+<label>Task Title</label><input
 type="text"
 id="title"
 placeholder="Enter task title"
 required
->
-</div>
 
+«»
 
-<div>
-<label>Platform</label>
-
-<input
+</div><div>
+<label>Platform</label><input
 type="text"
 id="platform"
 placeholder="Telegram"
 required
->
-</div>
 
+«»
 
-<div class="full">
-
-<label>Description / Instructions</label>
+</div><div class="full"><label>Description / Instructions</label>
 
 <textarea
 id="description"
 placeholder="Enter complete task instructions"
 required
-></textarea>
-
-</div>
-
-
-<div>
-
-<label>Task Link</label>
+></textarea></div><div><label>Task Link</label>
 
 <input
 type="url"
 id="taskUrl"
 placeholder="https://..."
 required
->
 
-</div>
+«»
 
-
-<div>
-
-<label>Worker Reward</label>
+</div><div><label>Worker Reward</label>
 
 <input
 type="number"
@@ -596,14 +499,10 @@ min="0"
 step="0.01"
 value="100"
 required
->
 
-</div>
+«»
 
-
-<div>
-
-<label>Workers Needed</label>
+</div><div><label>Workers Needed</label>
 
 <input
 type="number"
@@ -612,70 +511,34 @@ min="1"
 step="1"
 value="1"
 required
->
 
-</div>
+«»
 
+</div><div><label>Target Level</label>
 
-<div>
-
-<label>Target Level</label>
-
-<select id="targetLevel">
-
-<option value="level_1">
+<select id="targetLevel"><option value="level_1">
 Level 1
-</option>
-
-<option value="level_2">
+</option><option value="level_2">
 Level 2
-</option>
-
-<option value="both">
+</option><option value="both">
 Both Levels
-</option>
+</option></select></div><div><label>Task Status</label>
 
-</select>
-
-</div>
-
-
-<div>
-
-<label>Task Status</label>
-
-<select id="taskStatus">
-
-<option value="active">
+<select id="taskStatus"><option value="active">
 Active
-</option>
-
-<option value="paused">
+</option><option value="paused">
 Paused
-</option>
-
-<option value="closed">
+</option><option value="closed">
 Closed
-</option>
-
-<option value="draft">
+</option><option value="draft">
 Draft
-</option>
-
-</select>
-
-</div>
-
-</div>
-
-
-<div class="form-buttons">
-
-<button
+</option></select></div></div><div class="form-buttons"><button
 type="submit"
 id="saveButton"
 class="button"
->
+
+«»
+
 Create Task
 </button>
 
@@ -684,44 +547,15 @@ type="button"
 id="cancelButton"
 class="button secondary"
 style="display:none;"
->
+
+«»
+
 Cancel Edit
 </button>
 
-</div>
-
-
-<p id="formMessage"></p>
-
-</form>
-
-</div>
-
-
-<div class="card">
-
-<h3>Existing Tasks</h3>
-
-<div id="taskList">
-
-<div class="loading">
+</div><p id="formMessage"></p></form></div><div class="card"><h3>Existing Tasks</h3><div id="taskList"><div class="loading">
 Loading tasks...
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-</main>
-
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
+</div></div></div></section></main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 
 "use strict";
 
@@ -735,7 +569,6 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
 "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
-
 
 const supabaseClient =
 window.supabase.createClient(
@@ -835,36 +668,62 @@ maximumFractionDigits:2
 
 
 /* =========================
-GET ADMIN
+NORMALIZE RPC RESULT
 ========================= */
 
-async function getAdmin(){
+function normalizeRPCData(data){
 
-message.textContent =
-"Checking admin access...";
+if(data === null || data === undefined){
+return null;
+}
 
-message.className = "";
+if(Array.isArray(data)){
+
+if(data.length === 1){
+return data[0];
+}
+
+return data;
+
+}
+
+if(
+typeof data === "object" &&
+data.data !== undefined
+){
+
+return data.data;
+
+}
+
+return data;
+
+}
 
 
-/* Get authenticated user */
+/* =========================
+GET CURRENT USER
+========================= */
+
+async function getCurrentUser(){
 
 const {
-data:userData,
-error:userError
+data,
+error
 } =
 await supabaseClient.auth.getUser();
 
 
-if(userError){
+if(error){
 
-throw userError;
+throw error;
 
 }
 
 
 if(
-!userData ||
-!userData.user
+!data ||
+!data.user
 ){
 
 window.location.href =
@@ -876,37 +735,113 @@ return null;
 
 
 currentUser =
-userData.user;
+data.user;
 
-
-/* Check profile role */
-
-const {
-data:profile,
-error:profileError
-} =
-await supabaseClient
-.from("profiles")
-.select("role")
-.eq(
-"id",
-currentUser.id
-)
-.maybeSingle();
-
-
-if(profileError){
-
-throw profileError;
+return currentUser;
 
 }
 
 
+/* =========================
+ADMIN CHECK
+========================= */
+
+async function checkAdmin(){
+
+message.textContent =
+"Checking admin access...";
+
+message.className = "";
+
+
+const user =
+await getCurrentUser();
+
+
+if(!user){
+
+return false;
+
+}
+
+
+/*
+Use the existing admin RPC instead
+of directly querying profiles.
+*/
+
+const {
+data,
+error
+} =
+await supabaseClient.rpc(
+"admin_is_admin"
+);
+
+
+if(error){
+
+throw error;
+
+}
+
+
+const result =
+normalizeRPCData(data);
+
+
+let isAdmin = false;
+
+
+/*
+Handle boolean response.
+*/
+
 if(
-!profile ||
-String(profile.role || "").toLowerCase()
-!=="admin"
+typeof result === "boolean"
 ){
+
+isAdmin =
+result;
+
+}
+
+
+/*
+Handle JSON response such as:
+{is_admin:true}
+*/
+
+else if(
+result &&
+typeof result === "object"
+){
+
+isAdmin =
+Boolean(
+result.is_admin ??
+result.admin ??
+result.success
+);
+
+}
+
+
+/*
+Handle string response.
+*/
+
+else if(
+typeof result === "string"
+){
+
+isAdmin =
+result.toLowerCase() === "true";
+
+}
+
+
+if(!isAdmin){
 
 message.textContent =
 "Access denied. Admin account required.";
@@ -914,7 +849,10 @@ message.textContent =
 message.className =
 "error";
 
-return null;
+adminContent.style.display =
+"none";
+
+return false;
 
 }
 
@@ -929,7 +867,7 @@ adminContent.style.display =
 "block";
 
 
-return currentUser;
+return true;
 
 }
 
@@ -938,9 +876,7 @@ return currentUser;
 TARGET LEVEL DISPLAY
 ========================= */
 
-function getLevels(
-targetLevels
-){
+function getLevels(targetLevels){
 
 if(!Array.isArray(targetLevels)){
 
@@ -984,7 +920,9 @@ STATUS CLASS
 
 function getStatusClass(status){
 
-switch(status){
+switch(
+String(status || "").toLowerCase()
+){
 
 case "active":
 return "status-active";
@@ -1029,33 +967,19 @@ Loading tasks...
 `;
 
 
+/*
+Use the dedicated admin RPC.
+This bypasses the normal worker
+task RLS restrictions safely because
+the RPC itself performs admin checking.
+*/
+
 const {
-data:tasks,
+data,
 error
 } =
-await supabaseClient
-.from("tasks")
-.select(
-`
-id,
-title,
-description,
-platform,
-task_url,
-reward,
-workers_needed,
-target_levels,
-status,
-source,
-created_at,
-updated_at
-`
-)
-.order(
-"created_at",
-{
-ascending:false
-}
+await supabaseClient.rpc(
+"admin_list_tasks"
 );
 
 
@@ -1066,8 +990,78 @@ throw error;
 }
 
 
+let tasks =
+normalizeRPCData(data);
+
+
+/*
+Handle:
+[
+ task,
+ task
+]
+*/
+
 if(
-!tasks ||
+Array.isArray(tasks)
+){
+
+/* already correct */
+
+}
+
+
+/*
+Handle:
+{tasks:[...]}
+*/
+
+else if(
+tasks &&
+typeof tasks === "object" &&
+Array.isArray(tasks.tasks)
+){
+
+tasks =
+tasks.tasks;
+
+}
+
+
+/*
+Handle:
+{data:[...]}
+*/
+
+else if(
+tasks &&
+typeof tasks === "object" &&
+Array.isArray(tasks.data)
+){
+
+tasks =
+tasks.data;
+
+}
+
+
+/*
+Handle single object.
+*/
+
+else if(
+tasks &&
+typeof tasks === "object"
+){
+
+tasks =
+[tasks];
+
+}
+
+
+if(
+!Array.isArray(tasks) ||
 tasks.length === 0
 ){
 
@@ -1113,6 +1107,7 @@ card.innerHTML = `
 <h3>
 ${escapeHTML(task.title)}
 </h3>
+
 
 <div class="task-description">
 ${escapeHTML(task.description)}
@@ -1216,9 +1211,10 @@ ${escapeHTML(status.toUpperCase())}
 <div class="task-actions">
 
 <button
+type="button"
 class="button secondary"
 data-action="edit"
-data-id="${task.id}"
+data-id="${escapeHTML(task.id)}"
 >
 Edit
 </button>
@@ -1229,9 +1225,10 @@ status === "active"
 ?
 `
 <button
+type="button"
 class="button warning"
 data-action="pause"
-data-id="${task.id}"
+data-id="${escapeHTML(task.id)}"
 >
 Pause
 </button>
@@ -1239,9 +1236,10 @@ Pause
 :
 `
 <button
+type="button"
 class="button activate"
 data-action="activate"
-data-id="${task.id}"
+data-id="${escapeHTML(task.id)}"
 >
 Activate
 </button>
@@ -1254,9 +1252,10 @@ status !== "closed"
 ?
 `
 <button
+type="button"
 class="button danger"
 data-action="close"
-data-id="${task.id}"
+data-id="${escapeHTML(task.id)}"
 >
 Close
 </button>
@@ -1267,9 +1266,10 @@ Close
 
 
 <button
+type="button"
 class="button danger"
 data-action="delete"
-data-id="${task.id}"
+data-id="${escapeHTML(task.id)}"
 >
 Delete
 </button>
@@ -1285,7 +1285,9 @@ taskList.appendChild(card);
 );
 
 
-/* Attach actions */
+/* =========================
+ATTACH BUTTON ACTIONS
+========================= */
 
 taskList
 .querySelectorAll("[data-action]")
@@ -1315,14 +1317,18 @@ return;
 }
 
 
+button.disabled =
+true;
+
+
+try{
+
 if(action === "pause"){
 
 await changeStatus(
 taskId,
 "paused"
 );
-
-return;
 
 }
 
@@ -1334,8 +1340,6 @@ taskId,
 "active"
 );
 
-return;
-
 }
 
 
@@ -1346,8 +1350,6 @@ taskId,
 "closed"
 );
 
-return;
-
 }
 
 
@@ -1357,7 +1359,25 @@ await deleteTask(
 taskId
 );
 
-return;
+}
+
+
+}catch(error){
+
+console.error(
+"ACTION ERROR:",
+error
+);
+
+alert(
+"Error:\n\n" +
+error.message
+);
+
+}finally{
+
+button.disabled =
+false;
 
 }
 
@@ -1392,7 +1412,9 @@ String(taskId);
 
 if(!task){
 
-alert("Task not found.");
+alert(
+"Task not found."
+);
 
 return;
 
@@ -1440,7 +1462,9 @@ task.workers_needed || 1;
 
 
 const levels =
-Array.isArray(task.target_levels)
+Array.isArray(
+task.target_levels
+)
 ?
 task.target_levels
 :
@@ -1485,8 +1509,10 @@ task.status || "active";
 formTitle.textContent =
 "Edit Task";
 
+
 saveButton.textContent =
 "Save Changes";
+
 
 cancelButton.style.display =
 "inline-flex";
@@ -1503,7 +1529,7 @@ behavior:"smooth"
 
 
 /* =========================
-CREATE / UPDATE
+CREATE / UPDATE TASK
 ========================= */
 
 taskForm.addEventListener(
@@ -1661,25 +1687,8 @@ targetLevel === "both"
 [targetLevel];
 
 
-const taskData = {
-
-title:title,
-
-description:description,
-
-platform:platform,
-
-task_url:taskUrl,
-
-reward:reward,
-
-workers_needed:workersNeeded,
-
-target_levels:targetLevels,
-
-status:taskStatus
-
-};
+const wasEditing =
+Boolean(editingTaskId);
 
 
 try{
@@ -1688,179 +1697,7 @@ saveButton.disabled =
 true;
 
 
-if(editingTaskId){
+if(wasEditing){
 
 saveButton.textContent =
-"Saving...";
-
-
-const {
-error
-} =
-await supabaseClient
-.from("tasks")
-.update(taskData)
-.eq(
-"id",
-editingTaskId
-);
-
-
-if(error){
-
-throw error;
-
-}
-
-
-formMessage.textContent =
-"Task updated successfully.";
-
-formMessage.className =
-"success";
-
-
-}else{
-
-saveButton.textContent =
-"Creating...";
-
-
-const {
-error
-} =
-await supabaseClient
-.from("tasks")
-.insert({
-
-...taskData,
-
-created_by:
-currentUser.id,
-
-source:"admin"
-
-});
-
-
-if(error){
-
-throw error;
-
-}
-
-
-formMessage.textContent =
-"Task created successfully.";
-
-formMessage.className =
-"success";
-
-}
-
-
-resetForm();
-
-await loadTasks();
-
-
-}catch(error){
-
-console.error(
-"TASK SAVE ERROR:",
-error
-);
-
-
-formMessage.textContent =
-"Error: " +
-error.message;
-
-formMessage.className =
-"error";
-
-
-}finally{
-
-saveButton.disabled =
-false;
-
-if(editingTaskId){
-
-saveButton.textContent =
-"Save Changes";
-
-}else{
-
-saveButton.textContent =
-"Create Task";
-
-}
-
-}
-
-}
-);
-
-
-/* =========================
-CHANGE STATUS
-========================= */
-
-async function changeStatus(
-taskId,
-newStatus
-){
-
-try{
-
-const {
-error
-} =
-await supabaseClient
-.from("tasks")
-.update({
-status:newStatus
-})
-.eq(
-"id",
-taskId
-);
-
-
-if(error){
-
-throw error;
-
-}
-
-
-await loadTasks();
-
-
-}catch(error){
-
-console.error(
-"STATUS ERROR:",
-error
-);
-
-alert(
-"Unable to change task status:\n\n" +
-error.message
-);
-
-}
-
-}
-
-
-/* =========================
-DELETE TASK
-========================= */
-
-async function deleteTask(
-taskId
-){
-
-const confirmed =
+"Sav

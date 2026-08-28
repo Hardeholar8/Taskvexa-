@@ -3,382 +3,672 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TaskVexa - Admin Tasks</title>
+
+<title>TaskVexa - Task Management</title>
 
 <style>
 *{box-sizing:border-box}
 
+:root{
+--bg:#070a10;
+--sidebar:#0b0f17;
+--card:#111722;
+--border:#202b3b;
+--text:#f8fafc;
+--muted:#7f8da3;
+--green:#4ade80;
+--red:#f87171;
+--yellow:#facc15;
+}
+
 body{
-  margin:0;
-  background:#080b12;
-  color:#f8fafc;
-  font-family:Arial,Helvetica,sans-serif;
+margin:0;
+background:var(--bg);
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
 }
 
-header{
-  background:#0d111b;
-  border-bottom:1px solid #202b3b;
-  padding:18px 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+bottom:0;
+width:245px;
+background:var(--sidebar);
+border-right:1px solid var(--border);
+padding:22px 14px;
+overflow-y:auto;
+z-index:100;
 }
 
-header h1{
-  margin:0;
-  font-size:21px;
+.logo{
+padding:5px 14px 22px;
+border-bottom:1px solid var(--border);
+margin-bottom:18px;
 }
 
-header a{
-  color:#cbd5e1;
-  text-decoration:none;
-  font-size:14px;
+.logo h1{
+margin:0;
+font-size:23px;
 }
 
-main{
-  max-width:850px;
-  margin:auto;
-  padding:25px 15px 60px;
+.logo p{
+margin:6px 0 0;
+color:var(--muted);
+font-size:12px;
 }
 
-h2{
-  margin:0 0 8px;
-  font-size:28px;
+.nav-title{
+color:#56657b;
+font-size:10px;
+font-weight:bold;
+letter-spacing:1.3px;
+margin:18px 14px 8px;
+text-transform:uppercase;
 }
 
-.subtitle{
-  color:#94a3b8;
-  margin:0 0 22px;
+.nav-link{
+display:flex;
+align-items:center;
+gap:12px;
+width:100%;
+padding:12px 14px;
+margin:4px 0;
+border-radius:11px;
+color:#aeb9c9;
+text-decoration:none;
+font-size:14px;
+border:0;
+background:transparent;
+cursor:pointer;
+text-align:left;
+}
+
+.nav-link:hover,
+.nav-link.active{
+background:#171d2a;
+color:white;
+}
+
+.nav-icon{
+width:23px;
+text-align:center;
+font-size:16px;
+}
+
+.logout{
+margin-top:20px;
+padding-top:18px;
+border-top:1px solid var(--border);
+}
+
+#logoutButton{
+color:#f87171;
+}
+
+.main{
+margin-left:245px;
+min-height:100vh;
+}
+
+.topbar{
+height:70px;
+background:#070a10;
+border-bottom:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 28px;
+position:sticky;
+top:0;
+z-index:20;
+}
+
+.topbar-title{
+font-size:18px;
+font-weight:bold;
+}
+
+.content{
+max-width:1100px;
+margin:auto;
+padding:30px;
+}
+
+.heading{
+margin-bottom:20px;
+}
+
+.heading h2{
+margin:0 0 8px;
+font-size:29px;
+}
+
+.heading p{
+margin:0;
+color:var(--muted);
+font-size:14px;
 }
 
 #message{
-  padding:14px 0;
-  color:#94a3b8;
+margin-bottom:20px;
+font-size:13px;
 }
 
-.success{color:#4ade80!important}
-.error{color:#f87171!important}
+.success{color:var(--green)}
+.error{color:var(--red)}
 
-.panel{
-  background:#111722;
-  border:1px solid #202b3b;
-  border-radius:18px;
-  padding:20px;
-  margin-bottom:20px;
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:22px;
+margin-bottom:22px;
+}
+
+.card h3{
+margin-top:0;
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+}
+
+.full{
+grid-column:1/-1;
 }
 
 label{
-  display:block;
-  color:#cbd5e1;
-  font-size:13px;
-  font-weight:700;
-  margin:15px 0 7px;
+display:block;
+color:#b9c4d3;
+font-size:12px;
+font-weight:bold;
+margin-bottom:7px;
 }
 
 input,
 textarea,
 select{
-  width:100%;
-  padding:13px;
-  background:#090e16;
-  color:#fff;
-  border:1px solid #293548;
-  border-radius:10px;
-  outline:none;
-  font-size:14px;
+width:100%;
+padding:13px;
+background:#090e16;
+border:1px solid #293548;
+border-radius:10px;
+color:white;
+outline:none;
+font-size:14px;
 }
 
 textarea{
-  min-height:120px;
-  resize:vertical;
+min-height:110px;
+resize:vertical;
 }
 
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:#64748b;
+select{
+appearance:auto;
 }
 
-button{
-  border:0;
-  border-radius:10px;
-  padding:12px 16px;
-  font-weight:700;
-  cursor:pointer;
-  margin-top:15px;
+.button{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-height:42px;
+padding:10px 17px;
+background:#f8fafc;
+color:#090d14;
+border:0;
+border-radius:11px;
+font-size:13px;
+font-weight:700;
+cursor:pointer;
 }
 
-.primary{
-  background:#f8fafc;
-  color:#080b12;
+.button:disabled{
+opacity:.6;
+cursor:not-allowed;
 }
 
 .secondary{
-  background:#1b2533;
-  color:#fff;
+background:#182131;
+color:#fff;
+border:1px solid #293548;
 }
 
 .danger{
-  background:#32191d;
-  color:#f87171;
+background:#32191d;
+color:#f87171;
+border:1px solid #55262d;
 }
 
-button:disabled{
-  opacity:.55;
-  cursor:not-allowed;
+.warning{
+background:#332b16;
+color:#facc15;
+border:1px solid #55471d;
+}
+
+.form-buttons{
+display:flex;
+gap:10px;
+margin-top:18px;
+flex-wrap:wrap;
 }
 
 #formMessage{
-  margin-top:14px;
-  font-size:14px;
+font-size:13px;
+margin-top:14px;
 }
 
 .task-card{
-  background:#111722;
-  border:1px solid #202b3b;
-  border-radius:18px;
-  padding:19px;
-  margin-bottom:15px;
+background:#0d131e;
+border:1px solid var(--border);
+border-radius:17px;
+padding:20px;
+margin-bottom:15px;
 }
 
 .task-card h3{
-  margin:0 0 10px;
-  font-size:19px;
+margin:0 0 10px;
+font-size:18px;
 }
 
-.description{
-  color:#94a3b8;
-  line-height:1.5;
-  white-space:pre-wrap;
+.task-description{
+color:#94a3b8;
+line-height:1.6;
+white-space:pre-wrap;
+margin-bottom:15px;
 }
 
-.info{
-  margin-top:10px;
-  padding-top:10px;
-  border-top:1px solid #1d2838;
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
+.info-row{
+display:flex;
+justify-content:space-between;
+gap:15px;
+padding:10px 0;
+border-top:1px solid #1b2533;
+font-size:13px;
 }
 
-.info span:first-child{
-  color:#64748b;
+.info-row span:first-child{
+color:#64748b;
 }
 
-.info span:last-child{
-  font-weight:700;
-  text-align:right;
-  word-break:break-word;
+.info-row span:last-child{
+font-weight:700;
+text-align:right;
 }
 
 .reward{
-  color:#4ade80!important;
+color:var(--green)!important;
 }
 
 .status{
-  display:inline-block;
-  margin-top:12px;
-  padding:6px 10px;
-  border-radius:20px;
-  font-size:11px;
-  font-weight:700;
+display:inline-block;
+padding:5px 9px;
+border-radius:8px;
+font-size:11px;
+font-weight:bold;
 }
 
-.active{
-  background:#102d20;
-  color:#4ade80;
+.status-active{
+background:#12331f;
+color:var(--green);
 }
 
-.paused{
-  background:#332b16;
-  color:#facc15;
+.status-paused{
+background:#332b16;
+color:var(--yellow);
 }
 
-.closed{
-  background:#32191d;
-  color:#f87171;
+.status-closed{
+background:#32191d;
+color:var(--red);
 }
 
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  margin-top:15px;
+.task-actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:17px;
 }
 
-.actions button{
-  margin:0;
+.task-actions button{
+padding:9px 13px;
+border-radius:9px;
+font-size:12px;
+font-weight:bold;
+cursor:pointer;
 }
 
 .empty{
-  text-align:center;
-  color:#64748b;
-  padding:30px;
+text-align:center;
+padding:30px;
+color:#64748b;
 }
 
-.hidden{
-  display:none!important;
+.mobile-menu{
+display:none;
+background:#151b28;
+border:1px solid var(--border);
+color:white;
+border-radius:9px;
+padding:8px 11px;
+cursor:pointer;
 }
 
-@media(max-width:600px){
-  header{
-    padding:16px 14px;
-  }
+@media(max-width:800px){
 
-  main{
-    padding:22px 13px 50px;
-  }
+.sidebar{
+transform:translateX(-100%);
+transition:.25s;
+}
 
-  .info{
-    flex-direction:column;
-  }
+.sidebar.open{
+transform:translateX(0);
+}
 
-  .actions button{
-    flex:1 1 45%;
-  }
+.main{
+margin-left:0;
+}
+
+.mobile-menu{
+display:block;
+}
+
+.content{
+padding:22px 15px 40px;
+}
+
+.form-grid{
+grid-template-columns:1fr;
+}
+
+.full{
+grid-column:auto;
+}
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <h1>TaskVexa Admin</h1>
-  <a href="admin.html">← Admin Dashboard</a>
-</header>
+<aside class="sidebar" id="sidebar">
 
-<main>
+<div class="logo">
+<h1>TaskVexa</h1>
+<p>Admin Control Panel</p>
+</div>
 
-  <h2>Task Management</h2>
+<div class="nav-title">Overview</div>
 
-  <p class="subtitle">
-    Create, edit, activate, pause and close tasks available to workers.
-  </p>
+<a href="admin.html" class="nav-link">
+<span class="nav-icon">⌂</span>
+Dashboard
+</a>
 
-  <div id="message">
-    Checking admin access...
-  </div>
+<div class="nav-title">Management</div>
 
-  <section id="adminContent" class="hidden">
+<a href="worker.html" class="nav-link">
+<span class="nav-icon">👥</span>
+Workers
+</a>
 
-    <div class="panel">
+<a href="promoters.html" class="nav-link">
+<span class="nav-icon">📣</span>
+Promoters
+</a>
 
-      <h3 id="formTitle">Create New Task</h3>
+<a href="tasks.html" class="nav-link active">
+<span class="nav-icon">✓</span>
+Tasks
+</a>
 
-      <form id="taskForm">
+<a href="admin-submissions.html" class="nav-link">
+<span class="nav-icon">📋</span>
+Submissions
+</a>
 
-        <label for="title">Task Title</label>
-        <input
-          id="title"
-          type="text"
-          required
-          placeholder="Enter task title"
-        >
+<a href="admin-withdrawals.html" class="nav-link">
+<span class="nav-icon">💳</span>
+Withdrawals
+</a>
 
-        <label for="description">
-          Description / Instructions
-        </label>
+<a href="admin-promoter-wallet.html" class="nav-link">
+<span class="nav-icon">💰</span>
+Promoter Wallet
+</a>
 
-        <textarea
-          id="description"
-          required
-          placeholder="Enter task instructions"
-        ></textarea>
+<div class="nav-title">Settings</div>
 
-        <label for="platform">Platform</label>
+<a href="settings.html" class="nav-link">
+<span class="nav-icon">⚙</span>
+Platform Settings
+</a>
 
-        <input
-          id="platform"
-          type="text"
-          required
-          placeholder="Telegram"
-        >
+<div class="logout">
 
-        <label for="taskUrl">Task Link</label>
+<button id="logoutButton" class="nav-link">
+<span class="nav-icon">↪</span>
+Logout
+</button>
 
-        <input
-          id="taskUrl"
-          type="url"
-          required
-          placeholder="https://..."
-        >
+</div>
 
-        <label for="reward">Worker Reward</label>
-
-        <input
-          id="reward"
-          type="number"
-          min="0"
-          step="0.01"
-          required
-        >
-
-        <label for="workersNeeded">
-          Workers Needed
-        </label>
-
-        <input
-          id="workersNeeded"
-          type="number"
-          min="1"
-          value="1"
-          required
-        >
-
-        <label for="targetLevel">
-          Target Level
-        </label>
-
-        <select id="targetLevel">
-          <option value="level_1">Level 1</option>
-          <option value="level_2">Level 2</option>
-          <option value="both">Both Levels</option>
-        </select>
-
-        <button
-          id="saveButton"
-          class="primary"
-          type="submit"
-        >
-          Create Task
-        </button>
-
-        <button
-          id="cancelButton"
-          class="secondary hidden"
-          type="button"
-        >
-          Cancel Edit
-        </button>
-
-      </form>
-
-      <div id="formMessage"></div>
-
-    </div>
+</aside>
 
 
-    <div class="panel">
+<div class="main">
 
-      <h3>Existing Tasks</h3>
+<div class="topbar">
 
-      <div id="taskList">
-        Loading tasks...
-      </div>
+<button id="mobileMenu" class="mobile-menu">
+☰
+</button>
 
-    </div>
+<div class="topbar-title">
+Task Management
+</div>
 
-  </section>
+<div></div>
+
+</div>
+
+
+<main class="content">
+
+<div class="heading">
+
+<h2>Task Management</h2>
+
+<p>
+Create, edit, activate, pause and close tasks available to workers.
+</p>
+
+</div>
+
+<div id="message">
+Checking admin access...
+</div>
+
+
+<section id="adminContent" style="display:none;">
+
+<div class="card">
+
+<h3 id="formTitle">
+Create New Task
+</h3>
+
+<form id="taskForm">
+
+<div class="form-grid">
+
+<div>
+<label>Task Title</label>
+
+<input
+type="text"
+id="title"
+placeholder="Enter task title"
+required
+>
+</div>
+
+
+<div>
+<label>Platform</label>
+
+<input
+type="text"
+id="platform"
+placeholder="Telegram"
+required
+>
+</div>
+
+
+<div class="full">
+<label>Description / Instructions</label>
+
+<textarea
+id="description"
+placeholder="Enter complete task instructions"
+required
+></textarea>
+</div>
+
+
+<div>
+<label>Task Link</label>
+
+<input
+type="url"
+id="taskUrl"
+placeholder="https://..."
+required
+>
+</div>
+
+
+<div>
+<label>Worker Reward</label>
+
+<input
+type="number"
+id="reward"
+min="0"
+step="0.01"
+value="100"
+required
+>
+</div>
+
+
+<div>
+<label>Workers Needed</label>
+
+<input
+type="number"
+id="workersNeeded"
+min="1"
+value="1"
+required
+>
+</div>
+
+
+<div>
+<label>Target Level</label>
+
+<select id="targetLevel">
+
+<option value="level_1">
+Level 1
+</option>
+
+<option value="level_2">
+Level 2
+</option>
+
+<option value="both">
+Both Levels
+</option>
+
+</select>
+</div>
+
+
+<div>
+<label>Task Status</label>
+
+<select id="taskStatus">
+
+<option value="active">
+Active
+</option>
+
+<option value="paused">
+Paused
+</option>
+
+<option value="closed">
+Closed
+</option>
+
+</select>
+</div>
+
+</div>
+
+
+<div class="form-buttons">
+
+<button
+type="submit"
+id="saveButton"
+class="button"
+>
+Create Task
+</button>
+
+<button
+type="button"
+id="cancelButton"
+class="button secondary"
+style="display:none;"
+>
+Cancel Edit
+</button>
+
+</div>
+
+<p id="formMessage"></p>
+
+</form>
+
+</div>
+
+
+<div class="card">
+
+<h3>Existing Tasks</h3>
+
+<div id="taskList">
+Loading tasks...
+</div>
+
+</div>
+
+</section>
 
 </main>
+
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-/* =====================================================
-   SUPABASE
-===================================================== */
 
 const SUPABASE_URL =
 "https://dxtlnrthlpdaobnbazny.supabase.co";
@@ -388,14 +678,10 @@ const SUPABASE_KEY =
 
 const supabaseClient =
 window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
 
 const message =
 document.getElementById("message");
@@ -406,14 +692,11 @@ document.getElementById("adminContent");
 const taskForm =
 document.getElementById("taskForm");
 
-const taskList =
-document.getElementById("taskList");
-
 const formMessage =
 document.getElementById("formMessage");
 
-const formTitle =
-document.getElementById("formTitle");
+const taskList =
+document.getElementById("taskList");
 
 const saveButton =
 document.getElementById("saveButton");
@@ -421,528 +704,1140 @@ document.getElementById("saveButton");
 const cancelButton =
 document.getElementById("cancelButton");
 
+const formTitle =
+document.getElementById("formTitle");
+
+const logoutButton =
+document.getElementById("logoutButton");
+
+const mobileMenu =
+document.getElementById("mobileMenu");
+
+const sidebar =
+document.getElementById("sidebar");
+
 
 let currentUser = null;
 let editingTaskId = null;
-let allTasks = [];
 
 
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
+/* =========================
+MOBILE MENU
+========================= */
+
+mobileMenu.addEventListener(
+"click",
+function(){
+
+sidebar.classList.toggle("open");
+
+}
+);
+
+
+/* =========================
+ESCAPE HTML
+========================= */
 
 function escapeHTML(value){
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
-/* =====================================================
-   MONEY
-===================================================== */
+/* =========================
+FORMAT MONEY
+========================= */
 
-function formatMoney(value){
+function money(value){
 
-  return "₦" +
-    Number(value || 0).toLocaleString(
-      "en-NG",
-      {
-        minimumFractionDigits:2,
-        maximumFractionDigits:2
-      }
-    );
+return "₦" +
+Number(value || 0).toLocaleString(
+"en-NG",
+{
+minimumFractionDigits:0,
+maximumFractionDigits:2
+}
+);
 
 }
 
 
-/* =====================================================
-   DATE
-===================================================== */
-
-function formatDate(value){
-
-  if(!value) return "-";
-
-  const date = new Date(value);
-
-  if(Number.isNaN(date.getTime())){
-    return "-";
-  }
-
-  return date.toLocaleString(
-    "en-NG",
-    {
-      dateStyle:"medium",
-      timeStyle:"short"
-    }
-  );
-
-}
-
-
-/* =====================================================
-   ADMIN CHECK
-===================================================== */
+/* =========================
+ADMIN CHECK
+========================= */
 
 async function checkAdmin(){
 
-  try{
+try{
 
-    message.textContent =
-      "Checking admin access...";
-
-    /*
-      Use getSession first so the page does not
-      unnecessarily wait for a new authentication
-      request.
-    */
-
-    const {
-      data:sessionData,
-      error:sessionError
-    } =
-    await supabaseClient.auth.getSession();
-
-    if(sessionError){
-      throw sessionError;
-    }
-
-    let session =
-      sessionData?.session;
+message.textContent =
+"Checking admin access...";
 
 
-    /*
-      If no session was found, try getUser once.
-    */
-
-    if(!session){
-
-      const {
-        data:userData,
-        error:userError
-      } =
-      await supabaseClient.auth.getUser();
-
-      if(userError){
-        throw userError;
-      }
-
-      if(!userData?.user){
-
-        message.textContent =
-          "You are not logged in. Redirecting...";
-
-        setTimeout(
-          () => {
-            window.location.href =
-              "login.html";
-          },
-          500
-        );
-
-        return false;
-      }
-
-      currentUser =
-        userData.user;
-
-    }else{
-
-      currentUser =
-        session.user;
-
-    }
+const {
+data,
+error
+} =
+await supabaseClient.auth.getUser();
 
 
-    /*
-      Check profile role.
-    */
+if(error){
 
-    const {
-      data:profile,
-      error:profileError
-    } =
-    await supabaseClient
-      .from("profiles")
-      .select("role")
-      .eq("id",currentUser.id)
-      .maybeSingle();
-
-
-    if(profileError){
-      throw profileError;
-    }
-
-
-    if(
-      !profile ||
-      String(profile.role).toLowerCase() !== "admin"
-    ){
-
-      message.textContent =
-        "Access denied. Admin account required.";
-
-      message.className =
-        "error";
-
-      return false;
-    }
-
-
-    message.textContent =
-      "Admin access confirmed.";
-
-    message.className =
-      "success";
-
-    adminContent.classList.remove(
-      "hidden"
-    );
-
-    return true;
-
-  }catch(error){
-
-    console.error(
-      "ADMIN CHECK ERROR:",
-      error
-    );
-
-    message.textContent =
-      "Admin access error: " +
-      (error.message || "Unknown error");
-
-    message.className =
-      "error";
-
-    return false;
-  }
+throw error;
 
 }
 
 
-/* =====================================================
-   LOAD TASKS
-===================================================== */
+if(!data || !data.user){
+
+window.location.href =
+"login.html";
+
+return null;
+
+}
+
+
+currentUser =
+data.user;
+
+
+/*
+Get profile role.
+*/
+
+const {
+data:profile,
+error:profileError
+} =
+await supabaseClient
+.from("profiles")
+.select("role")
+.eq(
+"id",
+currentUser.id
+)
+.maybeSingle();
+
+
+if(profileError){
+
+throw profileError;
+
+}
+
+
+if(
+!profile ||
+String(profile.role).toLowerCase() !==
+"admin"
+){
+
+message.textContent =
+"Access denied. Admin account required.";
+
+message.className =
+"error";
+
+return null;
+
+}
+
+
+message.textContent =
+"Admin access confirmed.";
+
+message.className =
+"success";
+
+adminContent.style.display =
+"block";
+
+
+await loadTasks();
+
+
+return currentUser;
+
+
+}catch(error){
+
+console.error(
+"ADMIN CHECK ERROR:",
+error
+);
+
+
+message.innerHTML =
+"Unable to verify admin access.<br><br>" +
+escapeHTML(error.message);
+
+message.className =
+"error";
+
+return null;
+
+}
+
+}
+
+
+/* =========================
+CREATE / UPDATE TASK
+========================= */
+
+taskForm.addEventListener(
+"submit",
+async function(event){
+
+event.preventDefault();
+
+
+formMessage.textContent = "";
+formMessage.className = "";
+
+
+try{
+
+saveButton.disabled =
+true;
+
+saveButton.textContent =
+editingTaskId
+? "Saving..."
+: "Creating...";
+
+
+const title =
+document.getElementById("title")
+.value.trim();
+
+
+const description =
+document.getElementById("description")
+.value.trim();
+
+
+const platform =
+document.getElementById("platform")
+.value.trim();
+
+
+const taskUrl =
+document.getElementById("taskUrl")
+.value.trim();
+
+
+const reward =
+Number(
+document.getElementById("reward")
+.value
+);
+
+
+const workersNeeded =
+Number(
+document.getElementById("workersNeeded")
+.value
+);
+
+
+const targetLevel =
+document.getElementById("targetLevel")
+.value;
+
+
+const taskStatus =
+document.getElementById("taskStatus")
+.value;
+
+
+if(!title){
+
+throw new Error(
+"Task title is required."
+);
+
+}
+
+
+if(!description){
+
+throw new Error(
+"Task description is required."
+);
+
+}
+
+
+if(!taskUrl){
+
+throw new Error(
+"Task link is required."
+);
+
+}
+
+
+if(!Number.isFinite(reward) || reward < 0){
+
+throw new Error(
+"Enter a valid worker reward."
+);
+
+}
+
+
+if(
+!Number.isInteger(workersNeeded) ||
+workersNeeded < 1
+){
+
+throw new Error(
+"Workers Needed must be at least 1."
+);
+
+}
+
+
+const targetLevels =
+targetLevel === "both"
+? ["level_1","level_2"]
+: [targetLevel];
+
+
+const taskData = {
+
+title:title,
+
+description:description,
+
+platform:platform,
+
+task_url:taskUrl,
+
+reward:reward,
+
+workers_needed:workersNeeded,
+
+target_levels:targetLevels,
+
+status:taskStatus
+
+};
+
+
+/* =========================
+UPDATE
+========================= */
+
+if(editingTaskId){
+
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.update(taskData)
+.eq(
+"id",
+editingTaskId
+);
+
+
+if(error){
+
+throw error;
+
+}
+
+
+formMessage.textContent =
+"Task updated successfully.";
+
+formMessage.className =
+"success";
+
+}
+
+
+/* =========================
+CREATE
+========================= */
+
+else{
+
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.insert({
+
+...taskData,
+
+created_by:
+currentUser.id,
+
+source:
+"admin"
+
+});
+
+
+if(error){
+
+throw error;
+
+}
+
+
+formMessage.textContent =
+"Task created successfully.";
+
+formMessage.className =
+"success";
+
+}
+
+
+resetForm();
+
+await loadTasks();
+
+
+}catch(error){
+
+console.error(
+"TASK SAVE ERROR:",
+error
+);
+
+
+formMessage.textContent =
+"Error: " +
+error.message;
+
+formMessage.className =
+"error";
+
+
+}finally{
+
+saveButton.disabled =
+false;
+
+saveButton.textContent =
+editingTaskId
+? "Save Changes"
+: "Create Task";
+
+}
+
+}
+);
+
+
+/* =========================
+LOAD TASKS
+========================= */
 
 async function loadTasks(){
 
-  taskList.innerHTML =
-    "<div class='empty'>Loading tasks...</div>";
-
-  try{
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("tasks")
-      .select(
-        "id,title,description,platform,task_url,reward,workers_needed,target_levels,status,created_by,source,created_at,updated_at,promoter_charge"
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
+taskList.innerHTML =
+"<p>Loading tasks...</p>";
 
 
-    if(error){
-      throw error;
-    }
+try{
+
+const {
+data:tasks,
+error
+} =
+await supabaseClient
+.from("tasks")
+.select(
+"id,title,description,platform,task_url,reward,workers_needed,target_levels,status,source,created_at"
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 
-    allTasks =
-      Array.isArray(data)
-        ? data
-        : [];
+if(error){
 
-
-    renderTasks(
-      allTasks
-    );
-
-  }catch(error){
-
-    console.error(
-      "LOAD TASKS ERROR:",
-      error
-    );
-
-    taskList.innerHTML = `
-      <div class="empty error">
-        Unable to load tasks.<br><br>
-        ${escapeHTML(error.message)}
-      </div>
-    `;
-
-  }
+throw error;
 
 }
 
 
-/* =====================================================
-   RENDER TASKS
-===================================================== */
+if(!tasks || tasks.length === 0){
 
-function renderTasks(tasks){
+taskList.innerHTML =
+`
+<div class="empty">
+No tasks found.
+</div>
+`;
 
-  if(!tasks.length){
-
-    taskList.innerHTML =
-      "<div class='empty'>No tasks found.</div>";
-
-    return;
-  }
-
-
-  taskList.innerHTML = "";
-
-
-  tasks.forEach(task => {
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "task-card";
-
-
-    const status =
-      String(
-        task.status || "active"
-      ).toLowerCase();
-
-
-    let statusClass =
-      "active";
-
-
-    if(status === "paused"){
-      statusClass = "paused";
-    }
-
-    if(status === "closed"){
-      statusClass = "closed";
-    }
-
-
-    const levels =
-      Array.isArray(task.target_levels)
-        ? task.target_levels.join(", ")
-        : "-";
-
-
-    card.innerHTML = `
-
-      <h3>
-        ${escapeHTML(task.title)}
-      </h3>
-
-      <div class="description">
-        ${escapeHTML(task.description)}
-      </div>
-
-      <div class="info">
-        <span>Platform</span>
-        <span>
-          ${escapeHTML(task.platform || "-")}
-        </span>
-      </div>
-
-      <div class="info">
-        <span>Reward</span>
-        <span class="reward">
-          ${formatMoney(task.reward)}
-        </span>
-      </div>
-
-      <div class="info">
-        <span>Workers Needed</span>
-        <span>
-          ${escapeHTML(task.workers_needed || 0)}
-        </span>
-      </div>
-
-      <div class="info">
-        <span>Target Level</span>
-        <span>
-          ${escapeHTML(levels)}
-        </span>
-      </div>
-
-      <div class="info">
-        <span>Created</span>
-        <span>
-          ${escapeHTML(formatDate(task.created_at))}
-        </span>
-      </div>
-
-      <div>
-        <span class="status ${statusClass}">
-          ${escapeHTML(status.toUpperCase())}
-        </span>
-      </div>
-
-      <div class="actions">
-
-        <button
-          class="secondary"
-          data-action="edit"
-          data-id="${escapeHTML(task.id)}"
-        >
-          Edit
-        </button>
-
-        ${
-          status === "active"
-          ? `
-            <button
-              class="secondary"
-              data-action="pause"
-              data-id="${escapeHTML(task.id)}"
-            >
-              Pause
-            </button>
-          `
-          : ""
-        }
-
-        ${
-          status === "paused"
-          ? `
-            <button
-              class="secondary"
-              data-action="activate"
-              data-id="${escapeHTML(task.id)}"
-            >
-              Activate
-            </button>
-          `
-          : ""
-        }
-
-        ${
-          status !== "closed"
-          ? `
-            <button
-              class="danger"
-              data-action="close"
-              data-id="${escapeHTML(task.id)}"
-            >
-              Close
-            </button>
-          `
-          : ""
-        }
-
-        <button
-          class="danger"
-          data-action="delete"
-          data-id="${escapeHTML(task.id)}"
-        >
-          Delete
-        </button>
-
-      </div>
-
-    `;
-
-
-    taskList.appendChild(card);
-
-  });
+return;
 
 }
 
 
-/* =====================================================
-   TASK ACTIONS
-===================================================== */
-
-taskList.addEventListener(
-  "click",
-  async function(event){
-
-    const button =
-      event.target.closest(
-        "button[data-action]"
-      );
-
-    if(!button){
-      return;
-    }
+taskList.innerHTML = "";
 
 
-    const action =
-      button.dataset.action;
+tasks.forEach(
+task => {
 
-    const id =
-      button.dataset.id;
+const card =
+document.createElement("section");
 
-
-    if(action === "edit"){
-
-      startEdit(id);
-      return;
-
-    }
+card.className =
+"task-card";
 
 
-    if(action === "pause"){
-
-      await changeStatus(
-        id,
-        "paused"
-      );
-
-      return;
-
-    }
+let levels =
+"Not specified";
 
 
-    if(action === "activate"){
+if(
+Array.isArray(
+task.target_levels
+)
+){
 
-      await changeStatus(
-        id,
-        "active"
-      );
+if(
+task.target_levels.includes("level_1") &&
+task.target_levels.includes("level_2")
+){
 
-      return;
+levels =
+"Level 1 + Level 2";
 
-    }
+}else if(
+task.target_levels.includes("level_2")
+){
 
+levels =
+"Level 2";
 
-    if(action === "close"){
+}else if(
+task.target_levels.includes("level_1")
+){
 
-      if(
-        !confirm(
-          "Close this task?"
-        )
-      ){
-        return;
-      }
+levels =
+"Level 1";
 
-      await changeStatus(
-        id,
-        "closed"
-      );
+}
 
-      return;
-
-    }
+}
 
 
-    if(action === "delete"){
+let statusClass =
+"status-active";
 
-      if(
-        !confirm(
-          "Delete this
+
+if(task.status === "paused"){
+statusClass =
+"status-paused";
+}
+
+if(task.status === "closed"){
+statusClass =
+"status-closed";
+}
+
+
+let statusText =
+String(
+task.status || "active"
+).toUpperCase();
+
+
+card.innerHTML = `
+
+<h3>
+${escapeHTML(task.title)}
+</h3>
+
+<div class="task-description">
+${escapeHTML(task.description)}
+</div>
+
+<div class="info-row">
+<span>Platform</span>
+<span>
+${escapeHTML(
+task.platform || "Not specified"
+)}
+</span>
+</div>
+
+<div class="info-row">
+<span>Reward</span>
+<span class="reward">
+${money(task.reward)}
+</span>
+</div>
+
+<div class="info-row">
+<span>Workers Needed</span>
+<span>
+${Number(task.workers_needed || 0)}
+</span>
+</div>
+
+<div class="info-row">
+<span>Target Level</span>
+<span>
+${escapeHTML(levels)}
+</span>
+</div>
+
+<div class="info-row">
+<span>Source</span>
+<span>
+${escapeHTML(
+task.source || "admin"
+)}
+</span>
+</div>
+
+<div class="info-row">
+<span>Status</span>
+<span>
+<span class="status ${statusClass}">
+${escapeHTML(statusText)}
+</span>
+</span>
+</div>
+
+<div class="task-actions">
+
+<button
+class="button secondary edit-button"
+data-id="${task.id}"
+>
+Edit
+</button>
+
+${
+task.status === "active"
+?
+`
+<button
+class="button warning pause-button"
+data-id="${task.id}"
+>
+Pause
+</button>
+`
+:
+task.status === "paused"
+?
+`
+<button
+class="button"
+style="background:#12331f;color:#4ade80;"
+data-id="${task.id}"
+>
+Activate
+</button>
+`
+:
+task.status === "closed"
+?
+`
+<button
+class="button"
+style="background:#12331f;color:#4ade80;"
+data-id="${task.id}"
+>
+Activate
+</button>
+`
+:
+""
+}
+
+${
+task.status !== "closed"
+?
+`
+<button
+class="button danger close-button"
+data-id="${task.id}"
+>
+Close
+</button>
+`
+:
+""
+}
+
+<button
+class="button danger delete-button"
+data-id="${task.id}"
+>
+Delete
+</button>
+
+</div>
+
+`;
+
+
+taskList.appendChild(card);
+
+}
+);
+
+
+/* EDIT */
+
+document
+.querySelectorAll(".edit-button")
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+function(){
+
+editTask(
+button.dataset.id,
+tasks
+);
+
+}
+);
+
+}
+);
+
+
+/* PAUSE */
+
+document
+.querySelectorAll(".pause-button")
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+function(){
+
+changeStatus(
+button.dataset.id,
+"paused"
+);
+
+}
+);
+
+}
+);
+
+
+/* ACTIVATE */
+
+document
+.querySelectorAll(
+".task-actions .button"
+)
+.forEach(
+button => {
+
+if(
+button.textContent.trim() ===
+"Activate"
+){
+
+button.addEventListener(
+"click",
+function(){
+
+changeStatus(
+button.dataset.id,
+"active"
+);
+
+}
+);
+
+}
+
+}
+);
+
+
+/* CLOSE */
+
+document
+.querySelectorAll(".close-button")
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+function(){
+
+changeStatus(
+button.dataset.id,
+"closed"
+);
+
+}
+);
+
+}
+);
+
+
+/* DELETE */
+
+document
+.querySelectorAll(".delete-button")
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+function(){
+
+deleteTask(
+button.dataset.id
+);
+
+}
+);
+
+}
+);
+
+
+}catch(error){
+
+console.error(
+"LOAD TASKS ERROR:",
+error
+);
+
+
+taskList.innerHTML =
+`
+<div class="empty error">
+Unable to load tasks.<br><br>
+${escapeHTML(error.message)}
+</div>
+`;
+
+}
+
+}
+
+
+/* =========================
+EDIT TASK
+========================= */
+
+function editTask(
+taskId,
+tasks
+){
+
+const task =
+tasks.find(
+item =>
+String(item.id) ===
+String(taskId)
+);
+
+
+if(!task){
+
+return;
+
+}
+
+
+editingTaskId =
+task.id;
+
+
+document.getElementById(
+"title"
+).value =
+task.title || "";
+
+
+document.getElementById(
+"description"
+).value =
+task.description || "";
+
+
+document.getElementById(
+"platform"
+).value =
+task.platform || "";
+
+
+document.getElementById(
+"taskUrl"
+).value =
+task.task_url || "";
+
+
+document.getElementById(
+"reward"
+).value =
+task.reward ?? 0;
+
+
+document.getElementById(
+"workersNeeded"
+).value =
+task.workers_needed || 1;
+
+
+const levels =
+Array.isArray(
+task.target_levels
+)
+?
+task.target_levels
+:
+[];
+
+
+if(
+levels.includes("level_1") &&
+levels.includes("level_2")
+){
+
+document.getElementById(
+"targetLevel"
+).value =
+"both";
+
+}else if(
+levels.includes("level_2")
+){
+
+document.getElementById(
+"targetLevel"
+).value =
+"level_2";
+
+}else{
+
+document.getElementById(
+"targetLevel"
+).value =
+"level_1";
+
+}
+
+
+document.getElementById(
+"taskStatus"
+).value =
+task.status || "active";
+
+
+formTitle.textContent =
+"Edit Task";
+
+
+saveButton.textContent =
+"Save Changes";
+
+
+cancelButton.style.display =
+"inline-flex";
+
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
+
+}
+
+
+/* =========================
+CHANGE STATUS
+========================= */
+
+async function changeStatus(
+taskId,
+newStatus
+){
+
+try{
+
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.update({
+status:newStatus
+})
+.eq(
+"id",
+taskId
+);
+
+
+if(error){
+
+throw error;
+
+}
+
+
+await loadTasks();
+
+
+}catch(error){
+
+console.error(
+"STATUS ERROR:",
+error
+);
+
+
+alert(
+"Error: " +
+error.message
+);
+
+}
+
+}
+
+
+/* =========================
+DELETE TASK
+========================= */
+
+async function deleteTask(
+taskId
+){
+
+const confirmed =
+confirm(
+"Are you sure you want to delete this task?"
+);
+
+
+if(!confirmed){
+
+return;
+
+}
+
+
+try{
+
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.delete()
+.eq(
+"id",
+taskId
+);
+
+
+if(error){
+
+throw error;
+
+}
+
+
+await loadTasks();
+
+
+}catch(error){
+
+console.error(
+"DELETE ERROR:",
+error
+);
+
+
+alert(
+"Error: " +
+error.message
+);
+
+}
+
+}
+
+
+/* =========================
+RESET FORM
+========================= */
+
+cancelButton.addEventListener(
+"click",
+resetForm
+);
+
+
+function resetForm(){
+
+editingTaskId =
+null;
+
+taskForm.reset();
+
+
+document.getElementById(
+"reward"
+).value =
+100;
+
+
+document.getElementById(
+"workersNeeded"
+).value =
+1;
+
+
+document.getElementById(
+"targetLevel"
+).value =
+"level_1";
+
+
+document.getElementById(
+"taskStatus"
+).value =
+"active";
+
+
+formTitle.textContent =
+"Create New Task";
+
+
+saveButton.textContent 

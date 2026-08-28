@@ -1,361 +1,544 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>TaskVexa - Admin Submissions</title>
 
 <style>
+*{box-sizing:border-box}
 
-* {
-  box-sizing: border-box;
+:root{
+--bg:#070a10;
+--sidebar:#0b0f17;
+--card:#111722;
+--card2:#0d131e;
+--border:#202b3b;
+--text:#f8fafc;
+--muted:#7f8da3;
+--green:#4ade80;
+--red:#f87171;
+--yellow:#facc15;
 }
 
-body {
-  margin: 0;
-  background: #080b12;
-  color: #f8fafc;
-  font-family: Arial, sans-serif;
+body{
+margin:0;
+background:var(--bg);
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
 }
 
-/* HEADER */
-
-header {
-  background: #0d111b;
-  border-bottom: 1px solid #202b3b;
-  padding: 18px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+bottom:0;
+width:245px;
+background:var(--sidebar);
+border-right:1px solid var(--border);
+padding:22px 14px;
+overflow-y:auto;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 21px;
-  font-weight: 800;
+.logo{
+padding:5px 14px 22px;
+border-bottom:1px solid var(--border);
+margin-bottom:18px;
 }
 
-header a {
-  color: #cbd5e1;
-  text-decoration: none;
-  font-size: 14px;
+.logo h1{margin:0;font-size:23px}
+
+.logo p{
+margin:6px 0 0;
+color:var(--muted);
+font-size:12px;
 }
 
-/* MAIN */
-
-main {
-  max-width: 700px;
-  margin: auto;
-  padding: 25px 16px 60px;
+.nav-title{
+color:#56657b;
+font-size:10px;
+font-weight:bold;
+letter-spacing:1.3px;
+margin:18px 14px 8px;
+text-transform:uppercase;
 }
 
-.page-title {
-  margin-bottom: 22px;
+.nav-link{
+display:flex;
+align-items:center;
+gap:12px;
+width:100%;
+padding:12px 14px;
+margin:4px 0;
+border-radius:11px;
+color:#aeb9c9;
+text-decoration:none;
+font-size:14px;
+border:0;
+background:transparent;
+cursor:pointer;
+text-align:left;
 }
 
-.page-title h2 {
-  margin: 0 0 7px;
-  font-size: 27px;
+.nav-link:hover,
+.nav-link.active{
+background:#171d2a;
+color:white;
 }
 
-.page-title p {
-  margin: 0;
-  color: #64748b;
-  font-size: 14px;
+.nav-icon{
+width:23px;
+text-align:center;
+font-size:16px;
 }
 
-/* MESSAGE */
-
-#message {
-  margin-bottom: 15px;
-  color: #94a3b8;
-  text-align: center;
+.main{
+margin-left:245px;
+min-height:100vh;
 }
 
-/* SUBMISSION CARD */
-
-.submission-card {
-  background: linear-gradient(
-    145deg,
-    #111722,
-    #0d131e
-  );
-
-  border: 1px solid #202b3b;
-
-  border-radius: 20px;
-
-  padding: 20px;
-
-  margin-bottom: 17px;
-
-  box-shadow:
-    0 12px 30px rgba(0,0,0,.25);
+.topbar{
+height:70px;
+background:#070a10;
+border-bottom:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 28px;
+position:sticky;
+top:0;
+z-index:20;
 }
 
-/* TOP */
-
-.card-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 15px;
-  margin-bottom: 18px;
+.topbar-title{
+font-size:18px;
+font-weight:bold;
 }
 
-.card-top h3 {
-  margin: 0;
-  font-size: 19px;
+.admin-status{
+color:#aeb9c9;
+font-size:13px;
 }
 
-.pending-badge {
-  background: #332b16;
-  color: #facc15;
-  border-radius: 20px;
-  padding: 6px 10px;
-  font-size: 11px;
-  font-weight: 800;
-  white-space: nowrap;
+.mobile-menu{
+display:none;
+background:#151b28;
+border:1px solid var(--border);
+color:white;
+border-radius:9px;
+padding:8px 11px;
+cursor:pointer;
 }
 
-/* INFO */
-
-.info-row {
-  display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  padding: 11px 0;
-  border-top: 1px solid #1b2533;
-  font-size: 13px;
+.content{
+max-width:1200px;
+margin:auto;
+padding:30px;
 }
 
-.info-label {
-  color: #64748b;
+.heading{
+margin-bottom:20px;
 }
 
-.info-value {
-  color: #e2e8f0;
-  text-align: right;
-  word-break: break-word;
+.heading h2{
+margin:0 0 8px;
+font-size:29px;
 }
 
-.reward {
-  color: #4ade80;
-  font-weight: 800;
+.heading p{
+margin:0;
+color:var(--muted);
+font-size:14px;
 }
 
-/* SCREENSHOT */
-
-.proof-box {
-  margin-top: 18px;
-  padding-top: 18px;
-  border-top: 1px solid #1b2533;
+#message{
+margin-bottom:20px;
+font-size:13px;
 }
 
-.proof-title {
-  margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: 700;
+.success{color:var(--green)}
+.error{color:var(--red)}
+
+.filter{
+display:flex;
+gap:10px;
+margin-bottom:20px;
 }
 
-.proof-image {
-  width: 100%;
-  max-height: 430px;
-  object-fit: contain;
-  border-radius: 14px;
-  background: #080b12;
-  border: 1px solid #2a3648;
-  display: block;
-  cursor: pointer;
+.filter button{
+padding:10px 15px;
+border-radius:10px;
+border:1px solid var(--border);
+background:#151d2a;
+color:white;
+cursor:pointer;
+font-weight:bold;
 }
 
-.no-proof {
-  padding: 18px;
-  border-radius: 12px;
-  background: #0b1019;
-  color: #64748b;
-  text-align: center;
-  font-size: 13px;
+.filter button.active{
+background:#f8fafc;
+color:#090d14;
 }
 
-/* BUTTONS */
-
-.actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 18px;
+.submission-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:22px;
+margin-bottom:18px;
 }
 
-button {
-  border: none;
-  border-radius: 12px;
-  padding: 13px;
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
-  flex: 1;
+.submission-head{
+display:flex;
+justify-content:space-between;
+gap:15px;
+align-items:flex-start;
+margin-bottom:18px;
 }
 
-.approve-button {
-  background: #4ade80;
-  color: #06120b;
+.submission-head h3{
+margin:0 0 7px;
+font-size:18px;
 }
 
-.reject-button {
-  background: #32191d;
-  color: #f87171;
-  border: 1px solid #54242b;
+.muted{
+color:var(--muted);
+font-size:12px;
 }
 
-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
+.status{
+display:inline-block;
+padding:6px 11px;
+border-radius:20px;
+font-size:11px;
+font-weight:bold;
+text-transform:capitalize;
 }
 
-/* EMPTY */
-
-.empty {
-  background: #111722;
-  border: 1px solid #202b3b;
-  border-radius: 18px;
-  padding: 35px 20px;
-  text-align: center;
-  color: #64748b;
+.status.pending{
+background:#332b16;
+color:var(--yellow);
 }
 
-/* ERROR */
-
-.error {
-  color: #f87171 !important;
+.status.approved{
+background:#102d20;
+color:var(--green);
 }
 
-/* LOADING */
-
-.loading {
-  text-align: center;
-  padding: 30px;
-  color: #64748b;
+.status.rejected{
+background:#32191d;
+color:var(--red);
 }
 
-/* IMAGE MODAL */
-
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.9);
-  z-index: 9999;
-  padding: 20px;
-  align-items: center;
-  justify-content: center;
+.info-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:10px;
+margin-bottom:16px;
 }
 
-.modal img {
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-  border-radius: 10px;
+.info{
+background:var(--card2);
+border:1px solid #1d2838;
+border-radius:11px;
+padding:13px;
 }
 
-.close-modal {
-  position: fixed;
-  top: 18px;
-  right: 20px;
-  color: white;
-  font-size: 30px;
-  cursor: pointer;
+.info small{
+display:block;
+color:#64748b;
+font-size:10px;
+margin-bottom:6px;
 }
 
-/* MOBILE */
+.info strong{
+display:block;
+font-size:13px;
+word-break:break-word;
+}
 
-@media (max-width: 500px) {
+.reward{
+color:var(--green);
+}
 
-  main {
-    padding: 20px 12px 50px;
-  }
+.proof{
+background:#0b111b;
+border:1px solid #1f2b3d;
+border-radius:12px;
+padding:15px;
+margin-bottom:15px;
+}
 
-  .card-top {
-    flex-direction: column;
-  }
+.proof-title{
+font-size:12px;
+font-weight:bold;
+margin-bottom:10px;
+}
 
-  .actions {
-    flex-direction: column;
-  }
+.proof-text{
+color:#b9c4d3;
+font-size:13px;
+line-height:1.6;
+white-space:pre-wrap;
+}
+
+.proof-image{
+max-width:100%;
+max-height:500px;
+border-radius:10px;
+margin-top:10px;
+display:block;
+border:1px solid var(--border);
+}
+
+.button{
+min-height:42px;
+padding:10px 16px;
+border:0;
+border-radius:11px;
+font-size:13px;
+font-weight:700;
+cursor:pointer;
+margin-right:7px;
+margin-top:5px;
+}
+
+.button:disabled{
+opacity:.6;
+cursor:not-allowed;
+}
+
+.approve{
+background:#102d20;
+color:var(--green);
+border:1px solid #1f5c3a;
+}
+
+.reject{
+background:#32191d;
+color:var(--red);
+border:1px solid #5b292f;
+}
+
+.refresh{
+background:#f8fafc;
+color:#090d14;
+}
+
+.empty,
+.loading{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:17px;
+padding:35px 20px;
+text-align:center;
+color:var(--muted);
+}
+
+@media(max-width:900px){
+.info-grid{
+grid-template-columns:1fr 1fr;
+}
+}
+
+@media(max-width:800px){
+
+.sidebar{
+transform:translateX(-100%);
+transition:.25s;
+z-index:100;
+}
+
+.sidebar.open{
+transform:translateX(0);
+}
+
+.main{
+margin-left:0;
+}
+
+.mobile-menu{
+display:block;
+}
+
+.content{
+padding:22px 15px 40px;
+}
+
+.info-grid{
+grid-template-columns:1fr;
+}
+
+.submission-head{
+flex-direction:column;
+}
 
 }
 
+@media(max-width:500px){
+
+.topbar{
+padding:0 15px;
+}
+
+.admin-status{
+display:none;
+}
+
+.filter{
+overflow-x:auto;
+}
+}
 </style>
 </head>
 
-
 <body>
 
+<aside class="sidebar" id="sidebar">
 
-<header>
+<div class="logo">
+<h1>TaskVexa</h1>
+<p>Admin Control Panel</p>
+</div>
 
-  <h1>TaskVexa Admin</h1>
+<div class="nav-title">Overview</div>
 
-  <a href="dashboard.html">
-    ← Dashboard
-  </a>
+<a href="admin.html" class="nav-link">
+<span class="nav-icon">⌂</span>
+Dashboard
+</a>
 
-</header>
+<div class="nav-title">Management</div>
+
+<a href="worker.html" class="nav-link">
+<span class="nav-icon">👥</span>
+Workers
+</a>
+
+<a href="promoters.html" class="nav-link">
+<span class="nav-icon">📣</span>
+Promoters
+</a>
+
+<a href="tasks.html" class="nav-link">
+<span class="nav-icon">✓</span>
+Tasks
+</a>
+
+<a href="admin-submissions.html" class="nav-link active">
+<span class="nav-icon">📋</span>
+Submissions
+</a>
+
+<a href="admin-withdrawals.html" class="nav-link">
+<span class="nav-icon">💳</span>
+Withdrawals
+</a>
+
+<a href="admin-promoter-wallet.html" class="nav-link">
+<span class="nav-icon">💰</span>
+Promoter Wallet
+</a>
+
+<div class="nav-title">Settings</div>
+
+<a href="settings.html" class="nav-link">
+<span class="nav-icon">⚙</span>
+Platform Settings
+</a>
+
+<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);">
+
+<button id="logoutButton" class="nav-link" style="color:#f87171;">
+<span class="nav-icon">↪</span>
+Logout
+</button>
+
+</div>
+
+</aside>
 
 
-<main>
+<div class="main">
+
+<div class="topbar">
+
+<button id="mobileMenu" class="mobile-menu">
+☰
+</button>
+
+<div class="topbar-title">
+Task Submissions
+</div>
+
+<div class="admin-status">
+Admin
+</div>
+
+</div>
 
 
-  <div class="page-title">
+<main class="content">
 
-    <h2>
-      Task Submissions
-    </h2>
+<div class="heading">
 
-    <p>
-      Review worker proofs and approve or reject completed tasks.
-    </p>
+<h2>Task Submissions</h2>
 
-  </div>
+<p>
+Review worker proofs and approve or reject submitted tasks.
+</p>
 
-
-  <div id="message" class="loading">
-    Loading submissions...
-  </div>
+</div>
 
 
-  <div id="submissionList"></div>
+<div id="message">
+Checking admin access...
+</div>
 
+
+<div class="filter">
+
+<button
+class="active"
+data-filter="pending">
+Pending
+</button>
+
+<button data-filter="approved">
+Approved
+</button>
+
+<button data-filter="rejected">
+Rejected
+</button>
+
+<button data-filter="all">
+All
+</button>
+
+<button
+class="refresh"
+id="refreshButton">
+↻ Refresh
+</button>
+
+</div>
+
+
+<div id="submissionList">
+
+<div class="loading">
+Loading submissions...
+</div>
+
+</div>
 
 </main>
-
-
-<!-- IMAGE PREVIEW MODAL -->
-
-<div
-  id="imageModal"
-  class="modal"
->
-
-  <span
-    id="closeModal"
-    class="close-modal"
-  >
-    ×
-  </span>
-
-  <img
-    id="modalImage"
-    src=""
-    alt="Proof Screenshot"
-  >
 
 </div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 
 <script>
 
@@ -365,651 +548,995 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
-
 const supabaseClient =
 window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
 
 
 const message =
-document.getElementById(
-  "message"
-);
+document.getElementById("message");
 
 const submissionList =
-document.getElementById(
-  "submissionList"
-);
+document.getElementById("submissionList");
+
+const refreshButton =
+document.getElementById("refreshButton");
+
+const logoutButton =
+document.getElementById("logoutButton");
+
+const mobileMenu =
+document.getElementById("mobileMenu");
+
+const sidebar =
+document.getElementById("sidebar");
+
+
+let currentUser = null;
+let submissions = [];
+let currentFilter = "pending";
 
 
 /* =========================
-   LOAD SUBMISSIONS
+MOBILE MENU
 ========================= */
 
-async function loadSubmissions() {
+mobileMenu.addEventListener(
+"click",
+function(){
 
-  message.textContent =
-    "Loading submissions...";
+sidebar.classList.toggle("open");
 
-  message.className =
-    "loading";
+});
 
-  submissionList.innerHTML =
-    "";
 
+/* =========================
+ESCAPE HTML
+========================= */
 
-  try {
+function escapeHTML(value){
 
-    /*
-      Confirm logged-in admin.
-    */
-
-    const {
-      data: { user },
-      error: userError
-    } =
-    await supabaseClient.auth.getUser();
-
-
-    if (
-      userError ||
-      !user
-    ) {
-
-      window.location.href =
-        "login.html";
-
-      return;
-
-    }
-
-
-    /*
-      Load pending submissions
-      using the existing secure RPC.
-    */
-
-    const {
-      data: submissions,
-      error
-    } =
-    await supabaseClient.rpc(
-      "get_admin_pending_submissions"
-    );
-
-
-    if (error) {
-
-      throw error;
-
-    }
-
-
-    if (
-      !submissions ||
-      submissions.length === 0
-    ) {
-
-      message.textContent =
-        "No pending submissions.";
-
-      message.className =
-        "empty";
-
-      return;
-
-    }
-
-
-    message.textContent =
-      `${submissions.length} pending submission${
-        submissions.length === 1 ? "" : "s"
-      }`;
-
-    message.className =
-      "";
-
-
-    /*
-      Create cards.
-    */
-
-    submissions.forEach(
-      submission => {
-
-        const card =
-          document.createElement(
-            "section"
-          );
-
-        card.className =
-          "submission-card";
-
-
-        const reward =
-          Number(
-            submission.reward_amount ||
-            submission.task_reward ||
-            0
-          );
-
-
-        const date =
-          submission.created_at
-            ? new Date(
-                submission.created_at
-              ).toLocaleString(
-                "en-NG"
-              )
-            : "-";
-
-
-        card.innerHTML = `
-
-          <div class="card-top">
-
-            <h3>
-              ${escapeHTML(
-                submission.task_title ||
-                "Task"
-              )}
-            </h3>
-
-            <span class="pending-badge">
-              PENDING
-            </span>
-
-          </div>
-
-
-          <div class="info-row">
-
-            <span class="info-label">
-              Platform
-            </span>
-
-            <span class="info-value">
-              ${escapeHTML(
-                submission.task_platform ||
-                "Not specified"
-              )}
-            </span>
-
-          </div>
-
-
-          <div class="info-row">
-
-            <span class="info-label">
-              Reward
-            </span>
-
-            <span class="info-value reward">
-              ₦${reward.toLocaleString(
-                "en-NG"
-              )}
-            </span>
-
-          </div>
-
-
-          <div class="info-row">
-
-            <span class="info-label">
-              Worker Email
-            </span>
-
-            <span class="info-value">
-              ${escapeHTML(
-                submission.worker_email ||
-                "Email unavailable"
-              )}
-            </span>
-
-          </div>
-
-
-          <div class="info-row">
-
-            <span class="info-label">
-              Worker ID
-            </span>
-
-            <span class="info-value">
-              ${escapeHTML(
-                submission.worker_id ||
-                "-"
-              )}
-            </span>
-
-          </div>
-
-
-          <div class="info-row">
-
-            <span class="info-label">
-              Submitted
-            </span>
-
-            <span class="info-value">
-              ${escapeHTML(date)}
-            </span>
-
-          </div>
-
-
-          <div class="proof-box">
-
-            <div class="proof-title">
-              📷 Worker Proof
-            </div>
-
-            ${
-              submission.proof_url
-              ?
-              `
-                <img
-                  src="${escapeHTML(
-                    submission.proof_url
-                  )}"
-                  class="proof-image"
-                  alt="Worker proof"
-                >
-              `
-              :
-              `
-                <div class="no-proof">
-                  No screenshot uploaded.
-                </div>
-              `
-            }
-
-          </div>
-
-
-          <div class="actions">
-
-            <button
-              class="approve-button"
-            >
-              ✓ Approve
-            </button>
-
-            <button
-              class="reject-button"
-            >
-              ✕ Reject
-            </button>
-
-          </div>
-
-        `;
-
-
-        const approveButton =
-          card.querySelector(
-            ".approve-button"
-          );
-
-        const rejectButton =
-          card.querySelector(
-            ".reject-button"
-          );
-
-
-        approveButton.addEventListener(
-          "click",
-          () => {
-
-            reviewSubmission(
-              submission.id,
-              "approved",
-              approveButton,
-              rejectButton
-            );
-
-          }
-        );
-
-
-        rejectButton.addEventListener(
-          "click",
-          () => {
-
-            reviewSubmission(
-              submission.id,
-              "rejected",
-              approveButton,
-              rejectButton
-            );
-
-          }
-        );
-
-
-        /*
-          Click screenshot to enlarge.
-        */
-
-        const proofImage =
-          card.querySelector(
-            ".proof-image"
-          );
-
-
-        if (proofImage) {
-
-          proofImage.addEventListener(
-            "click",
-            () => {
-
-              openImage(
-                proofImage.src
-              );
-
-            }
-          );
-
-        }
-
-
-        submissionList.appendChild(
-          card
-        );
-
-      }
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "SUBMISSIONS ERROR:",
-      error
-    );
-
-
-    message.textContent =
-      "Unable to load submissions: " +
-      error.message;
-
-    message.className =
-      "error";
-
-  }
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
 /* =========================
-   REVIEW SUBMISSION
+MONEY
 ========================= */
 
-async function reviewSubmission(
-  submissionId,
-  newStatus,
-  approveButton,
-  rejectButton
-) {
+function formatMoney(value){
 
-  const action =
-    newStatus === "approved"
-      ? "approve"
-      : "reject";
-
-
-  const confirmation =
-    action === "approve"
-      ? "Approve this submission and credit the worker's reward?"
-      : "Reject this submission?";
-
-
-  if (
-    !confirm(
-      confirmation
-    )
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    approveButton.disabled =
-      true;
-
-    rejectButton.disabled =
-      true;
-
-
-    if (
-      action === "approve"
-    ) {
-
-      approveButton.textContent =
-        "Approving...";
-
-    } else {
-
-      rejectButton.textContent =
-        "Rejecting...";
-
-    }
-
-
-    /*
-      Use the existing secure
-      database function.
-
-      This keeps reward crediting
-      inside Supabase.
-    */
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient.rpc(
-      "review_task_submission",
-      {
-        p_submission_id:
-          submissionId,
-
-        p_action:
-          action
-      }
-    );
-
-
-    if (error) {
-
-      throw error;
-
-    }
-
-
-    if (
-      !data ||
-      data.success !== true
-    ) {
-
-      throw new Error(
-        data?.message ||
-        "The submission could not be reviewed."
-      );
-
-    }
-
-
-    if (
-      action === "approve"
-    ) {
-
-      alert(
-        "Submission approved. Worker reward credited successfully."
-      );
-
-    } else {
-
-      alert(
-        "Submission rejected successfully."
-      );
-
-    }
-
-
-    /*
-      Reload pending list.
-    */
-
-    await loadSubmissions();
-
-
-  } catch (error) {
-
-    console.error(
-      "REVIEW ERROR:",
-      error
-    );
-
-
-    alert(
-      "Error: " +
-      error.message
-    );
-
-
-    approveButton.disabled =
-      false;
-
-    rejectButton.disabled =
-      false;
-
-    approveButton.textContent =
-      "✓ Approve";
-
-    rejectButton.textContent =
-      "✕ Reject";
-
-  }
+return "₦" +
+Number(value || 0).toLocaleString(
+"en-NG",
+{
+minimumFractionDigits:0,
+maximumFractionDigits:2
+}
+);
 
 }
 
 
 /* =========================
-   IMAGE MODAL
+DATE
 ========================= */
 
-const imageModal =
-document.getElementById(
-  "imageModal"
-);
+function formatDate(value){
 
-const modalImage =
-document.getElementById(
-  "modalImage"
-);
-
-const closeModal =
-document.getElementById(
-  "closeModal"
-);
-
-
-function openImage(
-  imageUrl
-) {
-
-  modalImage.src =
-    imageUrl;
-
-  imageModal.style.display =
-    "flex";
-
+if(!value){
+return "-";
 }
 
+const date =
+new Date(value);
 
-closeModal.addEventListener(
-  "click",
-  () => {
+if(Number.isNaN(date.getTime())){
+return "-";
+}
 
-    imageModal.style.display =
-      "none";
-
-    modalImage.src =
-      "";
-
-  }
+return date.toLocaleString(
+"en-NG",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
 );
-
-
-imageModal.addEventListener(
-  "click",
-  event => {
-
-    if (
-      event.target ===
-      imageModal
-    ) {
-
-      imageModal.style.display =
-        "none";
-
-      modalImage.src =
-        "";
-
-    }
-
-  }
-);
-
-
-/* =========================
-   ESCAPE HTML
-========================= */
-
-function escapeHTML(
-  value
-) {
-
-  return String(
-    value ?? ""
-  )
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
 
 }
 
 
 /* =========================
-   START
+ADMIN CHECK
+========================= */
+
+async function getAdmin(){
+
+const {
+data,
+error
+} =
+await supabaseClient.auth.getUser();
+
+if(error){
+throw error;
+}
+
+if(!data || !data.user){
+
+window.location.href =
+"login.html";
+
+return null;
+
+}
+
+const {
+data:profile,
+error:profileError
+} =
+await supabaseClient
+.from("profiles")
+.select("role")
+.eq("id",data.user.id)
+.maybeSingle();
+
+if(profileError){
+throw profileError;
+}
+
+if(
+!profile ||
+String(profile.role).toLowerCase() !== "admin"
+){
+
+message.textContent =
+"Access denied. Admin account required.";
+
+message.className =
+"error";
+
+return null;
+
+}
+
+currentUser =
+data.user;
+
+return data.user;
+
+}
+
+
+/* =========================
+LOAD SUBMISSIONS
+========================= */
+
+async function loadSubmissions(){
+
+submissionList.innerHTML = `
+<div class="loading">
+Loading submissions...
+</div>
+`;
+
+try{
+
+const user =
+await getAdmin();
+
+if(!user){
+return;
+}
+
+
+/*
+Load submissions first.
+*/
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("task_submissions")
+.select("*")
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+if(error){
+throw error;
+}
+
+submissions =
+Array.isArray(data)
+? data
+: [];
+
+
+/*
+Load task information.
+*/
+
+const taskIds =
+[
+...new Set(
+submissions
+.map(item => item.task_id)
+.filter(Boolean)
+)
+];
+
+
+let tasksMap = {};
+
+
+if(taskIds.length > 0){
+
+const {
+data:tasks,
+error:tasksError
+} =
+await supabaseClient
+.from("tasks")
+.select(
+"id,title,platform,reward"
+)
+.in("id",taskIds);
+
+if(tasksError){
+throw tasksError;
+}
+
+(tasks || []).forEach(
+task => {
+
+tasksMap[task.id] =
+task;
+
+}
+);
+
+}
+
+
+/*
+Load worker profiles.
+*/
+
+const workerIds =
+[
+...new Set(
+submissions
+.map(item => item.worker_id)
+.filter(Boolean)
+)
+];
+
+
+let workersMap = {};
+
+
+if(workerIds.length > 0){
+
+const {
+data:profiles,
+error:profilesError
+} =
+await supabaseClient
+.from("profiles")
+.select("id,role")
+.in("id",workerIds);
+
+if(profilesError){
+throw profilesError;
+}
+
+(profiles || []).forEach(
+profile => {
+
+workersMap[profile.id] =
+profile;
+
+}
+);
+
+}
+
+
+submissions =
+submissions.map(
+submission => ({
+
+...submission,
+
+task:
+tasksMap[submission.task_id]
+|| null,
+
+worker:
+workersMap[submission.worker_id]
+|| null
+
+})
+);
+
+
+renderSubmissions();
+
+message.textContent =
+"Admin access confirmed.";
+
+message.className =
+"success";
+
+}catch(error){
+
+console.error(
+"SUBMISSION LOAD ERROR:",
+error
+);
+
+submissionList.innerHTML = `
+<div class="empty error">
+Unable to load submissions.<br><br>
+${escapeHTML(error.message)}
+</div>
+`;
+
+message.textContent =
+"Submission loading error: " +
+error.message;
+
+message.className =
+"error";
+
+}
+
+}
+
+
+/* =========================
+RENDER
+========================= */
+
+function renderSubmissions(){
+
+let filtered =
+submissions.filter(
+submission => {
+
+if(currentFilter === "all"){
+return true;
+}
+
+return String(
+submission.status || "pending"
+).toLowerCase() ===
+currentFilter;
+
+}
+);
+
+
+if(filtered.length === 0){
+
+submissionList.innerHTML = `
+<div class="empty">
+No ${currentFilter === "all" ? "" : currentFilter + " "}submissions found.
+</div>
+`;
+
+return;
+
+}
+
+
+submissionList.innerHTML = "";
+
+
+filtered.forEach(
+submission => {
+
+const card =
+document.createElement("section");
+
+card.className =
+"submission-card";
+
+
+const status =
+String(
+submission.status || "pending"
+).toLowerCase();
+
+
+const task =
+submission.task || {};
+
+
+const reward =
+Number(
+submission.reward_amount ||
+task.reward ||
+0
+);
+
+
+card.innerHTML = `
+
+<div class="submission-head">
+
+<div>
+
+<h3>
+${escapeHTML(
+task.title ||
+"Task"
+)}
+</h3>
+
+<div class="muted">
+Submitted:
+${escapeHTML(
+formatDate(
+submission.created_at
+)
+)}
+</div>
+
+</div>
+
+<div>
+
+<span class="status ${escapeHTML(status)}">
+${escapeHTML(status)}
+</span>
+
+</div>
+
+</div>
+
+
+<div class="info-grid">
+
+<div class="info">
+
+<small>Worker ID</small>
+
+<strong>
+${escapeHTML(
+submission.worker_id
+)}
+</strong>
+
+</div>
+
+
+<div class="info">
+
+<small>Platform</small>
+
+<strong>
+${escapeHTML(
+task.platform ||
+"-"
+)}
+</strong>
+
+</div>
+
+
+<div class="info">
+
+<small>Task Reward</small>
+
+<strong class="reward">
+${formatMoney(reward)}
+</strong>
+
+</div>
+
+
+<div class="info">
+
+<small>Submission ID</small>
+
+<strong>
+${escapeHTML(
+submission.id
+)}
+</strong>
+
+</div>
+
+
+<div class="info">
+
+<small>Task ID</small>
+
+<strong>
+${escapeHTML(
+submission.task_id
+)}
+</strong>
+
+</div>
+
+
+<div class="info">
+
+<small>Reviewed</small>
+
+<strong>
+${escapeHTML(
+formatDate(
+submission.reviewed_at
+)
+)}
+</strong>
+
+</div>
+
+</div>
+
+
+<div class="proof">
+
+<div class="proof-title">
+Worker Proof
+</div>
+
+${
+submission.proof_text
+?
+`
+<div class="proof-text">
+${escapeHTML(
+submission.proof_text
+)}
+</div>
+`
+:
+`
+<div class="muted">
+No proof text submitted.
+</div>
+`
+}
+
+
+${
+submission.proof_url
+?
+`
+<a
+href="${escapeHTML(
+submission.proof_url
+)}"
+target="_blank"
+rel="noopener noreferrer">
+
+<img
+class="proof-image"
+src="${escapeHTML(
+submission.proof_url
+)}"
+alt="Worker proof"
+onerror="this.style.display='none';">
+
+</a>
+
+<br>
+
+<a
+href="${escapeHTML(
+submission.proof_url
+)}"
+target="_blank"
+rel="noopener noreferrer"
+style="color:#4ade80;font-size:12px;">
+Open proof
+</a>
+`
+:
+""
+}
+
+</div>
+
+
+${
+status === "pending"
+?
+`
+
+<button
+class="button approve approve-button"
+data-id="${escapeHTML(
+submission.id
+)}">
+
+✓ Approve & Pay Reward
+
+</button>
+
+
+<button
+class="button reject reject-button"
+data-id="${escapeHTML(
+submission.id
+)}">
+
+✕ Reject
+
+</button>
+
+`
+:
+""
+}
+
+`;
+
+submissionList.appendChild(card);
+
+}
+);
+
+
+/* APPROVE BUTTONS */
+
+document
+.querySelectorAll(".approve-button")
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+function(){
+
+approveSubmission(
+button.dataset.id,
+button
+);
+
+});
+
+}
+);
+
+
+/* REJECT BUTTONS */
+
+document
+.querySelectorAll(".reject-button")
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+function(){
+
+rejectSubmission(
+button.dataset.id,
+button
+);
+
+});
+
+}
+);
+
+}
+
+
+/* =========================
+APPROVE
+========================= */
+
+async function approveSubmission(
+submissionId,
+button
+){
+
+if(
+!confirm(
+"Approve this submission and add the task reward to the worker balance?"
+)
+){
+return;
+}
+
+
+try{
+
+button.disabled =
+true;
+
+button.textContent =
+"Approving...";
+
+
+const {
+data,
+error
+} =
+await supabaseClient.rpc(
+"admin_approve_task_submission",
+{
+p_submission_id:
+submissionId
+}
+);
+
+
+if(error){
+throw error;
+}
+
+
+if(
+data &&
+typeof data === "object" &&
+data.success === false
+){
+
+throw new Error(
+data.message ||
+"Unable to approve submission."
+);
+
+}
+
+
+message.textContent =
+"Submission approved and reward processed successfully.";
+
+message.className =
+"success";
+
+
+await loadSubmissions();
+
+
+}catch(error){
+
+console.error(
+"APPROVE ERROR:",
+error
+);
+
+message.textContent =
+"Approval error: " +
+error.message;
+
+message.className =
+"error";
+
+button.disabled =
+false;
+
+button.textContent =
+"✓ Approve & Pay Reward";
+
+}
+
+}
+
+
+/* =========================
+REJECT
+========================= */
+
+async function rejectSubmission(
+submissionId,
+button
+){
+
+if(
+!confirm(
+"Reject this worker submission?"
+)
+){
+return;
+}
+
+
+try{
+
+button.disabled =
+true;
+
+button.textContent =
+"Rejecting...";
+
+
+const {
+data,
+error
+} =
+await supabaseClient.rpc(
+"admin_reject_task_submission",
+{
+p_submission_id:
+submissionId
+}
+);
+
+
+if(error){
+throw error;
+}
+
+
+if(
+data &&
+typeof data === "object" &&
+data.success === false
+){
+
+throw new Error(
+data.message ||
+"Unable to reject submission."
+);
+
+}
+
+
+message.textContent =
+"Submission rejected successfully.";
+
+message.className =
+"success";
+
+
+await loadSubmissions();
+
+
+}catch(error){
+
+console.error(
+"REJECT ERROR:",
+error
+);
+
+message.textContent =
+"Rejection error: " +
+error.message;
+
+message.className =
+"error";
+
+button.disabled =
+false;
+
+button.textContent =
+"✕ Reject";
+
+}
+
+}
+
+
+/* =========================
+FILTERS
+========================= */
+
+document
+.querySelectorAll(
+".filter button[data-filter]"
+)
+.forEach(
+button => {
+
+button.addEventListener(
+"click",
+function(){
+
+document
+.querySelectorAll(
+".filter button[data-filter]"
+)
+.forEach(
+item =>
+item.classList.remove("active")
+);
+
+button.classList.add("active");
+
+currentFilter =
+button.dataset.filter;
+
+renderSubmissions();
+
+});
+
+}
+);
+
+
+/* =========================
+REFRESH
+========================= */
+
+refreshButton.addEventListener(
+"click",
+async function(){
+
+refreshButton.disabled =
+true;
+
+refreshButton.textContent =
+"Loading...";
+
+await loadSubmissions();
+
+refreshButton.disabled =
+false;
+
+refreshButton.textContent =
+"↻ Refresh";
+
+}
+);
+
+
+/* =========================
+LOGOUT
+========================= */
+
+logoutButton.addEventListener(
+"click",
+async function(){
+
+logoutButton.disabled =
+true;
+
+logoutButton.textContent =
+"Logging out...";
+
+try{
+
+await supabaseClient.auth.signOut();
+
+window.location.href =
+"login.html";
+
+}catch(error){
+
+logoutButton.disabled =
+false;
+
+logoutButton.textContent =
+"Logout";
+
+message.textContent =
+"Logout error: " +
+error.message;
+
+message.className =
+"error";
+
+}
+
+});
+
+
+/* =========================
+START
 ========================= */
 
 loadSubmissions();

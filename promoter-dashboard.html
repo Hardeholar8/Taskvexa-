@@ -1,1368 +1,1436 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaskVexa - Promoter Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-
-  <style>
-    .task-card {
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      font-size: 15px;
-    }
-
-    .form-group textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .wallet-box,
-    .cost-box {
-      background: #f3f4f6;
-      padding: 15px;
-      border-radius: 10px;
-      margin: 15px 0;
-    }
-
-    .wallet-balance {
-      font-size: 28px;
-      font-weight: bold;
-      margin: 8px 0 15px;
-    }
-
-    .total-cost {
-      font-size: 22px;
-      font-weight: bold;
-    }
-
-    .status {
-      font-weight: bold;
-      margin-top: 8px;
-    }
-
-    .live,
-    .success {
-      color: #15803d;
-    }
-
-    .pending {
-      color: #b45309;
-    }
-
-    .error {
-      color: #dc2626;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    button:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-  </style>
-</head>
-
-<body>
-
-<header>
-  <h1>TaskVexa</h1>
-
-  <nav>
-    <a href="promoter-dashboard.html">
-      Promoter Dashboard
-    </a>
-
-    <a href="promoter-wallet.html">
-      Wallet
-    </a>
-
-    <button id="logoutButton">
-      Logout
-    </button>
-  </nav>
-</header>
-
-
-<main>
-
-  <!-- ACCESS -->
-
-  <section>
-    <h2>Promoter Dashboard</h2>
-
-    <p>
-      Create and manage your promoter tasks.
-    </p>
-
-    <p id="accessMessage">
-      Checking promoter access...
-    </p>
-  </section>
-
-
-  <!-- WALLET -->
-
-  <section
-    id="walletSection"
-    class="wallet-box hidden"
-  >
-
-    <h3>Promoter Wallet</h3>
-
-    <p>
-      Available Balance
-    </p>
-
-    <p class="wallet-balance">
-      ₦<span id="walletBalance">0</span>
-    </p>
-
-    <button
-      type="button"
-      onclick="window.location.href='promoter-wallet.html'"
-    >
-      Add Funds / Manage Wallet
-    </button>
-
-  </section>
-
-
-  <!-- CREATE TASK -->
-
-  <section
-    id="createTaskSection"
-    class="task-card hidden"
-  >
-
-    <h2>Create Task</h2>
-
-    <p>
-      Select a platform and enter the number of workers you need.
-      The price is controlled automatically by admin.
-    </p>
-
-
-    <!-- TITLE -->
-
-    <div class="form-group">
-
-      <label for="taskTitle">
-        Task Title
-      </label>
-
-      <input
-        type="text"
-        id="taskTitle"
-        placeholder="Enter task title"
-        maxlength="150"
-      >
-
-    </div>
-
-
-    <!-- DESCRIPTION -->
-
-    <div class="form-group">
-
-      <label for="taskDescription">
-        Task Instructions
-      </label>
-
-      <textarea
-        id="taskDescription"
-        placeholder="Enter the instructions workers should follow"
-      ></textarea>
-
-    </div>
-
-
-    <!-- PLATFORM -->
-
-    <div class="form-group">
-
-      <label for="taskPlatform">
-        Platform
-      </label>
-
-      <select id="taskPlatform">
-
-        <option value="">
-          Loading platforms...
-        </option>
-
-      </select>
-
-    </div>
-
-
-    <!-- WORKERS -->
-
-    <div class="form-group">
-
-      <label for="workersNeeded">
-        Number of Workers Needed
-      </label>
-
-      <input
-        type="number"
-        id="workersNeeded"
-        min="1"
-        step="1"
-        value="1"
-        inputmode="numeric"
-      >
-
-    </div>
-
-
-    <!-- PRICE -->
-
-    <div
-      id="priceBox"
-      class="cost-box hidden"
-    >
-
-      <p>
-        <strong>
-          Price Per Worker:
-        </strong>
-
-        ₦<span id="pricePerWorker">
-          0
-        </span>
-      </p>
-
-      <p class="total-cost">
-
-        <strong>
-          Total Cost:
-        </strong>
-
-        ₦<span id="totalCost">
-          0
-        </span>
-
-      </p>
-
-      <p>
-        This amount will be deducted from your promoter wallet
-        when the task is successfully submitted.
-      </p>
-
-    </div>
-
-
-    <!-- TASK LINK -->
-
-    <div class="form-group">
-
-      <label for="taskUrl">
-        Task Link
-      </label>
-
-      <input
-        type="url"
-        id="taskUrl"
-        placeholder="https://example.com/task"
-      >
-
-    </div>
-
-
-    <button
-      id="submitTaskButton"
-      disabled
-    >
-      Submit Task
-    </button>
-
-    <p id="taskMessage"></p>
-
-  </section>
-
-
-  <!-- MY TASKS -->
-
-  <section
-    id="myTasksSection"
-    class="task-card hidden"
-  >
-
-    <h2>My Tasks</h2>
-
-    <p id="myTasksMessage">
-      Loading your tasks...
-    </p>
-
-    <div id="myTasksList"></div>
-
-  </section>
-
-</main>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TaskVexa - Promoter Dashboard</title><style>
+*{box-sizing:border-box}
+
+:root{
+--bg:#070a10;
+--sidebar:#0b0f17;
+--card:#111722;
+--card2:#0d131e;
+--border:#202b3b;
+--text:#f8fafc;
+--muted:#7f8da3;
+--green:#4ade80;
+--red:#f87171;
+--yellow:#facc15;
+--blue:#60a5fa;
+}
+
+body{
+margin:0;
+background:var(--bg);
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
+}
+
+.sidebar{
+position:fixed;
+left:0;
+top:0;
+bottom:0;
+width:245px;
+background:var(--sidebar);
+border-right:1px solid var(--border);
+padding:22px 14px;
+overflow-y:auto;
+z-index:100;
+}
+
+.logo{
+padding:5px 14px 22px;
+border-bottom:1px solid var(--border);
+margin-bottom:18px;
+}
+
+.logo h1{
+margin:0;
+font-size:23px;
+}
+
+.logo p{
+margin:6px 0 0;
+color:var(--muted);
+font-size:12px;
+}
+
+.nav-title{
+color:#56657b;
+font-size:10px;
+font-weight:bold;
+letter-spacing:1.3px;
+margin:18px 14px 8px;
+text-transform:uppercase;
+}
+
+.nav-link{
+display:flex;
+align-items:center;
+gap:12px;
+width:100%;
+padding:12px 14px;
+margin:4px 0;
+border-radius:11px;
+color:#aeb9c9;
+text-decoration:none;
+font-size:14px;
+border:0;
+background:transparent;
+cursor:pointer;
+text-align:left;
+}
+
+.nav-link:hover,
+.nav-link.active{
+background:#171d2a;
+color:white;
+}
+
+.nav-icon{
+width:23px;
+text-align:center;
+font-size:16px;
+}
+
+.logout{
+margin-top:20px;
+padding-top:18px;
+border-top:1px solid var(--border);
+}
+
+#logoutButton{
+color:var(--red);
+}
+
+.main{
+margin-left:245px;
+min-height:100vh;
+}
+
+.topbar{
+height:70px;
+background:#070a10;
+border-bottom:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 28px;
+position:sticky;
+top:0;
+z-index:20;
+}
+
+.topbar-title{
+font-size:18px;
+font-weight:bold;
+}
+
+.promoter-status{
+display:flex;
+align-items:center;
+gap:8px;
+color:#aeb9c9;
+font-size:13px;
+}
+
+.online-dot{
+width:8px;
+height:8px;
+border-radius:50%;
+background:var(--green);
+}
+
+.content{
+max-width:1400px;
+margin:auto;
+padding:30px;
+}
+
+.heading{
+margin-bottom:24px;
+}
+
+.heading h2{
+margin:0 0 8px;
+font-size:30px;
+}
+
+.heading p{
+margin:0;
+color:var(--muted);
+font-size:14px;
+}
+
+#accessMessage{
+font-size:13px;
+margin-top:12px;
+}
+
+.success{
+color:var(--green);
+}
+
+.error{
+color:var(--red);
+}
+
+.hidden{
+display:none!important;
+}
+
+/* SUMMARY */
+
+.summary-grid{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:15px;
+margin-bottom:25px;
+}
+
+.summary-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:20px;
+}
+
+.summary-label{
+color:var(--muted);
+font-size:12px;
+}
+
+.summary-value{
+font-size:25px;
+font-weight:800;
+margin-top:10px;
+}
+
+.summary-icon{
+float:right;
+width:40px;
+height:40px;
+border-radius:11px;
+background:#191f2c;
+border:1px solid #293448;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+}
+
+/* GRID */
+
+.dashboard-grid{
+display:grid;
+grid-template-columns:1.35fr .65fr;
+gap:20px;
+align-items:start;
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:22px;
+margin-bottom:20px;
+}
+
+.card-head{
+display:flex;
+align-items:center;
+gap:13px;
+margin-bottom:18px;
+}
+
+.card-icon{
+width:42px;
+height:42px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#191f2c;
+border:1px solid #293448;
+border-radius:12px;
+font-size:19px;
+}
+
+.card-head h3{
+margin:0;
+font-size:17px;
+}
+
+.card-head p{
+margin:4px 0 0;
+font-size:12px;
+color:var(--muted);
+}
+
+/* WALLET */
+
+.wallet-card{
+background:linear-gradient(145deg,#121a29,#0d131e);
+border:1px solid #29354a;
+}
+
+.wallet-label{
+font-size:12px;
+color:#8997aa;
+}
+
+.wallet-balance{
+font-size:34px;
+font-weight:800;
+margin:8px 0 18px;
+}
+
+.wallet-button{
+display:flex;
+width:100%;
+justify-content:center;
+align-items:center;
+padding:12px;
+background:#f8fafc;
+color:#090d14;
+border-radius:11px;
+text-decoration:none;
+font-size:13px;
+font-weight:700;
+}
+
+/* FORM */
+
+.form-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:16px;
+}
+
+.form-group.full{
+grid-column:1/-1;
+}
+
+label{
+display:block;
+color:#b9c4d3;
+font-size:12px;
+font-weight:bold;
+margin-bottom:7px;
+}
+
+input,
+textarea,
+select{
+width:100%;
+padding:13px;
+background:#090e16;
+border:1px solid #293548;
+border-radius:10px;
+color:white;
+outline:none;
+font-size:14px;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+border-color:#4b5d78;
+}
+
+textarea{
+min-height:120px;
+resize:vertical;
+}
+
+select{
+appearance:auto;
+}
+
+.button{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-height:43px;
+padding:10px 17px;
+background:#f8fafc;
+color:#090d14;
+border:0;
+border-radius:11px;
+font-size:13px;
+font-weight:700;
+cursor:pointer;
+}
+
+.button:disabled{
+opacity:.6;
+cursor:not-allowed;
+}
+
+.secondary{
+background:#182131;
+color:white;
+border:1px solid #293548;
+}
+
+.form-buttons{
+display:flex;
+gap:10px;
+margin-top:18px;
+flex-wrap:wrap;
+}
+
+#taskMessage,
+#myTasksMessage{
+font-size:13px;
+margin-top:14px;
+}
+
+/* PRICE */
+
+.cost-box{
+margin-top:17px;
+background:#0b111b;
+border:1px solid #1f2b3d;
+border-radius:13px;
+padding:16px;
+}
+
+.cost-row{
+display:flex;
+justify-content:space-between;
+padding:8px 0;
+font-size:13px;
+}
+
+.cost-row span:first-child{
+color:#8997aa;
+}
+
+.cost-row span:last-child{
+font-weight:700;
+}
+
+.total-cost{
+font-size:23px;
+font-weight:800;
+color:var(--green);
+margin-top:6px;
+}
+
+.cost-note{
+font-size:11px;
+line-height:1.5;
+color:#64748b;
+margin:10px 0 0;
+}
+
+/* TASKS */
+
+.task-card{
+background:var(--card2);
+border:1px solid var(--border);
+border-radius:16px;
+padding:18px;
+margin-bottom:13px;
+}
+
+.task-card h4{
+margin:0 0 13px;
+font-size:16px;
+}
+
+.task-info{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:8px;
+}
+
+.task-info-item{
+padding:9px;
+background:#090e16;
+border:1px solid #1b2533;
+border-radius:9px;
+}
+
+.task-info-label{
+display:block;
+font-size:10px;
+color:#64748b;
+margin-bottom:4px;
+}
+
+.task-info-value{
+font-size:12px;
+font-weight:700;
+}
+
+.amount{
+color:var(--green);
+}
+
+.status{
+display:inline-block;
+padding:5px 9px;
+border-radius:8px;
+font-size:10px;
+font-weight:bold;
+}
+
+.status-live{
+background:#12331f;
+color:var(--green);
+}
+
+.status-pending{
+background:#332b16;
+color:var(--yellow);
+}
+
+.status-rejected{
+background:#32191d;
+color:var(--red);
+}
+
+.status-closed{
+background:#32191d;
+color:var(--red);
+}
+
+.status-paused{
+background:#332b16;
+color:var(--yellow);
+}
+
+.empty{
+text-align:center;
+padding:30px 10px;
+color:#64748b;
+font-size:13px;
+}
+
+.loading{
+text-align:center;
+padding:25px;
+color:var(--muted);
+}
+
+/* MOBILE */
+
+.mobile-menu{
+display:none;
+background:#151b28;
+border:1px solid var(--border);
+color:white;
+border-radius:9px;
+padding:8px 11px;
+cursor:pointer;
+}
+
+@media(max-width:1000px){
+
+.dashboard-grid{
+grid-template-columns:1fr;
+}
+
+.summary-grid{
+grid-template-columns:1fr 1fr;
+}
+
+}
+
+@media(max-width:800px){
+
+.sidebar{
+transform:translateX(-100%);
+transition:.25s;
+}
+
+.sidebar.open{
+transform:translateX(0);
+}
+
+.main{
+margin-left:0;
+}
+
+.mobile-menu{
+display:block;
+}
+
+.topbar{
+padding:0 15px;
+}
+
+.content{
+padding:22px 15px 40px;
+}
+
+.promoter-status{
+display:none;
+}
+
+.form-grid{
+grid-template-columns:1fr;
+}
+
+.form-group.full{
+grid-column:auto;
+}
+
+}
+
+@media(max-width:500px){
+
+.summary-grid{
+grid-template-columns:1fr;
+}
+
+.heading h2{
+font-size:25px;
+}
+
+.wallet-balance{
+font-size:29px;
+}
+
+.task-info{
+grid-template-columns:1fr;
+}
+
+}
+</style></head><body><aside class="sidebar" id="sidebar"><div class="logo">
+<h1>TaskVexa</h1>
+<p>Promoter Control Panel</p>
+</div><div class="nav-title">Overview</div><a href="promoter-dashboard.html" class="nav-link active">
+<span class="nav-icon">⌂</span>
+Dashboard
+</a><div class="nav-title">Promoter</div><a href="#createTask" class="nav-link">
+<span class="nav-icon">＋</span>
+Create Task
+</a><a href="#myTasks" class="nav-link">
+<span class="nav-icon">✓</span>
+My Tasks
+</a><a href="promoter-wallet.html" class="nav-link">
+<span class="nav-icon">💰</span>
+Wallet
+</a><div class="logout"><button id="logoutButton" class="nav-link">
+<span class="nav-icon">↪</span>
+Logout
+</button></div></aside><div class="main"><div class="topbar"><button id="mobileMenu" class="mobile-menu">
+☰
+</button><div class="topbar-title">
+Promoter Dashboard
+</div><div class="promoter-status">
+<span class="online-dot"></span>
+Promoter
+</div></div><main class="content"><div class="heading"><h2>Welcome to TaskVexa</h2><p>
+Create and manage tasks for workers from your promoter dashboard.
+</p><p id="accessMessage">
+Checking promoter access...
+</p></div><section id="dashboardContent" class="hidden"><!-- SUMMARY --><div class="summary-grid"><div class="summary-card"><div class="summary-icon">💰</div><div class="summary-label">
+Wallet Balance
+</div><div class="summary-value">
+₦<span id="walletBalance">0</span>
+</div></div><div class="summary-card"><div class="summary-icon">✓</div><div class="summary-label">
+My Tasks
+</div><div class="summary-value" id="taskCount">
+0
+</div></div><div class="summary-card"><div class="summary-icon">📣</div><div class="summary-label">
+Promoter Account
+</div><div class="summary-value">
+Active
+</div></div></div><div class="dashboard-grid"><!-- LEFT --><div><section id="createTask" class="card"><div class="card-head"><div class="card-icon">
+＋
+</div><div>
+<h3>Create New Task</h3>
+<p>Submit a task for workers to complete.</p>
+</div></div><div class="form-grid"><div class="form-group full"><label for="taskTitle">
+Task Title
+</label><input
+type="text"
+id="taskTitle"
+placeholder="Enter task title"
+maxlength="150"
+
+«»
+
+</div><div class="form-group full"><label for="taskDescription">
+Task Instructions
+</label><textarea
+id="taskDescription"
+placeholder="Enter the instructions workers should follow"
+></textarea></div><div class="form-group"><label for="taskPlatform">
+Platform
+</label><select id="taskPlatform"><option value="">
+Loading platforms...
+</option></select></div><div class="form-group"><label for="workersNeeded">
+Workers Needed
+</label><input
+type="number"
+id="workersNeeded"
+min="1"
+step="1"
+value="1"
+inputmode="numeric"
+
+«»
+
+</div><div class="form-group full"><label for="taskUrl">
+Task Link
+</label><input
+type="url"
+id="taskUrl"
+placeholder="https://example.com/task"
+
+«»
+
+</div></div><div id="priceBox" class="cost-box hidden"><div class="cost-row"><span>Price Per Worker</span>
+
+<span>
+₦<span id="pricePerWorker">0</span>
+</span></div><div class="cost-row"><span>Total Cost</span>
+
+<span class="total-cost">
+₦<span id="totalCost">0</span>
+</span></div><p class="cost-note">
+The price is controlled by admin. The total amount will be deducted from your promoter wallet when the task is successfully submitted.
+</p></div><div class="form-buttons"><button
+id="submitTaskButton"
+class="button"
+disabled
+
+«»
+
+Submit Task
+</button>
+
+<a
+href="promoter-wallet.html"
+class="button secondary"
+
+«»
+
+Add Funds
+</a>
+
+</div><p id="taskMessage"></p></section></div><!-- RIGHT --><div><section class="card wallet-card"><div class="card-head"><div class="card-icon">
+💰
+</div><div>
+<h3>Promoter Wallet</h3>
+<p>Available balance</p>
+</div></div><div class="wallet-label">
+Current Balance
+</div><div class="wallet-balance">
+₦<span id="walletBalanceSide">0</span>
+</div><a
+href="promoter-wallet.html"
+class="wallet-button"
+
+«»
+
+Manage Wallet
+</a>
+
+</section><section class="card"><div class="card-head"><div class="card-icon">
+ℹ
+</div><div>
+<h3>How It Works</h3>
+<p>Promoter task process</p>
+</div></div><div style="color:#94a3b8;font-size:13px;line-height:1.8"><p>1. Select the platform.</p><p>2. Enter your task instructions.</p><p>3. Choose how many workers you need.</p><p>4. Review the automatically calculated cost.</p><p>5. Submit the task for processing.</p></div></section></div></div><!-- MY TASKS --><section id="myTasks" class="card"><div class="card-head"><div class="card-icon">
+✓
+</div><div>
+<h3>My Tasks</h3>
+<p>Track the tasks you have submitted.</p>
+</div></div><p id="myTasksMessage">
+Loading your tasks...
+</p><div id="myTasksList"></div></section></section></main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+
+"use strict";
 
 const SUPABASE_URL =
-  "https://dxtlnrthlpdaobnbazny.supabase.co";
+"https://dxtlnrthlpdaobnbazny.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 const accessMessage =
-  document.getElementById(
-    "accessMessage"
-  );
+document.getElementById("accessMessage");
 
-const walletSection =
-  document.getElementById(
-    "walletSection"
-  );
+const dashboardContent =
+document.getElementById("dashboardContent");
 
 const walletBalance =
-  document.getElementById(
-    "walletBalance"
-  );
+document.getElementById("walletBalance");
 
-const createTaskSection =
-  document.getElementById(
-    "createTaskSection"
-  );
+const walletBalanceSide =
+document.getElementById("walletBalanceSide");
 
-const myTasksSection =
-  document.getElementById(
-    "myTasksSection"
-  );
+const taskCount =
+document.getElementById("taskCount");
 
 const taskPlatform =
-  document.getElementById(
-    "taskPlatform"
-  );
+document.getElementById("taskPlatform");
 
 const workersNeeded =
-  document.getElementById(
-    "workersNeeded"
-  );
+document.getElementById("workersNeeded");
 
 const priceBox =
-  document.getElementById(
-    "priceBox"
-  );
+document.getElementById("priceBox");
 
 const pricePerWorker =
-  document.getElementById(
-    "pricePerWorker"
-  );
+document.getElementById("pricePerWorker");
 
 const totalCost =
-  document.getElementById(
-    "totalCost"
-  );
+document.getElementById("totalCost");
 
 const submitTaskButton =
-  document.getElementById(
-    "submitTaskButton"
-  );
+document.getElementById("submitTaskButton");
 
 const taskMessage =
-  document.getElementById(
-    "taskMessage"
-  );
+document.getElementById("taskMessage");
 
 const myTasksMessage =
-  document.getElementById(
-    "myTasksMessage"
-  );
+document.getElementById("myTasksMessage");
 
 const myTasksList =
-  document.getElementById(
-    "myTasksList"
-  );
+document.getElementById("myTasksList");
 
+const sidebar =
+document.getElementById("sidebar");
+
+const mobileMenu =
+document.getElementById("mobileMenu");
 
 let currentUser = null;
-
 let settings = [];
-
 let selectedSetting = null;
 
 
-/* ==========================================
-   CHECK PROMOTER
-========================================== */
+/* MOBILE */
 
-async function checkPromoter() {
+mobileMenu.addEventListener(
+"click",
+function(){
 
-  try {
+sidebar.classList.toggle("open");
 
-    const {
-      data: {
-        user
-      },
-      error: userError
-    } =
-      await supabaseClient.auth.getUser();
+}
+);
 
 
-    if (
-      userError ||
-      !user
-    ) {
+/* ESCAPE */
 
-      window.location.href =
-        "login.html";
+function escapeHTML(value){
 
-      return false;
-
-    }
-
-
-    currentUser =
-      user;
-
-
-    const {
-      data: profile,
-      error
-    } =
-      await supabaseClient
-        .from("profiles")
-        .select("role")
-        .eq(
-          "id",
-          user.id
-        )
-        .maybeSingle();
-
-
-    if (error) {
-      throw error;
-    }
-
-
-    if (
-      !profile ||
-      profile.role !== "promoter"
-    ) {
-
-      accessMessage.textContent =
-        "Access denied. Promoter account required.";
-
-      accessMessage.className =
-        "error";
-
-      return false;
-
-    }
-
-
-    accessMessage.textContent =
-      "Promoter access confirmed.";
-
-    accessMessage.className =
-      "success";
-
-
-    walletSection.classList.remove(
-      "hidden"
-    );
-
-    createTaskSection.classList.remove(
-      "hidden"
-    );
-
-    myTasksSection.classList.remove(
-      "hidden"
-    );
-
-
-    return true;
-
-
-  } catch (error) {
-
-    console.error(
-      "PROMOTER ACCESS ERROR:",
-      error
-    );
-
-
-    accessMessage.textContent =
-      "Access Error: " +
-      error.message;
-
-    accessMessage.className =
-      "error";
-
-
-    return false;
-
-  }
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
-/* ==========================================
-   LOAD WALLET
-========================================== */
+/* CHECK PROMOTER */
 
-async function loadWallet() {
+async function checkPromoter(){
 
-  try {
+try{
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("wallets")
-        .select("balance")
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .maybeSingle();
+accessMessage.textContent =
+"Checking promoter access...";
 
+const {
+data:userData,
+error:userError
+} =
+await supabaseClient.auth.getUser();
 
-    if (error) {
-      throw error;
-    }
+if(userError){
 
+throw userError;
 
-    const balance =
-      Number(
-        data?.balance || 0
-      );
+}
 
+if(
+!userData ||
+!userData.user
+){
 
-    walletBalance.textContent =
-      balance.toLocaleString(
-        "en-NG"
-      );
+window.location.href =
+"login.html";
 
+return false;
 
-  } catch (error) {
+}
 
-    console.error(
-      "LOAD WALLET ERROR:",
-      error
-    );
+currentUser =
+userData.user;
 
+const {
+data:profile,
+error
+} =
+await supabaseClient
+.from("profiles")
+.select("role")
+.eq(
+"id",
+currentUser.id
+)
+.maybeSingle();
 
-    walletBalance.textContent =
-      "Unable to load";
+if(error){
 
-  }
+throw error;
+
+}
+
+if(
+!profile ||
+String(profile.role || "").toLowerCase()
+!=="promoter"
+){
+
+accessMessage.textContent =
+"Access denied. Promoter account required.";
+
+accessMessage.className =
+"error";
+
+return false;
+
+}
+
+accessMessage.textContent =
+"Promoter account ready.";
+
+accessMessage.className =
+"success";
+
+dashboardContent.classList.remove(
+"hidden"
+);
+
+return true;
+
+}catch(error){
+
+console.error(
+"PROMOTER ACCESS ERROR:",
+error
+);
+
+accessMessage.textContent =
+"Unable to verify promoter account.";
+
+accessMessage.className =
+"error";
+
+return false;
+
+}
 
 }
 
 
-/* ==========================================
-   LOAD PROMOTER SETTINGS
-========================================== */
+/* LOAD WALLET */
 
-async function loadSettings() {
+async function loadWallet(){
 
-  taskPlatform.innerHTML = `
-    <option value="">
-      Loading platforms...
-    </option>
-  `;
+try{
 
+const {
+data,
+error
+} =
+await supabaseClient
+.from("wallets")
+.select("balance")
+.eq(
+"user_id",
+currentUser.id
+)
+.maybeSingle();
 
-  try {
+if(error){
 
-    /*
-      IMPORTANT:
+throw error;
 
-      This RPC returns ONLY:
+}
 
-      platform
-      promoter_price
-      auto_publish
+const balance =
+Number(data?.balance || 0);
 
-      It DOES NOT return worker_reward.
-    */
+const formatted =
+balance.toLocaleString(
+"en-NG"
+);
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.rpc(
-        "get_promoter_task_settings"
-      );
+walletBalance.textContent =
+formatted;
 
+walletBalanceSide.textContent =
+formatted;
 
-    if (error) {
-      throw error;
-    }
+}catch(error){
 
+console.error(
+"LOAD WALLET ERROR:",
+error
+);
 
-    settings =
-      data || [];
+walletBalance.textContent =
+"0";
 
+walletBalanceSide.textContent =
+"0";
 
-    taskPlatform.innerHTML =
-      "";
-
-
-    if (
-      settings.length === 0
-    ) {
-
-      taskPlatform.innerHTML = `
-        <option value="">
-          No platforms configured
-        </option>
-      `;
-
-      submitTaskButton.disabled =
-        true;
-
-      taskMessage.textContent =
-        "No promoter platforms have been configured by admin.";
-
-      taskMessage.className =
-        "error";
-
-      return;
-
-    }
-
-
-    taskPlatform.innerHTML = `
-      <option value="">
-        Select platform
-      </option>
-    `;
-
-
-    settings.forEach(
-      setting => {
-
-        const option =
-          document.createElement(
-            "option"
-          );
-
-
-        option.value =
-          setting.platform;
-
-
-        option.textContent =
-          setting.platform;
-
-
-        taskPlatform.appendChild(
-          option
-        );
-
-      }
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "LOAD SETTINGS ERROR:",
-      error
-    );
-
-
-    taskPlatform.innerHTML = `
-      <option value="">
-        Unable to load platforms
-      </option>
-    `;
-
-
-    taskMessage.textContent =
-      "Unable to load promoter settings.";
-
-    taskMessage.className =
-      "error";
-
-
-    submitTaskButton.disabled =
-      true;
-
-  }
+}
 
 }
 
 
-/* ==========================================
-   UPDATE COST
-========================================== */
+/* LOAD SETTINGS */
 
-function updateCost() {
+async function loadSettings(){
 
-  const platform =
-    taskPlatform.value;
+taskPlatform.innerHTML = `
+<option value="">
+Loading platforms...
+</option>
+`;
 
+try{
 
-  selectedSetting =
-    settings.find(
-      setting =>
-        setting.platform ===
-        platform
-    );
+const {
+data,
+error
+} =
+await supabaseClient.rpc(
+"get_promoter_task_settings"
+);
 
+if(error){
 
-  const workers =
-    Number(
-      workersNeeded.value
-    );
+throw error;
 
+}
 
-  if (
-    !selectedSetting ||
-    !Number.isInteger(workers) ||
-    workers < 1
-  ) {
+settings =
+Array.isArray(data)
+? data
+: [];
 
-    priceBox.classList.add(
-      "hidden"
-    );
+taskPlatform.innerHTML = `
+<option value="">
+Select platform
+</option>
+`;
 
-    submitTaskButton.disabled =
-      true;
+if(
+settings.length === 0
+){
 
-    return;
+taskPlatform.innerHTML = `
+<option value="">
+No platforms configured
+</option>
+`;
 
-  }
+submitTaskButton.disabled =
+true;
 
+taskMessage.textContent =
+"No promoter platforms have been configured by admin.";
 
-  const price =
-    Number(
-      selectedSetting.promoter_price || 0
-    );
+taskMessage.className =
+"error";
 
+return;
 
-  if (
-    price < 0
-  ) {
+}
 
-    priceBox.classList.add(
-      "hidden"
-    );
+settings.forEach(
+setting => {
 
-    submitTaskButton.disabled =
-      true;
+const option =
+document.createElement(
+"option"
+);
 
-    return;
+option.value =
+setting.platform;
 
-  }
+option.textContent =
+setting.platform;
 
+taskPlatform.appendChild(
+option
+);
 
-  const total =
-    price * workers;
+}
+);
 
+}catch(error){
 
-  pricePerWorker.textContent =
-    price.toLocaleString(
-      "en-NG"
-    );
+console.error(
+"LOAD SETTINGS ERROR:",
+error
+);
 
+taskPlatform.innerHTML = `
+<option value="">
+Unable to load platforms
+</option>
+`;
 
-  totalCost.textContent =
-    total.toLocaleString(
-      "en-NG"
-    );
+submitTaskButton.disabled =
+true;
 
+taskMessage.textContent =
+"Unable to load promoter settings.";
 
-  priceBox.classList.remove(
-    "hidden"
-  );
+taskMessage.className =
+"error";
 
-
-  submitTaskButton.disabled =
-    false;
+}
 
 }
 
 
-/* ==========================================
-   PLATFORM CHANGE
-========================================== */
+/* UPDATE COST */
+
+function updateCost(){
+
+const platform =
+taskPlatform.value;
+
+selectedSetting =
+settings.find(
+setting =>
+String(setting.platform) ===
+String(platform)
+);
+
+const workers =
+Number(
+workersNeeded.value
+);
+
+if(
+!selectedSetting ||
+!Number.isInteger(workers) ||
+workers < 1
+){
+
+priceBox.classList.add(
+"hidden"
+);
+
+submitTaskButton.disabled =
+true;
+
+return;
+
+}
+
+const price =
+Number(
+selectedSetting.promoter_price || 0
+);
+
+if(
+!Number.isFinite(price) ||
+price < 0
+){
+
+priceBox.classList.add(
+"hidden"
+);
+
+submitTaskButton.disabled =
+true;
+
+return;
+
+}
+
+const total =
+price * workers;
+
+pricePerWorker.textContent =
+price.toLocaleString(
+"en-NG"
+);
+
+totalCost.textContent =
+total.toLocaleString(
+"en-NG"
+);
+
+priceBox.classList.remove(
+"hidden"
+);
+
+submitTaskButton.disabled =
+false;
+
+}
+
+
+/* EVENTS */
 
 taskPlatform.addEventListener(
-  "change",
-  updateCost
+"change",
+updateCost
 );
-
-
-/* ==========================================
-   WORKER COUNT CHANGE
-========================================== */
 
 workersNeeded.addEventListener(
-  "input",
-  updateCost
+"input",
+updateCost
 );
 
 
-/* ==========================================
-   SUBMIT TASK
-========================================== */
+/* SUBMIT TASK */
 
 submitTaskButton.addEventListener(
-  "click",
-  async function() {
+"click",
+async function(){
 
-    const title =
-      document.getElementById(
-        "taskTitle"
-      ).value.trim();
+const title =
+document.getElementById(
+"taskTitle"
+).value.trim();
 
+const description =
+document.getElementById(
+"taskDescription"
+).value.trim();
 
-    const description =
-      document.getElementById(
-        "taskDescription"
-      ).value.trim();
+const platform =
+taskPlatform.value;
 
+const taskUrl =
+document.getElementById(
+"taskUrl"
+).value.trim();
 
-    const platform =
-      taskPlatform.value;
+const workers =
+Number(
+workersNeeded.value
+);
 
+if(!title){
 
-    const taskUrl =
-      document.getElementById(
-        "taskUrl"
-      ).value.trim();
+taskMessage.textContent =
+"Please enter a task title.";
 
+taskMessage.className =
+"error";
 
-    const workers =
-      Number(
-        workersNeeded.value
-      );
+return;
 
+}
 
-    if (!title) {
+if(!description){
 
-      taskMessage.textContent =
-        "Please enter a task title.";
+taskMessage.textContent =
+"Please enter task instructions.";
 
-      taskMessage.className =
-        "error";
+taskMessage.className =
+"error";
 
-      return;
+return;
 
-    }
+}
 
+if(!platform){
 
-    if (!description) {
+taskMessage.textContent =
+"Please select a platform.";
 
-      taskMessage.textContent =
-        "Please enter task instructions.";
+taskMessage.className =
+"error";
 
-      taskMessage.className =
-        "error";
+return;
 
-      return;
+}
 
-    }
+if(
+!Number.isInteger(workers) ||
+workers < 1
+){
 
+taskMessage.textContent =
+"Please enter a valid number of workers.";
 
-    if (!platform) {
+taskMessage.className =
+"error";
 
-      taskMessage.textContent =
-        "Please select a platform.";
+return;
 
-      taskMessage.className =
-        "error";
+}
 
-      return;
+if(!taskUrl){
 
-    }
+taskMessage.textContent =
+"Please enter the task link.";
 
+taskMessage.className =
+"error";
 
-    if (
-      !Number.isInteger(workers) ||
-      workers < 1
-    ) {
+return;
 
-      taskMessage.textContent =
-        "Please enter a valid number of workers.";
+}
 
-      taskMessage.className =
-        "error";
+try{
 
-      return;
+submitTaskButton.disabled =
+true;
 
-    }
+submitTaskButton.textContent =
+"Submitting...";
 
+taskMessage.textContent =
+"Checking wallet and submitting task...";
 
-    if (!taskUrl) {
+taskMessage.className = "";
 
-      taskMessage.textContent =
-        "Please enter the task link.";
+const {
+data,
+error
+} =
+await supabaseClient.rpc(
+"create_promoter_task_v2",
+{
+p_title:title,
+p_description:description,
+p_platform:platform,
+p_task_url:taskUrl,
+p_workers_needed:workers
+}
+);
 
-      taskMessage.className =
-        "error";
+if(error){
 
-      return;
+throw error;
 
-    }
+}
 
+if(
+!data ||
+data.success !== true
+){
 
-    try {
+throw new Error(
+data?.message ||
+"Task could not be created."
+);
 
-      submitTaskButton.disabled =
-        true;
+}
 
-      submitTaskButton.textContent =
-        "Submitting...";
+const status =
+data.status === "active"
+? "LIVE"
+: "Pending Admin Review";
 
-      taskMessage.textContent =
-        "Checking wallet and creating task...";
+taskMessage.textContent =
+"Task submitted successfully. Status: " +
+status;
 
-      taskMessage.className =
-        "";
+taskMessage.className =
+"success";
 
+document.getElementById(
+"taskTitle"
+).value = "";
 
-      /*
-        THE DATABASE IS THE FINAL AUTHORITY.
+document.getElementById(
+"taskDescription"
+).value = "";
 
-        It:
-        - checks promoter role
-        - gets admin platform price
-        - calculates total cost
-        - checks wallet
-        - deducts wallet
-        - creates the task
-        - stores worker reward internally
-        - records the wallet transaction
+document.getElementById(
+"taskUrl"
+).value = "";
 
-        Worker reward is NEVER sent from this page.
-      */
+workersNeeded.value =
+"1";
 
-      const {
-        data,
-        error
-      } =
-      await supabaseClient.rpc(
-        "create_promoter_task_v2",
-        {
-          p_title:
-            title,
+taskPlatform.value =
+"";
 
-          p_description:
-            description,
+priceBox.classList.add(
+"hidden"
+);
 
-          p_platform:
-            platform,
+selectedSetting =
+null;
 
-          p_task_url:
-            taskUrl,
+await loadWallet();
 
-          p_workers_needed:
-            workers
-        }
-      );
+await loadMyTasks();
 
+submitTaskButton.disabled =
+true;
 
-      if (error) {
-        throw error;
-      }
+submitTaskButton.textContent =
+"Submit Task";
 
+}catch(error){
 
-      if (
-        !data ||
-        data.success !== true
-      ) {
+console.error(
+"SUBMIT TASK ERROR:",
+error
+);
 
-        throw new Error(
-          data?.message ||
-          "Task could not be created."
-        );
+let cleanMessage =
+error.message ||
+"Task could not be created.";
 
-      }
+if(
+cleanMessage
+.toLowerCase()
+.includes(
+"insufficient wallet"
+)
+){
 
+cleanMessage =
+"Insufficient wallet balance. Please add funds before posting this task.";
 
-      const status =
-        data.status ===
-        "active"
-          ? "LIVE"
-          : "Pending Admin Review";
+}
 
+taskMessage.textContent =
+cleanMessage;
 
-      taskMessage.textContent =
-        "Task submitted successfully. Status: " +
-        status;
+taskMessage.className =
+"error";
 
-      taskMessage.className =
-        "success";
+submitTaskButton.disabled =
+false;
 
+submitTaskButton.textContent =
+"Submit Task";
 
-      /*
-        CLEAR FORM
-      */
+}
 
-      document.getElementById(
-        "taskTitle"
-      ).value = "";
-
-
-      document.getElementById(
-        "taskDescription"
-      ).value = "";
-
-
-      document.getElementById(
-        "taskUrl"
-      ).value = "";
-
-
-      workersNeeded.value =
-        "1";
-
-
-      taskPlatform.value =
-        "";
-
-
-      priceBox.classList.add(
-        "hidden"
-      );
-
-
-      selectedSetting =
-        null;
-
-
-      /*
-        REFRESH WALLET
-      */
-
-      await loadWallet();
-
-      await loadMyTasks();
-
-
-      submitTaskButton.disabled =
-        true;
-
-      submitTaskButton.textContent =
-        "Submit Task";
-
-
-    } catch (error) {
-
-      console.error(
-        "SUBMIT TASK ERROR:",
-        error
-      );
-
-
-      /*
-        Show a clean message.
-      */
-
-      let message =
-        error.message ||
-        "Task could not be created.";
-
-
-      if (
-        message.toLowerCase()
-          .includes(
-            "insufficient wallet"
-          )
-      ) {
-
-        message =
-          "Insufficient wallet balance. Please add funds before posting this task.";
-
-      }
-
-
-      taskMessage.textContent =
-        message;
-
-      taskMessage.className =
-        "error";
-
-
-      submitTaskButton.disabled =
-        false;
-
-      submitTaskButton.textContent =
-        "Submit Task";
-
-    }
-
-  }
+}
 );
 
 
-/* ==========================================
-   LOAD MY TASKS
-========================================== */
+/* LOAD TASKS */
 
-async function loadMyTasks() {
+async function loadMyTasks(){
 
-  try {
+try{
 
-    const {
-      data: tasks,
-      error
-    } =
-      await supabaseClient.rpc(
-        "get_my_promoter_tasks"
-      );
-
-
-    if (error) {
-      throw error;
-    }
-
-
-    myTasksList.innerHTML =
-      "";
-
-
-    if (
-      !tasks ||
-      tasks.length === 0
-    ) {
-
-      myTasksMessage.textContent =
-        "You have not created any tasks yet.";
-
-      return;
-
-    }
-
-
-    myTasksMessage.textContent =
-      "";
-
-
-    tasks.forEach(
-      task => {
-
-        const card =
-          document.createElement(
-            "div"
-          );
-
-
-        card.className =
-          "task-card";
-
-
-        const statusClass =
-          task.status ===
-          "active"
-            ? "live"
-            : "pending";
-
-
-        const statusText =
-          task.status ===
-          "active"
-            ? "LIVE"
-            : task.status;
-
-
-        card.innerHTML = `
-
-          <h3>
-            ${escapeHTML(
-              task.title
-            )}
-          </h3>
-
-          <p>
-            <strong>
-              Platform:
-            </strong>
-
-            ${escapeHTML(
-              task.platform
-            )}
-          </p>
-
-          <p>
-            <strong>
-              Workers Requested:
-            </strong>
-
-            ${Number(
-              task.workers_needed || 0
-            )}
-          </p>
-
-          <p>
-            <strong>
-              Amount Charged:
-            </strong>
-
-            ₦${Number(
-              task.promoter_charge || 0
-            ).toLocaleString(
-              "en-NG"
-            )}
-          </p>
-
-          <p class="status ${statusClass}">
-            Status:
-            ${escapeHTML(
-              statusText
-            )}
-          </p>
-
-        `;
-
-
-        myTasksList.appendChild(
-          card
-        );
-
-      }
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "LOAD MY TASKS ERROR:",
-      error
-    );
-
-
-    myTasksMessage.textContent =
-      "Unable to load your tasks.";
-
-  }
-
-}
-
-
-/* ==========================================
-   ESCAPE HTML
-========================================== */
-
-function escapeHTML(value) {
-
-  return String(
-    value ?? ""
-  )
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* ==========================================
-   LOGOUT
-========================================== */
-
-document
-  .getElementById(
-    "logoutButton"
-  )
-  .addEventListener(
-    "click",
-    async function() {
-
-      await supabaseClient.auth.signOut();
-
-      window.location.href =
-        "login.html";
-
-    }
-  );
-
-
-/* ==========================================
-   START
-========================================== */
-
-async function initialize() {
-
-  const allowed =
-    await checkPromoter();
-
-
-  if (!allowed) {
-    return;
-  }
-
-
-  await loadWallet();
-
-  await loadSettings();
-
-  await loadMyTasks();
-
-}
-
-
-initialize();
-
-</script>
-
-</body>
-  </html>
+myTasksMessage.textCon

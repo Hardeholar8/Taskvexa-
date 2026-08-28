@@ -15,7 +15,6 @@
   --bg: #070a10;
   --sidebar: #0b0f17;
   --card: #111722;
-  --card2: #0d131e;
   --border: #202b3b;
   --text: #f8fafc;
   --muted: #7f8da3;
@@ -45,16 +44,15 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  width: 250px;
+  width: 245px;
   background: var(--sidebar);
   border-right: 1px solid var(--border);
-  padding: 20px 14px;
+  padding: 22px 14px;
   overflow-y: auto;
-  z-index: 1000;
 }
 
 .logo {
-  padding: 8px 14px 22px;
+  padding: 5px 14px 22px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 18px;
 }
@@ -65,23 +63,25 @@ body {
 }
 
 .logo p {
-  margin: 5px 0 0;
+  margin: 6px 0 0;
   color: var(--muted);
   font-size: 12px;
 }
 
 .nav-title {
-  color: #526078;
+  color: #56657b;
   font-size: 10px;
-  font-weight: 800;
+  font-weight: bold;
   letter-spacing: 1.3px;
-  margin: 15px 14px 8px;
+  margin: 18px 14px 8px;
+  text-transform: uppercase;
 }
 
 .nav-link {
   display: flex;
   align-items: center;
   gap: 12px;
+  width: 100%;
   padding: 12px 14px;
   margin: 4px 0;
   border-radius: 11px;
@@ -93,36 +93,32 @@ body {
 .nav-link:hover,
 .nav-link.active {
   background: #171d2a;
-  color: #fff;
+  color: white;
 }
 
 .nav-icon {
-  width: 24px;
+  width: 23px;
   text-align: center;
-  font-size: 17px;
+  font-size: 16px;
 }
 
-.logout-button {
-  width: 100%;
-  margin-top: 25px;
-  padding: 12px 14px;
-  background: #171d28;
-  border: 1px solid #293548;
-  border-radius: 11px;
-  color: #f87171;
-  font-weight: 700;
+.logout {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+#logoutButton {
+  background: transparent;
+  border: 0;
   cursor: pointer;
-  text-align: left;
-}
-
-.logout-button:hover {
-  background: #21171b;
+  color: #f87171;
 }
 
 /* MAIN */
 
 .main {
-  margin-left: 250px;
+  margin-left: 245px;
   min-height: 100vh;
 }
 
@@ -138,12 +134,12 @@ body {
   padding: 0 28px;
   position: sticky;
   top: 0;
-  z-index: 900;
+  z-index: 20;
 }
 
 .topbar-title {
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .admin-status {
@@ -157,8 +153,8 @@ body {
 .online-dot {
   width: 8px;
   height: 8px;
-  background: var(--green);
   border-radius: 50%;
+  background: var(--green);
 }
 
 /* CONTENT */
@@ -169,8 +165,12 @@ body {
   padding: 30px;
 }
 
+.heading {
+  margin-bottom: 25px;
+}
+
 .heading h2 {
-  margin: 0 0 7px;
+  margin: 0 0 8px;
   font-size: 29px;
 }
 
@@ -180,9 +180,8 @@ body {
   font-size: 14px;
 }
 
-.message {
-  margin: 18px 0;
-  color: var(--muted);
+#message {
+  margin-bottom: 20px;
   font-size: 13px;
 }
 
@@ -194,47 +193,45 @@ body {
   color: var(--red);
 }
 
-/* DASHBOARD */
+/* STAT CARDS */
 
-.dashboard-content {
-  display: none;
-}
-
-.overview {
+.stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
-  margin-top: 25px;
+  margin-bottom: 28px;
 }
 
 .stat {
-  background: linear-gradient(145deg,#131a27,#0d121b);
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 17px;
-  padding: 19px;
+  padding: 20px;
 }
 
-.stat small {
+.stat-label {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
 }
 
-.stat strong {
-  display: block;
-  margin-top: 13px;
-  font-size: 23px;
+.stat-value {
+  font-size: 25px;
+  font-weight: 800;
+  margin-top: 12px;
 }
 
-/* MANAGEMENT */
+/* SECTIONS */
 
 .section-title {
-  margin: 30px 0 14px;
+  margin: 25px 0 14px;
 }
 
 .section-title h3 {
   margin: 0;
   font-size: 17px;
 }
+
+/* MANAGEMENT */
 
 .management {
   display: grid;
@@ -245,26 +242,26 @@ body {
 .card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 17px;
+  border-radius: 18px;
   padding: 20px;
 }
 
 .card-head {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 13px;
   margin-bottom: 12px;
 }
 
-.card-icon {
+.icon {
   width: 42px;
   height: 42px;
-  background: #191f2c;
-  border: 1px solid #293448;
-  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #191f2c;
+  border: 1px solid #293448;
+  border-radius: 12px;
   font-size: 19px;
 }
 
@@ -277,20 +274,20 @@ body {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.6;
-  margin: 0 0 16px;
+  margin: 0 0 17px;
 }
 
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 11px 16px;
-  min-height: 40px;
+  min-height: 42px;
+  padding: 10px 16px;
   background: #f8fafc;
-  color: #080c13;
-  border-radius: 10px;
+  color: #090d14;
+  border: 0;
+  border-radius: 11px;
   text-decoration: none;
-  border: none;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -298,7 +295,6 @@ body {
 
 .button:hover {
   opacity: .9;
-  transform: translateY(-1px);
 }
 
 .secondary {
@@ -309,44 +305,45 @@ body {
 
 /* PAYMENT */
 
-.payment-card {
-  margin-top: 16px;
+.payment {
+  margin-top: 15px;
   background: linear-gradient(145deg,#121a29,#0d131e);
   border: 1px solid #29354a;
-  border-radius: 18px;
-  padding: 22px;
+  border-radius: 20px;
+  padding: 23px;
 }
 
-.info-box {
+.info {
   background: #0b111b;
   border: 1px solid #1f2b3d;
   color: #8997aa;
   padding: 13px;
-  border-radius: 10px;
-  font-size: 12px;
+  border-radius: 11px;
   margin-bottom: 18px;
+  font-size: 12px;
+  line-height: 1.5;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 14px;
+  gap: 15px;
 }
 
 .form-group.full {
   grid-column: 1 / -1;
 }
 
-.form-group label {
+label {
   display: block;
   color: #b9c4d3;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: bold;
   margin-bottom: 7px;
 }
 
-.form-group input,
-.form-group textarea {
+input,
+textarea {
   width: 100%;
   padding: 13px;
   background: #090e16;
@@ -357,24 +354,20 @@ body {
   font-size: 14px;
 }
 
-.form-group textarea {
+textarea {
   min-height: 90px;
   resize: vertical;
 }
 
-.form-group input:focus,
-.form-group textarea:focus {
-  border-color: #6b7280;
-}
-
 #paymentDetailsMessage {
+  margin-top: 12px;
   font-size: 13px;
-  font-weight: 600;
+  font-weight: bold;
 }
 
 /* MOBILE */
 
-.mobile-button {
+.mobile-menu {
   display: none;
   background: #151b28;
   border: 1px solid var(--border);
@@ -382,22 +375,20 @@ body {
   border-radius: 9px;
   padding: 8px 11px;
   cursor: pointer;
-  font-size: 18px;
 }
 
-@media (max-width: 1050px) {
-
-  .overview {
-    grid-template-columns: repeat(2, 1fr);
+@media(max-width:1050px) {
+  .stats {
+    grid-template-columns: 1fr 1fr;
   }
-
 }
 
-@media (max-width: 800px) {
+@media(max-width:800px) {
 
   .sidebar {
     transform: translateX(-100%);
     transition: .25s;
+    z-index: 100;
   }
 
   .sidebar.open {
@@ -408,7 +399,7 @@ body {
     margin-left: 0;
   }
 
-  .mobile-button {
+  .mobile-menu {
     display: block;
   }
 
@@ -416,29 +407,8 @@ body {
     padding: 22px 15px 40px;
   }
 
-  .topbar {
-    padding: 0 15px;
-  }
-
   .management {
     grid-template-columns: 1fr;
-  }
-
-}
-
-@media (max-width: 520px) {
-
-  .overview {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-
-  .stat {
-    padding: 15px;
-  }
-
-  .stat strong {
-    font-size: 19px;
   }
 
   .form-grid {
@@ -448,7 +418,21 @@ body {
   .form-group.full {
     grid-column: auto;
   }
+}
 
+@media(max-width:500px) {
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    padding: 0 15px;
+  }
+
+  .admin-status {
+    display: none;
+  }
 }
 </style>
 </head>
@@ -457,25 +441,21 @@ body {
 
 <!-- SIDEBAR -->
 
-<aside id="sidebar" class="sidebar">
+<aside class="sidebar" id="sidebar">
 
   <div class="logo">
     <h1>TaskVexa</h1>
-    <p>Administration Panel</p>
+    <p>Admin Control Panel</p>
   </div>
 
-  <div class="nav-title">
-    Main
-  </div>
+  <div class="nav-title">Overview</div>
 
   <a href="admin.html" class="nav-link active">
     <span class="nav-icon">⌂</span>
     Dashboard
   </a>
 
-  <div class="nav-title">
-    Management
-  </div>
+  <div class="nav-title">Management</div>
 
   <a href="worker.html" class="nav-link">
     <span class="nav-icon">👥</span>
@@ -483,7 +463,7 @@ body {
   </a>
 
   <a href="promoters.html" class="nav-link">
-    <span class="nav-icon">📢</span>
+    <span class="nav-icon">📣</span>
     Promoters
   </a>
 
@@ -507,18 +487,19 @@ body {
     Promoter Wallet
   </a>
 
-  <div class="nav-title">
-    Settings
-  </div>
+  <div class="nav-title">Settings</div>
 
-  <a href="#payment" class="nav-link">
+  <a href="settings.html" class="nav-link">
     <span class="nav-icon">⚙</span>
-    Payment Details
+    Platform Settings
   </a>
 
-  <button id="logoutButton" class="logout-button">
-    🚪 Logout
-  </button>
+  <div class="logout">
+    <button id="logoutButton" class="nav-link">
+      <span class="nav-icon">↪</span>
+      Logout
+    </button>
+  </div>
 
 </aside>
 
@@ -527,32 +508,25 @@ body {
 
 <div class="main">
 
-  <header class="topbar">
+  <div class="topbar">
 
-    <div style="display:flex;align-items:center;gap:12px;">
+    <button
+      id="mobileMenu"
+      class="mobile-menu"
+    >
+      ☰
+    </button>
 
-      <button
-        id="mobileButton"
-        class="mobile-button"
-      >
-        ☰
-      </button>
-
-      <div class="topbar-title">
-        Admin Dashboard
-      </div>
-
+    <div class="topbar-title">
+      Admin Dashboard
     </div>
 
     <div class="admin-status">
-
       <span class="online-dot"></span>
-
       Admin
-
     </div>
 
-  </header>
+  </div>
 
 
   <main class="content">
@@ -570,159 +544,783 @@ body {
     </div>
 
 
-    <div
-      id="message"
-      class="message"
-    >
+    <div id="message">
       Checking admin access...
     </div>
 
 
-    <div
-      id="dashboardContent"
-      class="dashboard-content"
-    >
+    <!-- STATS -->
+
+    <section class="stats">
+
+      <div class="stat">
+        <div class="stat-label">
+          Workers
+        </div>
+        <div class="stat-value" id="workerCount">
+          —
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">
+          Promoters
+        </div>
+        <div class="stat-value" id="promoterCount">
+          —
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">
+          Active Tasks
+        </div>
+        <div class="stat-value" id="taskCount">
+          —
+        </div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-label">
+          Pending Submissions
+        </div>
+        <div class="stat-value" id="submissionCount">
+          —
+        </div>
+      </div>
+
+    </section>
 
 
-      <!-- OVERVIEW -->
+    <!-- MANAGEMENT -->
 
-      <div class="overview">
+    <div class="section-title">
+      <h3>Management</h3>
+    </div>
 
-        <div class="stat">
 
-          <small>
-            Workers
-          </small>
+    <section class="management">
 
-          <strong id="workerCount">
-            —
-          </strong>
+      <div class="card">
+
+        <div class="card-head">
+          <div class="icon">👥</div>
+
+          <div>
+            <h3>Workers</h3>
+          </div>
+        </div>
+
+        <p>
+          View and manage registered worker accounts.
+        </p>
+
+        <a
+          href="worker.html"
+          class="button"
+        >
+          Manage Workers
+        </a>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-head">
+          <div class="icon">📣</div>
+
+          <div>
+            <h3>Promoters</h3>
+          </div>
+        </div>
+
+        <p>
+          Manage promoter accounts and promoter activity.
+        </p>
+
+        <a
+          href="promoters.html"
+          class="button"
+        >
+          Manage Promoters
+        </a>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-head">
+          <div class="icon">✓</div>
+
+          <div>
+            <h3>Task Management</h3>
+          </div>
+        </div>
+
+        <p>
+          Create, edit and manage tasks available to workers.
+        </p>
+
+        <a
+          href="tasks.html"
+          class="button"
+        >
+          Manage Tasks
+        </a>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-head">
+          <div class="icon">📋</div>
+
+          <div>
+            <h3>Task Submissions</h3>
+          </div>
+        </div>
+
+        <p>
+          Review submitted screenshots and approve or reject worker submissions.
+        </p>
+
+        <a
+          href="admin-submissions.html"
+          class="button"
+        >
+          Review Submissions
+        </a>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-head">
+          <div class="icon">💳</div>
+
+          <div>
+            <h3>Withdrawals</h3>
+          </div>
+        </div>
+
+        <p>
+          View and manage worker withdrawal requests.
+        </p>
+
+        <a
+          href="admin-withdrawals.html"
+          class="button"
+        >
+          Manage Withdrawals
+        </a>
+
+      </div>
+
+
+      <div class="card">
+
+        <div class="card-head">
+          <div class="icon">💰</div>
+
+          <div>
+            <h3>Promoter Wallet</h3>
+          </div>
+        </div>
+
+        <p>
+          Manage promoter deposits and promoter wallet balances.
+        </p>
+
+        <a
+          href="admin-promoter-wallet.html"
+          class="button"
+        >
+          Manage Wallet
+        </a>
+
+      </div>
+
+    </section>
+
+
+    <!-- PAYMENT DETAILS -->
+
+    <div class="section-title">
+      <h3>Promoter Deposit Payment Details</h3>
+    </div>
+
+
+    <section class="payment">
+
+      <div class="info">
+        These payment details are displayed to promoters when they add funds.
+      </div>
+
+
+      <div class="form-grid">
+
+        <div class="form-group">
+
+          <label>
+            Bank Name
+          </label>
+
+          <input
+            id="bankName"
+            type="text"
+            placeholder="e.g. Opay"
+          >
 
         </div>
 
 
-        <div class="stat">
+        <div class="form-group">
 
-          <small>
-            Promoters
-          </small>
+          <label>
+            Account Name
+          </label>
 
-          <strong id="promoterCount">
-            —
-          </strong>
-
-        </div>
-
-
-        <div class="stat">
-
-          <small>
-            Active Tasks
-          </small>
-
-          <strong id="taskCount">
-            —
-          </strong>
+          <input
+            id="accountName"
+            type="text"
+            placeholder="Enter account name"
+          >
 
         </div>
 
 
-        <div class="stat">
+        <div class="form-group">
 
-          <small>
-            Pending Withdrawals
-          </small>
+          <label>
+            Account Number
+          </label>
 
-          <strong id="withdrawalCount">
-            —
-          </strong>
+          <input
+            id="accountNumber"
+            type="text"
+            inputmode="numeric"
+            placeholder="Enter account number"
+          >
+
+        </div>
+
+
+        <div class="form-group full">
+
+          <label>
+            Payment Instructions
+          </label>
+
+          <textarea
+            id="paymentInstructions"
+            placeholder="Enter payment instructions"
+          ></textarea>
 
         </div>
 
       </div>
 
 
-      <!-- MANAGEMENT -->
+      <br>
 
-      <div class="section-title">
-        <h3>
-          Management
-        </h3>
-      </div>
+      <button
+        id="savePaymentDetailsButton"
+        class="button"
+      >
+        Save Payment Details
+      </button>
 
+      <div id="paymentDetailsMessage"></div>
 
-      <div class="management">
+    </section>
 
+  </main>
 
-        <div class="card">
-
-          <div class="card-head">
-
-            <div class="card-icon">
-              👥
-            </div>
-
-            <h3>
-              Workers
-            </h3>
-
-          </div>
-
-          <p>
-            View and manage registered worker accounts.
-          </p>
-
-          <a
-            href="worker.html"
-            class="button"
-          >
-            Manage Workers
-          </a>
-
-        </div>
+</div>
 
 
-        <div class="card">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-          <div class="card-head">
+<script>
 
-            <div class="card-icon">
-              📢
-            </div>
+const SUPABASE_URL =
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
 
-            <h3>
-              Promoters
-            </h3>
+const SUPABASE_KEY =
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
-          </div>
-
-          <p>
-            View and manage promoter accounts and activities.
-          </p>
-
-          <a
-            href="promoters.html"
-            class="button"
-          >
-            Manage Promoters
-          </a>
-
-        </div>
+const supabaseClient =
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+  );
 
 
-        <div class="card">
+const message =
+  document.getElementById("message");
 
-          <div class="card-head">
+const logoutButton =
+  document.getElementById("logoutButton");
 
-            <div class="card-icon">
-              ✓
-            </div>
+const mobileMenu =
+  document.getElementById("mobileMenu");
 
-            <h3>
-              Task Management
-            </h3>
+const sidebar =
+  document.getElementById("sidebar");
 
-          </div>
+const savePaymentDetailsButton =
+  document.getElementById(
+    "savePaymentDetailsButton"
+  );
 
-          <p>
-            Create, edit and manage
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+mobileMenu.addEventListener(
+  "click",
+  function() {
+
+    sidebar.classList.toggle("open");
+
+  }
+);
+
+
+/* =========================
+   CHECK ADMIN
+========================= */
+
+async function checkAdmin() {
+
+  try {
+
+    message.textContent =
+      "Checking admin access...";
+
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getSession();
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    const session =
+      data.session;
+
+
+    if (!session) {
+
+      window.location.href =
+        "login.html";
+
+      return;
+
+    }
+
+
+    const user =
+      session.user;
+
+
+    /*
+      Check profile role.
+    */
+
+    const {
+      data: profile,
+      error: profileError
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq(
+          "id",
+          user.id
+        )
+        .maybeSingle();
+
+
+    if (profileError) {
+
+      throw profileError;
+
+    }
+
+
+    if (
+      !profile ||
+      String(profile.role).toLowerCase() !==
+      "admin"
+    ) {
+
+      message.textContent =
+        "Access denied. Admin account required.";
+
+      message.className =
+        "error";
+
+      return;
+
+    }
+
+
+    message.textContent =
+      "Admin access confirmed.";
+
+    message.className =
+      "success";
+
+
+    /*
+      Load dashboard statistics.
+      These are optional.
+      If one fails, the dashboard
+      itself still remains usable.
+    */
+
+    loadStatistics();
+
+    loadPaymentDetails();
+
+  } catch (error) {
+
+    console.error(
+      "ADMIN ERROR:",
+      error
+    );
+
+    message.textContent =
+      "Admin check error: " +
+      error.message;
+
+    message.className =
+      "error";
+
+  }
+
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
+
+async function loadStatistics() {
+
+  try {
+
+    const workers =
+      await supabaseClient
+        .from("profiles")
+        .select("id", {
+          count: "exact",
+          head: true
+        })
+        .eq("role", "worker");
+
+
+    if (
+      !workers.error
+    ) {
+
+      document.getElementById(
+        "workerCount"
+      ).textContent =
+        workers.count ?? 0;
+
+    }
+
+
+    const promoters =
+      await supabaseClient
+        .from("profiles")
+        .select("id", {
+          count: "exact",
+          head: true
+        })
+        .eq("role", "promoter");
+
+
+    if (
+      !promoters.error
+    ) {
+
+      document.getElementById(
+        "promoterCount"
+      ).textContent =
+        promoters.count ?? 0;
+
+    }
+
+
+    const tasks =
+      await supabaseClient
+        .from("tasks")
+        .select("id", {
+          count: "exact",
+          head: true
+        })
+        .eq("status", "active");
+
+
+    if (
+      !tasks.error
+    ) {
+
+      document.getElementById(
+        "taskCount"
+      ).textContent =
+        tasks.count ?? 0;
+
+    }
+
+
+    const submissions =
+      await supabaseClient
+        .from("task_submissions")
+        .select("id", {
+          count: "exact",
+          head: true
+        })
+        .eq("status", "pending");
+
+
+    if (
+      !submissions.error
+    ) {
+
+      document.getElementById(
+        "submissionCount"
+      ).textContent =
+        submissions.count ?? 0;
+
+    }
+
+  } catch (error) {
+
+    console.warn(
+      "Statistics could not be loaded:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================
+   PAYMENT DETAILS
+========================= */
+
+async function loadPaymentDetails() {
+
+  try {
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient
+        .from("promoter_payment_details")
+        .select(
+          "bank_name, account_name, account_number, instructions"
+        )
+        .order(
+          "updated_at",
+          {
+            ascending: false
+          }
+        )
+        .limit(1)
+        .maybeSingle();
+
+
+    if (error) {
+
+      console.warn(
+        "Payment details:",
+        error
+      );
+
+      return;
+
+    }
+
+
+    if (!data) {
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      "bankName"
+    ).value =
+      data.bank_name || "";
+
+
+    document.getElementById(
+      "accountName"
+    ).value =
+      data.account_name || "";
+
+
+    document.getElementById(
+      "accountNumber"
+    ).value =
+      data.account_number || "";
+
+
+    document.getElementById(
+      "paymentInstructions"
+    ).value =
+      data.instructions || "";
+
+  } catch (error) {
+
+    console.warn(
+      "Payment details loading error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================
+   SAVE PAYMENT DETAILS
+========================= */
+
+savePaymentDetailsButton.addEventListener(
+  "click",
+  async function() {
+
+    const bank =
+      document.getElementById(
+        "bankName"
+      ).value.trim();
+
+    const account =
+      document.getElementById(
+        "accountName"
+      ).value.trim();
+
+    const number =
+      document.getElementById(
+        "accountNumber"
+      ).value.trim();
+
+    const instructions =
+      document.getElementById(
+        "paymentInstructions"
+      ).value.trim();
+
+    const result =
+      document.getElementById(
+        "paymentDetailsMessage"
+      );
+
+
+    if (
+      !bank ||
+      !account ||
+      !number
+    ) {
+
+      result.textContent =
+        "Please complete the bank, account name and account number.";
+
+      result.className =
+        "error";
+
+      return;
+
+    }
+
+
+    try {
+
+      savePaymentDetailsButton.disabled =
+        true;
+
+      savePaymentDetailsButton.textContent =
+        "Saving...";
+
+
+      const {
+        data,
+        error
+      } =
+      await supabaseClient.rpc(
+        "admin_update_promoter_payment_details",
+        {
+          p_bank_name: bank,
+          p_account_name: account,
+          p_account_number: number,
+          p_instructions:
+            instructions || null
+        }
+      );
+
+
+      if (error) {
+
+        throw error;
+
+      }
+
+
+      if (
+        !data ||
+        data.success !== true
+      ) {
+
+        throw new Error(
+          data?.message ||
+          "Unable to save payment details."
+        );
+
+      }
+
+
+      result.textContent =
+        "Payment details saved successfully.";
+
+      result.className =
+        "success";
+
+    } catch (error) {
+
+      console.error(
+        error
+      );
+
+      result.textContent =
+        "Error: " +
+        error.message;
+
+      result.className =
+        "error";
+
+    } finally {
+
+      savePaymentDetailsButton.disabled =
+        false;
+
+      savePaymentDetailsButton.textConten

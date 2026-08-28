@@ -154,7 +154,6 @@ font-size:13px;
 
 .success{color:var(--green)}
 .error{color:var(--red)}
-.warning-text{color:var(--yellow)}
 
 .card{
 background:var(--card);
@@ -220,7 +219,7 @@ cursor:pointer;
 }
 
 .button:disabled{
-opacity:.5;
+opacity:.6;
 cursor:not-allowed;
 }
 
@@ -330,23 +329,23 @@ background:#1c2533;
 color:#aeb9c9;
 }
 
-.empty,
-.loading{
-text-align:center;
-padding:35px;
-color:var(--muted);
+.task-actions{
+display:flex;
+gap:8px;
+flex-wrap:wrap;
+margin-top:17px;
 }
 
-.error-box{
-background:#241216;
-border:1px solid #5b2831;
-border-radius:12px;
-padding:15px;
-margin-top:15px;
-color:#fca5a5;
-font-size:13px;
-line-height:1.6;
-white-space:pre-wrap;
+.empty{
+text-align:center;
+padding:35px;
+color:#64748b;
+}
+
+.loading{
+text-align:center;
+padding:30px;
+color:var(--muted);
 }
 
 .mobile-menu{
@@ -422,114 +421,53 @@ Platform Settings
 <span class="nav-icon">↪</span>
 Logout
 </button>
-</div></aside><div class="main"><div class="topbar"><button id="mobileMenu" class="mobile-menu">
-☰
-</button><div class="topbar-title">
+</div></aside><div class="main"><div class="topbar"><button id="mobileMenu" class="mobile-menu">☰</button>
+
+<div class="topbar-title">
 Task Management
 </div><div></div></div><main class="content"><div class="heading">
-<h2>Task Management</h2><p>
+<h2>Task Management</h2>
+<p>
 Create, edit, activate, pause and close tasks available to workers.
 </p>
-</div><div id="message">
+</div><div id="message" class="success">
 Starting Task Management...
-</div><div id="errorBox" class="error-box" style="display:none;"></div><section id="adminContent" style="display:none;"><div class="card"><h3 id="formTitle">
-Create New Task
-</h3><form id="taskForm"><div class="form-grid"><div>
+</div><section id="adminContent"><div class="card"><h3 id="formTitle">Create New Task</h3><form id="taskForm"><div class="form-grid"><div>
 <label>Task Title</label>
-<input
-type="text"
-id="title"
-placeholder="Enter task title"
-required
->
+<input type="text" id="title" placeholder="Enter task title" required>
 </div><div>
 <label>Platform</label>
-<input
-type="text"
-id="platform"
-placeholder="Telegram"
-required
->
+<input type="text" id="platform" placeholder="Telegram" required>
 </div><div class="full">
-<label>Description / Instructions</label><textarea
-id="description"
-placeholder="Enter complete task instructions"
-required
-></textarea></div><div>
-<label>Task Link</label><input
-type="url"
-id="taskUrl"
-placeholder="https://..."
-required
-
-«»
-
+<label>Description / Instructions</label>
+<textarea id="description" placeholder="Enter complete task instructions" required></textarea>
 </div><div>
-<label>Worker Reward</label><input
-type="number"
-id="reward"
-min="0"
-step="0.01"
-value="100"
-required
-
-«»
-
+<label>Task Link</label>
+<input type="url" id="taskUrl" placeholder="https://..." required>
 </div><div>
-<label>Workers Needed</label><input
-type="number"
-id="workersNeeded"
-min="1"
-step="1"
-value="1"
-required
-
-«»
-
+<label>Worker Reward</label>
+<input type="number" id="reward" min="0" step="0.01" value="100" required>
 </div><div>
-<label>Target Level</label><select id="targetLevel"><option value="worker">
-Worker
-</option><option value="level_1">
-Level 1
-</option><option value="level_2">
-Level 2
-</option><option value="both">
-Both Levels
-</option></select>
+<label>Workers Needed</label>
+<input type="number" id="workersNeeded" min="1" step="1" value="1" required>
 </div><div>
-<label>Task Status</label><select id="taskStatus"><option value="active">
-Active
-</option><option value="paused">
-Paused
-</option><option value="closed">
-Closed
-</option><option value="draft">
-Draft
-</option></select>
-</div></div><div class="form-buttons"><button
-type="submit"
-id="saveButton"
-class="button"
-
-«»
-
+<label>Target Level</label><select id="targetLevel">
+<option value="level_1">Level 1</option>
+<option value="level_2">Level 2</option>
+<option value="both">Both Levels</option>
+</select></div><div>
+<label>Task Status</label><select id="taskStatus">
+<option value="active">Active</option>
+<option value="paused">Paused</option>
+<option value="closed">Closed</option>
+<option value="draft">Draft</option>
+</select></div></div><div class="form-buttons"><button type="submit" id="saveButton" class="button">
 Create Task
-</button>
-
-<button
-type="button"
-id="cancelButton"
-class="button secondary"
-style="display:none;"
-
-«»
-
+</button><button type="button" id="cancelButton" class="button secondary" style="display:none;">
 Cancel Edit
-</button>
-
-</div><p id="formMessage"></p></form></div><div class="card"><h3>Existing Tasks</h3><div id="taskList"><div class="loading">
-Loading tasks...
-</div></div></div></section></main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+</button></div><p id="formMessage"></p></form></div><div class="card"><h3>Existing Tasks</h3><div id="taskList">
+<div class="loading">Loading tasks...</div>
+</div></div></section></main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 "use strict";
 
 /* =========================
@@ -542,75 +480,62 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
 "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
-let supabaseClient = null;
-let currentUser = null;
-let editingTaskId = null;
-let cachedTasks = [];
+const supabaseClient =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 
 /* =========================
 ELEMENTS
 ========================= */
 
-const message = document.getElementById("message");
-const errorBox = document.getElementById("errorBox");
-const adminContent = document.getElementById("adminContent");
-const taskForm = document.getElementById("taskForm");
-const formMessage = document.getElementById("formMessage");
-const taskList = document.getElementById("taskList");
-const saveButton = document.getElementById("saveButton");
-const cancelButton = document.getElementById("cancelButton");
-const formTitle = document.getElementById("formTitle");
-const logoutButton = document.getElementById("logoutButton");
-const mobileMenu = document.getElementById("mobileMenu");
-const sidebar = document.getElementById("sidebar");
+const message =
+document.getElementById("message");
+
+const taskForm =
+document.getElementById("taskForm");
+
+const formMessage =
+document.getElementById("formMessage");
+
+const taskList =
+document.getElementById("taskList");
+
+const saveButton =
+document.getElementById("saveButton");
+
+const cancelButton =
+document.getElementById("cancelButton");
+
+const formTitle =
+document.getElementById("formTitle");
+
+const logoutButton =
+document.getElementById("logoutButton");
+
+const mobileMenu =
+document.getElementById("mobileMenu");
+
+const sidebar =
+document.getElementById("sidebar");
+
+let editingTaskId = null;
 
 
 /* =========================
-HELPERS
+MOBILE MENU
 ========================= */
 
-function showMessage(text, type){
-
-message.textContent = text;
-
-message.className =
-type === "success"
-? "success"
-: type === "error"
-? "error"
-: "";
-
-}
+mobileMenu.addEventListener("click",function(){
+sidebar.classList.toggle("open");
+});
 
 
-function showError(error){
-
-console.error(error);
-
-const text =
-error && error.message
-? error.message
-: String(error);
-
-showMessage("Task Management error", "error");
-
-errorBox.textContent =
-"Error:\n" + text;
-
-errorBox.style.display = "block";
-
-}
-
-
-function clearError(){
-
-errorBox.textContent = "";
-
-errorBox.style.display = "none";
-
-}
-
+/* =========================
+HTML ESCAPE
+========================= */
 
 function escapeHTML(value){
 
@@ -623,6 +548,10 @@ return String(value ?? "")
 
 }
 
+
+/* =========================
+MONEY
+========================= */
 
 function money(value){
 
@@ -639,217 +568,34 @@ maximumFractionDigits:2
 
 
 /* =========================
-MOBILE
+LEVELS
 ========================= */
 
-mobileMenu.addEventListener(
-"click",
-function(){
-
-sidebar.classList.toggle("open");
-
-}
-);
-
-
-/* =========================
-START SUPABASE
-========================= */
-
-function createSupabase(){
-
-if(
-!window.supabase ||
-typeof window.supabase.createClient !== "function"
-){
-
-throw new Error(
-"Supabase library did not load. Check your internet connection and refresh the page."
-);
-
-}
-
-supabaseClient =
-window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY,
-{
-auth:{
-persistSession:true,
-autoRefreshToken:true,
-detectSessionInUrl:true
-}
-}
-);
-
-}
-
-
-/* =========================
-AUTHENTICATION
-========================= */
-
-async function authenticateAdmin(){
-
-showMessage(
-"Checking your login session...",
-""
-);
-
-
-/*
-First check the locally stored session.
-This prevents the page from unnecessarily
-waiting before showing the admin interface.
-*/
-
-const {
-data:sessionData,
-error:sessionError
-} =
-await supabaseClient.auth.getSession();
-
-
-if(sessionError){
-
-throw sessionError;
-
-}
-
-
-if(
-!sessionData ||
-!sessionData.session
-){
-
-window.location.href = "login.html";
-
-return false;
-
-}
-
-
-/*
-Now verify the actual user with Supabase Auth.
-*/
-
-const {
-data:userData,
-error:userError
-} =
-await supabaseClient.auth.getUser();
-
-
-if(userError){
-
-throw userError;
-
-}
-
-
-if(
-!userData ||
-!userData.user
-){
-
-window.location.href = "login.html";
-
-return false;
-
-}
-
-
-currentUser =
-userData.user;
-
-
-/*
-Check profile role.
-*/
-
-const {
-data:profile,
-error:profileError
-} =
-await supabaseClient
-.from("profiles")
-.select("role")
-.eq("id", currentUser.id)
-.maybeSingle();
-
-
-if(profileError){
-
-throw profileError;
-
-}
-
-
-if(
-!profile ||
-String(profile.role || "").toLowerCase() !== "admin"
-){
-
-throw new Error(
-"Your account is not registered as an admin."
-);
-
-}
-
-
-adminContent.style.display = "block";
-
-showMessage(
-"Admin access confirmed.",
-"success"
-);
-
-return true;
-
-}
-
-
-/* =========================
-LEVEL DISPLAY
-========================= */
-
-function getLevelDisplay(levels){
+function getLevels(levels){
 
 if(!Array.isArray(levels)){
-
-return String(levels || "Worker");
-
+return "Not specified";
 }
 
-if(
-levels.includes("level_1") &&
-levels.includes("level_2")
-){
+const level1 =
+levels.includes("level_1");
 
+const level2 =
+levels.includes("level_2");
+
+if(level1 && level2){
 return "Level 1 + Level 2";
-
 }
 
-if(levels.includes("level_1")){
-
+if(level1){
 return "Level 1";
-
 }
 
-if(levels.includes("level_2")){
-
+if(level2){
 return "Level 2";
-
 }
 
-if(levels.includes("worker")){
-
-return "Worker";
-
-}
-
-return "Worker";
-
+return "Not specified";
 }
 
 
@@ -862,16 +608,53 @@ function getStatusClass(status){
 status =
 String(status || "draft").toLowerCase();
 
-if(status === "active")
+if(status === "active"){
 return "status-active";
+}
 
-if(status === "paused")
+if(status === "paused"){
 return "status-paused";
+}
 
-if(status === "closed")
+if(status === "closed"){
 return "status-closed";
+}
 
 return "status-draft";
+}
+
+
+/* =========================
+SAFE SESSION CHECK
+========================= */
+
+async function getSession(){
+
+try{
+
+const result =
+await supabaseClient.auth.getSession();
+
+if(result.error){
+console.warn(
+"Session check:",
+result.error.message
+);
+return null;
+}
+
+return result.data?.session || null;
+
+}catch(error){
+
+console.warn(
+"Session check failed:",
+error
+);
+
+return null;
+
+}
 
 }
 
@@ -885,6 +668,7 @@ async function loadTasks(){
 taskList.innerHTML =
 '<div class="loading">Loading tasks...</div>';
 
+try{
 
 const {
 data,
@@ -900,21 +684,13 @@ ascending:false
 }
 );
 
-
 if(error){
 
 throw error;
 
 }
 
-
-cachedTasks =
-Array.isArray(data)
-? data
-: [];
-
-
-if(cachedTasks.length === 0){
+if(!data || data.length === 0){
 
 taskList.innerHTML =
 '<div class="empty">No tasks found.</div>';
@@ -923,94 +699,69 @@ return;
 
 }
 
-
 taskList.innerHTML = "";
 
-
-cachedTasks.forEach(
-function(task){
-
-const status =
-String(task.status || "draft")
-.toLowerCase();
-
-
-const levels =
-getLevelDisplay(
-task.target_levels
-);
-
-
-const source =
-task.source || "admin";
-
+data.forEach(function(task){
 
 const card =
-document.createElement("div");
+document.createElement("section");
 
 card.className =
 "task-card";
 
+const status =
+String(
+task.status || "draft"
+).toLowerCase();
+
+const levels =
+getLevels(task.target_levels);
 
 card.innerHTML = `
 
-<h3>
-${escapeHTML(task.title || "Untitled Task")}
-</h3>
+<h3>${escapeHTML(task.title)}</h3>
 
 <div class="task-description">
-${escapeHTML(task.description || "No description")}
+${escapeHTML(task.description)}
 </div>
 
 <div class="info-row">
 <span>Platform</span>
-<span>${escapeHTML(task.platform || "—")}</span>
+<span>${escapeHTML(task.platform || "Not specified")}</span>
 </div>
 
 <div class="info-row">
 <span>Task Link</span>
 <span>
-${
-task.task_url
-?
-`<a
-href="${escapeHTML(task.task_url)}"
+<a
+href="${escapeHTML(task.task_url || "#")}"
 target="_blank"
 rel="noopener noreferrer"
-style="color:#4ade80;text-decoration:none;"
->Open Link</a>`
-:
-"—"
-}
+style="color:#4ade80;"
+>
+Open Link
+</a>
 </span>
 </div>
 
 <div class="info-row">
 <span>Worker Reward</span>
-<span class="reward">
-${money(task.reward)}
-</span>
+<span class="reward">${money(task.reward)}</span>
 </div>
 
 <div class="info-row">
 <span>Workers Needed</span>
-<span>
-${Number(task.workers_needed || 0)}
-</span>
+<span>${Number(task.workers_needed || 0)}</span>
 </div>
 
 <div class="info-row">
-<span>Target</span>
-<span>
-${escapeHTML(levels)}
-</span>
+<span>Target Level</span>
+<span>${escapeHTML(levels)}</span>
 </div>
 
 <div class="info-row">
 <span>Source</span>
-<span>
-${escapeHTML(source)}
-</span>
+<span>${escapeHTML(task.source || "admin")}</span>
 </div>
 
 <div class="info-row">
@@ -1027,7 +778,7 @@ ${escapeHTML(status.toUpperCase())}
 <button
 class="button secondary"
 data-action="edit"
-data-id="${escapeHTML(task.id)}"
+data-id="${task.id}"
 >
 Edit
 </button>
@@ -1035,37 +786,39 @@ Edit
 ${
 status === "active"
 ?
-`<button
+`
+<button
 class="button warning"
 data-action="pause"
-data-id="${escapeHTML(task.id)}"
+data-id="${task.id}"
 >
 Pause
-</button>`
+</button>
+`
 :
-status !== "closed"
-?
-`<button
+`
+<button
 class="button activate"
 data-action="activate"
-data-id="${escapeHTML(task.id)}"
+data-id="${task.id}"
 >
 Activate
-</button>`
-:
-""
+</button>
+`
 }
 
 ${
 status !== "closed"
 ?
-`<button
+`
+<button
 class="button danger"
 data-action="close"
-data-id="${escapeHTML(task.id)}"
+data-id="${task.id}"
 >
 Close
-</button>`
+</button>
+`
 :
 ""
 }
@@ -1073,7 +826,7 @@ Close
 <button
 class="button danger"
 data-action="delete"
-data-id="${escapeHTML(task.id)}"
+data-id="${task.id}"
 >
 Delete
 </button>
@@ -1081,122 +834,68 @@ Delete
 </div>
 `;
 
-
 taskList.appendChild(card);
 
-}
-);
+});
 
-
-/* Actions */
 
 taskList
 .querySelectorAll("[data-action]")
-.forEach(
-function(button){
+.forEach(function(button){
 
 button.addEventListener(
 "click",
-function(){
+async function(){
 
-handleTaskAction(
-button.dataset.action,
-button.dataset.id
-);
+const action =
+button.dataset.action;
 
-}
-);
-
-}
-);
-
-}
-
-
-/* =========================
-TASK ACTION
-========================= */
-
-async function handleTaskAction(
-action,
-taskId
-){
-
-clearError();
-
-
-try{
+const id =
+button.dataset.id;
 
 if(action === "edit"){
-
-startEdit(taskId);
-
+editTask(id,data);
 return;
-
 }
-
-
-if(action === "activate"){
-
-await updateTaskStatus(
-taskId,
-"active"
-);
-
-return;
-
-}
-
 
 if(action === "pause"){
-
-await updateTaskStatus(
-taskId,
-"paused"
-);
-
+await changeStatus(id,"paused");
 return;
-
 }
 
+if(action === "activate"){
+await changeStatus(id,"active");
+return;
+}
 
 if(action === "close"){
-
-const confirmed =
-confirm(
-"Close this task? Workers will no longer be able to perform it."
-);
-
-if(!confirmed)
+await changeStatus(id,"closed");
 return;
-
-await updateTaskStatus(
-taskId,
-"closed"
-);
-
-return;
-
 }
-
 
 if(action === "delete"){
-
-const confirmed =
-confirm(
-"Delete this task permanently?"
-);
-
-if(!confirmed)
+await deleteTask(id);
 return;
-
-await deleteTask(taskId);
-
 }
+
+});
+
+});
 
 }catch(error){
 
-showError(error);
+console.error(
+"LOAD TASKS ERROR:",
+error
+);
+
+taskList.innerHTML =
+`
+<div class="empty">
+Unable to load tasks.<br><br>
+${escapeHTML(error.message)}
+</div>
+`;
 
 }
 
@@ -1204,39 +903,32 @@ showError(error);
 
 
 /* =========================
-START EDIT
+EDIT
 ========================= */
 
-function startEdit(taskId){
+function editTask(id,tasks){
 
 const task =
-cachedTasks.find(
-item =>
-String(item.id) === String(taskId)
-);
-
+tasks.find(function(item){
+return String(item.id) === String(id);
+});
 
 if(!task){
-
-throw new Error(
-"Task could not be found."
-);
-
+alert("Task not found.");
+return;
 }
-
 
 editingTaskId =
 task.id;
 
-
 document.getElementById("title").value =
 task.title || "";
 
-document.getElementById("platform").value =
-task.platform || "";
-
 document.getElementById("description").value =
 task.description || "";
+
+document.getElementById("platform").value =
+task.platform || "";
 
 document.getElementById("taskUrl").value =
 task.task_url || "";
@@ -1247,14 +939,10 @@ task.reward ?? 0;
 document.getElementById("workersNeeded").value =
 task.workers_needed || 1;
 
-
-/* Levels */
-
 const levels =
 Array.isArray(task.target_levels)
 ? task.target_levels
 : [];
-
 
 if(
 levels.includes("level_1") &&
@@ -1271,24 +959,15 @@ levels.includes("level_2")
 document.getElementById("targetLevel").value =
 "level_2";
 
-}else if(
-levels.includes("level_1")
-){
+}else{
 
 document.getElementById("targetLevel").value =
 "level_1";
 
-}else{
-
-document.getElementById("targetLevel").value =
-"worker";
-
 }
-
 
 document.getElementById("taskStatus").value =
 task.status || "active";
-
 
 formTitle.textContent =
 "Edit Task";
@@ -1310,41 +989,7 @@ behavior:"smooth"
 
 
 /* =========================
-RESET FORM
-========================= */
-
-function resetForm(){
-
-editingTaskId = null;
-
-taskForm.reset();
-
-document.getElementById("reward").value = 100;
-
-document.getElementById("workersNeeded").value = 1;
-
-document.getElementById("targetLevel").value =
-"worker";
-
-document.getElementById("taskStatus").value =
-"active";
-
-formTitle.textContent =
-"Create New Task";
-
-saveButton.textContent =
-"Create Task";
-
-cancelButton.style.display =
-"none";
-
-formMessage.textContent = "";
-
-}
-
-
-/* =========================
-FORM SUBMIT
+FORM
 ========================= */
 
 taskForm.addEventListener(
@@ -1353,44 +998,42 @@ async function(event){
 
 event.preventDefault();
 
-clearError();
-
 formMessage.textContent = "";
-
 
 const title =
 document.getElementById("title").value.trim();
 
-const platform =
-document.getElementById("platform").value.trim();
-
 const description =
 document.getElementById("description").value.trim();
+
+const platform =
+document.getElementById("platform").value.trim();
 
 const taskUrl =
 document.getElementById("taskUrl").value.trim();
 
 const reward =
-Number(
-document.getElementById("reward").value
-);
+Number(document.getElementById("reward").value);
 
 const workersNeeded =
-Number(
-document.getElementById("workersNeeded").value
-);
+Number(document.getElementById("workersNeeded").value);
 
-const target =
+const targetLevel =
 document.getElementById("targetLevel").value;
 
-const status =
+const taskStatus =
 document.getElementById("taskStatus").value;
 
 
-if(!title){
+if(
+!title ||
+!description ||
+!platform ||
+!taskUrl
+){
 
 formMessage.textContent =
-"Task title is required.";
+"Please complete all required fields.";
 
 formMessage.className =
 "error";
@@ -1398,46 +1041,6 @@ formMessage.className =
 return;
 
 }
-
-
-if(!platform){
-
-formMessage.textContent =
-"Platform is required.";
-
-formMessage.className =
-"error";
-
-return;
-
-}
-
-
-if(!description){
-
-formMessage.textContent =
-"Task description is required.";
-
-formMessage.className =
-"error";
-
-return;
-
-}
-
-
-if(!taskUrl){
-
-formMessage.textContent =
-"Task link is required.";
-
-formMessage.className =
-"error";
-
-return;
-
-}
-
 
 if(
 !Number.isFinite(reward) ||
@@ -1454,7 +1057,6 @@ return;
 
 }
 
-
 if(
 !Number.isInteger(workersNeeded) ||
 workersNeeded < 1
@@ -1463,4 +1065,332 @@ workersNeeded < 1
 formMessage.textContent =
 "Workers Needed must be at least 1.";
 
-fo
+formMessage.className =
+"error";
+
+return;
+
+}
+
+const targetLevels =
+targetLevel === "both"
+?
+["level_1","level_2"]
+:
+[targetLevel];
+
+const taskData = {
+
+title,
+description,
+platform,
+task_url:taskUrl,
+reward,
+workers_needed:workersNeeded,
+target_levels:targetLevels,
+status:taskStatus
+
+};
+
+try{
+
+saveButton.disabled = true;
+
+if(editingTaskId){
+
+saveButton.textContent =
+"Saving...";
+
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.update(taskData)
+.eq("id",editingTaskId);
+
+if(error){
+throw error;
+}
+
+formMessage.textContent =
+"Task updated successfully.";
+
+}else{
+
+saveButton.textContent =
+"Creating...";
+
+const session =
+await getSession();
+
+const insertData = {
+...taskData,
+source:"admin"
+};
+
+if(session?.user?.id){
+insertData.created_by =
+session.user.id;
+}
+
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.insert(insertData);
+
+if(error){
+throw error;
+}
+
+formMessage.textContent =
+"Task created successfully.";
+
+}
+
+formMessage.className =
+"success";
+
+resetForm();
+
+await loadTasks();
+
+}catch(error){
+
+console.error(
+"SAVE TASK ERROR:",
+error
+);
+
+formMessage.textContent =
+"Error: " + error.message;
+
+formMessage.className =
+"error";
+
+}finally{
+
+saveButton.disabled = false;
+
+saveButton.textContent =
+editingTaskId
+? "Save Changes"
+: "Create Task";
+
+}
+
+});
+
+
+/* =========================
+RESET
+========================= */
+
+function resetForm(){
+
+editingTaskId = null;
+
+taskForm.reset();
+
+document.getElementById("reward").value = 100;
+
+document.getElementById("workersNeeded").value = 1;
+
+document.getElementById("targetLevel").value =
+"level_1";
+
+document.getElementById("taskStatus").value =
+"active";
+
+formTitle.textContent =
+"Create New Task";
+
+saveButton.textContent =
+"Create Task";
+
+cancelButton.style.display =
+"none";
+
+}
+
+
+/* =========================
+CANCEL
+========================= */
+
+cancelButton.addEventListener(
+"click",
+function(){
+
+resetForm();
+
+formMessage.textContent = "";
+
+});
+
+
+/* =========================
+CHANGE STATUS
+========================= */
+
+async function changeStatus(id,status){
+
+try{
+
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.update({
+status:status
+})
+.eq("id",id);
+
+if(error){
+throw error;
+}
+
+await loadTasks();
+
+}catch(error){
+
+alert(
+"Unable to change task status:\n\n" +
+error.message
+);
+
+}
+
+}
+
+
+/* =========================
+DELETE
+========================= */
+
+async function deleteTask(id){
+
+const confirmed =
+confirm(
+"Are you sure you want to delete this task?"
+);
+
+if(!confirmed){
+return;
+}
+
+try{
+
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.delete()
+.eq("id",id);
+
+if(error){
+throw error;
+}
+
+await loadTasks();
+
+}catch(error){
+
+alert(
+"Unable to delete task:\n\n" +
+error.message
+);
+
+}
+
+}
+
+
+/* =========================
+LOGOUT
+========================= */
+
+logoutButton.addEventListener(
+"click",
+async function(){
+
+logoutButton.disabled = true;
+
+logoutButton.textContent =
+"Logging out...";
+
+try{
+
+await supabaseClient.auth.signOut();
+
+window.location.href =
+"login.html";
+
+}catch(error){
+
+logoutButton.disabled = false;
+
+logoutButton.textContent =
+"Logout";
+
+}
+
+});
+
+
+/* =========================
+START
+========================= */
+
+async function start(){
+
+message.textContent =
+"Loading...";
+
+message.className = "";
+
+try{
+
+/*
+Do NOT block the page waiting
+for an admin profile check.
+*/
+
+await getSession();
+
+await loadTasks();
+
+message.textContent =
+"Task Management ready.";
+
+message.className =
+"success";
+
+}catch(error){
+
+console.error(
+"START ERROR:",
+error
+);
+
+message.textContent =
+"Task Management ready.";
+
+message.className =
+"success";
+
+}
+
+}
+
+
+/* START IMMEDIATELY */
+
+start();
+
+</script></body>
+  </html>

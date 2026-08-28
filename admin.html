@@ -15,11 +15,13 @@
   --bg: #070a10;
   --sidebar: #0b0f17;
   --card: #111722;
+  --card2: #0d131e;
   --border: #202b3b;
   --text: #f8fafc;
   --muted: #7f8da3;
   --green: #4ade80;
   --red: #f87171;
+  --yellow: #facc15;
 }
 
 html,
@@ -114,7 +116,7 @@ body {
   border-top: 1px solid var(--border);
 }
 
-.logout .nav-link {
+#logoutButton {
   color: #f87171;
 }
 
@@ -133,7 +135,7 @@ body {
 
 .topbar {
   height: 70px;
-  background: rgba(7,10,16,.97);
+  background: rgba(7,10,16,.96);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -141,7 +143,7 @@ body {
   padding: 0 28px;
   position: sticky;
   top: 0;
-  z-index: 20;
+  z-index: 900;
 }
 
 .topbar-title {
@@ -175,7 +177,7 @@ body {
 }
 
 .heading {
-  margin-bottom: 25px;
+  margin-bottom: 20px;
 }
 
 .heading h2 {
@@ -192,6 +194,7 @@ body {
 #message {
   margin-bottom: 20px;
   font-size: 13px;
+  min-height: 18px;
 }
 
 .success {
@@ -218,7 +221,6 @@ body {
   border: 1px solid var(--border);
   border-radius: 17px;
   padding: 20px;
-  min-height: 105px;
 }
 
 .stat-label {
@@ -233,7 +235,7 @@ body {
 }
 
 /* =========================
-   SECTIONS
+   MANAGEMENT
 ========================= */
 
 .section-title {
@@ -244,10 +246,6 @@ body {
   margin: 0;
   font-size: 17px;
 }
-
-/* =========================
-   MANAGEMENT
-========================= */
 
 .management {
   display: grid;
@@ -293,6 +291,10 @@ body {
   margin: 0 0 17px;
 }
 
+/* =========================
+   BUTTON
+========================= */
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -311,6 +313,12 @@ body {
 
 .button:hover {
   opacity: .9;
+}
+
+.button.secondary {
+  background: #1a2130;
+  color: #dbe4f0;
+  border: 1px solid #2b374a;
 }
 
 /* =========================
@@ -369,6 +377,11 @@ textarea {
 textarea {
   min-height: 90px;
   resize: vertical;
+}
+
+input:focus,
+textarea:focus {
+  border-color: #59677e;
 }
 
 #paymentDetailsMessage {
@@ -519,7 +532,6 @@ textarea {
     <button
       id="logoutButton"
       class="nav-link"
-      type="button"
     >
       <span class="nav-icon">↪</span>
       Logout
@@ -541,7 +553,6 @@ textarea {
     <button
       id="mobileMenu"
       class="mobile-menu"
-      type="button"
     >
       ☰
     </button>
@@ -662,6 +673,8 @@ textarea {
     <section class="management">
 
 
+      <!-- WORKERS -->
+
       <div class="card">
 
         <div class="card-head">
@@ -689,6 +702,8 @@ textarea {
 
       </div>
 
+
+      <!-- PROMOTERS -->
 
       <div class="card">
 
@@ -718,6 +733,8 @@ textarea {
       </div>
 
 
+      <!-- TASKS -->
+
       <div class="card">
 
         <div class="card-head">
@@ -745,6 +762,8 @@ textarea {
 
       </div>
 
+
+      <!-- SUBMISSIONS -->
 
       <div class="card">
 
@@ -774,6 +793,8 @@ textarea {
       </div>
 
 
+      <!-- WITHDRAWALS -->
+
       <div class="card">
 
         <div class="card-head">
@@ -802,6 +823,8 @@ textarea {
       </div>
 
 
+      <!-- PROMOTER WALLET -->
+
       <div class="card">
 
         <div class="card-head">
@@ -829,7 +852,6 @@ textarea {
 
       </div>
 
-
     </section>
 
 
@@ -856,7 +878,6 @@ textarea {
 
 
       <div class="form-grid">
-
 
         <div class="form-group">
 
@@ -917,7 +938,6 @@ textarea {
 
         </div>
 
-
       </div>
 
 
@@ -927,7 +947,6 @@ textarea {
       <button
         id="savePaymentDetailsButton"
         class="button"
-        type="button"
       >
         Save Payment Details
       </button>
@@ -937,19 +956,18 @@ textarea {
 
     </section>
 
-
   </main>
 
 </div>
 
 
+<!-- =========================
+     SUPABASE
+========================= -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-/* =========================
-   SUPABASE
-========================= */
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
@@ -960,7 +978,14 @@ const SUPABASE_KEY =
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_KEY
+    SUPABASE_KEY,
+    {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true
+      }
+    }
   );
 
 
@@ -1013,7 +1038,19 @@ mobileMenu.addEventListener(
 
 
 /* =========================
-   ADMIN CHECK
+   NUMBER FORMAT
+========================= */
+
+function number(value) {
+
+  return Number(value || 0)
+    .toLocaleString("en-NG");
+
+}
+
+
+/* =========================
+   CHECK ADMIN
 ========================= */
 
 async function checkAdmin() {
@@ -1023,37 +1060,35 @@ async function checkAdmin() {
     message.textContent =
       "Checking admin access...";
 
+    message.className = "";
+
 
     /*
-      Get current session.
+      IMPORTANT:
+      Use getUser() instead of relying
+      only on getSession().
     */
 
     const {
-      data,
-      error
+      data: {
+        user
+      },
+      error: userError
     } =
-    await supabaseClient.auth.getSession();
+      await supabaseClient.auth.getUser();
 
 
-    if (error) {
+    if (userError) {
 
-      throw error;
+      throw userError;
 
     }
 
 
-    const session =
-      data?.session;
-
-
-    /*
-      No session.
-    */
-
-    if (!session) {
+    if (!user) {
 
       message.textContent =
-        "No active login session.";
+        "You are not logged in. Redirecting to login...";
 
       message.className =
         "error";
@@ -1065,31 +1100,27 @@ async function checkAdmin() {
             "login.html";
 
         },
-        1000
+        800
       );
 
-      return;
+      return false;
 
     }
 
 
-    const user =
-      session.user;
-
-
     /*
-      Get profile.
+      Get the user's profile role.
     */
 
     const {
       data: profile,
       error: profileError
     } =
-    await supabaseClient
-      .from("profiles")
-      .select("role")
-      .eq("id", user.id)
-      .maybeSingle();
+      await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .maybeSingle();
 
 
     if (profileError) {
@@ -1099,13 +1130,18 @@ async function checkAdmin() {
     }
 
 
-    /*
-      Confirm admin.
-    */
+    if (!profile) {
+
+      throw new Error(
+        "Your account profile was not found."
+      );
+
+    }
+
 
     if (
-      !profile ||
-      String(profile.role).toLowerCase() !== "admin"
+      String(profile.role || "")
+        .toLowerCase() !== "admin"
     ) {
 
       message.textContent =
@@ -1114,14 +1150,10 @@ async function checkAdmin() {
       message.className =
         "error";
 
-      return;
+      return false;
 
     }
 
-
-    /*
-      Admin confirmed.
-    */
 
     message.textContent =
       "Admin access confirmed.";
@@ -1131,27 +1163,35 @@ async function checkAdmin() {
 
 
     /*
-      Load dashboard.
+      Load everything after admin
+      access has been confirmed.
     */
 
-    await loadStatistics();
+    await Promise.all([
+      loadStatistics(),
+      loadPaymentDetails()
+    ]);
 
-    await loadPaymentDetails();
+
+    return true;
 
 
   } catch (error) {
 
     console.error(
-      "ADMIN CHECK ERROR:",
+      "ADMIN DASHBOARD ERROR:",
       error
     );
 
+
     message.textContent =
       "Admin error: " +
-      (error.message || "Unable to verify admin.");
+      error.message;
 
     message.className =
       "error";
+
+    return false;
 
   }
 
@@ -1159,21 +1199,16 @@ async function checkAdmin() {
 
 
 /* =========================
-   STATISTICS
+   LOAD STATISTICS
 ========================= */
 
 async function loadStatistics() {
 
   /*
-    Workers
+    WORKERS
   */
 
-  try {
-
-    const {
-      count,
-      error
-    } =
+  const workersResult =
     await supabaseClient
       .from("profiles")
       .select("id", {
@@ -1183,46 +1218,29 @@ async function loadStatistics() {
       .eq("role", "worker");
 
 
-    if (error) {
+  if (workersResult.error) {
 
-      console.warn(
-        "Worker count error:",
-        error
-      );
-
-      workerCount.textContent =
-        "0";
-
-    } else {
-
-      workerCount.textContent =
-        String(count ?? 0);
-
-    }
-
-  } catch (error) {
-
-    console.warn(
-      "Worker count failed:",
-      error
+    console.error(
+      "Worker count error:",
+      workersResult.error
     );
 
     workerCount.textContent =
       "0";
 
+  } else {
+
+    workerCount.textContent =
+      number(workersResult.count);
+
   }
 
 
   /*
-    Promoters
+    PROMOTERS
   */
 
-  try {
-
-    const {
-      count,
-      error
-    } =
+  const promotersResult =
     await supabaseClient
       .from("profiles")
       .select("id", {
@@ -1232,46 +1250,29 @@ async function loadStatistics() {
       .eq("role", "promoter");
 
 
-    if (error) {
+  if (promotersResult.error) {
 
-      console.warn(
-        "Promoter count error:",
-        error
-      );
-
-      promoterCount.textContent =
-        "0";
-
-    } else {
-
-      promoterCount.textContent =
-        String(count ?? 0);
-
-    }
-
-  } catch (error) {
-
-    console.warn(
-      "Promoter count failed:",
-      error
+    console.error(
+      "Promoter count error:",
+      promotersResult.error
     );
 
     promoterCount.textContent =
       "0";
 
+  } else {
+
+    promoterCount.textContent =
+      number(promotersResult.count);
+
   }
 
 
   /*
-    Active tasks
+    ACTIVE TASKS
   */
 
-  try {
-
-    const {
-      count,
-      error
-    } =
+  const tasksResult =
     await supabaseClient
       .from("tasks")
       .select("id", {
@@ -1281,46 +1282,29 @@ async function loadStatistics() {
       .eq("status", "active");
 
 
-    if (error) {
+  if (tasksResult.error) {
 
-      console.warn(
-        "Task count error:",
-        error
-      );
-
-      taskCount.textContent =
-        "0";
-
-    } else {
-
-      taskCount.textContent =
-        String(count ?? 0);
-
-    }
-
-  } catch (error) {
-
-    console.warn(
-      "Task count failed:",
-      error
+    console.error(
+      "Task count error:",
+      tasksResult.error
     );
 
     taskCount.textContent =
       "0";
 
+  } else {
+
+    taskCount.textContent =
+      number(tasksResult.count);
+
   }
 
 
   /*
-    Pending submissions
+    PENDING SUBMISSIONS
   */
 
-  try {
-
-    const {
-      count,
-      error
-    } =
+  const submissionsResult =
     await supabaseClient
       .from("task_submissions")
       .select("id", {
@@ -1330,32 +1314,20 @@ async function loadStatistics() {
       .eq("status", "pending");
 
 
-    if (error) {
+  if (submissionsResult.error) {
 
-      console.warn(
-        "Submission count error:",
-        error
-      );
-
-      submissionCount.textContent =
-        "0";
-
-    } else {
-
-      submissionCount.textContent =
-        String(count ?? 0);
-
-    }
-
-  } catch (error) {
-
-    console.warn(
-      "Submission count failed:",
-      error
+    console.error(
+      "Submission count error:",
+      submissionsResult.error
     );
 
     submissionCount.textContent =
       "0";
+
+  } else {
+
+    submissionCount.textContent =
+      number(submissionsResult.count);
 
   }
 
@@ -1363,7 +1335,7 @@ async function loadStatistics() {
 
 
 /* =========================
-   PAYMENT DETAILS
+   LOAD PAYMENT DETAILS
 ========================= */
 
 async function loadPaymentDetails() {
@@ -1376,12 +1348,4 @@ async function loadPaymentDetails() {
     } =
     await supabaseClient
       .from("promoter_payment_details")
-      .select(
-        "bank_name, account_name, account_number, instructions"
-      )
-      .order(
-        "updated_at",
-        {
-          ascending: false
-        }
-      )
+  

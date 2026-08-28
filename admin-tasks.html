@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>TaskVexa - Admin Task Management</title>
+<title>TaskVexa - Task Management</title>
 
 <style>
 *{box-sizing:border-box}
@@ -103,8 +103,8 @@ padding-top:18px;
 border-top:1px solid var(--border);
 }
 
-.logout button{
-color:#f87171;
+#logoutButton{
+color:var(--red);
 }
 
 .main{
@@ -131,7 +131,7 @@ font-weight:bold;
 }
 
 .content{
-max-width:1150px;
+max-width:1200px;
 margin:auto;
 padding:30px;
 }
@@ -151,13 +151,18 @@ color:var(--muted);
 font-size:14px;
 }
 
-.message{
+#message{
 margin-bottom:20px;
 font-size:13px;
 }
 
-.success{color:var(--green)}
-.error{color:var(--red)}
+.success{
+color:var(--green);
+}
+
+.error{
+color:var(--red);
+}
 
 .card{
 background:var(--card);
@@ -168,7 +173,7 @@ margin-bottom:22px;
 }
 
 .card h3{
-margin:0 0 18px;
+margin-top:0;
 }
 
 .form-grid{
@@ -202,15 +207,13 @@ outline:none;
 font-size:14px;
 }
 
-input:focus,
-textarea:focus,
-select:focus{
-border-color:#4ade80;
+textarea{
+min-height:110px;
+resize:vertical;
 }
 
-textarea{
-min-height:120px;
-resize:vertical;
+select{
+appearance:auto;
 }
 
 .button{
@@ -235,26 +238,26 @@ cursor:not-allowed;
 
 .secondary{
 background:#182131;
-color:#fff;
+color:white;
 border:1px solid #293548;
 }
 
 .danger{
 background:#32191d;
-color:#f87171;
+color:var(--red);
 border:1px solid #55262d;
 }
 
 .warning{
 background:#332b16;
-color:#facc15;
+color:var(--yellow);
 border:1px solid #55471d;
 }
 
-.green{
+.activate{
 background:#12331f;
-color:#4ade80;
-border:1px solid #1f5c3a;
+color:var(--green);
+border:1px solid #245b38;
 }
 
 .form-buttons{
@@ -270,7 +273,7 @@ margin-top:14px;
 }
 
 .task-card{
-background:#0d131e;
+background:var(--card2);
 border:1px solid var(--border);
 border-radius:17px;
 padding:20px;
@@ -279,7 +282,7 @@ margin-bottom:15px;
 
 .task-card h3{
 margin:0 0 10px;
-font-size:19px;
+font-size:18px;
 }
 
 .task-description{
@@ -305,7 +308,6 @@ color:#64748b;
 .info-row span:last-child{
 font-weight:700;
 text-align:right;
-word-break:break-word;
 }
 
 .reward{
@@ -335,6 +337,26 @@ background:#32191d;
 color:var(--red);
 }
 
+.status-draft{
+background:#1c2533;
+color:#aeb9c9;
+}
+
+.status-pending{
+background:#332b16;
+color:var(--yellow);
+}
+
+.status-approved{
+background:#12331f;
+color:var(--green);
+}
+
+.status-rejected{
+background:#32191d;
+color:var(--red);
+}
+
 .task-actions{
 display:flex;
 gap:8px;
@@ -342,10 +364,9 @@ flex-wrap:wrap;
 margin-top:17px;
 }
 
-.empty,
-.loading{
+.empty{
 text-align:center;
-padding:30px;
+padding:35px;
 color:#64748b;
 }
 
@@ -357,6 +378,12 @@ color:white;
 border-radius:9px;
 padding:8px 11px;
 cursor:pointer;
+}
+
+.loading{
+text-align:center;
+padding:30px;
+color:var(--muted);
 }
 
 @media(max-width:800px){
@@ -389,24 +416,6 @@ grid-template-columns:1fr;
 .full{
 grid-column:auto;
 }
-
-.topbar{
-padding:0 15px;
-}
-
-}
-
-@media(max-width:500px){
-
-.info-row{
-flex-direction:column;
-gap:5px;
-}
-
-.info-row span:last-child{
-text-align:left;
-}
-
 }
 </style>
 </head>
@@ -439,7 +448,6 @@ Workers
 Promoters
 </a>
 
-<!-- IMPORTANT: ADMIN TASK PAGE -->
 <a href="admin-tasks.html" class="nav-link active">
 <span class="nav-icon">✓</span>
 Tasks Management
@@ -491,9 +499,7 @@ Logout
 Task Management
 </div>
 
-<div style="color:#7f8da3;font-size:13px;">
-Admin
-</div>
+<div></div>
 
 </div>
 
@@ -510,15 +516,13 @@ Create, edit, activate, pause and close tasks available to workers.
 
 </div>
 
-<div id="message" class="message">
+
+<div id="message">
 Checking admin access...
 </div>
 
 
 <section id="adminContent" style="display:none;">
-
-
-<!-- CREATE / EDIT TASK -->
 
 <div class="card">
 
@@ -530,9 +534,7 @@ Create New Task
 
 <div class="form-grid">
 
-
 <div>
-
 <label>Task Title</label>
 
 <input
@@ -541,12 +543,10 @@ id="title"
 placeholder="Enter task title"
 required
 >
-
 </div>
 
 
 <div>
-
 <label>Platform</label>
 
 <input
@@ -555,7 +555,6 @@ id="platform"
 placeholder="Telegram"
 required
 >
-
 </div>
 
 
@@ -659,6 +658,10 @@ Paused
 Closed
 </option>
 
+<option value="draft">
+Draft
+</option>
+
 </select>
 
 </div>
@@ -687,14 +690,13 @@ Cancel Edit
 
 </div>
 
+
 <p id="formMessage"></p>
 
 </form>
 
 </div>
 
-
-<!-- EXISTING TASKS -->
 
 <div class="card">
 
@@ -721,11 +723,19 @@ Loading tasks...
 
 <script>
 
+"use strict";
+
+
+/* =========================
+SUPABASE
+========================= */
+
 const SUPABASE_URL =
 "https://dxtlnrthlpdaobnbazny.supabase.co";
 
 const SUPABASE_KEY =
 "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
 
 const supabaseClient =
 window.supabase.createClient(
@@ -733,6 +743,10 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
+
+/* =========================
+ELEMENTS
+========================= */
 
 const message =
 document.getElementById("message");
@@ -821,54 +835,51 @@ maximumFractionDigits:2
 
 
 /* =========================
-CHECK ADMIN
+GET ADMIN
 ========================= */
 
-async function checkAdmin(){
-
-try{
+async function getAdmin(){
 
 message.textContent =
 "Checking admin access...";
 
-message.className =
-"message";
+message.className = "";
 
+
+/* Get authenticated user */
 
 const {
-data,
-error
+data:userData,
+error:userError
 } =
 await supabaseClient.auth.getUser();
 
 
-if(error){
+if(userError){
 
-throw error;
+throw userError;
 
 }
 
 
 if(
-!data ||
-!data.user
+!userData ||
+!userData.user
 ){
 
 window.location.href =
 "login.html";
 
-return false;
+return null;
 
 }
 
 
 currentUser =
-data.user;
+userData.user;
 
 
-/*
-Get role from profiles.
-*/
+/* Check profile role */
 
 const {
 data:profile,
@@ -893,19 +904,17 @@ throw profileError;
 
 if(
 !profile ||
-String(profile.role).toLowerCase() !== "admin"
+String(profile.role || "").toLowerCase()
+!=="admin"
 ){
 
 message.textContent =
 "Access denied. Admin account required.";
 
 message.className =
-"message error";
+"error";
 
-adminContent.style.display =
-"none";
-
-return false;
+return null;
 
 }
 
@@ -914,82 +923,36 @@ message.textContent =
 "Admin access confirmed.";
 
 message.className =
-"message success";
+"success";
 
 adminContent.style.display =
 "block";
 
 
-await loadTasks();
-
-return true;
-
-
-}catch(error){
-
-console.error(
-"ADMIN CHECK ERROR:",
-error
-);
-
-message.innerHTML =
-"Unable to verify admin access.<br><br>" +
-escapeHTML(error.message);
-
-message.className =
-"message error";
-
-return false;
-
-}
+return currentUser;
 
 }
 
 
 /* =========================
-GET TARGET LEVELS
+TARGET LEVEL DISPLAY
 ========================= */
 
-function getTargetLevels(){
+function getLevels(
+targetLevels
+){
 
-const value =
-document.getElementById(
-"targetLevel"
-).value;
-
-
-if(value === "both"){
-
-return [
-"level_1",
-"level_2"
-];
-
-}
-
-
-return [value];
-
-}
-
-
-/* =========================
-LEVEL DISPLAY
-========================= */
-
-function displayLevels(levels){
-
-if(!Array.isArray(levels)){
+if(!Array.isArray(targetLevels)){
 
 return "Not specified";
 
 }
 
 const has1 =
-levels.includes("level_1");
+targetLevels.includes("level_1");
 
 const has2 =
-levels.includes("level_2");
+targetLevels.includes("level_2");
 
 
 if(has1 && has2){
@@ -1016,267 +979,40 @@ return "Not specified";
 
 
 /* =========================
-CREATE / UPDATE
+STATUS CLASS
 ========================= */
 
-taskForm.addEventListener(
-"submit",
-async function(event){
+function getStatusClass(status){
 
-event.preventDefault();
+switch(status){
 
+case "active":
+return "status-active";
 
-formMessage.textContent =
-"";
+case "paused":
+return "status-paused";
 
-formMessage.className =
-"";
+case "closed":
+return "status-closed";
 
+case "draft":
+return "status-draft";
 
-try{
+case "pending":
+return "status-pending";
 
-saveButton.disabled =
-true;
+case "approved":
+return "status-approved";
 
+case "rejected":
+return "status-rejected";
 
-const title =
-document.getElementById(
-"title"
-).value.trim();
-
-
-const description =
-document.getElementById(
-"description"
-).value.trim();
-
-
-const platform =
-document.getElementById(
-"platform"
-).value.trim();
-
-
-const taskUrl =
-document.getElementById(
-"taskUrl"
-).value.trim();
-
-
-const reward =
-Number(
-document.getElementById(
-"reward"
-).value
-);
-
-
-const workersNeeded =
-Number(
-document.getElementById(
-"workersNeeded"
-).value
-);
-
-
-const taskStatus =
-document.getElementById(
-"taskStatus"
-).value;
-
-
-if(!title){
-
-throw new Error(
-"Task title is required."
-);
-
-}
-
-
-if(!description){
-
-throw new Error(
-"Task description is required."
-);
-
-}
-
-
-if(!platform){
-
-throw new Error(
-"Platform is required."
-);
-
-}
-
-
-if(!taskUrl){
-
-throw new Error(
-"Task link is required."
-);
-
-}
-
-
-if(
-!Number.isFinite(reward) ||
-reward < 0
-){
-
-throw new Error(
-"Enter a valid worker reward."
-);
-
-}
-
-
-if(
-!Number.isInteger(workersNeeded) ||
-workersNeeded < 1
-){
-
-throw new Error(
-"Workers Needed must be at least 1."
-);
-
-}
-
-
-const taskData = {
-
-title:title,
-
-description:description,
-
-platform:platform,
-
-task_url:taskUrl,
-
-reward:reward,
-
-workers_needed:workersNeeded,
-
-target_levels:getTargetLevels(),
-
-status:taskStatus
-
-};
-
-
-/* UPDATE */
-
-if(editingTaskId){
-
-saveButton.textContent =
-"Saving...";
-
-
-const {
-error
-} =
-await supabaseClient
-.from("tasks")
-.update(taskData)
-.eq(
-"id",
-editingTaskId
-);
-
-
-if(error){
-
-throw error;
-
-}
-
-
-formMessage.textContent =
-"Task updated successfully.";
-
-formMessage.className =
-"success";
-
-
-}
-/* CREATE */
-
-else{
-
-saveButton.textContent =
-"Creating...";
-
-
-const {
-error
-} =
-await supabaseClient
-.from("tasks")
-.insert({
-
-...taskData,
-
-created_by:
-currentUser.id,
-
-source:
-"admin"
-
-});
-
-
-if(error){
-
-throw error;
-
-}
-
-
-formMessage.textContent =
-"Task created successfully.";
-
-formMessage.className =
-"success";
-
-}
-
-
-resetForm();
-
-await loadTasks();
-
-
-}catch(error){
-
-console.error(
-"SAVE TASK ERROR:",
-error
-);
-
-formMessage.textContent =
-"Error: " +
-error.message;
-
-formMessage.className =
-"error";
-
-
-}finally{
-
-saveButton.disabled =
-false;
-
-saveButton.textContent =
-editingTaskId
-? "Save Changes"
-: "Create Task";
+default:
+return "status-draft";
 
 }
 
 }
-);
 
 
 /* =========================
@@ -1285,14 +1021,13 @@ LOAD TASKS
 
 async function loadTasks(){
 
-taskList.innerHTML = `
+taskList.innerHTML =
+`
 <div class="loading">
 Loading tasks...
 </div>
 `;
 
-
-try{
 
 const {
 data:tasks,
@@ -1300,7 +1035,8 @@ error
 } =
 await supabaseClient
 .from("tasks")
-.select(`
+.select(
+`
 id,
 title,
 description,
@@ -1311,8 +1047,10 @@ workers_needed,
 target_levels,
 status,
 source,
-created_at
-`)
+created_at,
+updated_at
+`
+)
 .order(
 "created_at",
 {
@@ -1333,7 +1071,8 @@ if(
 tasks.length === 0
 ){
 
-taskList.innerHTML = `
+taskList.innerHTML =
+`
 <div class="empty">
 No tasks found.
 </div>
@@ -1344,17 +1083,14 @@ return;
 }
 
 
-taskList.innerHTML =
-"";
+taskList.innerHTML = "";
 
 
 tasks.forEach(
-task => {
+function(task){
 
 const card =
-document.createElement(
-"section"
-);
+document.createElement("section");
 
 card.className =
 "task-card";
@@ -1362,36 +1098,13 @@ card.className =
 
 const status =
 String(
-task.status || "active"
+task.status || "draft"
 ).toLowerCase();
 
 
-let statusClass =
-"status-active";
-
-
-if(status === "paused"){
-
-statusClass =
-"status-paused";
-
-}
-
-if(status === "closed"){
-
-statusClass =
-"status-closed";
-
-}
-
-
-const statusText =
-status.toUpperCase();
-
-
-const levels =
-displayLevels(
-task.target_levels
+const source =
+String(
+task.source || "admin"
 );
 
 
@@ -1408,13 +1121,11 @@ ${escapeHTML(task.description)}
 
 <div class="info-row">
 
-<span>
-Platform
-</span>
+<span>Platform</span>
 
 <span>
 ${escapeHTML(
-task.platform || "-"
+task.platform || "Not specified"
 )}
 </span>
 
@@ -1423,9 +1134,27 @@ task.platform || "-"
 
 <div class="info-row">
 
+<span>Task Link</span>
+
 <span>
-Worker Reward
+
+<a
+href="${escapeHTML(task.task_url || "#")}"
+target="_blank"
+rel="noopener noreferrer"
+style="color:#4ade80;"
+>
+Open Link
+</a>
+
 </span>
+
+</div>
+
+
+<div class="info-row">
+
+<span>Worker Reward</span>
 
 <span class="reward">
 ${money(task.reward)}
@@ -1436,14 +1165,10 @@ ${money(task.reward)}
 
 <div class="info-row">
 
-<span>
-Workers Needed
-</span>
+<span>Workers Needed</span>
 
 <span>
-${Number(
-task.workers_needed || 0
-)}
+${Number(task.workers_needed || 0)}
 </span>
 
 </div>
@@ -1451,26 +1176,11 @@ task.workers_needed || 0
 
 <div class="info-row">
 
-<span>
-Target Level
-</span>
-
-<span>
-${escapeHTML(levels)}
-</span>
-
-</div>
-
-
-<div class="info-row">
-
-<span>
-Source
-</span>
+<span>Target Level</span>
 
 <span>
 ${escapeHTML(
-task.source || "admin"
+getLevels(task.target_levels)
 )}
 </span>
 
@@ -1479,16 +1189,10 @@ task.source || "admin"
 
 <div class="info-row">
 
-<span>
-Status
-</span>
+<span>Source</span>
 
 <span>
-
-<span class="status ${statusClass}">
-${escapeHTML(statusText)}
-</span>
-
+${escapeHTML(source)}
 </span>
 
 </div>
@@ -1496,28 +1200,13 @@ ${escapeHTML(statusText)}
 
 <div class="info-row">
 
+<span>Status</span>
+
 <span>
-Task Link
+
+<span class="status ${getStatusClass(status)}">
+${escapeHTML(status.toUpperCase())}
 </span>
-
-<span>
-
-${
-task.task_url
-?
-`
-<a
-href="${escapeHTML(task.task_url)}"
-target="_blank"
-rel="noopener noreferrer"
-style="color:#4ade80;text-decoration:none;"
->
-Open Task
-</a>
-`
-:
-"-"
-}
 
 </span>
 
@@ -1527,8 +1216,9 @@ Open Task
 <div class="task-actions">
 
 <button
-class="button secondary edit-button"
-data-id="${escapeHTML(task.id)}"
+class="button secondary"
+data-action="edit"
+data-id="${task.id}"
 >
 Edit
 </button>
@@ -1539,8 +1229,9 @@ status === "active"
 ?
 `
 <button
-class="button warning pause-button"
-data-id="${escapeHTML(task.id)}"
+class="button warning"
+data-action="pause"
+data-id="${task.id}"
 >
 Pause
 </button>
@@ -1548,8 +1239,9 @@ Pause
 :
 `
 <button
-class="button green activate-button"
-data-id="${escapeHTML(task.id)}"
+class="button activate"
+data-action="activate"
+data-id="${task.id}"
 >
 Activate
 </button>
@@ -1562,8 +1254,9 @@ status !== "closed"
 ?
 `
 <button
-class="button danger close-button"
-data-id="${escapeHTML(task.id)}"
+class="button danger"
+data-action="close"
+data-id="${task.id}"
 >
 Close
 </button>
@@ -1574,8 +1267,9 @@ Close
 
 
 <button
-class="button danger delete-button"
-data-id="${escapeHTML(task.id)}"
+class="button danger"
+data-action="delete"
+data-id="${task.id}"
 >
 Delete
 </button>
@@ -1591,145 +1285,87 @@ taskList.appendChild(card);
 );
 
 
-/* EDIT */
+/* Attach actions */
 
-document
-.querySelectorAll(
-".edit-button"
-)
+taskList
+.querySelectorAll("[data-action]")
 .forEach(
-button => {
+function(button){
 
 button.addEventListener(
 "click",
-function(){
+async function(){
+
+const action =
+button.dataset.action;
+
+const taskId =
+button.dataset.id;
+
+
+if(action === "edit"){
 
 editTask(
-button.dataset.id,
+taskId,
 tasks
 );
 
-}
-);
+return;
 
 }
-);
 
 
-/* PAUSE */
+if(action === "pause"){
 
-document
-.querySelectorAll(
-".pause-button"
-)
-.forEach(
-button => {
-
-button.addEventListener(
-"click",
-function(){
-
-changeStatus(
-button.dataset.id,
+await changeStatus(
+taskId,
 "paused"
 );
 
-}
-);
+return;
 
 }
-);
 
 
-/* ACTIVATE */
+if(action === "activate"){
 
-document
-.querySelectorAll(
-".activate-button"
-)
-.forEach(
-button => {
-
-button.addEventListener(
-"click",
-function(){
-
-changeStatus(
-button.dataset.id,
+await changeStatus(
+taskId,
 "active"
 );
 
-}
-);
+return;
 
 }
-);
 
 
-/* CLOSE */
+if(action === "close"){
 
-document
-.querySelectorAll(
-".close-button"
-)
-.forEach(
-button => {
-
-button.addEventListener(
-"click",
-function(){
-
-changeStatus(
-button.dataset.id,
+await changeStatus(
+taskId,
 "closed"
 );
 
-}
-);
+return;
 
 }
+
+
+if(action === "delete"){
+
+await deleteTask(
+taskId
 );
 
+return;
 
-/* DELETE */
-
-document
-.querySelectorAll(
-".delete-button"
-)
-.forEach(
-button => {
-
-button.addEventListener(
-"click",
-function(){
-
-deleteTask(
-button.dataset.id
-);
+}
 
 }
 );
 
 }
 );
-
-
-}catch(error){
-
-console.error(
-"LOAD TASKS ERROR:",
-error
-);
-
-taskList.innerHTML = `
-<div class="empty error">
-Unable to load tasks.<br><br>
-${escapeHTML(error.message)}
-</div>
-`;
-
-}
 
 }
 
@@ -1745,9 +1381,12 @@ tasks
 
 const task =
 tasks.find(
-item =>
-String(item.id) ===
-String(taskId)
+function(item){
+
+return String(item.id) ===
+String(taskId);
+
+}
 );
 
 
@@ -1801,9 +1440,7 @@ task.workers_needed || 1;
 
 
 const levels =
-Array.isArray(
-task.target_levels
-)
+Array.isArray(task.target_levels)
 ?
 task.target_levels
 :
@@ -1820,8 +1457,7 @@ document.getElementById(
 ).value =
 "both";
 
-}
-else if(
+}else if(
 levels.includes("level_2")
 ){
 
@@ -1830,8 +1466,7 @@ document.getElementById(
 ).value =
 "level_2";
 
-}
-else{
+}else{
 
 document.getElementById(
 "targetLevel"
@@ -1850,23 +1485,14 @@ task.status || "active";
 formTitle.textContent =
 "Edit Task";
 
-
 saveButton.textContent =
 "Save Changes";
-
 
 cancelButton.style.display =
 "inline-flex";
 
 
-formMessage.textContent =
-"Editing task: " +
-(task.title || "");
-
-
-formMessage.className =
-"";
-
+formMessage.textContent = "";
 
 window.scrollTo({
 top:0,
@@ -1874,6 +1500,307 @@ behavior:"smooth"
 });
 
 }
+
+
+/* =========================
+CREATE / UPDATE
+========================= */
+
+taskForm.addEventListener(
+"submit",
+async function(event){
+
+event.preventDefault();
+
+
+formMessage.textContent = "";
+formMessage.className = "";
+
+
+const title =
+document.getElementById(
+"title"
+).value.trim();
+
+
+const description =
+document.getElementById(
+"description"
+).value.trim();
+
+
+const platform =
+document.getElementById(
+"platform"
+).value.trim();
+
+
+const taskUrl =
+document.getElementById(
+"taskUrl"
+).value.trim();
+
+
+const reward =
+Number(
+document.getElementById(
+"reward"
+).value
+);
+
+
+const workersNeeded =
+Number(
+document.getElementById(
+"workersNeeded"
+).value
+);
+
+
+const targetLevel =
+document.getElementById(
+"targetLevel"
+).value;
+
+
+const taskStatus =
+document.getElementById(
+"taskStatus"
+).value;
+
+
+if(!title){
+
+formMessage.textContent =
+"Task title is required.";
+
+formMessage.className =
+"error";
+
+return;
+
+}
+
+
+if(!description){
+
+formMessage.textContent =
+"Task description is required.";
+
+formMessage.className =
+"error";
+
+return;
+
+}
+
+
+if(!platform){
+
+formMessage.textContent =
+"Platform is required.";
+
+formMessage.className =
+"error";
+
+return;
+
+}
+
+
+if(!taskUrl){
+
+formMessage.textContent =
+"Task link is required.";
+
+formMessage.className =
+"error";
+
+return;
+
+}
+
+
+if(
+!Number.isFinite(reward) ||
+reward < 0
+){
+
+formMessage.textContent =
+"Enter a valid worker reward.";
+
+formMessage.className =
+"error";
+
+return;
+
+}
+
+
+if(
+!Number.isInteger(workersNeeded) ||
+workersNeeded < 1
+){
+
+formMessage.textContent =
+"Workers Needed must be at least 1.";
+
+formMessage.className =
+"error";
+
+return;
+
+}
+
+
+const targetLevels =
+targetLevel === "both"
+?
+["level_1","level_2"]
+:
+[targetLevel];
+
+
+const taskData = {
+
+title:title,
+
+description:description,
+
+platform:platform,
+
+task_url:taskUrl,
+
+reward:reward,
+
+workers_needed:workersNeeded,
+
+target_levels:targetLevels,
+
+status:taskStatus
+
+};
+
+
+try{
+
+saveButton.disabled =
+true;
+
+
+if(editingTaskId){
+
+saveButton.textContent =
+"Saving...";
+
+
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.update(taskData)
+.eq(
+"id",
+editingTaskId
+);
+
+
+if(error){
+
+throw error;
+
+}
+
+
+formMessage.textContent =
+"Task updated successfully.";
+
+formMessage.className =
+"success";
+
+
+}else{
+
+saveButton.textContent =
+"Creating...";
+
+
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.insert({
+
+...taskData,
+
+created_by:
+currentUser.id,
+
+source:"admin"
+
+});
+
+
+if(error){
+
+throw error;
+
+}
+
+
+formMessage.textContent =
+"Task created successfully.";
+
+formMessage.className =
+"success";
+
+}
+
+
+resetForm();
+
+await loadTasks();
+
+
+}catch(error){
+
+console.error(
+"TASK SAVE ERROR:",
+error
+);
+
+
+formMessage.textContent =
+"Error: " +
+error.message;
+
+formMessage.className =
+"error";
+
+
+}finally{
+
+saveButton.disabled =
+false;
+
+if(editingTaskId){
+
+saveButton.textContent =
+"Save Changes";
+
+}else{
+
+saveButton.textContent =
+"Create Task";
+
+}
+
+}
+
+}
+);
 
 
 /* =========================
@@ -1887,28 +1814,53 @@ newStatus
 
 try{
 
-const action =
-newStatus === "active"
-? "activate"
-: newStatus === "paused"
-? "pause"
-: "close";
+const {
+error
+} =
+await supabaseClient
+.from("tasks")
+.update({
+status:newStatus
+})
+.eq(
+"id",
+taskId
+);
 
 
-if(
-!confirm(
-"Are you sure you want to " +
-action +
-" this task?"
-)
-){
+if(error){
 
-return;
+throw error;
 
 }
 
 
-const {
+await loadTasks();
+
+
+}catch(error){
+
+console.error(
+"STATUS ERROR:",
 error
-} =
-await supabase
+);
+
+alert(
+"Unable to change task status:\n\n" +
+error.message
+);
+
+}
+
+}
+
+
+/* =========================
+DELETE TASK
+========================= */
+
+async function deleteTask(
+taskId
+){
+
+const confirmed =

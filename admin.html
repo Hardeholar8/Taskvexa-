@@ -15,12 +15,13 @@
   --bg: #070a10;
   --sidebar: #0b0f17;
   --card: #111722;
+  --card2: #0d131e;
   --border: #202b3b;
   --text: #f8fafc;
   --muted: #7f8da3;
-  --accent: #8b5cf6;
   --green: #4ade80;
   --red: #f87171;
+  --yellow: #facc15;
 }
 
 html,
@@ -37,7 +38,9 @@ body {
   min-height: 100vh;
 }
 
-/* SIDEBAR */
+/* =========================
+   SIDEBAR
+========================= */
 
 .sidebar {
   position: fixed;
@@ -49,6 +52,7 @@ body {
   border-right: 1px solid var(--border);
   padding: 22px 14px;
   overflow-y: auto;
+  z-index: 1000;
 }
 
 .logo {
@@ -88,6 +92,10 @@ body {
   color: #aeb9c9;
   text-decoration: none;
   font-size: 14px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
 }
 
 .nav-link:hover,
@@ -109,20 +117,21 @@ body {
 }
 
 #logoutButton {
-  background: transparent;
-  border: 0;
-  cursor: pointer;
   color: #f87171;
 }
 
-/* MAIN */
+/* =========================
+   MAIN
+========================= */
 
 .main {
   margin-left: 245px;
   min-height: 100vh;
 }
 
-/* TOPBAR */
+/* =========================
+   TOPBAR
+========================= */
 
 .topbar {
   height: 70px;
@@ -135,6 +144,7 @@ body {
   position: sticky;
   top: 0;
   z-index: 20;
+  backdrop-filter: blur(12px);
 }
 
 .topbar-title {
@@ -155,9 +165,12 @@ body {
   height: 8px;
   border-radius: 50%;
   background: var(--green);
+  box-shadow: 0 0 10px rgba(74,222,128,.6);
 }
 
-/* CONTENT */
+/* =========================
+   CONTENT
+========================= */
 
 .content {
   max-width: 1400px;
@@ -166,7 +179,7 @@ body {
 }
 
 .heading {
-  margin-bottom: 25px;
+  margin-bottom: 22px;
 }
 
 .heading h2 {
@@ -193,7 +206,13 @@ body {
   color: var(--red);
 }
 
-/* STAT CARDS */
+.warning {
+  color: var(--yellow);
+}
+
+/* =========================
+   STATS
+========================= */
 
 .stats {
   display: grid;
@@ -203,10 +222,18 @@ body {
 }
 
 .stat {
-  background: var(--card);
+  background: linear-gradient(145deg, #131a27, #0d121b);
   border: 1px solid var(--border);
   border-radius: 17px;
   padding: 20px;
+  min-height: 120px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.18);
+}
+
+.stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .stat-label {
@@ -214,16 +241,29 @@ body {
   font-size: 12px;
 }
 
-.stat-value {
-  font-size: 25px;
-  font-weight: 800;
-  margin-top: 12px;
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a2030;
+  border-radius: 10px;
+  font-size: 17px;
 }
 
-/* SECTIONS */
+.stat-value {
+  font-size: 26px;
+  font-weight: 800;
+  margin-top: 15px;
+}
+
+/* =========================
+   SECTION
+========================= */
 
 .section-title {
-  margin: 25px 0 14px;
+  margin: 28px 0 14px;
 }
 
 .section-title h3 {
@@ -231,7 +271,9 @@ body {
   font-size: 17px;
 }
 
-/* MANAGEMENT */
+/* =========================
+   MANAGEMENT
+========================= */
 
 .management {
   display: grid;
@@ -244,6 +286,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 18px;
   padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.15);
 }
 
 .card-head {
@@ -277,6 +320,10 @@ body {
   margin: 0 0 17px;
 }
 
+/* =========================
+   BUTTON
+========================= */
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -295,6 +342,7 @@ body {
 
 .button:hover {
   opacity: .9;
+  transform: translateY(-1px);
 }
 
 .secondary {
@@ -303,7 +351,9 @@ body {
   border: 1px solid #2b374a;
 }
 
-/* PAYMENT */
+/* =========================
+   PAYMENT
+========================= */
 
 .payment {
   margin-top: 15px;
@@ -313,7 +363,7 @@ body {
   padding: 23px;
 }
 
-.info {
+.info-box {
   background: #0b111b;
   border: 1px solid #1f2b3d;
   color: #8997aa;
@@ -354,9 +404,19 @@ textarea {
   font-size: 14px;
 }
 
+input:focus,
+textarea:focus {
+  border-color: #59677e;
+}
+
 textarea {
   min-height: 90px;
   resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #4f5c70;
 }
 
 #paymentDetailsMessage {
@@ -365,7 +425,9 @@ textarea {
   font-weight: bold;
 }
 
-/* MOBILE */
+/* =========================
+   MOBILE
+========================= */
 
 .mobile-menu {
   display: none;
@@ -375,12 +437,15 @@ textarea {
   border-radius: 9px;
   padding: 8px 11px;
   cursor: pointer;
+  font-size: 18px;
 }
 
 @media(max-width:1050px) {
+
   .stats {
     grid-template-columns: 1fr 1fr;
   }
+
 }
 
 @media(max-width:800px) {
@@ -388,7 +453,6 @@ textarea {
   .sidebar {
     transform: translateX(-100%);
     transition: .25s;
-    z-index: 100;
   }
 
   .sidebar.open {
@@ -418,6 +482,7 @@ textarea {
   .form-group.full {
     grid-column: auto;
   }
+
 }
 
 @media(max-width:500px) {
@@ -433,13 +498,16 @@ textarea {
   .admin-status {
     display: none;
   }
+
 }
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
+<!-- =========================
+     SIDEBAR
+========================= -->
 
 <aside class="sidebar" id="sidebar">
 
@@ -448,14 +516,18 @@ textarea {
     <p>Admin Control Panel</p>
   </div>
 
-  <div class="nav-title">Overview</div>
+  <div class="nav-title">
+    Overview
+  </div>
 
   <a href="admin.html" class="nav-link active">
     <span class="nav-icon">⌂</span>
     Dashboard
   </a>
 
-  <div class="nav-title">Management</div>
+  <div class="nav-title">
+    Management
+  </div>
 
   <a href="worker.html" class="nav-link">
     <span class="nav-icon">👥</span>
@@ -487,7 +559,9 @@ textarea {
     Promoter Wallet
   </a>
 
-  <div class="nav-title">Settings</div>
+  <div class="nav-title">
+    Settings
+  </div>
 
   <a href="settings.html" class="nav-link">
     <span class="nav-icon">⚙</span>
@@ -495,16 +569,23 @@ textarea {
   </a>
 
   <div class="logout">
-    <button id="logoutButton" class="nav-link">
+
+    <button
+      id="logoutButton"
+      class="nav-link"
+    >
       <span class="nav-icon">↪</span>
       Logout
     </button>
+
   </div>
 
 </aside>
 
 
-<!-- MAIN -->
+<!-- =========================
+     MAIN
+========================= -->
 
 <div class="main">
 
@@ -544,55 +625,121 @@ textarea {
     </div>
 
 
-    <div id="message">
+    <div
+      id="message"
+      class="success"
+    >
       Checking admin access...
     </div>
 
 
-    <!-- STATS -->
+    <!-- =========================
+         OVERVIEW
+    ========================= -->
 
     <section class="stats">
 
       <div class="stat">
-        <div class="stat-label">
-          Workers
+
+        <div class="stat-top">
+
+          <div class="stat-label">
+            Workers
+          </div>
+
+          <div class="stat-icon">
+            👥
+          </div>
+
         </div>
-        <div class="stat-value" id="workerCount">
+
+        <div
+          class="stat-value"
+          id="workerCount"
+        >
           —
         </div>
+
       </div>
 
-      <div class="stat">
-        <div class="stat-label">
-          Promoters
-        </div>
-        <div class="stat-value" id="promoterCount">
-          —
-        </div>
-      </div>
 
       <div class="stat">
-        <div class="stat-label">
-          Active Tasks
+
+        <div class="stat-top">
+
+          <div class="stat-label">
+            Promoters
+          </div>
+
+          <div class="stat-icon">
+            📣
+          </div>
+
         </div>
-        <div class="stat-value" id="taskCount">
+
+        <div
+          class="stat-value"
+          id="promoterCount"
+        >
           —
         </div>
+
       </div>
 
+
       <div class="stat">
-        <div class="stat-label">
-          Pending Submissions
+
+        <div class="stat-top">
+
+          <div class="stat-label">
+            Active Tasks
+          </div>
+
+          <div class="stat-icon">
+            ✓
+          </div>
+
         </div>
-        <div class="stat-value" id="submissionCount">
+
+        <div
+          class="stat-value"
+          id="taskCount"
+        >
           —
         </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-top">
+
+          <div class="stat-label">
+            Pending Submissions
+          </div>
+
+          <div class="stat-icon">
+            📋
+          </div>
+
+        </div>
+
+        <div
+          class="stat-value"
+          id="submissionCount"
+        >
+          —
+        </div>
+
       </div>
 
     </section>
 
 
-    <!-- MANAGEMENT -->
+    <!-- =========================
+         MANAGEMENT
+    ========================= -->
 
     <div class="section-title">
       <h3>Management</h3>
@@ -601,14 +748,21 @@ textarea {
 
     <section class="management">
 
+
       <div class="card">
 
         <div class="card-head">
-          <div class="icon">👥</div>
+
+          <div class="icon">
+            👥
+          </div>
 
           <div>
-            <h3>Workers</h3>
+            <h3>
+              Workers
+            </h3>
           </div>
+
         </div>
 
         <p>
@@ -628,11 +782,17 @@ textarea {
       <div class="card">
 
         <div class="card-head">
-          <div class="icon">📣</div>
+
+          <div class="icon">
+            📣
+          </div>
 
           <div>
-            <h3>Promoters</h3>
+            <h3>
+              Promoters
+            </h3>
           </div>
+
         </div>
 
         <p>
@@ -652,11 +812,17 @@ textarea {
       <div class="card">
 
         <div class="card-head">
-          <div class="icon">✓</div>
+
+          <div class="icon">
+            ✓
+          </div>
 
           <div>
-            <h3>Task Management</h3>
+            <h3>
+              Task Management
+            </h3>
           </div>
+
         </div>
 
         <p>
@@ -676,11 +842,17 @@ textarea {
       <div class="card">
 
         <div class="card-head">
-          <div class="icon">📋</div>
+
+          <div class="icon">
+            📋
+          </div>
 
           <div>
-            <h3>Task Submissions</h3>
+            <h3>
+              Task Submissions
+            </h3>
           </div>
+
         </div>
 
         <p>
@@ -700,11 +872,17 @@ textarea {
       <div class="card">
 
         <div class="card-head">
-          <div class="icon">💳</div>
+
+          <div class="icon">
+            💳
+          </div>
 
           <div>
-            <h3>Withdrawals</h3>
+            <h3>
+              Withdrawals
+            </h3>
           </div>
+
         </div>
 
         <p>
@@ -724,11 +902,17 @@ textarea {
       <div class="card">
 
         <div class="card-head">
-          <div class="icon">💰</div>
+
+          <div class="icon">
+            💰
+          </div>
 
           <div>
-            <h3>Promoter Wallet</h3>
+            <h3>
+              Promoter Wallet
+            </h3>
           </div>
+
         </div>
 
         <p>
@@ -744,28 +928,36 @@ textarea {
 
       </div>
 
+
     </section>
 
 
-    <!-- PAYMENT DETAILS -->
+    <!-- =========================
+         PAYMENT DETAILS
+    ========================= -->
 
     <div class="section-title">
-      <h3>Promoter Deposit Payment Details</h3>
+      <h3>
+        Promoter Deposit Payment Details
+      </h3>
     </div>
 
 
     <section class="payment">
 
-      <div class="info">
+      <div class="info-box">
+
         These payment details are displayed to promoters when they add funds.
+
       </div>
 
 
       <div class="form-grid">
 
+
         <div class="form-group">
 
-          <label>
+          <label for="bankName">
             Bank Name
           </label>
 
@@ -780,7 +972,7 @@ textarea {
 
         <div class="form-group">
 
-          <label>
+          <label for="accountName">
             Account Name
           </label>
 
@@ -795,7 +987,7 @@ textarea {
 
         <div class="form-group">
 
-          <label>
+          <label for="accountNumber">
             Account Number
           </label>
 
@@ -811,7 +1003,7 @@ textarea {
 
         <div class="form-group full">
 
-          <label>
+          <label for="paymentInstructions">
             Payment Instructions
           </label>
 
@@ -822,10 +1014,12 @@ textarea {
 
         </div>
 
+
       </div>
 
 
       <br>
+
 
       <button
         id="savePaymentDetailsButton"
@@ -834,9 +1028,14 @@ textarea {
         Save Payment Details
       </button>
 
-      <div id="paymentDetailsMessage"></div>
+
+      <div
+        id="paymentDetailsMessage"
+      ></div>
+
 
     </section>
+
 
   </main>
 
@@ -846,6 +1045,10 @@ textarea {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
@@ -860,8 +1063,24 @@ const supabaseClient =
   );
 
 
+/* =========================
+   ELEMENTS
+========================= */
+
 const message =
   document.getElementById("message");
+
+const workerCount =
+  document.getElementById("workerCount");
+
+const promoterCount =
+  document.getElementById("promoterCount");
+
+const taskCount =
+  document.getElementById("taskCount");
+
+const submissionCount =
+  document.getElementById("submissionCount");
 
 const logoutButton =
   document.getElementById("logoutButton");
@@ -886,7 +1105,9 @@ mobileMenu.addEventListener(
   "click",
   function() {
 
-    sidebar.classList.toggle("open");
+    sidebar.classList.toggle(
+      "open"
+    );
 
   }
 );
@@ -903,23 +1124,26 @@ async function checkAdmin() {
     message.textContent =
       "Checking admin access...";
 
+    message.className =
+      "success";
+
 
     const {
-      data,
-      error
+      data: sessionData,
+      error: sessionError
     } =
       await supabaseClient.auth.getSession();
 
 
-    if (error) {
+    if (sessionError) {
 
-      throw error;
+      throw sessionError;
 
     }
 
 
     const session =
-      data.session;
+      sessionData.session;
 
 
     if (!session) {
@@ -927,7 +1151,7 @@ async function checkAdmin() {
       window.location.href =
         "login.html";
 
-      return;
+      return false;
 
     }
 
@@ -947,10 +1171,7 @@ async function checkAdmin() {
       await supabaseClient
         .from("profiles")
         .select("role")
-        .eq(
-          "id",
-          user.id
-        )
+        .eq("id", user.id)
         .maybeSingle();
 
 
@@ -973,7 +1194,7 @@ async function checkAdmin() {
       message.className =
         "error";
 
-      return;
+      return false;
 
     }
 
@@ -986,20 +1207,23 @@ async function checkAdmin() {
 
 
     /*
-      Load dashboard statistics.
-      These are optional.
-      If one fails, the dashboard
-      itself still remains usable.
+      Load everything after
+      admin access is confirmed.
     */
 
-    loadStatistics();
+    await Promise.all([
+      loadStatistics(),
+      loadPaymentDetails()
+    ]);
 
-    loadPaymentDetails();
+
+    return true;
+
 
   } catch (error) {
 
     console.error(
-      "ADMIN ERROR:",
+      "ADMIN CHECK ERROR:",
       error
     );
 
@@ -1009,6 +1233,8 @@ async function checkAdmin() {
 
     message.className =
       "error";
+
+    return false;
 
   }
 
@@ -1021,306 +1247,104 @@ async function checkAdmin() {
 
 async function loadStatistics() {
 
-  try {
-
-    const workers =
-      await supabaseClient
-        .from("profiles")
-        .select("id", {
-          count: "exact",
-          head: true
-        })
-        .eq("role", "worker");
-
-
-    if (
-      !workers.error
-    ) {
-
-      document.getElementById(
-        "workerCount"
-      ).textContent =
-        workers.count ?? 0;
-
-    }
-
-
-    const promoters =
-      await supabaseClient
-        .from("profiles")
-        .select("id", {
-          count: "exact",
-          head: true
-        })
-        .eq("role", "promoter");
-
-
-    if (
-      !promoters.error
-    ) {
-
-      document.getElementById(
-        "promoterCount"
-      ).textContent =
-        promoters.count ?? 0;
-
-    }
-
-
-    const tasks =
-      await supabaseClient
-        .from("tasks")
-        .select("id", {
-          count: "exact",
-          head: true
-        })
-        .eq("status", "active");
-
-
-    if (
-      !tasks.error
-    ) {
-
-      document.getElementById(
-        "taskCount"
-      ).textContent =
-        tasks.count ?? 0;
-
-    }
-
-
-    const submissions =
-      await supabaseClient
-        .from("task_submissions")
-        .select("id", {
-          count: "exact",
-          head: true
-        })
-        .eq("status", "pending");
-
-
-    if (
-      !submissions.error
-    ) {
-
-      document.getElementById(
-        "submissionCount"
-      ).textContent =
-        submissions.count ?? 0;
-
-    }
-
-  } catch (error) {
-
-    console.warn(
-      "Statistics could not be loaded:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================
-   PAYMENT DETAILS
-========================= */
-
-async function loadPaymentDetails() {
+  /*
+    Workers
+    ----------
+    Uses the same admin_get_workers
+    RPC that is already working
+    on your worker page.
+  */
 
   try {
 
     const {
-      data,
+      data: workers,
+      error: workersError
+    } =
+    await supabaseClient.rpc(
+      "admin_get_workers"
+    );
+
+
+    if (workersError) {
+
+      console.error(
+        "WORKER COUNT ERROR:",
+        workersError
+      );
+
+      workerCount.textContent =
+        "0";
+
+    } else {
+
+      workerCount.textContent =
+        Array.isArray(workers)
+          ? workers.length
+          : "0";
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "WORKER COUNT ERROR:",
+      error
+    );
+
+    workerCount.textContent =
+      "0";
+
+  }
+
+
+  /*
+    Promoters
+    ----------
+    Use the profiles table.
+    If RLS prevents direct counting,
+    leave the value at 0 rather than
+    breaking the whole dashboard.
+  */
+
+  try {
+
+    const {
+      count,
       error
     } =
-      await supabaseClient
-        .from("promoter_payment_details")
-        .select(
-          "bank_name, account_name, account_number, instructions"
-        )
-        .order(
-          "updated_at",
-          {
-            ascending: false
-          }
-        )
-        .limit(1)
-        .maybeSingle();
+    await supabaseClient
+      .from("profiles")
+      .select(
+        "id",
+        {
+          count: "exact",
+          head: true
+        }
+      )
+      .eq(
+        "role",
+        "promoter"
+      );
 
 
     if (error) {
 
-      console.warn(
-        "Payment details:",
+      console.error(
+        "PROMOTER COUNT ERROR:",
         error
       );
 
-      return;
+      promoterCount.textContent =
+        "0";
+
+    } else {
+
+      promoterCount.textContent =
+        count ?? 0;
 
     }
-
-
-    if (!data) {
-
-      return;
-
-    }
-
-
-    document.getElementById(
-      "bankName"
-    ).value =
-      data.bank_name || "";
-
-
-    document.getElementById(
-      "accountName"
-    ).value =
-      data.account_name || "";
-
-
-    document.getElementById(
-      "accountNumber"
-    ).value =
-      data.account_number || "";
-
-
-    document.getElementById(
-      "paymentInstructions"
-    ).value =
-      data.instructions || "";
 
   } catch (error) {
 
-    console.warn(
-      "Payment details loading error:",
-      error
-    );
-
-  }
-
-}
-
-
-/* =========================
-   SAVE PAYMENT DETAILS
-========================= */
-
-savePaymentDetailsButton.addEventListener(
-  "click",
-  async function() {
-
-    const bank =
-      document.getElementById(
-        "bankName"
-      ).value.trim();
-
-    const account =
-      document.getElementById(
-        "accountName"
-      ).value.trim();
-
-    const number =
-      document.getElementById(
-        "accountNumber"
-      ).value.trim();
-
-    const instructions =
-      document.getElementById(
-        "paymentInstructions"
-      ).value.trim();
-
-    const result =
-      document.getElementById(
-        "paymentDetailsMessage"
-      );
-
-
-    if (
-      !bank ||
-      !account ||
-      !number
-    ) {
-
-      result.textContent =
-        "Please complete the bank, account name and account number.";
-
-      result.className =
-        "error";
-
-      return;
-
-    }
-
-
-    try {
-
-      savePaymentDetailsButton.disabled =
-        true;
-
-      savePaymentDetailsButton.textContent =
-        "Saving...";
-
-
-      const {
-        data,
-        error
-      } =
-      await supabaseClient.rpc(
-        "admin_update_promoter_payment_details",
-        {
-          p_bank_name: bank,
-          p_account_name: account,
-          p_account_number: number,
-          p_instructions:
-            instructions || null
-        }
-      );
-
-
-      if (error) {
-
-        throw error;
-
-      }
-
-
-      if (
-        !data ||
-        data.success !== true
-      ) {
-
-        throw new Error(
-          data?.message ||
-          "Unable to save payment details."
-        );
-
-      }
-
-
-      result.textContent =
-        "Payment details saved successfully.";
-
-      result.className =
-        "success";
-
-    } catch (error) {
-
-      console.error(
-        error
-      );
-
-      result.textContent =
-        "Error: " +
-        error.message;
-
-      result.className =
-        "error";
-
-    } finally {
-
-      savePaymentDetailsButton.disabled =
-        false;
-
-      savePaymentDetailsButton.textConten
+   

@@ -13,41 +13,66 @@
   box-sizing: border-box;
 }
 
-body {
-  margin: 0;
-  background: #f5f7fb;
-  font-family: Arial, sans-serif;
-  color: #172033;
+:root {
+  --bg: #070b14;
+  --panel: #0d1422;
+  --panel2: #111a2b;
+  --border: #1d293d;
+  --text: #f8fafc;
+  --muted: #94a3b8;
+  --accent: #7c3aed;
+  --accent2: #8b5cf6;
+  --green: #22c55e;
+  --red: #ef4444;
 }
 
-/* HEADER */
+body {
+  margin: 0;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(124,58,237,.16),
+      transparent 35%
+    ),
+    var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* TOP BAR */
 
 .topbar {
-  height: 64px;
-  background: white;
+  height: 68px;
+  background: rgba(7,11,20,.92);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 18px;
-  border-bottom: 1px solid #e5e7eb;
+  padding: 0 22px;
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 200;
+  backdrop-filter: blur(15px);
 }
 
 .brand {
-  font-size: 22px;
+  font-size: 23px;
   font-weight: 800;
-  color: #111827;
+  letter-spacing: -.5px;
+}
+
+.brand span {
+  color: var(--accent2);
 }
 
 .menu-btn {
-  background: #111827;
-  color: white;
-  border: 0;
   width: 42px;
   height: 42px;
+  border: 1px solid var(--border);
   border-radius: 10px;
+  background: var(--panel2);
+  color: white;
   font-size: 20px;
   cursor: pointer;
 }
@@ -56,112 +81,143 @@ body {
 
 .sidebar {
   position: fixed;
+  top: 68px;
   left: 0;
-  top: 64px;
   width: 245px;
-  height: calc(100vh - 64px);
-  background: #111827;
-  padding: 20px 14px;
-  z-index: 90;
+  height: calc(100vh - 68px);
+  background: #090f1c;
+  border-right: 1px solid var(--border);
+  padding: 22px 14px;
+  z-index: 150;
   transition: transform .25s ease;
 }
 
 .sidebar-title {
-  color: #9ca3af;
-  font-size: 12px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 700;
   text-transform: uppercase;
-  margin: 5px 12px 12px;
-  letter-spacing: .8px;
+  letter-spacing: 1px;
+  padding: 0 12px 12px;
 }
 
 .nav-link {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #d1d5db;
+  color: #aeb9ca;
   text-decoration: none;
   padding: 13px 14px;
-  border-radius: 10px;
+  border-radius: 11px;
   margin-bottom: 5px;
-  font-size: 15px;
+  font-size: 14px;
+  transition: .2s;
 }
 
 .nav-link:hover,
 .nav-link.active {
-  background: #1f2937;
+  background: rgba(124,58,237,.16);
   color: white;
+  border: 1px solid rgba(139,92,246,.18);
 }
 
 .logout-link {
-  margin-top: 20px;
   width: 100%;
-  border: 0;
-  background: #dc2626;
-  color: white;
+  margin-top: 22px;
   padding: 13px;
-  border-radius: 10px;
+  border-radius: 11px;
+  border: 1px solid rgba(239,68,68,.25);
+  background: rgba(239,68,68,.08);
+  color: #fca5a5;
+  font-size: 14px;
   cursor: pointer;
-  font-size: 15px;
 }
 
 /* MAIN */
 
 .main {
   margin-left: 245px;
-  padding: 25px;
+  padding: 28px;
   max-width: 1250px;
 }
 
 /* WELCOME */
 
 .welcome {
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 
 .welcome h1 {
-  margin: 0 0 7px;
-  font-size: 25px;
+  margin: 0 0 8px;
+  font-size: 27px;
+}
+
+.welcome h1 span {
+  color: var(--accent2);
 }
 
 .welcome p {
   margin: 0;
-  color: #6b7280;
+  color: var(--muted);
+  font-size: 14px;
 }
 
 /* BALANCE */
 
 .balance-card {
-  background: #111827;
-  color: white;
-  border-radius: 18px;
-  padding: 25px;
-  margin-bottom: 22px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(
+      135deg,
+      #17112d,
+      #0d1422 65%
+    );
+  border: 1px solid rgba(139,92,246,.28);
+  border-radius: 20px;
+  padding: 26px;
+  margin-bottom: 28px;
+  box-shadow: 0 15px 45px rgba(0,0,0,.28);
+}
+
+.balance-card::after {
+  content: "";
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  right: -70px;
+  top: -80px;
+  background: rgba(139,92,246,.15);
+  filter: blur(4px);
 }
 
 .balance-label {
-  color: #cbd5e1;
-  font-size: 14px;
   margin: 0;
-}
-
-.balance {
-  font-size: 36px;
-  font-weight: 800;
-  margin: 10px 0;
-}
-
-.balance-status {
-  color: #a7f3d0;
+  color: #aeb9ca;
   font-size: 13px;
 }
 
-/* QUICK ACTIONS */
+.balance {
+  font-size: 38px;
+  font-weight: 800;
+  margin: 10px 0;
+  letter-spacing: -.8px;
+}
+
+.balance-status {
+  color: #86efac;
+  font-size: 12px;
+}
+
+/* SECTION */
 
 .section-title {
-  font-size: 19px;
-  margin: 25px 0 13px;
+  font-size: 18px;
+  margin: 26px 0 14px;
 }
+
+/* ACTIONS */
 
 .actions {
   display: grid;
@@ -170,85 +226,134 @@ body {
 }
 
 .action-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 18px;
+  background: rgba(13,20,34,.9);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  padding: 19px;
   text-decoration: none;
-  color: #111827;
-  transition: transform .15s ease, box-shadow .15s ease;
+  color: white;
+  transition: .2s;
 }
 
 .action-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  transform: translateY(-3px);
+  border-color: rgba(139,92,246,.45);
+  box-shadow: 0 10px 30px rgba(0,0,0,.2);
 }
 
 .action-icon {
-  font-size: 25px;
-  margin-bottom: 12px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(124,58,237,.13);
+  border-radius: 11px;
+  font-size: 21px;
+  margin-bottom: 14px;
 }
 
 .action-card strong {
   display: block;
-  font-size: 15px;
-  margin-bottom: 5px;
+  font-size: 14px;
+  margin-bottom: 6px;
 }
 
 .action-card span {
-  color: #6b7280;
+  color: var(--muted);
   font-size: 12px;
 }
 
-/* INFO CARDS */
+/* INFORMATION */
 
 .info-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 15px;
-  margin-top: 20px;
 }
 
 .info-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 14px;
+  background: rgba(13,20,34,.9);
+  border: 1px solid var(--border);
+  border-radius: 15px;
   padding: 20px;
 }
 
 .info-card h3 {
-  margin: 0 0 8px;
-  font-size: 16px;
+  margin: 0 0 9px;
+  font-size: 15px;
 }
 
 .info-card p {
   margin: 0;
-  color: #6b7280;
-  font-size: 14px;
-  line-height: 1.5;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
 .account-badge {
   display: inline-block;
-  margin-top: 12px;
-  padding: 6px 10px;
-  background: #eef2ff;
-  color: #3730a3;
+  margin-top: 13px;
+  padding: 6px 11px;
   border-radius: 20px;
-  font-size: 12px;
-  font-weight: bold;
+  background: rgba(34,197,94,.1);
+  color: #86efac;
+  font-size: 11px;
+  font-weight: 700;
 }
 
-/* MESSAGE */
+/* ERROR / LOADING */
 
-#message {
-  margin-top: 10px;
-  font-size: 13px;
+#loadingScreen {
+  text-align: center;
+  padding: 70px 20px;
+}
+
+.loader {
+  width: 38px;
+  height: 38px;
+  border: 3px solid #263247;
+  border-top-color: var(--accent2);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-box {
+  max-width: 600px;
+  margin: 60px auto;
+  background: rgba(239,68,68,.08);
+  border: 1px solid rgba(239,68,68,.3);
+  border-radius: 15px;
+  padding: 22px;
+  color: #fecaca;
+}
+
+.error-box strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #fca5a5;
+}
+
+.retry-btn {
+  margin-top: 15px;
+  background: var(--accent);
+  border: 0;
+  color: white;
+  padding: 11px 17px;
+  border-radius: 9px;
+  cursor: pointer;
 }
 
 /* MOBILE */
 
-@media (max-width: 850px) {
+@media (max-width: 900px) {
 
   .sidebar {
     transform: translateX(-100%);
@@ -260,35 +365,42 @@ body {
 
   .main {
     margin-left: 0;
-    padding: 18px;
+    padding: 20px;
   }
 
   .actions {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 520px) {
+
+  .topbar {
+    padding: 0 15px;
+  }
+
+  .main {
+    padding: 17px;
+  }
 
   .welcome h1 {
-    font-size: 22px;
+    font-size: 23px;
   }
 
   .balance {
-    font-size: 30px;
+    font-size: 31px;
   }
 
   .actions {
-    grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
 
   .action-card {
     padding: 15px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
   }
 }
 </style>
@@ -301,12 +413,12 @@ body {
 <header class="topbar">
 
   <div class="brand">
-    TaskVexa
+    Task<span>Vexa</span>
   </div>
 
   <button
-    class="menu-btn"
     id="menuButton"
+    class="menu-btn"
     type="button"
   >
     ☰
@@ -318,8 +430,8 @@ body {
 <!-- SIDEBAR -->
 
 <aside
-  class="sidebar"
   id="sidebar"
+  class="sidebar"
 >
 
   <div class="sidebar-title">
@@ -362,8 +474,8 @@ body {
   </a>
 
   <button
-    class="logout-link"
     id="logoutButton"
+    class="logout-link"
   >
     🚪 Logout
   </button>
@@ -373,183 +485,223 @@ body {
 
 <!-- MAIN -->
 
-<main
-  class="main"
-  id="dashboardContent"
-  style="display:none;"
->
+<main class="main">
 
-  <!-- WELCOME -->
+  <!-- LOADING -->
 
-  <section class="welcome">
+  <div id="loadingScreen">
 
-    <h1>
-      Welcome,
-      <span id="userName">
-        Worker
-      </span>
-    </h1>
+    <div class="loader"></div>
 
     <p>
-      Complete tasks and manage your TaskVexa account.
+      Checking your account...
     </p>
 
-  </section>
+  </div>
 
 
-  <!-- BALANCE -->
+  <!-- ERROR -->
 
-  <section class="balance-card">
+  <div
+    id="errorScreen"
+    class="error-box"
+    style="display:none;"
+  >
 
-    <p class="balance-label">
-      Available Balance
-    </p>
+    <strong>
+      Dashboard could not be loaded
+    </strong>
 
-    <div
-      class="balance"
-      id="balance"
+    <div id="errorMessage"></div>
+
+    <button
+      class="retry-btn"
+      onclick="location.reload()"
     >
-      ₦0.00
-    </div>
+      Try Again
+    </button>
 
-    <div
-      class="balance-status"
-      id="message"
-    >
-      Loading balance...
-    </div>
-
-  </section>
+  </div>
 
 
-  <!-- QUICK ACTIONS -->
+  <!-- DASHBOARD -->
 
-  <h2 class="section-title">
-    Quick Actions
-  </h2>
+  <section
+    id="dashboardContent"
+    style="display:none;"
+  >
 
-  <section class="actions">
+    <section class="welcome">
 
-    <a
-      href="tasks.html"
-      class="action-card"
-    >
-
-      <div class="action-icon">
-        📋
-      </div>
-
-      <strong>
-        View Tasks
-      </strong>
-
-      <span>
-        Find available tasks
-      </span>
-
-    </a>
-
-
-    <a
-      href="withdraw.html"
-      class="action-card"
-    >
-
-      <div class="action-icon">
-        💰
-      </div>
-
-      <strong>
-        Withdraw
-      </strong>
-
-      <span>
-        Request a withdrawal
-      </span>
-
-    </a>
-
-
-    <a
-      href="referrals.html"
-      class="action-card"
-    >
-
-      <div class="action-icon">
-        👥
-      </div>
-
-      <strong>
-        My Referrals
-      </strong>
-
-      <span>
-        View your referrals
-      </span>
-
-    </a>
-
-
-    <a
-      href="profile.html"
-      class="action-card"
-    >
-
-      <div class="action-icon">
-        👤
-      </div>
-
-      <strong>
-        My Profile
-      </strong>
-
-      <span>
-        Manage your account
-      </span>
-
-    </a>
-
-  </section>
-
-
-  <!-- ACCOUNT INFORMATION -->
-
-  <h2 class="section-title">
-    Account
-  </h2>
-
-  <section class="info-grid">
-
-    <div class="info-card">
-
-      <h3>
-        Account Type
-      </h3>
-
-      <p>
-        You are currently registered as a worker and can perform available tasks.
-      </p>
-
-      <span class="account-badge">
-        <span id="userType">
+      <h1>
+        Welcome,
+        <span id="userName">
           Worker
         </span>
-      </span>
-
-    </div>
-
-
-    <div class="info-card">
-
-      <h3>
-        Start Earning
-      </h3>
+      </h1>
 
       <p>
-        Visit Available Tasks to see tasks you can perform and submit for review.
+        Complete tasks and manage your TaskVexa account.
       </p>
 
-    </div>
+    </section>
+
+
+    <!-- BALANCE -->
+
+    <section class="balance-card">
+
+      <p class="balance-label">
+        Available Balance
+      </p>
+
+      <div
+        id="balance"
+        class="balance"
+      >
+        ₦0.00
+      </div>
+
+      <div
+        id="message"
+        class="balance-status"
+      >
+        Loading balance...
+      </div>
+
+    </section>
+
+
+    <!-- QUICK ACTIONS -->
+
+    <h2 class="section-title">
+      Quick Actions
+    </h2>
+
+    <section class="actions">
+
+      <a
+        href="tasks.html"
+        class="action-card"
+      >
+
+        <div class="action-icon">
+          📋
+        </div>
+
+        <strong>
+          Available Tasks
+        </strong>
+
+        <span>
+          Find tasks to perform
+        </span>
+
+      </a>
+
+
+      <a
+        href="withdraw.html"
+        class="action-card"
+      >
+
+        <div class="action-icon">
+          💰
+        </div>
+
+        <strong>
+          Withdraw
+        </strong>
+
+        <span>
+          Manage your withdrawals
+        </span>
+
+      </a>
+
+
+      <a
+        href="referrals.html"
+        class="action-card"
+      >
+
+        <div class="action-icon">
+          👥
+        </div>
+
+        <strong>
+          My Referrals
+        </strong>
+
+        <span>
+          View your referral activity
+        </span>
+
+      </a>
+
+
+      <a
+        href="profile.html"
+        class="action-card"
+      >
+
+        <div class="action-icon">
+          👤
+        </div>
+
+        <strong>
+          My Profile
+        </strong>
+
+        <span>
+          Manage your account
+        </span>
+
+      </a>
+
+    </section>
+
+
+    <!-- ACCOUNT -->
+
+    <h2 class="section-title">
+      Account Overview
+    </h2>
+
+    <section class="info-grid">
+
+      <div class="info-card">
+
+        <h3>
+          Account Type
+        </h3>
+
+        <p>
+          Your account is registered as a worker. You can access available tasks and submit completed work.
+        </p>
+
+        <span class="account-badge">
+          <span id="userType">
+            Worker
+          </span>
+        </span>
+
+      </div>
+
+
+      <div class="info-card">
+
+        <h3>
+          Ready to work?
+        </h3>
+
+        <p>
+          Open Available Tasks to see tasks currently available to your account.
+        </p>
+
+      </div>
+
+    </section>
 
   </section>
 
@@ -581,6 +733,21 @@ document.getElementById(
   "dashboardContent"
 );
 
+const loadingScreen =
+document.getElementById(
+  "loadingScreen"
+);
+
+const errorScreen =
+document.getElementById(
+  "errorScreen"
+);
+
+const errorMessage =
+document.getElementById(
+  "errorMessage"
+);
+
 
 /* ================================
    MOBILE MENU
@@ -610,6 +777,9 @@ document
   "click",
   async function() {
 
+    this.disabled = true;
+    this.textContent = "Logging out...";
+
     await supabaseClient.auth.signOut();
 
     window.location.href =
@@ -620,12 +790,37 @@ document
 
 
 /* ================================
+   SHOW ERROR
+================================ */
+
+function showError(message) {
+
+  loadingScreen.style.display =
+    "none";
+
+  dashboardContent.style.display =
+    "none";
+
+  errorMessage.textContent =
+    message;
+
+  errorScreen.style.display =
+    "block";
+
+}
+
+
+/* ================================
    CHECK WORKER ACCESS
 ================================ */
 
 async function checkWorkerAccess() {
 
   try {
+
+    /*
+      GET CURRENT USER
+    */
 
     const {
       data: {
@@ -636,18 +831,30 @@ async function checkWorkerAccess() {
       await supabaseClient.auth.getUser();
 
 
-    if (
-      userError ||
-      !user
-    ) {
+    if (userError) {
 
-      window.location.href =
-        "login.html";
+      throw new Error(
+        "Authentication error: " +
+        userError.message
+      );
+
+    }
+
+
+    if (!user) {
+
+      showError(
+        "No active login session was found. Please return to the login page and sign in again."
+      );
 
       return null;
 
     }
 
+
+    /*
+      GET PROFILE
+    */
 
     const {
       data: profile,
@@ -667,25 +874,19 @@ async function checkWorkerAccess() {
 
     if (profileError) {
 
-      console.error(
-        "Profile error:",
-        profileError
+      throw new Error(
+        "Could not load your profile: " +
+        profileError.message
       );
-
-      window.location.href =
-        "login.html";
-
-      return null;
 
     }
 
 
     if (!profile) {
 
-      await supabaseClient.auth.signOut();
-
-      window.location.href =
-        "login.html";
+      showError(
+        "Your account exists, but no profile was found for this user."
+      );
 
       return null;
 
@@ -695,7 +896,7 @@ async function checkWorkerAccess() {
     const role =
       String(
         profile.role || ""
-      ).toLowerCase();
+      ).trim().toLowerCase();
 
 
     /*
@@ -731,27 +932,32 @@ async function checkWorkerAccess() {
 
 
     /*
-      ONLY WORKER
+      NOT WORKER
     */
 
     if (
       role !== "worker"
     ) {
 
-      await supabaseClient.auth.signOut();
-
-      window.location.href =
-        "login.html";
+      showError(
+        "Your account role is \"" +
+        role +
+        "\". This page is only for worker accounts."
+      );
 
       return null;
 
     }
 
 
+    /*
+      DISPLAY USER
+    */
+
     const name =
       profile.full_name ||
-      user.email
-        .split("@")[0];
+      user.email?.split("@")[0] ||
+      "Worker";
 
 
     document.getElementById(
@@ -766,6 +972,9 @@ async function checkWorkerAccess() {
       "Worker";
 
 
+    loadingScreen.style.display =
+      "none";
+
     dashboardContent.style.display =
       "block";
 
@@ -776,12 +985,14 @@ async function checkWorkerAccess() {
   } catch (error) {
 
     console.error(
-      "Worker access error:",
+      "Worker dashboard error:",
       error
     );
 
-    window.location.href =
-      "login.html";
+    showError(
+      error.message ||
+      "Unable to load your account."
+    );
 
     return null;
 
@@ -832,29 +1043,47 @@ async function loadWalletBalance(
     }
 
 
+    let finalBalance = 0;
+
+
     /*
-      CREATE WALLET IF MISSING
+      EXISTING WALLET
     */
 
-    if (!wallet) {
+    if (wallet) {
+
+      finalBalance =
+        Number(
+          wallet.balance || 0
+        );
+
+    }
+
+
+    /*
+      CREATE WALLET
+      ONLY IF MISSING
+    */
+
+    else {
 
       const {
         data: newWallet,
         error: createError
       } =
-        await supabaseClient
-          .from("wallets")
-          .insert({
+      await supabaseClient
+        .from("wallets")
+        .insert({
 
-            user_id:
-              user.id,
+          user_id:
+            user.id,
 
-            balance:
-              0
+          balance:
+            0
 
-          })
-          .select("balance")
-          .single();
+        })
+        .select("balance")
+        .single();
 
 
       if (createError) {
@@ -864,38 +1093,27 @@ async function loadWalletBalance(
       }
 
 
-      balanceElement.textContent =
-        "₦" +
+      finalBalance =
         Number(
-          newWallet.balance || 0
-        ).toLocaleString(
-          "en-NG",
-          {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-          }
-        );
-
-
-    } else {
-
-      balanceElement.textContent =
-        "₦" +
-        Number(
-          wallet.balance || 0
-        ).toLocaleString(
-          "en-NG",
-          {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-          }
+          newWallet?.balance || 0
         );
 
     }
 
 
+    balanceElement.textContent =
+      "₦" +
+      finalBalance.toLocaleString(
+        "en-NG",
+        {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }
+      );
+
+
     messageElement.textContent =
-      "Balance updated.";
+      "Balance updated";
 
 
   } catch (error) {
@@ -906,8 +1124,11 @@ async function loadWalletBalance(
     );
 
 
+    balanceElement.textContent =
+      "₦0.00";
+
     messageElement.textContent =
-      "Unable to load balance.";
+      "Wallet balance could not be loaded.";
 
   }
 
@@ -943,4 +1164,4 @@ initializeDashboard();
 </script>
 
 </body>
-</html>
+  </html>

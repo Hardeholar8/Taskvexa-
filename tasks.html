@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>TaskVexa - Available Tasks</title>
 
 <style>
@@ -137,7 +138,7 @@ header{
 
 .task-info{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
+  grid-template-columns:repeat(2,1fr);
   gap:10px;
   margin-bottom:18px;
 }
@@ -347,21 +348,31 @@ textarea{
 
 </header>
 
+
 <main class="content">
 
   <div class="heading">
+
     <h1>Available Tasks</h1>
-    <p>Complete tasks and submit your screenshot proof for review.</p>
+
+    <p>
+      Complete tasks and submit your screenshot proof for review.
+    </p>
+
   </div>
+
 
   <div id="message" class="message">
     Checking account...
   </div>
 
+
   <div id="taskList">
+
     <div class="loading">
       Loading tasks...
     </div>
+
   </div>
 
 </main>
@@ -379,11 +390,14 @@ textarea{
       Complete the task first, then upload a screenshot proving that you completed it.
     </div>
 
+
     <form id="proofForm">
 
       <div class="form-group">
 
-        <label>Screenshot Proof</label>
+        <label>
+          Screenshot Proof
+        </label>
 
         <input
           id="proofFile"
@@ -398,9 +412,12 @@ textarea{
 
       </div>
 
+
       <div class="form-group">
 
-        <label>Additional Note (Optional)</label>
+        <label>
+          Additional Note (Optional)
+        </label>
 
         <textarea
           id="proofText"
@@ -409,7 +426,9 @@ textarea{
 
       </div>
 
+
       <div id="submitMessage"></div>
+
 
       <div class="modal-actions">
 
@@ -493,7 +512,7 @@ let selectedTask = null;
 let submissions = [];
 
 
-/* ESCAPE */
+/* ESCAPE HTML */
 
 function escapeHTML(value){
 
@@ -523,7 +542,7 @@ function formatMoney(value){
 }
 
 
-/* GET USER */
+/* GET CURRENT USER */
 
 async function getCurrentUser(){
 
@@ -533,17 +552,35 @@ async function getCurrentUser(){
   } =
   await supabaseClient.auth.getUser();
 
-  if(error) throw error;
 
-  if(!data || !data.user){
+  if(error){
 
-    window.location.href="login.html";
+    throw error;
+
+  }
+
+
+  if(
+    !data ||
+    !data.user
+  ){
+
+    window.location.href =
+      "login.html";
+
     return null;
 
   }
 
-  currentUser = data.user;
 
+  currentUser =
+    data.user;
+
+
+  /*
+    Make sure only worker accounts
+    can use this page.
+  */
 
   const {
     data:profile,
@@ -552,15 +589,24 @@ async function getCurrentUser(){
   await supabaseClient
     .from("profiles")
     .select("role")
-    .eq("id",currentUser.id)
+    .eq(
+      "id",
+      currentUser.id
+    )
     .maybeSingle();
 
-  if(profileError) throw profileError;
+
+  if(profileError){
+
+    throw profileError;
+
+  }
 
 
   if(
     !profile ||
-    String(profile.role).toLowerCase() !== "worker"
+    String(profile.role).toLowerCase() !==
+    "worker"
   ){
 
     message.textContent =
@@ -573,12 +619,13 @@ async function getCurrentUser(){
 
   }
 
+
   return currentUser;
 
 }
 
 
-/* LOAD SUBMISSIONS */
+/* LOAD ONLY THIS WORKER'S SUBMISSIONS */
 
 async function loadMySubmissions(){
 
@@ -597,10 +644,18 @@ async function loadMySubmissions(){
     )
     .order(
       "created_at",
-      {ascending:false}
+      {
+        ascending:false
+      }
     );
 
-  if(error) throw error;
+
+  if(error){
+
+    throw error;
+
+  }
+
 
   submissions =
     Array.isArray(data)
@@ -610,7 +665,7 @@ async function loadMySubmissions(){
 }
 
 
-/* FIND SUBMISSION */
+/* FIND THIS WORKER'S SUBMISSION */
 
 function getTaskSubmission(taskId){
 
@@ -633,21 +688,40 @@ async function loadTasks(){
     </div>
   `;
 
+
   try{
 
     const user =
       await getCurrentUser();
 
-    if(!user) return;
 
+    if(!user){
+
+      return;
+
+    }
+
+
+    /*
+      Load only the logged-in worker's
+      submissions.
+    */
 
     await loadMySubmissions();
 
 
     /*
-      WORKER PAGE:
-      Only ACTIVE tasks.
-      No Level 1 / Level 2 display.
+      WORKER TASKS:
+
+      Only active tasks.
+
+      No Level 1.
+
+      No Level 2.
+
+      No target level.
+
+      No workers needed.
     */
 
     const {
@@ -657,7 +731,7 @@ async function loadTasks(){
     await supabaseClient
       .from("tasks")
       .select(
-        "id,title,description,platform,task_url,reward,workers_needed,status,created_at"
+        "id,title,description,platform,task_url,reward,status,created_at"
       )
       .eq(
         "status",
@@ -665,11 +739,17 @@ async function loadTasks(){
       )
       .order(
         "created_at",
-        {ascending:false}
+        {
+          ascending:false
+        }
       );
 
 
-    if(error) throw error;
+    if(error){
+
+      throw error;
+
+    }
 
 
     renderTasks(
@@ -693,6 +773,7 @@ async function loadTasks(){
       error
     );
 
+
     taskList.innerHTML = `
       <div class="empty error">
         Unable to load tasks.<br><br>
@@ -700,8 +781,10 @@ async function loadTasks(){
       </div>
     `;
 
+
     message.textContent =
-      "Error: " + error.message;
+      "Error: " +
+      error.message;
 
     message.className =
       "message error";
@@ -711,7 +794,7 @@ async function loadTasks(){
 }
 
 
-/* RENDER */
+/* RENDER TASKS */
 
 function renderTasks(tasks){
 
@@ -719,8 +802,15 @@ function renderTasks(tasks){
 
     taskList.innerHTML = `
       <div class="empty">
-        <h3>No active tasks</h3>
-        <p>There are currently no tasks available.</p>
+
+        <h3>
+          No active tasks
+        </h3>
+
+        <p>
+          There are currently no tasks available.
+        </p>
+
       </div>
     `;
 
@@ -729,10 +819,18 @@ function renderTasks(tasks){
   }
 
 
-  taskList.innerHTML = "";
+  taskList.innerHTML =
+    "";
 
 
   tasks.forEach(task => {
+
+    /*
+      IMPORTANT:
+
+      Only look for the submission
+      belonging to the current worker.
+    */
 
     const submission =
       getTaskSubmission(task.id);
@@ -745,17 +843,19 @@ function renderTasks(tasks){
       "task-card";
 
 
-    let submissionHTML = "";
+    let submissionHTML =
+      "";
 
     let alreadySubmitted =
-      Boolean(submission);
+      false;
 
 
     if(submission){
 
       const status =
         String(
-          submission.status || "pending"
+          submission.status ||
+          "pending"
         ).toLowerCase();
 
 
@@ -774,6 +874,9 @@ function renderTasks(tasks){
         statusText =
           "Approved";
 
+        alreadySubmitted =
+          true;
+
       }
 
 
@@ -786,18 +889,33 @@ function renderTasks(tasks){
           "Rejected";
 
         /*
-          Allow rejected task to be submitted again.
+          Worker can submit again
+          after rejection.
         */
 
-        alreadySubmitted = false;
+        alreadySubmitted =
+          false;
+
+      }
+
+
+      if(
+        status !== "approved" &&
+        status !== "rejected"
+      ){
+
+        alreadySubmitted =
+          true;
 
       }
 
 
       submissionHTML = `
+
         <div class="submission-status">
 
           Submission:
+
           <strong class="${statusClass}">
             ${statusText}
           </strong>
@@ -806,19 +924,22 @@ function renderTasks(tasks){
             status === "approved"
             ?
             `
-            <br>
-            Reward:
-            <strong class="approved">
-              ${formatMoney(
-                submission.reward_amount
-              )}
-            </strong>
+              <br>
+
+              Reward:
+
+              <strong class="approved">
+                ${formatMoney(
+                  submission.reward_amount
+                )}
+              </strong>
             `
             :
             ""
           }
 
         </div>
+
       `;
 
     }
@@ -830,36 +951,47 @@ function renderTasks(tasks){
         ${escapeHTML(task.title)}
       </div>
 
+
       <div class="task-description">
         ${escapeHTML(task.description)}
       </div>
 
+
       <div class="task-info">
 
         <div class="info">
-          <small>Platform</small>
-          <strong>
-            ${escapeHTML(task.platform || "-")}
-          </strong>
-        </div>
 
-        <div class="info">
-          <small>Task Reward</small>
-          <strong class="reward">
-            ${formatMoney(task.reward)}
-          </strong>
-        </div>
+          <small>
+            Platform
+          </small>
 
-        <div class="info">
-          <small>Workers Needed</small>
           <strong>
             ${escapeHTML(
-              task.workers_needed ?? 1
+              task.platform || "-"
             )}
           </strong>
+
+        </div>
+
+
+        <div class="info">
+
+          <small>
+            Task Reward
+          </small>
+
+          <strong class="reward">
+
+            ${formatMoney(
+              task.reward
+            )}
+
+          </strong>
+
         </div>
 
       </div>
+
 
       <div>
 
@@ -871,19 +1003,25 @@ function renderTasks(tasks){
           Open Task
         </button>
 
+
         <button
           class="button submit-proof"
           data-id="${escapeHTML(task.id)}"
           ${alreadySubmitted ? "disabled" : ""}
         >
+
           ${
             alreadySubmitted
-              ? "Proof Submitted"
-              : "Submit Proof"
+              ?
+              "Proof Submitted"
+              :
+              "Submit Proof"
           }
+
         </button>
 
       </div>
+
 
       ${submissionHTML}
 
@@ -895,7 +1033,7 @@ function renderTasks(tasks){
   });
 
 
-  /* OPEN TASK */
+  /* OPEN TASK BUTTON */
 
   document
     .querySelectorAll(".open-task")
@@ -909,7 +1047,9 @@ function renderTasks(tasks){
             tasks.find(
               item =>
                 String(item.id) ===
-                String(button.dataset.id)
+                String(
+                  button.dataset.id
+                )
             );
 
 
@@ -939,7 +1079,7 @@ function renderTasks(tasks){
     });
 
 
-  /* SUBMIT PROOF */
+  /* SUBMIT PROOF BUTTON */
 
   document
     .querySelectorAll(".submit-proof")
@@ -953,8 +1093,11 @@ function renderTasks(tasks){
             tasks.find(
               item =>
                 String(item.id) ===
-                String(button.dataset.id)
+                String(
+                  button.dataset.id
+                )
             );
+
 
           if(task){
 
@@ -970,14 +1113,16 @@ function renderTasks(tasks){
 }
 
 
-/* OPEN MODAL */
+/* OPEN PROOF MODAL */
 
 function openProofModal(task){
 
   selectedTask =
     task;
 
+
   proofForm.reset();
+
 
   submitMessage.textContent =
     "";
@@ -985,24 +1130,32 @@ function openProofModal(task){
   submitMessage.className =
     "";
 
-  proofModal.classList.add("show");
+
+  proofModal.classList.add(
+    "show"
+  );
 
 }
 
 
-/* CLOSE MODAL */
+/* CLOSE PROOF MODAL */
 
 function closeProofModal(){
 
   selectedTask =
     null;
 
+
   proofForm.reset();
+
 
   submitMessage.textContent =
     "";
 
-  proofModal.classList.remove("show");
+
+  proofModal.classList.remove(
+    "show"
+  );
 
 }
 
@@ -1017,7 +1170,10 @@ proofModal.addEventListener(
   "click",
   function(event){
 
-    if(event.target === proofModal){
+    if(
+      event.target ===
+      proofModal
+    ){
 
       closeProofModal();
 
@@ -1036,7 +1192,10 @@ proofForm.addEventListener(
     event.preventDefault();
 
 
-    if(!currentUser || !selectedTask){
+    if(
+      !currentUser ||
+      !selectedTask
+    ){
 
       return;
 
@@ -1060,9 +1219,15 @@ proofForm.addEventListener(
     }
 
 
+    /*
+      Image only.
+    */
+
     if(
       !file.type ||
-      !file.type.startsWith("image/")
+      !file.type.startsWith(
+        "image/"
+      )
     ){
 
       submitMessage.textContent =
@@ -1075,6 +1240,10 @@ proofForm.addEventListener(
 
     }
 
+
+    /*
+      Maximum 5MB.
+    */
 
     if(
       file.size >
@@ -1097,12 +1266,14 @@ proofForm.addEventListener(
       submitProofButton.disabled =
         true;
 
+
       submitProofButton.textContent =
         "Checking...";
 
 
       /*
-        Check for duplicate submission.
+        Check whether THIS worker
+        already submitted this task.
       */
 
       const {
@@ -1111,7 +1282,9 @@ proofForm.addEventListener(
       } =
       await supabaseClient
         .from("task_submissions")
-        .select("id,status")
+        .select(
+          "id,status"
+        )
         .eq(
           "task_id",
           selectedTask.id
@@ -1130,10 +1303,17 @@ proofForm.addEventListener(
       }
 
 
+      /*
+        Approved or pending:
+        do not allow another submission.
+      */
+
       if(
         existing &&
-        String(existing.status).toLowerCase()
-        !== "rejected"
+        String(
+          existing.status
+        ).toLowerCase() !==
+        "rejected"
       ){
 
         throw new Error(
@@ -1144,8 +1324,9 @@ proofForm.addEventListener(
 
 
       /*
-        If previous submission was rejected,
-        remove it before creating the new one.
+        If rejected, remove the old
+        rejected submission so the worker
+        can submit again.
       */
 
       if(existing){
@@ -1154,12 +1335,15 @@ proofForm.addEventListener(
           error:deleteError
         } =
         await supabaseClient
-          .from("task_submissions")
+          .from(
+            "task_submissions"
+          )
           .delete()
           .eq(
             "id",
             existing.id
           );
+
 
         if(deleteError){
 
@@ -1174,11 +1358,16 @@ proofForm.addEventListener(
         "Uploading...";
 
 
+      /*
+        Create unique proof path.
+      */
+
       const extension =
         file.name
           .split(".")
           .pop()
-          .toLowerCase() || "jpg";
+          .toLowerCase() ||
+        "jpg";
 
 
       const filePath =
@@ -1191,13 +1380,19 @@ proofForm.addEventListener(
         extension;
 
 
+      /*
+        Upload screenshot.
+      */
+
       const {
         data:uploadData,
         error:uploadError
       } =
       await supabaseClient
         .storage
-        .from("task-proofs")
+        .from(
+          "task-proofs"
+        )
         .upload(
           filePath,
           file,
@@ -1220,12 +1415,22 @@ proofForm.addEventListener(
         "Submitting...";
 
 
+      /*
+        Create pending submission.
+
+        Reward is copied from the task
+        at the time of submission.
+      */
+
       const {
         error:submissionError
       } =
       await supabaseClient
-        .from("task_submissions")
+        .from(
+          "task_submissions"
+        )
         .insert({
+
           task_id:
             selectedTask.id,
 
@@ -1236,99 +1441,24 @@ proofForm.addEventListener(
             uploadData.path,
 
           proof_text:
-            proofText.value.trim() || null,
+            proofText.value.trim() ||
+            null,
 
           status:
             "pending",
 
           reward_amount:
             Number(
-              selectedTask.reward || 0
+              selectedTask.reward ||
+              0
             )
+
         });
 
 
       if(submissionError){
 
-        await supabaseClient
-          .storage
-          .from("task-proofs")
-          .remove([
-            uploadData.path
-          ]);
-
-        throw submissionError;
-
-      }
-
-
-      submitMessage.textContent =
-        "Proof submitted successfully. Waiting for admin review.";
-
-      submitMessage.className =
-        "success";
-
-
-      setTimeout(
-        async function(){
-
-          closeProofModal();
-
-          await loadTasks();
-
-        },
-        1200
-      );
-
-
-    }catch(error){
-
-      console.error(
-        "SUBMIT PROOF ERROR:",
-        error
-      );
-
-      submitMessage.textContent =
-        error.message ||
-        "Unable to submit proof.";
-
-      submitMessage.className =
-        "error";
-
-    }finally{
-
-      submitProofButton.disabled =
-        false;
-
-      submitProofButton.textContent =
-        "Submit Proof";
-
-    }
-
-  }
-);
-
-
-/* LOGOUT */
-
-logoutButton.addEventListener(
-  "click",
-  async function(){
-
-    await supabaseClient.auth.signOut();
-
-    window.location.href =
-      "login.html";
-
-  }
-);
-
-
-/* START */
-
-loadTasks();
-
-</script>
-
-</body>
-</html>
+        /*
+          Remove uploaded screenshot
+          if database insert fails.
+        */

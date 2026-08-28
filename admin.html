@@ -19,16 +19,12 @@
 --red:#f87171;
 }
 
-html,body{
+body{
 margin:0;
-padding:0;
-min-height:100%;
 background:var(--bg);
 color:var(--text);
 font-family:Arial,Helvetica,sans-serif;
 }
-
-body{min-height:100vh}
 
 .sidebar{
 position:fixed;
@@ -79,6 +75,10 @@ border-radius:11px;
 color:#aeb9c9;
 text-decoration:none;
 font-size:14px;
+border:0;
+background:transparent;
+cursor:pointer;
+text-align:left;
 }
 
 .nav-link:hover,
@@ -100,9 +100,6 @@ border-top:1px solid var(--border);
 }
 
 #logoutButton{
-background:transparent;
-border:0;
-cursor:pointer;
 color:#f87171;
 }
 
@@ -113,7 +110,7 @@ min-height:100vh;
 
 .topbar{
 height:70px;
-background:rgba(7,10,16,.95);
+background:#070a10;
 border-bottom:1px solid var(--border);
 display:flex;
 align-items:center;
@@ -166,12 +163,17 @@ font-size:14px;
 }
 
 #message{
-margin-bottom:20px;
+margin-bottom:15px;
 font-size:13px;
 }
 
-.success{color:var(--green)}
-.error{color:var(--red)}
+.success{
+color:var(--green);
+}
+
+.error{
+color:var(--red);
+}
 
 .refresh-button{
 margin-bottom:20px;
@@ -186,7 +188,6 @@ font-weight:700;
 
 .refresh-button:disabled{
 opacity:.6;
-cursor:not-allowed;
 }
 
 .stats{
@@ -214,6 +215,12 @@ font-weight:800;
 margin-top:12px;
 }
 
+.management{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
+}
+
 .section-title{
 margin:25px 0 14px;
 }
@@ -221,12 +228,6 @@ margin:25px 0 14px;
 .section-title h3{
 margin:0;
 font-size:17px;
-}
-
-.management{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:15px;
 }
 
 .card{
@@ -283,10 +284,6 @@ font-weight:700;
 cursor:pointer;
 }
 
-.button:hover{
-opacity:.9;
-}
-
 .payment{
 margin-top:15px;
 background:linear-gradient(145deg,#121a29,#0d131e);
@@ -324,7 +321,8 @@ font-weight:bold;
 margin-bottom:7px;
 }
 
-input,textarea{
+input,
+textarea{
 width:100%;
 padding:13px;
 background:#090e16;
@@ -487,10 +485,7 @@ Logout
 
 <div class="topbar">
 
-<button
-id="mobileMenu"
-class="mobile-menu"
->
+<button id="mobileMenu" class="mobile-menu">
 ☰
 </button>
 
@@ -522,7 +517,7 @@ Manage workers, promoters, tasks, withdrawals and platform settings.
 
 
 <div id="message">
-Checking admin access...
+Loading dashboard...
 </div>
 
 
@@ -537,66 +532,23 @@ class="refresh-button"
 <section class="stats">
 
 <div class="stat">
-
-<div class="stat-label">
-Workers
+<div class="stat-label">Workers</div>
+<div class="stat-value" id="workerCount">—</div>
 </div>
-
-<div
-class="stat-value"
-id="workerCount"
->
-—
-</div>
-
-</div>
-
 
 <div class="stat">
-
-<div class="stat-label">
-Promoters
+<div class="stat-label">Promoters</div>
+<div class="stat-value" id="promoterCount">—</div>
 </div>
-
-<div
-class="stat-value"
-id="promoterCount"
->
-—
-</div>
-
-</div>
-
 
 <div class="stat">
-
-<div class="stat-label">
-Active Tasks
+<div class="stat-label">Active Tasks</div>
+<div class="stat-value" id="taskCount">—</div>
 </div>
-
-<div
-class="stat-value"
-id="taskCount"
->
-—
-</div>
-
-</div>
-
 
 <div class="stat">
-
-<div class="stat-label">
-Pending Submissions
-</div>
-
-<div
-class="stat-value"
-id="submissionCount"
->
-—
-</div>
-
+<div class="stat-label">Pending Submissions</div>
+<div class="stat-value" id="submissionCount">—</div>
 </div>
 
 </section>
@@ -609,172 +561,99 @@ id="submissionCount"
 
 <section class="management">
 
-
 <div class="card">
-
 <div class="card-head">
-
-<div class="icon">
-👥
-</div>
-
-<div>
-<h3>Workers</h3>
-</div>
-
+<div class="icon">👥</div>
+<div><h3>Workers</h3></div>
 </div>
 
 <p>
 View and manage registered worker accounts.
 </p>
 
-<a
-href="worker.html"
-class="button"
->
+<a href="worker.html" class="button">
 Manage Workers
 </a>
-
 </div>
 
 
 <div class="card">
-
 <div class="card-head">
-
-<div class="icon">
-📣
-</div>
-
-<div>
-<h3>Promoters</h3>
-</div>
-
+<div class="icon">📣</div>
+<div><h3>Promoters</h3></div>
 </div>
 
 <p>
 Manage promoter accounts and promoter activity.
 </p>
 
-<a
-href="promoters.html"
-class="button"
->
+<a href="promoters.html" class="button">
 Manage Promoters
 </a>
-
 </div>
 
 
 <div class="card">
-
 <div class="card-head">
-
-<div class="icon">
-✓
-</div>
-
-<div>
-<h3>Task Management</h3>
-</div>
-
+<div class="icon">✓</div>
+<div><h3>Task Management</h3></div>
 </div>
 
 <p>
 Create, edit and manage tasks available to workers.
 </p>
 
-<a
-href="tasks.html"
-class="button"
->
+<a href="tasks.html" class="button">
 Manage Tasks
 </a>
-
 </div>
 
 
 <div class="card">
-
 <div class="card-head">
-
-<div class="icon">
-📋
-</div>
-
-<div>
-<h3>Task Submissions</h3>
-</div>
-
+<div class="icon">📋</div>
+<div><h3>Task Submissions</h3></div>
 </div>
 
 <p>
 Review submitted screenshots and approve or reject worker submissions.
 </p>
 
-<a
-href="admin-submissions.html"
-class="button"
->
+<a href="admin-submissions.html" class="button">
 Review Submissions
 </a>
-
 </div>
 
 
 <div class="card">
-
 <div class="card-head">
-
-<div class="icon">
-💳
-</div>
-
-<div>
-<h3>Withdrawals</h3>
-</div>
-
+<div class="icon">💳</div>
+<div><h3>Withdrawals</h3></div>
 </div>
 
 <p>
 View and manage worker withdrawal requests.
 </p>
 
-<a
-href="admin-withdrawals.html"
-class="button"
->
+<a href="admin-withdrawals.html" class="button">
 Manage Withdrawals
 </a>
-
 </div>
 
 
 <div class="card">
-
 <div class="card-head">
-
-<div class="icon">
-💰
-</div>
-
-<div>
-<h3>Promoter Wallet</h3>
-</div>
-
+<div class="icon">💰</div>
+<div><h3>Promoter Wallet</h3></div>
 </div>
 
 <p>
 Manage promoter deposits and promoter wallet balances.
 </p>
 
-<a
-href="admin-promoter-wallet.html"
-class="button"
->
+<a href="admin-promoter-wallet.html" class="button">
 Manage Wallet
 </a>
-
 </div>
 
 </section>
@@ -794,42 +673,30 @@ These payment details are displayed to promoters when they add funds.
 
 <div class="form-grid">
 
-
 <div class="form-group">
-
-<label>
-Bank Name
-</label>
+<label>Bank Name</label>
 
 <input
 id="bankName"
 type="text"
 placeholder="e.g. Opay"
 >
-
 </div>
 
 
 <div class="form-group">
-
-<label>
-Account Name
-</label>
+<label>Account Name</label>
 
 <input
 id="accountName"
 type="text"
 placeholder="Enter account name"
 >
-
 </div>
 
 
 <div class="form-group">
-
-<label>
-Account Number
-</label>
+<label>Account Number</label>
 
 <input
 id="accountNumber"
@@ -837,21 +704,16 @@ type="text"
 inputmode="numeric"
 placeholder="Enter account number"
 >
-
 </div>
 
 
 <div class="form-group full">
-
-<label>
-Payment Instructions
-</label>
+<label>Payment Instructions</label>
 
 <textarea
 id="paymentInstructions"
 placeholder="Enter payment instructions"
 ></textarea>
-
 </div>
 
 </div>
@@ -930,16 +792,16 @@ sidebar.classList.toggle("open");
 
 
 /* =========================
-CHECK ADMIN
+GET CURRENT USER
 ========================= */
 
-async function checkAdmin(){
+async function getAdmin(){
 
 const {
 data,
 error
 } =
-await supabaseClient.auth.getSession();
+await supabaseClient.auth.getUser();
 
 
 if(error){
@@ -949,16 +811,12 @@ throw error;
 }
 
 
-const session =
-data?.session;
-
-
-if(!session){
+if(!data || !data.user){
 
 window.location.href =
 "login.html";
 
-return false;
+return null;
 
 }
 
@@ -972,7 +830,7 @@ await supabaseClient
 .select("role")
 .eq(
 "id",
-session.user.id
+data.user.id
 )
 .maybeSingle();
 
@@ -996,60 +854,32 @@ message.textContent =
 message.className =
 "error";
 
-return false;
+return null;
 
 }
 
 
-message.textContent =
-"Admin access confirmed.";
-
-message.className =
-"success";
-
-return true;
+return data.user;
 
 }
 
 
 /* =========================
-LOAD DASHBOARD STATISTICS
+LOAD STATISTICS
 ========================= */
 
 async function loadStatistics(){
-
-/*
-IMPORTANT:
-The Supabase function returns:
-
-[
-  {
-    workers: 1,
-    promoters: 1,
-    active_tasks: 3,
-    pending_submissions: 0
-  }
-]
-
-So we read data[0].
-*/
 
 const {
 data,
 error
 } =
-await supabaseClient
-.rpc(
+await supabaseClient.rpc(
 "admin_get_dashboard_stats"
 );
 
 
 if(error){
-
-console.error(
-"STATISTICS RPC ERROR:",
-error
-);
 
 throw error;
 
@@ -1057,72 +887,110 @@ throw error;
 
 
 console.log(
-"Dashboard statistics:",
+"ADMIN STATS:",
 data
 );
 
 
+let stats = null;
+
+
+/*
+Handle every possible Supabase
+RPC response shape safely.
+*/
+
+if(Array.isArray(data)){
+
+if(data.length > 0){
+
+stats = data[0];
+
+}
+
+}else if(data && typeof data === "object"){
+
 if(
-!data ||
-!Array.isArray(data) ||
-data.length === 0
+Array.isArray(data.data) &&
+data.data.length > 0
 ){
 
+stats = data.data[0];
+
+}else{
+
+stats = data;
+
+}
+
+}
+
+
+if(!stats){
+
 throw new Error(
-"No dashboard statistics were returned."
+"No dashboard statistics returned."
 );
 
 }
 
 
-const stats =
-data[0];
+/*
+Support both normal names and
+possible JSON names.
+*/
 
+const workers =
+stats.workers ??
+stats.worker_count ??
+0;
 
-/* WORKERS */
+const promoters =
+stats.promoters ??
+stats.promoter_count ??
+0;
+
+const activeTasks =
+stats.active_tasks ??
+stats.active_task_count ??
+stats.tasks ??
+0;
+
+const pendingSubmissions =
+stats.pending_submissions ??
+stats.pending_submission_count ??
+stats.pending ??
+0;
+
 
 document.getElementById(
 "workerCount"
 ).textContent =
-Number(
-stats.workers ?? 0
-);
+Number(workers);
 
-
-/* PROMOTERS */
 
 document.getElementById(
 "promoterCount"
 ).textContent =
-Number(
-stats.promoters ?? 0
-);
+Number(promoters);
 
-
-/* ACTIVE TASKS */
 
 document.getElementById(
 "taskCount"
 ).textContent =
-Number(
-stats.active_tasks ?? 0
-);
+Number(activeTasks);
 
-
-/* PENDING SUBMISSIONS */
 
 document.getElementById(
 "submissionCount"
 ).textContent =
-Number(
-stats.pending_submissions ?? 0
-);
+Number(pendingSubmissions);
 
 }
 
 
 /* =========================
-LOAD PAYMENT DETAILS
+PAYMENT DETAILS
 ========================= */
 
 async function loadPaymentDetails(){
@@ -1151,7 +1019,6 @@ ascending:false
 if(error){
 
 console.warn(
-"Payment details:",
 error
 );
 
@@ -1193,7 +1060,7 @@ data.instructions || "";
 }catch(error){
 
 console.warn(
-"Payment details loading error:",
+"Payment details error:",
 error
 );
 
@@ -1215,24 +1082,20 @@ document.getElementById(
 "bankName"
 ).value.trim();
 
-
 const account =
 document.getElementById(
 "accountName"
 ).value.trim();
-
 
 const number =
 document.getElementById(
 "accountNumber"
 ).value.trim();
 
-
 const instructions =
 document.getElementById(
 "paymentInstructions"
 ).value.trim();
-
 
 const result =
 document.getElementById(
@@ -1290,12 +1153,12 @@ throw error;
 
 
 if(
-!data ||
-data.success !== true
+data &&
+data.success === false
 ){
 
 throw new Error(
-data?.message ||
+data.message ||
 "Unable to save payment details."
 );
 
@@ -1312,7 +1175,6 @@ result.className =
 }catch(error){
 
 console.error(
-"SAVE PAYMENT ERROR:",
 error
 );
 
@@ -1351,10 +1213,6 @@ refreshButton.textContent =
 "Loading...";
 
 
-/*
-Reset values while loading.
-*/
-
 document.getElementById(
 "workerCount"
 ).textContent =
@@ -1378,11 +1236,11 @@ document.getElementById(
 
 try{
 
-const isAdmin =
-await checkAdmin();
+const user =
+await getAdmin();
 
 
-if(!isAdmin){
+if(!user){
 
 return;
 
@@ -1394,12 +1252,8 @@ await loadStatistics();
 await loadPaymentDetails();
 
 
-/*
-Show successful result.
-*/
-
 message.textContent =
-"Dashboard statistics loaded successfully.";
+"Dashboard loaded successfully.";
 
 message.className =
 "success";
@@ -1435,24 +1289,12 @@ refreshButton.textContent =
 
 
 /* =========================
-REFRESH BUTTON
-========================= */
-
-refreshButton.addEventListener(
-"click",
-refreshDashboard
-);
-
-
-/* =========================
 LOGOUT
 ========================= */
 
 logoutButton.addEventListener(
 "click",
 async function(){
-
-try{
 
 logoutButton.disabled =
 true;
@@ -1461,37 +1303,20 @@ logoutButton.textContent =
 "Logging out...";
 
 
-const {
-error
-} =
+try{
+
 await supabaseClient.auth.signOut();
-
-
-if(error){
-
-throw error;
-
-}
-
 
 window.location.href =
 "login.html";
 
-
 }catch(error){
-
-console.error(
-"LOGOUT ERROR:",
-error
-);
-
 
 logoutButton.disabled =
 false;
 
 logoutButton.textContent =
 "Logout";
-
 
 message.textContent =
 "Logout error: " +
@@ -1502,8 +1327,7 @@ message.className =
 
 }
 
-}
-);
+});
 
 
 /* =========================

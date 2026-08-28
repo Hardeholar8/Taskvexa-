@@ -1,0 +1,1406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TaskVexa - Available Tasks</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg:#070a10;
+  --card:#111722;
+  --card2:#0d131e;
+  --border:#202b3b;
+  --text:#f8fafc;
+  --muted:#7f8da3;
+  --green:#4ade80;
+  --red:#f87171;
+  --yellow:#facc15;
+  --blue:#60a5fa;
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+header{
+  height:70px;
+  background:#070a10;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 22px;
+  position:sticky;
+  top:0;
+  z-index:20;
+}
+
+.logo{
+  font-size:21px;
+  font-weight:800;
+}
+
+.header-right{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.back-button{
+  background:#151d2a;
+  color:white;
+  border:1px solid #293548;
+  padding:9px 13px;
+  border-radius:9px;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:bold;
+}
+
+.logout{
+  background:#32191d;
+  color:#f87171;
+  border:1px solid #5b292f;
+  padding:9px 13px;
+  border-radius:9px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.content{
+  max-width:1100px;
+  margin:auto;
+  padding:28px 18px 50px;
+}
+
+.heading{
+  margin-bottom:22px;
+}
+
+.heading h1{
+  margin:0 0 8px;
+  font-size:28px;
+}
+
+.heading p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.message{
+  margin-bottom:18px;
+  font-size:13px;
+}
+
+.success{
+  color:var(--green);
+}
+
+.error{
+  color:var(--red);
+}
+
+.loading,
+.empty{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:35px 20px;
+  text-align:center;
+  color:var(--muted);
+}
+
+.task-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:18px;
+}
+
+.task-title{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:9px;
+}
+
+.task-description{
+  color:#a4b0c0;
+  line-height:1.6;
+  white-space:pre-wrap;
+  margin-bottom:18px;
+}
+
+.task-info{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.info{
+  background:var(--card2);
+  border:1px solid #1d2838;
+  border-radius:11px;
+  padding:13px;
+}
+
+.info small{
+  display:block;
+  color:#64748b;
+  font-size:10px;
+  margin-bottom:6px;
+}
+
+.info strong{
+  font-size:14px;
+  word-break:break-word;
+}
+
+.reward{
+  color:var(--green);
+  font-size:17px !important;
+}
+
+.status{
+  display:inline-block;
+  padding:5px 9px;
+  border-radius:20px;
+  background:#102d20;
+  color:var(--green);
+  font-size:11px;
+}
+
+.button{
+  min-height:42px;
+  padding:10px 16px;
+  border:0;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  margin:4px 6px 4px 0;
+}
+
+.open-task{
+  background:#f8fafc;
+  color:#090d14;
+}
+
+.submit-proof{
+  background:#151d2a;
+  color:white;
+  border:1px solid #293548;
+}
+
+.button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.submission-status{
+  margin-top:14px;
+  padding:12px;
+  border-radius:10px;
+  font-size:12px;
+  background:#0b111b;
+  border:1px solid #1f2b3d;
+}
+
+.pending{
+  color:var(--yellow);
+}
+
+.approved{
+  color:var(--green);
+}
+
+.rejected{
+  color:var(--red);
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  z-index:100;
+  padding:20px;
+  overflow-y:auto;
+}
+
+.modal.show{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-box{
+  width:100%;
+  max-width:500px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+}
+
+.modal-box h2{
+  margin:0 0 8px;
+}
+
+.modal-description{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:18px;
+  line-height:1.5;
+}
+
+label{
+  display:block;
+  color:#b9c4d3;
+  font-size:12px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+input,
+textarea{
+  width:100%;
+  padding:13px;
+  background:#090e16;
+  border:1px solid #293548;
+  border-radius:10px;
+  color:white;
+  outline:none;
+  font-size:14px;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.form-group{
+  margin-bottom:16px;
+}
+
+.file-note{
+  color:#64748b;
+  font-size:11px;
+  margin-top:7px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:8px;
+  margin-top:18px;
+}
+
+.cancel{
+  background:#151d2a;
+  color:white;
+  border:1px solid #293548;
+}
+
+.send{
+  background:#f8fafc;
+  color:#090d14;
+}
+
+#submitMessage{
+  margin-top:12px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+@media(max-width:700px){
+
+  header{
+    padding:0 13px;
+  }
+
+  .header-right{
+    gap:5px;
+  }
+
+  .back-button,
+  .logout{
+    padding:8px 9px;
+    font-size:11px;
+  }
+
+  .content{
+    padding:22px 13px 40px;
+  }
+
+  .heading h1{
+    font-size:24px;
+  }
+
+  .task-info{
+    grid-template-columns:1fr;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+    TaskVexa
+  </div>
+
+  <div class="header-right">
+
+    <a href="worker.html" class="back-button">
+      ← Dashboard
+    </a>
+
+    <button id="logoutButton" class="logout">
+      Logout
+    </button>
+
+  </div>
+
+</header>
+
+
+<main class="content">
+
+  <div class="heading">
+
+    <h1>Available Tasks</h1>
+
+    <p>
+      Complete available tasks and submit your proof for review.
+    </p>
+
+  </div>
+
+
+  <div id="message" class="message">
+    Checking account...
+  </div>
+
+
+  <div id="taskList">
+
+    <div class="loading">
+      Loading tasks...
+    </div>
+
+  </div>
+
+</main>
+
+
+<!-- SUBMIT PROOF MODAL -->
+
+<div id="proofModal" class="modal">
+
+  <div class="modal-box">
+
+    <h2>Submit Task Proof</h2>
+
+    <div class="modal-description">
+      Complete the task first, then upload a screenshot showing that you completed it.
+    </div>
+
+
+    <form id="proofForm">
+
+      <div class="form-group">
+
+        <label>
+          Screenshot Proof
+        </label>
+
+        <input
+          id="proofFile"
+          type="file"
+          accept="image/*"
+          required
+        >
+
+        <div class="file-note">
+          Screenshot/image only. Maximum 5MB.
+        </div>
+
+      </div>
+
+
+      <div class="form-group">
+
+        <label>
+          Additional Note (Optional)
+        </label>
+
+        <textarea
+          id="proofText"
+          placeholder="Add any information the admin should know..."
+        ></textarea>
+
+      </div>
+
+
+      <div id="submitMessage"></div>
+
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          id="cancelProof"
+          class="button cancel"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          id="submitProofButton"
+          class="button send"
+        >
+          Submit Proof
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const message =
+document.getElementById("message");
+
+const taskList =
+document.getElementById("taskList");
+
+const proofModal =
+document.getElementById("proofModal");
+
+const proofForm =
+document.getElementById("proofForm");
+
+const proofFile =
+document.getElementById("proofFile");
+
+const proofText =
+document.getElementById("proofText");
+
+const submitProofButton =
+document.getElementById("submitProofButton");
+
+const submitMessage =
+document.getElementById("submitMessage");
+
+const cancelProof =
+document.getElementById("cancelProof");
+
+const logoutButton =
+document.getElementById("logoutButton");
+
+
+let currentUser = null;
+let selectedTask = null;
+let submissions = [];
+
+
+/* =========================
+   ESCAPE HTML
+========================= */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================
+   MONEY
+========================= */
+
+function formatMoney(value){
+
+  return "₦" +
+    Number(value || 0).toLocaleString(
+      "en-NG",
+      {
+        minimumFractionDigits:0,
+        maximumFractionDigits:2
+      }
+    );
+
+}
+
+
+/* =========================
+   GET USER
+========================= */
+
+async function getCurrentUser(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient.auth.getUser();
+
+
+  if(error){
+
+    throw error;
+
+  }
+
+
+  if(
+    !data ||
+    !data.user
+  ){
+
+    window.location.href =
+      "login.html";
+
+    return null;
+
+  }
+
+
+  currentUser =
+    data.user;
+
+
+  /* Check profile */
+
+  const {
+    data:profile,
+    error:profileError
+  } =
+  await supabaseClient
+    .from("profiles")
+    .select("role")
+    .eq(
+      "id",
+      currentUser.id
+    )
+    .maybeSingle();
+
+
+  if(profileError){
+
+    throw profileError;
+
+  }
+
+
+  if(
+    !profile ||
+    String(profile.role).toLowerCase() !==
+    "worker"
+  ){
+
+    message.textContent =
+      "This page is for worker accounts only.";
+
+    message.className =
+      "message error";
+
+    return null;
+
+  }
+
+
+  return currentUser;
+
+}
+
+
+/* =========================
+   LOAD MY SUBMISSIONS
+========================= */
+
+async function loadMySubmissions(){
+
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("task_submissions")
+    .select(
+      "id,task_id,status,reward_amount,created_at"
+    )
+    .eq(
+      "worker_id",
+      currentUser.id
+    )
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    );
+
+
+  if(error){
+
+    throw error;
+
+  }
+
+
+  submissions =
+    Array.isArray(data)
+      ? data
+      : [];
+
+}
+
+
+/* =========================
+   GET SUBMISSION
+========================= */
+
+function getTaskSubmission(taskId){
+
+  return submissions.find(
+    submission =>
+      String(submission.task_id) ===
+      String(taskId)
+  );
+
+}
+
+
+/* =========================
+   LOAD ACTIVE TASKS
+========================= */
+
+async function loadTasks(){
+
+  taskList.innerHTML = `
+    <div class="loading">
+      Loading tasks...
+    </div>
+  `;
+
+
+  try{
+
+    const user =
+      await getCurrentUser();
+
+
+    if(!user){
+
+      return;
+
+    }
+
+
+    await loadMySubmissions();
+
+
+    /*
+      Only active tasks are shown.
+      No Level 1 / Level 2 logic.
+    */
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("tasks")
+      .select(
+        "id,title,description,platform,task_url,reward,workers_needed,status,created_at"
+      )
+      .eq(
+        "status",
+        "active"
+      )
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
+
+
+    if(error){
+
+      throw error;
+
+    }
+
+
+    const tasks =
+      Array.isArray(data)
+        ? data
+        : [];
+
+
+    renderTasks(tasks);
+
+
+    message.textContent =
+      "Available tasks loaded.";
+
+    message.className =
+      "message success";
+
+
+  }catch(error){
+
+    console.error(
+      "WORKER TASK ERROR:",
+      error
+    );
+
+
+    taskList.innerHTML = `
+      <div class="empty error">
+        Unable to load tasks.<br><br>
+        ${escapeHTML(error.message)}
+      </div>
+    `;
+
+
+    message.textContent =
+      "Error: " +
+      error.message;
+
+    message.className =
+      "message error";
+
+  }
+
+}
+
+
+/* =========================
+   RENDER TASKS
+========================= */
+
+function renderTasks(tasks){
+
+  if(
+    !tasks ||
+    tasks.length === 0
+  ){
+
+    taskList.innerHTML = `
+      <div class="empty">
+        <h3>No active tasks</h3>
+        <p>
+          There are currently no tasks available.
+        </p>
+      </div>
+    `;
+
+    return;
+
+  }
+
+
+  taskList.innerHTML = "";
+
+
+  tasks.forEach(task => {
+
+    const submission =
+      getTaskSubmission(task.id);
+
+
+    const card =
+      document.createElement("section");
+
+    card.className =
+      "task-card";
+
+
+    let submissionHTML = "";
+
+
+    if(submission){
+
+      const status =
+        String(
+          submission.status || "pending"
+        ).toLowerCase();
+
+
+      let statusClass =
+        "pending";
+
+
+      let statusText =
+        "Pending review";
+
+
+      if(status === "approved"){
+
+        statusClass =
+          "approved";
+
+        statusText =
+          "Approved";
+
+      }
+
+
+      if(status === "rejected"){
+
+        statusClass =
+          "rejected";
+
+        statusText =
+          "Rejected";
+
+      }
+
+
+      submissionHTML = `
+        <div class="submission-status">
+          Submission:
+          <strong class="${statusClass}">
+            ${statusText}
+          </strong>
+
+          ${
+            status === "approved"
+            ?
+            `
+            <br>
+            Reward:
+            <strong class="approved">
+              ${formatMoney(
+                submission.reward_amount
+              )}
+            </strong>
+            `
+            :
+            ""
+          }
+        </div>
+      `;
+
+    }
+
+
+    const alreadySubmitted =
+      Boolean(submission);
+
+
+    card.innerHTML = `
+
+      <div class="task-title">
+        ${escapeHTML(task.title)}
+      </div>
+
+
+      <div class="task-description">
+        ${escapeHTML(task.description)}
+      </div>
+
+
+      <div class="task-info">
+
+        <div class="info">
+          <small>Platform</small>
+          <strong>
+            ${escapeHTML(
+              task.platform || "-"
+            )}
+          </strong>
+        </div>
+
+
+        <div class="info">
+          <small>Task Reward</small>
+          <strong class="reward">
+            ${formatMoney(task.reward)}
+          </strong>
+        </div>
+
+
+        <div class="info">
+          <small>Workers Needed</small>
+          <strong>
+            ${escapeHTML(
+              task.workers_needed ?? 1
+            )}
+          </strong>
+        </div>
+
+      </div>
+
+
+      <div>
+
+        <button
+          class="button open-task"
+          data-id="${escapeHTML(task.id)}"
+          ${!task.task_url ? "disabled" : ""}
+        >
+          Open Task
+        </button>
+
+
+        <button
+          class="button submit-proof"
+          data-id="${escapeHTML(task.id)}"
+          ${alreadySubmitted ? "disabled" : ""}
+        >
+          ${
+            alreadySubmitted
+              ? "Proof Submitted"
+              : "Submit Proof"
+          }
+        </button>
+
+      </div>
+
+
+      ${submissionHTML}
+
+    `;
+
+
+    taskList.appendChild(card);
+
+  });
+
+
+  document
+    .querySelectorAll(".open-task")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          const task =
+            tasks.find(
+              item =>
+                String(item.id) ===
+                String(button.dataset.id)
+            );
+
+
+          if(!task || !task.task_url){
+
+            alert(
+              "This task does not have a valid link."
+            );
+
+            return;
+
+          }
+
+
+          /*
+            Open in a new tab.
+          */
+
+          window.open(
+            task.task_url,
+            "_blank",
+            "noopener,noreferrer"
+          );
+
+        }
+      );
+
+    });
+
+
+  document
+    .querySelectorAll(".submit-proof")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          const task =
+            tasks.find(
+              item =>
+                String(item.id) ===
+                String(button.dataset.id)
+            );
+
+
+          if(!task){
+
+            return;
+
+          }
+
+
+          openProofModal(task);
+
+        }
+      );
+
+    });
+
+}
+
+
+/* =========================
+   OPEN PROOF MODAL
+========================= */
+
+function openProofModal(task){
+
+  selectedTask =
+    task;
+
+
+  proofForm.reset();
+
+  submitMessage.textContent = "";
+
+  submitMessage.className = "";
+
+
+  proofModal.classList.add("show");
+
+}
+
+
+/* =========================
+   CLOSE MODAL
+========================= */
+
+function closeProofModal(){
+
+  selectedTask =
+    null;
+
+  proofForm.reset();
+
+  submitMessage.textContent = "";
+
+  proofModal.classList.remove("show");
+
+}
+
+
+cancelProof.addEventListener(
+  "click",
+  closeProofModal
+);
+
+
+proofModal.addEventListener(
+  "click",
+  function(event){
+
+    if(event.target === proofModal){
+
+      closeProofModal();
+
+    }
+
+  }
+);
+
+
+/* =========================
+   SUBMIT PROOF
+========================= */
+
+proofForm.addEventListener(
+  "submit",
+  async function(event){
+
+    event.preventDefault();
+
+
+    if(!currentUser){
+
+      return;
+
+    }
+
+
+    if(!selectedTask){
+
+      return;
+
+    }
+
+
+    const file =
+      proofFile.files[0];
+
+
+    if(!file){
+
+      submitMessage.textContent =
+        "Please select a screenshot.";
+
+      submitMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    /*
+      Only image files.
+    */
+
+    if(
+      !file.type ||
+      !file.type.startsWith("image/")
+    ){
+
+      submitMessage.textContent =
+        "Please upload an image screenshot only.";
+
+      submitMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    /*
+      Maximum 5MB.
+    */
+
+    if(
+      file.size >
+      5 * 1024 * 1024
+    ){
+
+      submitMessage.textContent =
+        "Screenshot must not be larger than 5MB.";
+
+      submitMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    try{
+
+      submitProofButton.disabled =
+        true;
+
+      submitProofButton.textContent =
+        "Uploading...";
+
+
+      /*
+        Check again before submitting.
+        This prevents duplicate submissions.
+      */
+
+      const {
+        data:existing,
+        error:existingError
+      } =
+      await supabaseClient
+        .from("task_submissions")
+        .select("id,status")
+        .eq(
+          "task_id",
+          selectedTask.id
+        )
+        .eq(
+          "worker_id",
+          currentUser.id
+        )
+        .maybeSingle();
+
+
+      if(existingError){
+
+        throw existingError;
+
+      }
+
+
+      if(existing){
+
+        throw new Error(
+          "You have already submitted this task."
+        );
+
+      }
+
+
+      /*
+        Upload screenshot.
+
+        IMPORTANT:
+        Create a Supabase Storage bucket named:
+
+        task-proofs
+
+        The bucket should allow authenticated
+        workers to upload their own proof files.
+      */
+
+      const extension =
+        file.name
+          .split(".")
+          .pop()
+          .toLowerCase() || "jpg";
+
+
+      const filePath =
+        currentUser.id +
+        "/" +
+        selectedTask.id +
+        "-" +
+        Date.now() +
+        "." +
+        extension;
+
+
+      const {
+        data:uploadData,
+        error:uploadError
+      } =
+      await supabaseClient
+        .storage
+        .from("task-proofs")
+        .upload(
+          filePath,
+          file,
+          {
+            cacheControl:"3600",
+            upsert:false,
+            contentType:file.type
+          }
+        );
+
+
+      if(uploadError){
+
+        throw uploadError;
+
+      }
+
+
+      /*
+        Store the proof path in task_submissions.
+      */
+
+      const {
+        error:submissionError
+      } =
+      await supabaseClient
+        .from("task_submissions")
+        .insert({
+          task_id:selectedTask.id,
+          worker_id:currentUser.id,
+          proof_url:uploadData.path,
+          proof_text:
+            proofText.value.trim() || null,
+          status:"pending",
+          reward_amount:
+            Number(selectedTask.reward || 0)
+        });
+
+
+      if(submissionError){
+
+        /*
+          If database insert fails, try to remove
+          the uploaded proof so there is no orphan.
+        */
+
+        await supabaseClient
+          .storage
+          .from("task-proofs")
+          .remove([
+            uploadData.path
+          ]);
+
+
+        throw submissionError;
+
+      }
+
+
+      submitMessage.textContent =
+        "Proof submitted successfully. Waiting for admin review.";
+
+      submitMessage.className =
+        "success";
+
+
+      /*
+        Refresh the page after a short delay.
+      */
+
+      setTimeout(
+        function(){
+
+          closeProofModal();
+
+          loadTasks();
+
+        },
+        1200
+      );
+
+
+    }catch(error){
+
+      console.error(
+        "SUBMIT PROOF ERR

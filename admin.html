@@ -1,542 +1,1296 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>TaskVexa - Admin Dashboard</title>
-
-<link rel="stylesheet" href="style.css">
-
-<style>
-* {
-  box-sizing: border-box;
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TaskVexa - Admin Dashboard</title><style>
+*{
+  box-sizing:border-box;
 }
 
-:root {
-  --bg: #070a10;
-  --sidebar: #0b0f17;
-  --card: #111722;
-  --card2: #0d131e;
-  --border: #202b3b;
-  --text: #f8fafc;
-  --muted: #7f8da3;
-  --soft: #cbd5e1;
-  --accent: #8b5cf6;
-  --accent2: #6d28d9;
-  --green: #4ade80;
-  --yellow: #facc15;
-  --red: #f87171;
+:root{
+  --bg:#070a10;
+  --sidebar:#0b0f17;
+  --card:#111722;
+  --card2:#0d131e;
+  --border:#202b3b;
+  --text:#f8fafc;
+  --muted:#7f8da3;
+  --soft:#cbd5e1;
+  --accent:#8b5cf6;
+  --accent2:#6d28d9;
+  --green:#4ade80;
+  --yellow:#facc15;
+  --red:#f87171;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
 }
 
-body {
-  min-height: 100vh;
+body{
+  min-height:100vh;
 }
 
-/* =========================
-   SIDEBAR
-========================= */
+/* SIDEBAR */
 
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 250px;
-  background: var(--sidebar);
-  border-right: 1px solid var(--border);
-  padding: 22px 14px;
-  z-index: 1000;
-  overflow-y: auto;
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:250px;
+  background:var(--sidebar);
+  border-right:1px solid var(--border);
+  padding:22px 14px;
+  z-index:1000;
+  overflow-y:auto;
+  transition:.25s;
 }
 
-.logo {
-  padding: 8px 14px 25px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 18px;
+.logo{
+  padding:8px 14px 24px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:18px;
 }
 
-.logo h1 {
-  margin: 0;
-  font-size: 23px;
-  letter-spacing: -0.5px;
+.logo h1{
+  margin:0;
+  font-size:23px;
 }
 
-.logo span {
-  display: block;
-  margin-top: 5px;
-  color: var(--muted);
-  font-size: 12px;
+.logo span{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:12px;
 }
 
-.nav-title {
-  color: #4f5d73;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.4px;
-  padding: 10px 14px 8px;
-  text-transform: uppercase;
+.nav-title{
+  color:#4f5d73;
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:1.4px;
+  padding:10px 14px 8px;
+  text-transform:uppercase;
 }
 
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 12px 14px;
-  margin: 4px 0;
-  border-radius: 11px;
-  color: #aeb9c9;
-  text-decoration: none;
-  font-size: 14px;
-  transition: .2s;
+.nav-link{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  padding:12px 14px;
+  margin:4px 0;
+  border-radius:11px;
+  color:#aeb9c9;
+  text-decoration:none;
+  font-size:14px;
+  transition:.2s;
 }
 
 .nav-link:hover,
-.nav-link.active {
-  background: #171d2a;
-  color: white;
+.nav-link.active{
+  background:#171d2a;
+  color:white;
 }
 
-.nav-icon {
-  width: 24px;
-  text-align: center;
-  font-size: 16px;
+.nav-icon{
+  width:24px;
+  text-align:center;
+  font-size:16px;
 }
 
-.logout-nav {
-  margin-top: 25px;
-  border-top: 1px solid var(--border);
-  padding-top: 18px;
+.logout-nav{
+  margin-top:25px;
+  border-top:1px solid var(--border);
+  padding-top:18px;
 }
 
-#logoutButton {
-  border: 0;
-  background: transparent;
-  cursor: pointer;
+/* MAIN */
+
+.main{
+  margin-left:250px;
+  min-height:100vh;
 }
 
-/* =========================
-   MAIN
-========================= */
+/* TOPBAR */
 
-.main {
-  margin-left: 250px;
-  min-height: 100vh;
+.topbar{
+  height:72px;
+  border-bottom:1px solid var(--border);
+  background:rgba(7,10,16,.94);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 30px;
+  position:sticky;
+  top:0;
+  z-index:900;
+  backdrop-filter:blur(12px);
 }
 
-/* =========================
-   TOPBAR
-========================= */
-
-.topbar {
-  height: 72px;
-  border-bottom: 1px solid var(--border);
-  background: rgba(7,10,16,.92);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 30px;
-  position: sticky;
-  top: 0;
-  z-index: 900;
-  backdrop-filter: blur(12px);
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:14px;
 }
 
-.topbar-title {
-  font-size: 18px;
-  font-weight: 700;
+.topbar-title{
+  font-size:18px;
+  font-weight:700;
 }
 
-.admin-badge {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #aeb9c9;
-  font-size: 13px;
+.admin-badge{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#aeb9c9;
+  font-size:13px;
 }
 
-.online-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--green);
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(74,222,128,.6);
+.online-dot{
+  width:8px;
+  height:8px;
+  background:var(--green);
+  border-radius:50%;
+  box-shadow:0 0 10px rgba(74,222,128,.6);
 }
 
-/* =========================
-   CONTENT
-========================= */
+/* CONTENT */
 
-.content {
-  padding: 30px;
-  max-width: 1400px;
-  margin: auto;
+.content{
+  padding:30px;
+  max-width:1450px;
+  margin:auto;
 }
 
-.page-heading {
-  margin-bottom: 25px;
+.page-heading{
+  margin-bottom:25px;
 }
 
-.page-heading h2 {
-  margin: 0 0 8px;
-  font-size: 29px;
+.page-heading h2{
+  margin:0 0 8px;
+  font-size:29px;
 }
 
-.page-heading p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
+.page-heading p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
 }
 
-#message {
-  margin-bottom: 20px;
-  font-size: 13px;
+#message{
+  margin-bottom:20px;
+  font-size:13px;
 }
 
-.success {
-  color: var(--green);
+.success{
+  color:var(--green);
 }
 
-.error {
-  color: var(--red);
+.error{
+  color:var(--red);
 }
 
-/* =========================
-   OVERVIEW CARDS
-========================= */
+/* STATS */
 
-.overview-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 25px;
+.overview-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:28px;
 }
 
-.stat-card {
-  background: linear-gradient(145deg, #131a27, #0d121b);
-  border: 1px solid var(--border);
-  border-radius: 17px;
-  padding: 20px;
-  min-height: 125px;
-  box-shadow: 0 12px 30px rgba(0,0,0,.2);
+.stat-card{
+  background:linear-gradient(145deg,#131a27,#0d121b);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:20px;
+  min-height:125px;
+  box-shadow:0 12px 30px rgba(0,0,0,.2);
 }
 
-.stat-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
-.stat-label {
-  color: var(--muted);
-  font-size: 12px;
+.stat-label{
+  color:var(--muted);
+  font-size:12px;
 }
 
-.stat-icon {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #1a2030;
-  border-radius: 10px;
-  font-size: 17px;
+.stat-icon{
+  width:36px;
+  height:36px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#1a2030;
+  border-radius:10px;
+  font-size:17px;
 }
 
-.stat-value {
-  margin-top: 18px;
-  font-size: 24px;
-  font-weight: 800;
+.stat-value{
+  margin-top:18px;
+  font-size:24px;
+  font-weight:800;
 }
 
-/* =========================
-   SECTION
-========================= */
+/* SECTION */
 
-.section-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 28px 0 14px;
+.section-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin:28px 0 14px;
 }
 
-.section-title h3 {
-  margin: 0;
-  font-size: 17px;
+.section-title h3{
+  margin:0;
+  font-size:17px;
 }
 
-.section-title span {
-  color: var(--muted);
-  font-size: 12px;
+.section-title span{
+  color:var(--muted);
+  font-size:12px;
 }
 
-/* =========================
-   MANAGEMENT GRID
-========================= */
+/* MANAGEMENT */
 
-.management-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+.management-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:16px;
 }
 
-.admin-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  padding: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.18);
+.admin-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
+  box-shadow:0 10px 25px rgba(0,0,0,.18);
+  transition:.2s;
 }
 
-.admin-card:hover {
-  border-color: #303d52;
+.admin-card:hover{
+  border-color:#303d52;
+  transform:translateY(-1px);
 }
 
-.card-head {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  margin-bottom: 13px;
+.card-head{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-bottom:13px;
 }
 
-.card-icon {
-  width: 42px;
-  height: 42px;
-  background: #191f2c;
-  border: 1px solid #293448;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 19px;
+.card-icon{
+  width:42px;
+  height:42px;
+  background:#191f2c;
+  border:1px solid #293448;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:19px;
+  flex-shrink:0;
 }
 
-.admin-card h3 {
-  margin: 0;
-  font-size: 16px;
+.admin-card h3{
+  margin:0;
+  font-size:16px;
 }
 
-.admin-card p {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-  margin: 0 0 17px;
+.admin-card p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  margin:0 0 17px;
 }
 
-/* =========================
-   BUTTON
-========================= */
+/* BUTTONS */
 
-.admin-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 42px;
-  padding: 10px 16px;
-  border-radius: 11px;
-  text-decoration: none;
-  font-size: 13px;
-  font-weight: 700;
-  background: #f8fafc;
-  color: #090d14;
-  border: none;
-  cursor: pointer;
-  transition: .2s;
+.admin-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:10px 16px;
+  border-radius:11px;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:700;
+  background:#f8fafc;
+  color:#090d14;
+  border:none;
+  cursor:pointer;
+  transition:.2s;
 }
 
-.admin-button:hover {
-  transform: translateY(-1px);
-  opacity: .9;
+.admin-button:hover{
+  transform:translateY(-1px);
+  opacity:.9;
 }
 
-.secondary-button {
-  background: #1a2130;
-  color: #dbe4f0;
-  border: 1px solid #2b374a;
+.secondary-button{
+  background:#1a2130;
+  color:#dbe4f0;
+  border:1px solid #2b374a;
 }
 
-/* =========================
-   PAYMENT DETAILS
-========================= */
+/* PAYMENT */
 
-.payment-card {
-  background: linear-gradient(145deg, #121a29, #0d131e);
-  border: 1px solid #29354a;
-  border-radius: 20px;
-  padding: 23px;
-  margin-top: 16px;
+.payment-card{
+  background:linear-gradient(145deg,#121a29,#0d131e);
+  border:1px solid #29354a;
+  border-radius:20px;
+  padding:23px;
+  margin-top:16px;
 }
 
-.payment-card .card-head {
-  margin-bottom: 20px;
+.info-box{
+  background:#0b111b;
+  border:1px solid #1f2b3d;
+  color:#8997aa;
+  padding:13px;
+  border-radius:11px;
+  margin-bottom:20px;
+  font-size:12px;
+  line-height:1.5;
 }
 
-.info-box {
-  background: #0b111b;
-  border: 1px solid #1f2b3d;
-  color: #8997aa;
-  padding: 13px;
-  border-radius: 11px;
-  margin-bottom: 20px;
-  font-size: 12px;
-  line-height: 1.5;
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
 }
 
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+.form-group{
+  margin-bottom:5px;
 }
 
-.form-group {
-  margin-bottom: 5px;
+.form-group.full{
+  grid-column:1/-1;
 }
 
-.form-group.full {
-  grid-column: 1 / -1;
-}
-
-.form-group label {
-  display: block;
-  color: #b9c4d3;
-  font-size: 12px;
-  font-weight: 700;
-  margin-bottom: 7px;
+.form-group label{
+  display:block;
+  color:#b9c4d3;
+  font-size:12px;
+  font-weight:700;
+  margin-bottom:7px;
 }
 
 .form-group input,
-.form-group textarea {
-  width: 100%;
-  padding: 13px;
-  background: #090e16;
-  border: 1px solid #293548;
-  border-radius: 10px;
-  color: white;
-  outline: none;
-  font-size: 14px;
+.form-group textarea{
+  width:100%;
+  padding:13px;
+  background:#090e16;
+  border:1px solid #293548;
+  border-radius:10px;
+  color:white;
+  outline:none;
+  font-size:14px;
 }
 
 .form-group input:focus,
-.form-group textarea:focus {
-  border-color: #59677e;
+.form-group textarea:focus{
+  border-color:#8b5cf6;
 }
 
-.form-group textarea {
-  min-height: 90px;
-  resize: vertical;
+.form-group textarea{
+  min-height:90px;
+  resize:vertical;
 }
 
 .form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: #4f5c70;
+.form-group textarea::placeholder{
+  color:#4f5c70;
 }
 
-#paymentDetailsMessage {
-  margin-top: 13px;
-  font-size: 13px;
-  font-weight: 600;
+#paymentDetailsMessage{
+  margin-top:13px;
+  font-size:13px;
+  font-weight:600;
 }
+
+/* QUICK LINKS */
+
+.quick-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.quick-link{
+  display:block;
+  background:#0d131e;
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:17px;
+  text-decoration:none;
+  color:white;
+  transition:.2s;
+}
+
+.quick-link:hover{
+  background:#151c29;
+  transform:translateY(-2px);
+}
+
+.quick-link-icon{
+  font-size:21px;
+  margin-bottom:10px;
+}
+
+.quick-link strong{
+  display:block;
+  font-size:13px;
+}
+
+.quick-link small{
+  display:block;
+  color:var(--muted);
+  margin-top:5px;
+  font-size:11px;
+}
+
+/* MOBILE MENU */
+
+.mobile-menu{
+  display:none;
+  background:#151b28;
+  border:1px solid var(--border);
+  color:white;
+  border-radius:9px;
+  padding:9px 11px;
+  cursor:pointer;
+  font-size:18px;
+}
+
+/* OVERLAY */
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.65);
+  z-index:999;
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1050px){
+
+  .overview-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .quick-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:800px){
+
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .overlay.open{
+    display:block;
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .topbar{
+    padding:0 15px;
+  }
+
+  .content{
+    padding:22px 15px 40px;
+  }
+
+  .management-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
+}
+
+@media(max-width:560px){
+
+  .overview-grid{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+  }
+
+  .stat-card{
+    padding:15px;
+    min-height:105px;
+  }
+
+  .stat-value{
+    font-size:20px;
+  }
+
+  .quick-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .page-heading h2{
+    font-size:25px;
+  }
+
+  .admin-card{
+    padding:17px;
+  }
+}
+</style></head><body><!-- SIDEBAR --><aside class="sidebar" id="sidebar">  <div class="logo">
+    <h1>TaskVexa</h1>
+    <span>Administration Panel</span>
+  </div>  <div class="nav-title">Main</div>  <a href="admin.html" class="nav-link active">
+    <span class="nav-icon">⌂</span>
+    Dashboard
+  </a>  <div class="nav-title">Management</div>  <a href="tasks.html" class="nav-link">
+    <span class="nav-icon">📋</span>
+    Tasks
+  </a>  <a href="admin-submissions.html" class="nav-link">
+    <span class="nav-icon">📸</span>
+    Submissions
+  </a>  <a href="admin-withdrawals.html" class="nav-link">
+    <span class="nav-icon">💸</span>
+    Withdrawals
+  </a>  <a href="admin-promoter-wallet.html" class="nav-link">
+    <span class="nav-icon">💰</span>
+    Promoter Wallet
+  </a>  <div class="nav-title">Users</div>  <a href="#workers" class="nav-link">
+    <span class="nav-icon">👷</span>
+    Workers
+  </a>  <a href="#promoters" class="nav-link">
+    <span class="nav-icon">📢</span>
+    Promoters
+  </a>  <div class="nav-title">System</div>  <a href="#settings" class="nav-link">
+    <span class="nav-icon">⚙️</span>
+    Settings
+  </a>  <div class="logout-nav">
+    <button id="logoutButton" class="nav-link">
+      <span class="nav-icon">↪</span>
+      Logout
+    </button>
+  </div></aside><div class="overlay" id="overlay"></div><!-- MAIN --><div class="main">  <!-- TOPBAR -->  <header class="topbar"><div class="topbar-left">
+
+  <button
+    id="mobileMenu"
+    class="mobile-menu"
+  >
+    ☰
+  </button>
+
+  <div class="topbar-title">
+    Admin Dashboard
+  </div>
+
+</div>
+
+<div class="admin-badge">
+  <span class="online-dot"></span>
+  Admin
+</div>
+
+  </header>  <!-- CONTENT -->  <main class="content"><div class="page-heading">
+
+  <h2>Welcome, Admin</h2>
+
+  <p>
+    Manage TaskVexa from one central dashboard.
+  </p>
+
+</div>
+
+<div id="message">
+  Checking admin access...
+</div>
+
+<section id="adminContent" style="display:none;">
+
+  <!-- STATISTICS -->
+
+  <div class="overview-grid">
+
+    <div class="stat-card">
+
+      <div class="stat-top">
+        <span class="stat-label">
+          Platform
+        </span>
+
+        <span class="stat-icon">
+          🚀
+        </span>
+      </div>
+
+      <div class="stat-value">
+        TaskVexa
+      </div>
+
+    </div>
+
+    <div class="stat-card">
+
+      <div class="stat-top">
+        <span class="stat-label">
+          Tasks
+        </span>
+
+        <span class="stat-icon">
+          📋
+        </span>
+      </div>
+
+      <div
+        class="stat-value"
+        id="taskCount"
+      >
+        —
+      </div>
+
+    </div>
+
+    <div class="stat-card">
+
+      <div class="stat-top">
+        <span class="stat-label">
+          Pending Reviews
+        </span>
+
+        <span class="stat-icon">
+          📸
+        </span>
+      </div>
+
+      <div
+        class="stat-value"
+        id="submissionCount"
+      >
+        —
+      </div>
+
+    </div>
+
+    <div class="stat-card">
+
+      <div class="stat-top">
+        <span class="stat-label">
+          Pending Withdrawals
+        </span>
+
+        <span class="stat-icon">
+          💸
+        </span>
+      </div>
+
+      <div
+        class="stat-value"
+        id="withdrawalCount"
+      >
+        —
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- PAYMENT DETAILS -->
+
+  <div class="section-title">
+
+    <h3>Payment Configuration</h3>
+
+    <span>Promoter deposits</span>
+
+  </div>
+
+  <section class="payment-card">
+
+    <div class="card-head">
+
+      <div class="card-icon">
+        🏦
+      </div>
+
+      <div>
+        <h3>Promoter Deposit Payment Details</h3>
+      </div>
+
+    </div>
+
+    <div class="info-box">
+
+      These details are shown to promoters when
+      they press <strong>Add Funds</strong>.
+      Enter the account where promoter deposits
+      should be made.
+
+    </div>
+
+    <div class="form-grid">
+
+      <div class="form-group">
+
+        <label for="bankName">
+          Bank Name
+        </label>
+
+        <input
+          type="text"
+          id="bankName"
+          placeholder="e.g. Opay"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="accountName">
+          Account Name
+        </label>
+
+        <input
+          type="text"
+          id="accountName"
+          placeholder="Enter account name"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="accountNumber">
+          Account Number
+        </label>
+
+        <input
+          type="text"
+          id="accountNumber"
+          inputmode="numeric"
+          placeholder="Enter account number"
+        >
+
+      </div>
+
+      <div class="form-group">
+
+        <label for="paymentInstructions">
+          Payment Instructions
+        </label>
+
+        <input
+          type="text"
+          id="paymentInstructions"
+          placeholder="Payment instructions"
+        >
+
+      </div>
+
+    </div>
+
+    <br>
+
+    <button
+      id="savePaymentDetailsButton"
+      class="admin-button"
+    >
+      Save Payment Details
+    </button>
+
+    <p id="paymentDetailsMessage"></p>
+
+  </section>
+
+  <!-- MANAGEMENT -->
+
+  <div class="section-title">
+
+    <h3>Management</h3>
+
+    <span>Platform controls</span>
+
+  </div>
+
+  <div class="management-grid">
+
+    <!-- TASKS -->
+
+    <div class="admin-card">
+
+      <div class="card-head">
+
+        <div class="card-icon">
+          📋
+        </div>
+
+        <h3>Task Management</h3>
+
+      </div>
+
+      <p>
+        Create, edit and manage tasks available
+        to workers.
+      </p>
+
+      <a
+        href="tasks.html"
+        class="admin-button"
+      >
+        Manage Tasks
+      </a>
+
+    </div>
+
+    <!-- SUBMISSIONS -->
+
+    <div class="admin-card">
+
+      <div class="card-head">
+
+        <div class="card-icon">
+          📸
+        </div>
+
+        <h3>Task Submissions</h3>
+
+      </div>
+
+      <p>
+        Review worker screenshots and approve
+        or reject submitted proofs.
+      </p>
+
+      <a
+        href="admin-submissions.html"
+        class="admin-button"
+      >
+        Review Submissions
+      </a>
+
+    </div>
+
+    <!-- WITHDRAWALS -->
+
+    <div class="admin-card">
+
+      <div class="card-head">
+
+        <div class="card-icon">
+          💸
+        </div>
+
+        <h3>Withdrawal Requests</h3>
+
+      </div>
+
+      <p>
+        Review and manage worker withdrawal
+        requests.
+      </p>
+
+      <a
+        href="admin-withdrawals.html"
+        class="admin-button"
+      >
+        Manage Withdrawals
+      </a>
+
+    </div>
+
+    <!-- PROMOTER WALLET -->
+
+    <div class="admin-card">
+
+      <div class="card-head">
+
+        <div class="card-icon">
+          💰
+        </div>
+
+        <h3>Promoter Wallet</h3>
+
+      </div>
+
+      <p>
+        Manage promoter deposits, payment
+        requests and wallet balances.
+      </p>
+
+      <a
+        href="admin-promoter-wallet.html"
+        class="admin-button"
+      >
+        Manage Wallet
+      </a>
+
+    </div>
+
+    <!-- WORKERS -->
+
+    <div
+      class="admin-card"
+      id="workers"
+    >
+
+      <div class="card-head">
+
+        <div class="card-icon">
+          👷
+        </div>
+
+        <h3>Workers</h3>
+
+      </div>
+
+      <p>
+        Worker account management and monitoring
+        will be handled here.
+      </p>
+
+      <button
+        class="admin-button secondary-button"
+        type="button"
+      >
+        Worker Management
+      </button>
+
+    </div>
+
+    <!-- PROMOTERS -->
+
+    <div
+      class="admin-card"
+      id="promoters"
+    >
+
+      <div class="card-head">
+
+        <div class="card-icon">
+          📢
+        </div>
+
+        <h3>Promoters</h3>
+
+      </div>
+
+      <p>
+        Manage promoter accounts and promoter
+        activity.
+      </p>
+
+      <button
+        class="admin-button secondary-button"
+        type="button"
+      >
+        Promoter Management
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- QUICK ACCESS -->
+
+  <div class="section-title">
+
+    <h3>Quick Access</h3>
+
+    <span>Frequently used</span>
+
+  </div>
+
+  <div class="quick-grid">
+
+    <a
+      href="tasks.html"
+      class="quick-link"
+    >
+
+      <div class="quick-link-icon">
+        📋
+      </div>
+
+      <strong>Tasks</strong>
+
+      <small>
+        Manage platform tasks
+      </small>
+
+    </a>
+
+    <a
+      href="admin-submissions.html"
+      class="quick-link"
+    >
+
+      <div class="quick-link-icon">
+        📸
+      </div>
+
+      <strong>Proof Reviews</strong>
+
+      <small>
+        Review submissions
+      </small>
+
+    </a>
+
+    <a
+      href="admin-withdrawals.html"
+      class="quick-link"
+    >
+
+      <div class="quick-link-icon">
+        💸
+      </div>
+
+      <strong>Withdrawals</strong>
+
+      <small>
+        Manage withdrawal requests
+      </small>
+
+    </a>
+
+    <a
+      href="admin-promoter-wallet.html"
+      class="quick-link"
+    >
+
+      <div class="quick-link-icon">
+        💰
+      </div>
+
+      <strong>Promoter Wallet</strong>
+
+      <small>
+        Manage promoter funds
+      </small>
+
+    </a>
+
+  </div>
+
+  <!-- SETTINGS -->
+
+  <div
+    class="section-title"
+    id="settings"
+  >
+
+    <h3>System Settings</h3>
+
+    <span>Configuration</span>
+
+  </div>
+
+  <section class="admin-card">
+
+    <div class="card-head">
+
+      <div class="card-icon">
+        ⚙️
+      </div>
+
+      <h3>TaskVexa Settings</h3>
+
+    </div>
+
+    <p>
+      Platform settings can be added here as
+      the TaskVexa administration system expands.
+    </p>
+
+    <button
+      class="admin-button secondary-button"
+      type="button"
+      onclick="alert('Settings section ready for configuration.')"
+    >
+      Open Settings
+    </button>
+
+  </section>
+
+</section>
+
+  </main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+
+const SUPABASE_URL =
+"https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const message =
+document.getElementById("message");
+
+const adminContent =
+document.getElementById("adminContent");
+
+const logoutButton =
+document.getElementById("logoutButton");
+
+const mobileMenu =
+document.getElementById("mobileMenu");
+
+const sidebar =
+document.getElementById("sidebar");
+
+const overlay =
+document.getElementById("overlay");
+
+const bankName =
+document.getElementById("bankName");
+
+const accountName =
+document.getElementById("accountName");
+
+const accountNumber =
+document.getElementById("accountNumber");
+
+const paymentInstructions =
+document.getElementById("paymentInstructions");
+
+const savePaymentDetailsButton =
+document.getElementById(
+  "savePaymentDetailsButton"
+);
+
+const paymentDetailsMessage =
+document.getElementById(
+  "paymentDetailsMessage"
+);
+
+const taskCount =
+document.getElementById("taskCount");
+
+const submissionCount =
+document.getElementById(
+  "submissionCount"
+);
+
+const withdrawalCount =
+document.getElementById(
+  "withdrawalCount"
+);
+
 
 /* =========================
-   QUICK LINKS
+   MOBILE MENU
 ========================= */
 
-.quick-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
+function openMenu(){
+
+  sidebar.classList.add("open");
+  overlay.classList.add("open");
+
 }
 
-.quick-link {
-  display: block;
-  background: #0d131e;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 17px;
-  text-decoration: none;
-  color: white;
-  transition: .2s;
+function closeMenu(){
+
+  sidebar.classList.remove("open");
+  overlay.classList.remove("open");
+
 }
 
-.quick-link:hover {
-  background: #151c29;
-  transform: translateY(-2px);
-}
+mobileMenu.addEventListener(
+  "click",
+  openMenu
+);
 
-.quick-link-icon {
-  font-size: 21px;
-  margin-bottom: 10px;
-}
+overlay.addEventListener(
+  "click",
+  closeMenu
+);
 
-.quick-link strong {
-  display: block;
-  font-size: 13px;
-}
-
-.quick-link small {
-  display: block;
-  color: var(--muted);
-  margin-top: 5px;
-  font-size: 11px;
-}
 
 /* =========================
-   MOBILE
+   CHECK ADMIN
 ========================= */
 
-.mobile-menu {
-  display: none;
-  background: #151b28;
-  border: 1px solid var(--border);
-  color: white;
-  border-radius: 9px;
-  padding: 9px 11px;
-  cursor: pointer;
-  font-size: 18px;
-}
+async function checkAdmin(){
 
-@media (max-width: 1050px) {
-  .overview-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  try{
 
-  .quick-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+    const {
+      data:{user},
+      error:userError
+    } =
+    await supabaseClient.auth.getUser();
 
-@media (max-width: 800px) {
-  .sidebar {
-    transform: translateX(-100%);
-    transition: .25s;
-  }
+    if(
+      userError ||
+      !user
+    ){
 
-  .sidebar.open {
-    transform: translateX(0);
-  }
+      window.location.href =
+      "login.html";
 
-  .main {
-    margin-left: 0;
-  }
+      return false;
 
-  .mobile-menu {
-    display: block;
-  }
+    }
 
-  .topbar {
-    padding: 0 16px;
-  }
+    const {
+      data:profile,
+      error:profileError
+    } =
+    await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq("id",user.id)
+      .maybeSingle();
 
-  .content {
-    padding: 22px 15px 40px;
- 
+    if(profileError){
+
+      throw profileError;
+
+    }
+
+    if(
+      !profile ||
+      profile.role !== "admin"
+    ){
+
+      message.textContent =
+      "Access denied. Admin account required.";
+
+      message.className =
+      "error";
+
+      return false;
+      

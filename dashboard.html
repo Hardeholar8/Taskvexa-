@@ -21,7 +21,7 @@
   --text: #f8fafc;
   --muted: #94a3b8;
   --accent: #7c3aed;
-  --accent2: #8b5cf6;
+  --accent2: #a78bfa;
   --green: #22c55e;
   --red: #ef4444;
 }
@@ -44,7 +44,7 @@ body {
 
 .topbar {
   height: 68px;
-  background: rgba(7,11,20,.92);
+  background: rgba(7,11,20,.94);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
@@ -59,7 +59,6 @@ body {
 .brand {
   font-size: 23px;
   font-weight: 800;
-  letter-spacing: -.5px;
 }
 
 .brand span {
@@ -189,7 +188,6 @@ body {
   right: -70px;
   top: -80px;
   background: rgba(139,92,246,.15);
-  filter: blur(4px);
 }
 
 .balance-label {
@@ -202,7 +200,6 @@ body {
   font-size: 38px;
   font-weight: 800;
   margin: 10px 0;
-  letter-spacing: -.8px;
 }
 
 .balance-status {
@@ -302,11 +299,12 @@ body {
   font-weight: 700;
 }
 
-/* ERROR / LOADING */
+/* LOADING */
 
 #loadingScreen {
   text-align: center;
   padding: 70px 20px;
+  color: var(--muted);
 }
 
 .loader {
@@ -324,6 +322,8 @@ body {
     transform: rotate(360deg);
   }
 }
+
+/* ERROR */
 
 .error-box {
   max-width: 600px;
@@ -408,8 +408,6 @@ body {
 
 <body>
 
-<!-- TOP BAR -->
-
 <header class="topbar">
 
   <div class="brand">
@@ -426,8 +424,6 @@ body {
 
 </header>
 
-
-<!-- SIDEBAR -->
 
 <aside
   id="sidebar"
@@ -483,11 +479,7 @@ body {
 </aside>
 
 
-<!-- MAIN -->
-
 <main class="main">
-
-  <!-- LOADING -->
 
   <div id="loadingScreen">
 
@@ -499,8 +491,6 @@ body {
 
   </div>
 
-
-  <!-- ERROR -->
 
   <div
     id="errorScreen"
@@ -524,8 +514,6 @@ body {
   </div>
 
 
-  <!-- DASHBOARD -->
-
   <section
     id="dashboardContent"
     style="display:none;"
@@ -546,8 +534,6 @@ body {
 
     </section>
 
-
-    <!-- BALANCE -->
 
     <section class="balance-card">
 
@@ -571,8 +557,6 @@ body {
 
     </section>
 
-
-    <!-- QUICK ACTIONS -->
 
     <h2 class="section-title">
       Quick Actions
@@ -662,8 +646,6 @@ body {
     </section>
 
 
-    <!-- ACCOUNT -->
-
     <h2 class="section-title">
       Account Overview
     </h2>
@@ -707,8 +689,6 @@ body {
 
 </main>
 
-
-<!-- SUPABASE -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -778,7 +758,9 @@ document
   async function() {
 
     this.disabled = true;
-    this.textContent = "Logging out...";
+
+    this.textContent =
+      "Logging out...";
 
     await supabaseClient.auth.signOut();
 
@@ -818,10 +800,6 @@ async function checkWorkerAccess() {
 
   try {
 
-    /*
-      GET CURRENT USER
-    */
-
     const {
       data: {
         user
@@ -853,7 +831,9 @@ async function checkWorkerAccess() {
 
 
     /*
-      GET PROFILE
+      IMPORTANT:
+      Only request columns that
+      actually exist in profiles.
     */
 
     const {
@@ -862,9 +842,7 @@ async function checkWorkerAccess() {
     } =
       await supabaseClient
         .from("profiles")
-        .select(
-          "role, full_name"
-        )
+        .select("role")
         .eq(
           "id",
           user.id
@@ -932,7 +910,7 @@ async function checkWorkerAccess() {
 
 
     /*
-      NOT WORKER
+      ONLY WORKER
     */
 
     if (
@@ -951,19 +929,21 @@ async function checkWorkerAccess() {
 
 
     /*
-      DISPLAY USER
+      USE EMAIL BECAUSE
+      profiles.full_name
+      DOES NOT EXIST.
     */
 
-    const name =
-      profile.full_name ||
-      user.email?.split("@")[0] ||
-      "Worker";
+    const emailName =
+      user.email
+        ? user.email.split("@")[0]
+        : "Worker";
 
 
     document.getElementById(
       "userName"
     ).textContent =
-      name;
+      emailName;
 
 
     document.getElementById(
@@ -1046,10 +1026,6 @@ async function loadWalletBalance(
     let finalBalance = 0;
 
 
-    /*
-      EXISTING WALLET
-    */
-
     if (wallet) {
 
       finalBalance =
@@ -1061,8 +1037,7 @@ async function loadWalletBalance(
 
 
     /*
-      CREATE WALLET
-      ONLY IF MISSING
+      Create wallet if missing.
     */
 
     else {
@@ -1071,19 +1046,19 @@ async function loadWalletBalance(
         data: newWallet,
         error: createError
       } =
-      await supabaseClient
-        .from("wallets")
-        .insert({
+        await supabaseClient
+          .from("wallets")
+          .insert({
 
-          user_id:
-            user.id,
+            user_id:
+              user.id,
 
-          balance:
-            0
+            balance:
+              0
 
-        })
-        .select("balance")
-        .single();
+          })
+          .select("balance")
+          .single();
 
 
       if (createError) {
@@ -1164,4 +1139,4 @@ initializeDashboard();
 </script>
 
 </body>
-  </html>
+</html>

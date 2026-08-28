@@ -21,6 +21,7 @@
   --muted: #7f8da3;
   --green: #4ade80;
   --red: #f87171;
+  --yellow: #facc15;
 }
 
 html,
@@ -36,154 +37,53 @@ body {
   min-height: 100vh;
 }
 
-/* SIDEBAR */
+/* HEADER */
 
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 245px;
-  background: var(--sidebar);
-  border-right: 1px solid var(--border);
-  padding: 22px 14px;
-  z-index: 1000;
-  overflow-y: auto;
-}
-
-.logo {
-  padding: 8px 14px 22px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 18px;
-}
-
-.logo h1 {
-  margin: 0;
-  font-size: 22px;
-}
-
-.logo span {
-  display: block;
-  margin-top: 5px;
-  color: var(--muted);
-  font-size: 11px;
-}
-
-.nav-title {
-  color: #4f5d73;
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: 1.3px;
-  padding: 10px 14px 7px;
-  text-transform: uppercase;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  width: 100%;
-  padding: 12px 14px;
-  margin: 4px 0;
-  border-radius: 11px;
-  color: #aeb9c9;
-  text-decoration: none;
-  font-size: 13px;
-  border: 0;
-  background: transparent;
-  cursor: pointer;
-  text-align: left;
-}
-
-.nav-link:hover,
-.nav-link.active {
-  background: #171d2a;
-  color: white;
-}
-
-.nav-icon {
-  width: 23px;
-  text-align: center;
-  font-size: 16px;
-}
-
-.logout {
-  margin-top: 20px;
-  border-top: 1px solid var(--border);
-  padding-top: 18px;
-}
-
-/* MAIN */
-
-.main {
-  margin-left: 245px;
-  min-height: 100vh;
-}
-
-/* TOPBAR */
-
-.topbar {
+header {
   height: 70px;
-  background: rgba(7,10,16,.96);
+  background: var(--sidebar);
   border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 28px;
-  position: sticky;
-  top: 0;
-  z-index: 900;
+  padding: 0 20px;
 }
 
-.topbar-title {
-  font-size: 17px;
-  font-weight: 700;
-}
-
-.admin-status {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.online-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--green);
-}
-
-/* CONTENT */
-
-.content {
-  max-width: 1250px;
-  margin: auto;
-  padding: 28px;
-}
-
-.heading {
-  margin-bottom: 22px;
-}
-
-.heading h2 {
-  margin: 0 0 7px;
-  font-size: 28px;
-}
-
-.heading p {
+header h1 {
   margin: 0;
+  font-size: 21px;
+}
+
+header a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* MAIN */
+
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 25px 16px 50px;
+}
+
+.page-title h2 {
+  margin: 0 0 7px;
+  font-size: 27px;
+}
+
+.page-title p {
   color: var(--muted);
-  font-size: 13px;
+  margin: 0 0 25px;
+  font-size: 14px;
 }
 
 /* MESSAGE */
 
 .message {
   margin-bottom: 18px;
-  color: var(--muted);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 .success {
@@ -194,119 +94,106 @@ body {
   color: var(--red);
 }
 
+.warning {
+  color: var(--yellow);
+}
+
+/* CONTROLS */
+
+.controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.search {
+  flex: 1;
+  min-width: 220px;
+  padding: 12px 14px;
+  background: #0d131e;
+  border: 1px solid #293548;
+  border-radius: 10px;
+  color: white;
+  outline: none;
+}
+
+.search:focus {
+  border-color: #59677e;
+}
+
+.button {
+  border: 1px solid #293548;
+  border-radius: 10px;
+  background: #151d2a;
+  color: white;
+  padding: 11px 16px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.button:hover {
+  opacity: .9;
+}
+
+.button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
 /* STATS */
 
 .stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
-  margin-bottom: 22px;
+  gap: 14px;
+  margin-bottom: 25px;
 }
 
-.stat-card {
-  background: linear-gradient(145deg, #131a27, #0d121b);
+.stat {
+  background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 17px;
-  padding: 19px;
+  border-radius: 16px;
+  padding: 18px;
 }
 
 .stat-label {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
 }
 
 .stat-value {
   margin-top: 10px;
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 800;
 }
 
-/* TOOLBAR */
-
-.toolbar {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 15px;
-  margin-bottom: 18px;
-
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.search-box {
-  flex: 1;
-}
-
-.search-box input {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 10px;
-  border: 1px solid #293548;
-  background: #090e16;
-  color: white;
-  outline: none;
-  font-size: 13px;
-}
-
-.search-box input:focus {
-  border-color: #59677e;
-}
-
-.search-box input::placeholder {
-  color: #4f5c70;
-}
-
-.refresh-button {
-  padding: 12px 16px;
-  border-radius: 10px;
-  border: 1px solid #293548;
-  background: #151d2a;
-  color: white;
-  cursor: pointer;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
-.refresh-button:disabled {
-  opacity: .5;
-}
-
-/* WORKERS */
-
-.worker-list {
-  display: grid;
-  gap: 14px;
-}
+/* WORKER CARD */
 
 .worker-card {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 17px;
   padding: 19px;
-}
-
-.worker-card:hover {
-  border-color: #334158;
+  margin-bottom: 14px;
 }
 
 .worker-top {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   gap: 15px;
-  margin-bottom: 16px;
+  margin-bottom: 15px;
 }
 
-.worker-title {
+.worker-name {
   font-size: 17px;
   font-weight: 800;
 }
 
 .worker-id {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 12px;
   margin-top: 5px;
   word-break: break-all;
 }
@@ -314,25 +201,26 @@ body {
 .status {
   padding: 6px 10px;
   border-radius: 20px;
-  font-size: 10px;
-  font-weight: 800;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
 }
 
 .status.active {
-  color: var(--green);
   background: #102d20;
+  color: var(--green);
 }
 
 .status.inactive {
-  color: var(--red);
   background: #32191d;
+  color: var(--red);
 }
 
 /* INFO */
 
 .worker-info {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
 
@@ -347,7 +235,7 @@ body {
   display: block;
   color: #64748b;
   font-size: 10px;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .info strong {
@@ -355,22 +243,25 @@ body {
   word-break: break-word;
 }
 
-/* VIEW */
+/* ACTIONS */
 
-.view-button {
+.worker-actions {
+  display: flex;
+  gap: 9px;
   margin-top: 15px;
-  padding: 10px 14px;
-  border: 1px solid #293548;
-  background: #171f2e;
-  color: white;
-  border-radius: 9px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 12px;
+  flex-wrap: wrap;
 }
 
-.view-button:hover {
-  background: #202a3b;
+.activate-button {
+  background: #12301f;
+  border-color: #245b3a;
+  color: var(--green);
+}
+
+.deactivate-button {
+  background: #32191d;
+  border-color: #643139;
+  color: var(--red);
 }
 
 /* EMPTY */
@@ -378,450 +269,169 @@ body {
 .empty {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 17px;
   padding: 35px 20px;
   text-align: center;
   color: var(--muted);
 }
 
-/* MODAL */
-
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.75);
-  z-index: 2000;
-  padding: 20px;
-}
-
-.modal.show {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.modal-box {
-  width: 100%;
-  max-width: 560px;
-  background: #101722;
-  border: 1px solid #293548;
-  border-radius: 18px;
-  padding: 22px;
-}
-
-.modal-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.modal-head h3 {
-  margin: 0;
-}
-
-.close-button {
-  border: 0;
-  background: transparent;
-  color: #94a3b8;
-  font-size: 25px;
-  cursor: pointer;
-}
-
-.modal-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-}
-
-.modal-info {
-  background: #0b111b;
-  border: 1px solid #202b3b;
-  border-radius: 10px;
-  padding: 12px;
-}
-
-.modal-info.full {
-  grid-column: 1 / -1;
-}
-
-.modal-info small {
-  display: block;
-  color: #64748b;
-  font-size: 10px;
-  margin-bottom: 5px;
-}
-
-.modal-info strong {
-  font-size: 12px;
-  word-break: break-word;
-}
-
 /* MOBILE */
 
-.mobile-menu {
-  display: none;
-  border: 1px solid var(--border);
-  background: #151b28;
-  color: white;
-  border-radius: 9px;
-  padding: 8px 10px;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-@media (max-width: 950px) {
-
-  .worker-info {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .stats {
-    grid-template-columns: 1fr 1fr;
-  }
-
-}
-
-@media (max-width: 750px) {
-
-  .sidebar {
-    transform: translateX(-100%);
-    transition: .25s;
-  }
-
-  .sidebar.open {
-    transform: translateX(0);
-  }
-
-  .main {
-    margin-left: 0;
-  }
-
-  .mobile-menu {
-    display: block;
-  }
-
-  .topbar {
-    padding: 0 15px;
-  }
-
-  .content {
-    padding: 22px 15px 40px;
-  }
-
-}
-
-@media (max-width: 550px) {
+@media(max-width:700px) {
 
   .stats {
     grid-template-columns: 1fr;
-  }
-
-  .toolbar {
-    flex-direction: column;
-    align-items: stretch;
   }
 
   .worker-info {
     grid-template-columns: 1fr 1fr;
   }
 
-  .modal-grid {
+  .worker-top {
+    align-items: flex-start;
+  }
+}
+
+@media(max-width:450px) {
+
+  .worker-info {
     grid-template-columns: 1fr;
   }
 
-  .modal-info.full {
-    grid-column: auto;
+  header {
+    padding: 0 14px;
   }
 
+  header h1 {
+    font-size: 18px;
+  }
+
+  header a {
+    font-size: 12px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- SIDEBAR -->
+<header>
 
-<aside
-  id="sidebar"
-  class="sidebar"
->
+  <h1>TaskVexa</h1>
 
-  <div class="logo">
-    <h1>TaskVexa</h1>
-    <span>Administration Panel</span>
+  <a href="admin.html">
+    ← Admin Dashboard
+  </a>
+
+</header>
+
+
+<main>
+
+  <div class="page-title">
+
+    <h2>Workers</h2>
+
+    <p>
+      View and manage registered worker accounts.
+    </p>
+
   </div>
 
-  <div class="nav-title">
-    Main
+
+  <div id="message" class="message">
+    Checking admin access...
   </div>
 
-  <a
-    href="admin.html"
-    class="nav-link"
-  >
-    <span class="nav-icon">⌂</span>
-    Dashboard
-  </a>
 
-  <a
-    href="worker.html"
-    class="nav-link active"
-  >
-    <span class="nav-icon">👥</span>
-    Workers
-  </a>
+  <!-- STATISTICS -->
 
-  <a
-    href="promoters.html"
-    class="nav-link"
-  >
-    <span class="nav-icon">📣</span>
-    Promoters
-  </a>
+  <section class="stats">
 
-  <div class="nav-title">
-    Management
-  </div>
+    <div class="stat">
 
-  <a
-    href="tasks.html"
-    class="nav-link"
-  >
-    <span class="nav-icon">✓</span>
-    Tasks
-  </a>
+      <div class="stat-label">
+        Total Workers
+      </div>
 
-  <a
-    href="admin-submissions.html"
-    class="nav-link"
-  >
-    <span class="nav-icon">📋</span>
-    Submissions
-  </a>
+      <div
+        class="stat-value"
+        id="totalWorkers"
+      >
+        —
+      </div>
 
-  <a
-    href="admin-withdrawals.html"
-    class="nav-link"
-  >
-    <span class="nav-icon">💳</span>
-    Withdrawals
-  </a>
-
-  <a
-    href="admin-promoter-wallet.html"
-    class="nav-link"
-  >
-    <span class="nav-icon">💰</span>
-    Promoter Wallet
-  </a>
-
-  <div class="nav-title">
-    Account
-  </div>
-
-  <button
-    id="logoutButton"
-    class="nav-link logout"
-  >
-    <span class="nav-icon">↪</span>
-    Logout
-  </button>
-
-</aside>
+    </div>
 
 
-<!-- MAIN -->
+    <div class="stat">
 
-<div class="main">
+      <div class="stat-label">
+        Active Workers
+      </div>
 
-  <div class="topbar">
+      <div
+        class="stat-value"
+        id="activeWorkers"
+      >
+        —
+      </div>
 
-    <div
-      style="
-        display:flex;
-        align-items:center;
-        gap:12px;
-      "
+    </div>
+
+
+    <div class="stat">
+
+      <div class="stat-label">
+        Total Worker Balance
+      </div>
+
+      <div
+        class="stat-value"
+        id="totalBalance"
+      >
+        ₦0.00
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- SEARCH -->
+
+  <div class="controls">
+
+    <input
+      id="searchInput"
+      class="search"
+      type="search"
+      placeholder="Search by worker ID or account type..."
     >
 
-      <button
-        id="mobileMenu"
-        class="mobile-menu"
-      >
-        ☰
-      </button>
-
-      <div class="topbar-title">
-        Workers
-      </div>
-
-    </div>
-
-    <div class="admin-status">
-      <span class="online-dot"></span>
-      Admin
-    </div>
-
-  </div>
-
-
-  <main class="content">
-
-    <div class="heading">
-
-      <h2>
-        Workers
-      </h2>
-
-      <p>
-        View and manage registered worker accounts.
-      </p>
-
-    </div>
-
-
-    <div
-      id="message"
-      class="message"
+    <button
+      id="refreshButton"
+      class="button"
     >
-      Loading workers...
-    </div>
-
-
-    <!-- STATISTICS -->
-
-    <div class="stats">
-
-      <div class="stat-card">
-
-        <div class="stat-label">
-          Total Workers
-        </div>
-
-        <div
-          id="totalWorkers"
-          class="stat-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="stat-card">
-
-        <div class="stat-label">
-          Active Workers
-        </div>
-
-        <div
-          id="activeWorkers"
-          class="stat-value"
-        >
-          0
-        </div>
-
-      </div>
-
-
-      <div class="stat-card">
-
-        <div class="stat-label">
-          Total Worker Balance
-        </div>
-
-        <div
-          id="totalBalance"
-          class="stat-value"
-        >
-          ₦0.00
-        </div>
-
-      </div>
-
-    </div>
-
-
-    <!-- SEARCH -->
-
-    <div class="toolbar">
-
-      <div class="search-box">
-
-        <input
-          id="searchInput"
-          type="search"
-          placeholder="Search by worker ID or account type..."
-        >
-
-      </div>
-
-
-      <button
-        id="refreshButton"
-        class="refresh-button"
-      >
-        ↻ Refresh Workers
-      </button>
-
-    </div>
-
-
-    <!-- WORKER LIST -->
-
-    <div
-      id="workerList"
-      class="worker-list"
-    ></div>
-
-  </main>
-
-</div>
-
-
-<!-- MODAL -->
-
-<div
-  id="workerModal"
-  class="modal"
->
-
-  <div class="modal-box">
-
-    <div class="modal-head">
-
-      <h3>
-        Worker Details
-      </h3>
-
-      <button
-        id="closeModal"
-        class="close-button"
-      >
-        ×
-      </button>
-
-    </div>
-
-    <div
-      id="modalContent"
-      class="modal-grid"
-    ></div>
+      ↻ Refresh Workers
+    </button>
 
   </div>
 
-</div>
+
+  <div id="workerList"></div>
+
+</main>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
 
-/* =========================
+/* =========================================
    SUPABASE
-========================= */
+========================================= */
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
@@ -836,82 +446,38 @@ const supabaseClient =
   );
 
 
-/* =========================
+/* =========================================
    ELEMENTS
-========================= */
+========================================= */
 
 const message =
-  document.getElementById(
-    "message"
-  );
+  document.getElementById("message");
 
 const workerList =
-  document.getElementById(
-    "workerList"
-  );
+  document.getElementById("workerList");
 
 const refreshButton =
-  document.getElementById(
-    "refreshButton"
-  );
+  document.getElementById("refreshButton");
 
 const searchInput =
-  document.getElementById(
-    "searchInput"
-  );
+  document.getElementById("searchInput");
 
 const totalWorkers =
-  document.getElementById(
-    "totalWorkers"
-  );
+  document.getElementById("totalWorkers");
 
 const activeWorkers =
-  document.getElementById(
-    "activeWorkers"
-  );
+  document.getElementById("activeWorkers");
 
 const totalBalance =
-  document.getElementById(
-    "totalBalance"
-  );
-
-const workerModal =
-  document.getElementById(
-    "workerModal"
-  );
-
-const modalContent =
-  document.getElementById(
-    "modalContent"
-  );
-
-const closeModal =
-  document.getElementById(
-    "closeModal"
-  );
-
-const logoutButton =
-  document.getElementById(
-    "logoutButton"
-  );
-
-const mobileMenu =
-  document.getElementById(
-    "mobileMenu"
-  );
-
-const sidebar =
-  document.getElementById(
-    "sidebar"
-  );
+  document.getElementById("totalBalance");
 
 
 let allWorkers = [];
 
 
-/* =========================
-   ESCAPE HTML
-========================= */
+/* =========================================
+   HTML ESCAPE
+========================================= */
 
 function escapeHTML(value) {
 
@@ -925,9 +491,9 @@ function escapeHTML(value) {
 }
 
 
-/* =========================
+/* =========================================
    MONEY
-========================= */
+========================================= */
 
 function formatMoney(amount) {
 
@@ -943,100 +509,155 @@ function formatMoney(amount) {
 }
 
 
-/* =========================
-   DATE
-========================= */
+/* =========================================
+   CHECK ADMIN
+========================================= */
 
-function formatDate(value) {
-
-  if (!value) {
-    return "-";
-  }
-
-  const date =
-    new Date(value);
-
-  if (
-    Number.isNaN(
-      date.getTime()
-    )
-  ) {
-    return "-";
-  }
-
-  return date.toLocaleString(
-    "en-NG"
-  );
-
-}
-
-
-/* =========================
-   LOAD WORKERS
-========================= */
-
-async function loadWorkers() {
-
-  refreshButton.disabled =
-    true;
-
-  refreshButton.textContent =
-    "Loading...";
-
-  message.textContent =
-    "Loading workers...";
-
-  message.className =
-    "message";
-
-  workerList.innerHTML =
-    "";
-
+async function checkAdmin() {
 
   try {
 
-    /*
-      Only check that a user is
-      signed in here.
-
-      The admin_get_workers RPC
-      already performs the secure
-      admin-role check.
-    */
-
     const {
-      data: { user },
-      error: authError
+      data: sessionData,
+      error: sessionError
     } =
-      await supabaseClient.auth.getUser();
+      await supabaseClient.auth.getSession();
 
 
-    if (
-      authError ||
-      !user
-    ) {
+    if (sessionError) {
+      throw sessionError;
+    }
+
+
+    const session =
+      sessionData.session;
+
+
+    if (!session) {
 
       window.location.href =
         "login.html";
 
-      return;
+      return false;
 
+    }
+
+
+    const user =
+      session.user;
+
+
+    const {
+      data: profile,
+      error: profileError
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .maybeSingle();
+
+
+    if (profileError) {
+      throw profileError;
+    }
+
+
+    if (
+      !profile ||
+      String(profile.role).toLowerCase() !==
+      "admin"
+    ) {
+
+      message.textContent =
+        "Access denied. Admin account required.";
+
+      message.className =
+        "message error";
+
+      return false;
+
+    }
+
+
+    return true;
+
+  } catch (error) {
+
+    console.error(
+      "ADMIN CHECK ERROR:",
+      error
+    );
+
+    message.textContent =
+      "Admin check error: " +
+      error.message;
+
+    message.className =
+      "message error";
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================
+   LOAD WORKERS
+========================================= */
+
+async function loadWorkers() {
+
+  refreshButton.disabled = true;
+
+  refreshButton.textContent =
+    "Loading...";
+
+
+  message.textContent =
+    "Loading worker accounts...";
+
+  message.className =
+    "message";
+
+
+  try {
+
+    const isAdmin =
+      await checkAdmin();
+
+
+    if (!isAdmin) {
+      return;
     }
 
 
     /*
       IMPORTANT:
-      Use the RPC that already
-      successfully loaded the worker.
+      Read directly from profiles.
+      No RPC is used.
     */
 
     const {
       data: workers,
       error: workersError
     } =
-      await supabaseClient.rpc(
-        "admin_get_workers"
-      );
+      await supabaseClient
+        .from("profiles")
+        .select(
+          "id, role, created_at, updated_at"
+        )
+        .eq(
+          "role",
+          "worker"
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
 
 
     if (workersError) {
@@ -1047,68 +668,117 @@ async function loadWorkers() {
 
 
     allWorkers =
-      Array.isArray(workers)
-        ? workers
-        : [];
+      workers || [];
 
 
     /*
-      Update dashboard numbers.
+      Load wallet balances.
     */
 
-    updateStatistics(
-      allWorkers
-    );
+    let wallets = [];
 
 
-    /*
-      Display workers.
-    */
+    if (allWorkers.length > 0) {
 
-    renderWorkers(
-      allWorkers
-    );
+      const workerIds =
+        allWorkers.map(
+          worker => worker.id
+        );
 
 
-    if (
-      allWorkers.length > 0
-    ) {
+      const {
+        data: walletData,
+        error: walletError
+      } =
+        await supabaseClient
+          .from("wallets")
+          .select(
+            "user_id, balance"
+          )
+          .in(
+            "user_id",
+            workerIds
+          );
 
-      message.textContent =
-        `SUCCESS: ${allWorkers.length} worker account(s) loaded successfully.`;
 
-      message.className =
-        "message success";
+      if (walletError) {
 
-    } else {
+        console.warn(
+          "Wallet loading warning:",
+          walletError
+        );
 
-      message.textContent =
-        "No worker accounts have been registered yet.";
+      } else {
 
-      message.className =
-        "message";
+        wallets =
+          walletData || [];
+
+      }
 
     }
+
+
+    /*
+      Attach balances.
+    */
+
+    const walletMap = {};
+
+
+    wallets.forEach(
+      wallet => {
+
+        walletMap[
+          wallet.user_id
+        ] =
+          Number(wallet.balance || 0);
+
+      }
+    );
+
+
+    allWorkers =
+      allWorkers.map(
+        worker => ({
+
+          ...worker,
+
+          balance:
+            walletMap[worker.id] || 0
+
+        })
+      );
+
+
+    updateStatistics();
+
+    renderWorkers();
+
+
+    message.textContent =
+      "Worker accounts loaded successfully.";
+
+    message.className =
+      "message success";
 
 
   } catch (error) {
 
     console.error(
-      "WORKERS ERROR:",
+      "WORKER LOAD ERROR:",
       error
     );
 
 
     message.textContent =
       "Unable to load workers: " +
-      (
-        error?.message ||
-        "Unknown error"
-      );
+      error.message;
 
     message.className =
       "message error";
 
+
+    workerList.innerHTML = "";
 
   } finally {
 
@@ -1123,35 +793,25 @@ async function loadWorkers() {
 }
 
 
-/* =========================
+/* =========================================
    STATISTICS
-========================= */
+========================================= */
 
-function updateStatistics(
-  workers
-) {
+function updateStatistics() {
 
-  totalWorkers.textContent =
-    workers.length;
+  const count =
+    allWorkers.length;
 
 
   const active =
-    workers.filter(
+    allWorkers.filter(
       worker =>
-        String(
-          worker.status ||
-          "active"
-        ).toLowerCase() ===
-        "active"
+        worker.status !== "inactive"
     ).length;
 
 
-  activeWorkers.textContent =
-    active;
-
-
   const balance =
-    workers.reduce(
+    allWorkers.reduce(
       (
         total,
         worker
@@ -1164,36 +824,72 @@ function updateStatistics(
     );
 
 
+  totalWorkers.textContent =
+    count;
+
+
+  activeWorkers.textContent =
+    active;
+
+
   totalBalance.textContent =
-    formatMoney(
-      balance
-    );
+    formatMoney(balance);
 
 }
 
 
-/* =========================
-   RENDER WORKERS
-========================= */
+/* =========================================
+   RENDER
+========================================= */
 
-function renderWorkers(
-  workers
-) {
+function renderWorkers() {
 
-  workerList.innerHTML =
-    "";
+  const search =
+    searchInput.value
+      .trim()
+      .toLowerCase();
 
 
-  if (
-    !workers ||
-    workers.length === 0
-  ) {
+  const filtered =
+    allWorkers.filter(
+      worker => {
+
+        const id =
+          String(
+            worker.id || ""
+          ).toLowerCase();
+
+
+        const role =
+          String(
+            worker.role || ""
+          ).toLowerCase();
+
+
+        return (
+          !search ||
+          id.includes(search) ||
+          role.includes(search)
+        );
+
+      }
+    );
+
+
+  workerList.innerHTML = "";
+
+
+  if (filtered.length === 0) {
 
     workerList.innerHTML = `
 
       <div class="empty">
 
-        No worker accounts have been registered yet.
+        ${
+          allWorkers.length === 0
+            ? "No worker accounts have been registered yet."
+            : "No workers match your search."
+        }
 
       </div>
 
@@ -1204,7 +900,7 @@ function renderWorkers(
   }
 
 
-  workers.forEach(
+  filtered.forEach(
     worker => {
 
       const card =
@@ -1217,7 +913,7 @@ function renderWorkers(
         "worker-card";
 
 
-      const id =
+      const workerId =
         worker.id ||
         "Unavailable";
 
@@ -1233,36 +929,24 @@ function renderWorkers(
         );
 
 
-      /*
-        The current RPC returns:
-        id
-        role
-        created_at
-        updated_at
-        balance
-
-        So we only display fields
-        that actually exist.
-      */
-
       const created =
-        formatDate(
-          worker.created_at
-        );
+        worker.created_at
+          ? new Date(
+              worker.created_at
+            ).toLocaleString(
+              "en-NG"
+            )
+          : "-";
 
 
       const updated =
-        formatDate(
-          worker.updated_at
-        );
-
-
-      const isActive =
-        String(
-          worker.status ||
-          "active"
-        ).toLowerCase() ===
-        "active";
+        worker.updated_at
+          ? new Date(
+              worker.updated_at
+            ).toLocaleString(
+              "en-NG"
+            )
+          : "-";
 
 
       card.innerHTML = `
@@ -1271,29 +955,18 @@ function renderWorkers(
 
           <div>
 
-            <div class="worker-title">
+            <div class="worker-name">
               Worker Account
             </div>
 
             <div class="worker-id">
-              ${escapeHTML(id)}
+              ${escapeHTML(workerId)}
             </div>
 
           </div>
 
-
-          <span class="status ${
-            isActive
-              ? "active"
-              : "inactive"
-          }">
-
-            ${
-              isActive
-                ? "Active"
-                : "Inactive"
-            }
-
+          <span class="status active">
+            Active
           </span>
 
         </div>
@@ -1304,11 +977,11 @@ function renderWorkers(
           <div class="info">
 
             <small>
-              Balance
+              Account Type
             </small>
 
             <strong>
-              ${formatMoney(balance)}
+              ${escapeHTML(role)}
             </strong>
 
           </div>
@@ -1317,11 +990,11 @@ function renderWorkers(
           <div class="info">
 
             <small>
-              Account Type
+              Balance
             </small>
 
             <strong>
-              ${escapeHTML(role)}
+              ${formatMoney(balance)}
             </strong>
 
           </div>
@@ -1352,34 +1025,34 @@ function renderWorkers(
 
           </div>
 
+
+          <div class="info">
+
+            <small>
+              Worker ID
+            </small>
+
+            <strong>
+              ${escapeHTML(workerId)}
+            </strong>
+
+          </div>
+
         </div>
 
 
-        <button
-          class="view-button"
-        >
-          View Worker Details
-        </button>
+        <div class="worker-actions">
+
+          <button
+            class="button deactivate-button"
+            onclick="showWorkerInfo('${escapeHTML(workerId)}')"
+          >
+            View Worker ID
+          </button>
+
+        </div>
 
       `;
-
-
-      const viewButton =
-        card.querySelector(
-          ".view-button"
-        );
-
-
-      viewButton.addEventListener(
-        "click",
-        () => {
-
-          openWorkerDetails(
-            worker
-          );
-
-        }
-      );
 
 
       workerList.appendChild(
@@ -1392,80 +1065,47 @@ function renderWorkers(
 }
 
 
-/* =========================
+/* =========================================
+   VIEW WORKER
+========================================= */
+
+function showWorkerInfo(workerId) {
+
+  alert(
+    "Worker ID:\\n\\n" +
+    workerId
+  );
+
+}
+
+
+/* =========================================
    SEARCH
-========================= */
+========================================= */
 
 searchInput.addEventListener(
   "input",
-  function() {
-
-    const query =
-      this.value
-        .trim()
-        .toLowerCase();
-
-
-    if (!query) {
-
-      renderWorkers(
-        allWorkers
-      );
-
-      return;
-
-    }
-
-
-    const filtered =
-      allWorkers.filter(
-        worker => {
-
-          const id =
-            String(
-              worker.id || ""
-            ).toLowerCase();
-
-
-          const role =
-            String(
-              worker.role || ""
-            ).toLowerCase();
-
-
-          return (
-            id.includes(query) ||
-            role.includes(query)
-          );
-
-        }
-      );
-
-
-    renderWorkers(
-      filtered
-    );
-
-  }
+  renderWorkers
 );
 
 
-/* =========================
-   VIEW DETAILS
-========================= */
+/* =========================================
+   REFRESH
+========================================= */
 
-function openWorkerDetails(
-  worker
-) {
-
-  const id =
-    worker.id ||
-    "Unavailable";
+refreshButton.addEventListener(
+  "click",
+  loadWorkers
+);
 
 
-  const role =
-    worker.role ||
-    "worker";
+/* =========================================
+   START
+========================================= */
 
+loadWorkers();
 
-  const b
+</script>
+
+</body>
+  </html>

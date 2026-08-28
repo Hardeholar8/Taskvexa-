@@ -485,7 +485,10 @@ textarea{
 
   <div class="topbar">
 
-    <button id="mobileMenu" class="mobile-menu">
+    <button
+      id="mobileMenu"
+      class="mobile-menu"
+    >
       ☰
     </button>
 
@@ -503,11 +506,15 @@ textarea{
   <main class="content">
 
     <div class="heading">
-      <h2>Welcome to TaskVexa</h2>
+
+      <h2>
+        Welcome to TaskVexa
+      </h2>
 
       <p>
         Manage workers, promoters, tasks, withdrawals and platform settings.
       </p>
+
     </div>
 
     <div id="message">
@@ -524,6 +531,7 @@ textarea{
     <section class="stats">
 
       <div class="stat">
+
         <div class="stat-label">
           Workers
         </div>
@@ -534,9 +542,11 @@ textarea{
         >
           —
         </div>
+
       </div>
 
       <div class="stat">
+
         <div class="stat-label">
           Promoters
         </div>
@@ -547,9 +557,11 @@ textarea{
         >
           —
         </div>
+
       </div>
 
       <div class="stat">
+
         <div class="stat-label">
           Active Tasks
         </div>
@@ -560,9 +572,11 @@ textarea{
         >
           —
         </div>
+
       </div>
 
       <div class="stat">
+
         <div class="stat-label">
           Pending Submissions
         </div>
@@ -573,6 +587,7 @@ textarea{
         >
           —
         </div>
+
       </div>
 
     </section>
@@ -737,7 +752,9 @@ textarea{
 
         <div class="form-group">
 
-          <label>Bank Name</label>
+          <label>
+            Bank Name
+          </label>
 
           <input
             id="bankName"
@@ -749,7 +766,9 @@ textarea{
 
         <div class="form-group">
 
-          <label>Account Name</label>
+          <label>
+            Account Name
+          </label>
 
           <input
             id="accountName"
@@ -761,7 +780,9 @@ textarea{
 
         <div class="form-group">
 
-          <label>Account Number</label>
+          <label>
+            Account Number
+          </label>
 
           <input
             id="accountNumber"
@@ -774,7 +795,9 @@ textarea{
 
         <div class="form-group full">
 
-          <label>Payment Instructions</label>
+          <label>
+            Payment Instructions
+          </label>
 
           <textarea
             id="paymentInstructions"
@@ -854,13 +877,13 @@ mobileMenu.addEventListener(
 
 
 /* =========================
-   SET STAT
+   SET STATISTIC
 ========================= */
 
 function setStat(id,value){
 
   document.getElementById(id).textContent =
-    Number(value || 0);
+    Number(value ?? 0);
 
 }
 
@@ -871,87 +894,57 @@ function setStat(id,value){
 
 async function checkAdmin(){
 
-  try{
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.auth.getSession();
+
+  if(error){
+
+    throw error;
+
+  }
+
+  const session =
+    data?.session;
+
+  if(!session){
+
+    window.location.href =
+      "login.html";
+
+    return false;
+
+  }
+
+  const {
+    data: profile,
+    error: profileError
+  } =
+    await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq(
+        "id",
+        session.user.id
+      )
+      .maybeSingle();
+
+  if(profileError){
+
+    throw profileError;
+
+  }
+
+  if(
+    !profile ||
+    String(profile.role).toLowerCase() !==
+    "admin"
+  ){
 
     message.textContent =
-      "Checking admin access...";
-
-    message.className = "";
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.auth.getSession();
-
-    if(error){
-
-      throw error;
-
-    }
-
-    const session =
-      data?.session;
-
-    if(!session){
-
-      window.location.href =
-        "login.html";
-
-      return false;
-
-    }
-
-    const {
-      data: profile,
-      error: profileError
-    } =
-      await supabaseClient
-        .from("profiles")
-        .select("role")
-        .eq("id",session.user.id)
-        .maybeSingle();
-
-    if(profileError){
-
-      throw profileError;
-
-    }
-
-    if(
-      !profile ||
-      String(profile.role).toLowerCase() !==
-      "admin"
-    ){
-
-      message.textContent =
-        "Access denied. Admin account required.";
-
-      message.className =
-        "error";
-
-      return false;
-
-    }
-
-    message.textContent =
-      "Admin access confirmed.";
-
-    message.className =
-      "success";
-
-    return true;
-
-  }catch(error){
-
-    console.error(
-      "ADMIN CHECK ERROR:",
-      error
-    );
-
-    message.textContent =
-      "Admin check error: " +
-      error.message;
+      "Access denied. Admin account required.";
 
     message.className =
       "error";
@@ -960,76 +953,97 @@ async function checkAdmin(){
 
   }
 
+  message.textContent =
+    "Admin access confirmed.";
+
+  message.className =
+    "success";
+
+  return true;
+
 }
 
 
 /* =========================
-   LOAD DASHBOARD STATS
+   LOAD STATISTICS
 ========================= */
 
 async function loadStatistics(){
 
-  try{
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient.rpc(
-        "admin_get_dashboard_stats"
-      );
-
-    if(error){
-
-      throw error;
-
-    }
-
-    console.log(
-      "DASHBOARD STATS:",
-      data
+  const {
+    data,
+    error
+  } =
+    await supabaseClient.rpc(
+      "admin_get_dashboard_stats"
     );
 
-    setStat(
-      "workerCount",
-      data?.workers
-    );
+  if(error){
 
-    setStat(
-      "promoterCount",
-      data?.promoters
-    );
-
-    setStat(
-      "taskCount",
-      data?.active_tasks
-    );
-
-    setStat(
-      "submissionCount",
-      data?.pending_submissions
-    );
-
-  }catch(error){
-
-    console.error(
-      "STATISTICS ERROR:",
-      error
-    );
-
-    message.textContent =
-      "Dashboard statistics error: " +
-      error.message;
-
-    message.className =
-      "error";
-
-    setStat("workerCount",0);
-    setStat("promoterCount",0);
-    setStat("taskCount",0);
-    setStat("submissionCount",0);
+    throw error;
 
   }
+
+  console.log(
+    "Dashboard RPC result:",
+    data
+  );
+
+
+  /*
+    IMPORTANT:
+
+    admin_get_dashboard_stats()
+    returns RETURNS TABLE(...)
+
+    Supabase therefore gives us:
+
+    [
+      {
+        workers: 1,
+        promoters: 0,
+        active_tasks: 3,
+        pending_submissions: 0
+      }
+    ]
+
+    We must read data[0].
+  */
+
+  const stats =
+    Array.isArray(data)
+      ? data[0]
+      : data;
+
+
+  if(!stats){
+
+    throw new Error(
+      "Dashboard statistics returned no data."
+    );
+
+  }
+
+
+  setStat(
+    "workerCount",
+    stats.workers
+  );
+
+  setStat(
+    "promoterCount",
+    stats.promoters
+  );
+
+  setStat(
+    "taskCount",
+    stats.active_tasks
+  );
+
+  setStat(
+    "submissionCount",
+    stats.pending_submissions
+  );
 
 }
 
@@ -1100,7 +1114,7 @@ async function loadPaymentDetails(){
   }catch(error){
 
     console.warn(
-      "Payment details loading error:",
+      "Payment details error:",
       error
     );
 
@@ -1110,7 +1124,137 @@ async function loadPaymentDetails(){
 
 
 /* =========================
-   INITIALIZE
+   SAVE PAYMENT DETAILS
+========================= */
+
+savePaymentDetailsButton.addEventListener(
+  "click",
+  async function(){
+
+    const bank =
+      document.getElementById(
+        "bankName"
+      ).value.trim();
+
+    const account =
+      document.getElementById(
+        "accountName"
+      ).value.trim();
+
+    const number =
+      document.getElementById(
+        "accountNumber"
+      ).value.trim();
+
+    const instructions =
+      document.getElementById(
+        "paymentInstructions"
+      ).value.trim();
+
+    const result =
+      document.getElementById(
+        "paymentDetailsMessage"
+      );
+
+
+    if(
+      !bank ||
+      !account ||
+      !number
+    ){
+
+      result.textContent =
+        "Please complete the bank, account name and account number.";
+
+      result.className =
+        "error";
+
+      return;
+
+    }
+
+
+    try{
+
+      savePaymentDetailsButton.disabled =
+        true;
+
+      savePaymentDetailsButton.textContent =
+        "Saving...";
+
+
+      const {
+        data,
+        error
+      } =
+        await supabaseClient.rpc(
+          "admin_update_promoter_payment_details",
+          {
+            p_bank_name:bank,
+            p_account_name:account,
+            p_account_number:number,
+            p_instructions:
+              instructions || null
+          }
+        );
+
+
+      if(error){
+
+        throw error;
+
+      }
+
+
+      if(
+        !data ||
+        data.success !== true
+      ){
+
+        throw new Error(
+          data?.message ||
+          "Unable to save payment details."
+        );
+
+      }
+
+
+      result.textContent =
+        "Payment details saved successfully.";
+
+      result.className =
+        "success";
+
+    }catch(error){
+
+      console.error(
+        "SAVE PAYMENT ERROR:",
+        error
+      );
+
+      result.textContent =
+        "Error: " +
+        error.message;
+
+      result.className =
+        "error";
+
+    }finally{
+
+      savePaymentDetailsButton.disabled =
+        false;
+
+      savePaymentDetailsButton.textContent =
+        "Save Payment Details";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   INITIALIZE DASHBOARD
 ========================= */
 
 async function initializeDashboard(){
@@ -1121,10 +1265,40 @@ async function initializeDashboard(){
   refreshButton.textContent =
     "Loading...";
 
-  const isAdmin =
-    await checkAdmin();
 
-  if(!isAdmin){
+  try{
+
+    const isAdmin =
+      await checkAdmin();
+
+
+    if(!isAdmin){
+
+      return;
+
+    }
+
+
+    await loadStatistics();
+
+    await loadPaymentDetails();
+
+
+  }catch(error){
+
+    console.error(
+      "DASHBOARD ERROR:",
+      error
+    );
+
+    message.textContent =
+      "Dashboard error: " +
+      error.message;
+
+    message.className =
+      "error";
+
+  }finally{
 
     refreshButton.disabled =
       false;
@@ -1132,20 +1306,7 @@ async function initializeDashboard(){
     refreshButton.textContent =
       "↻ Refresh Dashboard";
 
-    return;
-
   }
-
-  await Promise.all([
-    loadStatistics(),
-    loadPaymentDetails()
-  ]);
-
-  refreshButton.disabled =
-    false;
-
-  refreshButton.textContent =
-    "↻ Refresh Dashboard";
 
 }
 
@@ -1176,44 +1337,4 @@ logoutButton.addEventListener(
       logoutButton.textContent =
         "Logging out...";
 
-      await supabaseClient.auth.signOut();
-
-      window.location.href =
-        "login.html";
-
-    }catch(error){
-
-      console.error(
-        "LOGOUT ERROR:",
-        error
-      );
-
-      logoutButton.disabled =
-        false;
-
-      logoutButton.textContent =
-        "Logout";
-
-      message.textContent =
-        "Logout error: " +
-        error.message;
-
-      message.className =
-        "error";
-
-    }
-
-  }
-);
-
-
-/* =========================
-   START
-========================= */
-
-initializeDashboard();
-
-</script>
-
-</body>
-  </html>
+      co

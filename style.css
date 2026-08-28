@@ -1,29 +1,24 @@
 /* =========================================
-   TASKVEXA GLOBAL STYLE
-   Mobile + Desktop Responsive
+   TASKVEXA - GLOBAL RESPONSIVE CSS
 ========================================= */
 
 * {
   box-sizing: border-box;
 }
 
-html {
+html,
+body {
   width: 100%;
+  min-width: 100%;
   min-height: 100%;
   margin: 0;
   padding: 0;
 }
 
 body {
-  width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
   background: #080d18;
   color: #f5f7fa;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 15px;
-  line-height: 1.5;
   overflow-x: hidden;
 }
 
@@ -32,9 +27,11 @@ body {
 ========================================= */
 
 header {
-  width: 100%;
-  min-height: 64px;
-  padding: 12px 20px;
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 14px 18px;
+
   background: #0b101c;
   border-bottom: 1px solid #1d2635;
 
@@ -50,55 +47,84 @@ header h1 {
   margin: 0;
   color: #4ade80;
   font-size: 22px;
-  font-weight: 700;
 }
 
 header a {
   color: #e5e7eb;
   text-decoration: none;
-  font-weight: 500;
-}
-
-header a:hover {
-  color: #4ade80;
 }
 
 /* =========================================
-   NAVIGATION
-========================================= */
-
-nav {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-nav a {
-  color: #e5e7eb;
-  text-decoration: none;
-}
-
-nav a:hover {
-  color: #4ade80;
-}
-
-/* =========================================
-   MAIN CONTENT
+   MAIN - FULL SCREEN
 ========================================= */
 
 main {
-  width: 100%;
-  max-width: 1200px;
+  display: block !important;
 
-  margin: 0 auto;
+  width: 100% !important;
+  max-width: none !important;
 
-  padding: 24px 20px 50px;
+  margin: 0 !important;
+
+  padding: 24px 20px 50px !important;
 }
 
 /* =========================================
-   HEADINGS
+   COMMON CONTAINERS
+========================================= */
+
+.container,
+.content,
+.page-container,
+.main-container,
+.wrapper {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* =========================================
+   SECTIONS
+========================================= */
+
+main > section {
+  width: 100% !important;
+  max-width: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* =========================================
+   CARDS
+========================================= */
+
+.card,
+.task-card,
+.admin-card,
+.wallet-box,
+.payment-box,
+.deposit-box,
+.history-box,
+.dashboard-card {
+  width: 100% !important;
+  max-width: none !important;
+
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+
+  background: #111827;
+
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+
+  padding: 20px;
+
+  margin-bottom: 18px;
+}
+
+/* =========================================
+   TEXT
 ========================================= */
 
 h1,
@@ -108,59 +134,61 @@ h4 {
   color: #f8fafc;
 }
 
-h1 {
-  font-size: 28px;
-}
-
-h2 {
-  font-size: 24px;
-  margin-top: 0;
-}
-
-h3 {
-  font-size: 19px;
-}
-
 p {
   color: #cbd5e1;
 }
 
 /* =========================================
-   LINKS
+   FORMS
 ========================================= */
 
-a {
-  color: #4ade80;
+form {
+  width: 100% !important;
+  max-width: none !important;
 }
 
-a:hover {
-  color: #86efac;
-}
-
-/* =========================================
-   CARDS / SECTIONS
-========================================= */
-
-section,
-.card,
-.task-card,
-.admin-card,
-.wallet-box,
-.payment-box,
-.deposit-box,
-.history-box {
+.form-group {
   width: 100%;
-  max-width: 100%;
+  margin-bottom: 16px;
 }
 
-.card,
-.task-card,
-.admin-card {
-  background: #111827;
-  border: 1px solid #1f2937;
-  border-radius: 14px;
-  padding: 20px;
-  margin-bottom: 18px;
+label {
+  display: block;
+  margin-bottom: 7px;
+  color: #f1f5f9;
+  font-weight: 600;
+}
+
+input,
+textarea,
+select {
+  width: 100% !important;
+  max-width: none !important;
+
+  min-height: 44px;
+
+  padding: 11px 13px;
+
+  background: #0b1220;
+  color: #f8fafc;
+
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 15px;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #4ade80;
 }
 
 /* =========================================
@@ -169,8 +197,6 @@ section,
 
 button,
 .btn {
-  display: inline-block;
-
   min-height: 44px;
 
   padding: 11px 18px;
@@ -185,127 +211,12 @@ button,
   font-weight: 600;
 
   cursor: pointer;
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.1s ease;
-}
-
-button:hover,
-.btn:hover {
-  opacity: 0.9;
-}
-
-button:active,
-.btn:active {
-  transform: scale(0.98);
 }
 
 button:disabled,
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-/* =========================================
-   FORMS
-========================================= */
-
-form {
-  width: 100%;
-}
-
-.form-group {
-  width: 100%;
-  margin-bottom: 16px;
-}
-
-label {
-  display: block;
-  margin-bottom: 7px;
-
-  color: #f1f5f9;
-
-  font-weight: 600;
-}
-
-input,
-textarea,
-select {
-  width: 100%;
-  max-width: 100%;
-
-  min-height: 44px;
-
-  padding: 11px 13px;
-
-  background: #0b1220;
-  color: #f8fafc;
-
-  border: 1px solid #334155;
-  border-radius: 8px;
-
-  font-family: inherit;
-  font-size: 15px;
-
-  outline: none;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: #4ade80;
-  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.12);
-}
-
-textarea {
-  min-height: 120px;
-  resize: vertical;
-}
-
-select {
-  cursor: pointer;
-}
-
-/* =========================================
-   INPUT PLACEHOLDER
-========================================= */
-
-input::placeholder,
-textarea::placeholder {
-  color: #64748b;
-}
-
-/* =========================================
-   TABLES
-========================================= */
-
-.table-container {
-  width: 100%;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 600px;
-}
-
-th,
-td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #263244;
-}
-
-th {
-  color: #f8fafc;
-  background: #111827;
-}
-
-td {
-  color: #cbd5e1;
 }
 
 /* =========================================
@@ -328,59 +239,20 @@ td {
   color: #4ade80 !important;
 }
 
-.status {
-  font-weight: 700;
-}
-
-/* =========================================
-   ALERT / MESSAGE
-========================================= */
-
-.message,
-.alert {
-  width: 100%;
-  padding: 12px 14px;
-  margin: 12px 0;
-
-  border-radius: 8px;
-
-  background: #111827;
-  border: 1px solid #263244;
-}
-
 /* =========================================
    WALLET
 ========================================= */
 
-.wallet-box {
-  background: #111827;
-  border: 1px solid #1f2937;
-  border-radius: 14px;
-
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
 .balance,
 .wallet-balance {
+  color: #4ade80;
   font-size: 30px;
   font-weight: 700;
-  color: #4ade80;
 }
 
 /* =========================================
-   PAYMENT BOX
+   PAYMENT DETAILS
 ========================================= */
-
-.payment-box {
-  background: #101827;
-  border: 1px solid #263b55;
-
-  border-radius: 14px;
-
-  padding: 20px;
-  margin-bottom: 20px;
-}
 
 .payment-detail {
   width: 100%;
@@ -399,47 +271,17 @@ td {
 .payment-detail strong {
   display: block;
   margin-bottom: 5px;
-  color: #f8fafc;
 }
 
 .account-number {
   display: inline-block;
 
+  color: #4ade80;
+
   font-size: 20px;
   font-weight: 700;
 
-  color: #4ade80;
-
   word-break: break-word;
-}
-
-/* =========================================
-   DEPOSIT / HISTORY
-========================================= */
-
-.deposit-box,
-.history-box {
-  background: #111827;
-  border: 1px solid #1f2937;
-
-  border-radius: 14px;
-
-  padding: 20px;
-  margin-bottom: 20px;
-}
-
-.deposit-item {
-  width: 100%;
-
-  background: #0b1220;
-
-  border: 1px solid #263244;
-
-  padding: 14px;
-
-  border-radius: 9px;
-
-  margin-bottom: 10px;
 }
 
 /* =========================================
@@ -455,69 +297,34 @@ img {
   width: 100%;
   max-width: 500px;
   max-height: 350px;
-
   object-fit: contain;
-
   margin-top: 10px;
-
   border-radius: 8px;
 }
 
 /* =========================================
-   FILE INPUT
+   TABLE
 ========================================= */
 
-input[type="file"] {
+.table-container {
   width: 100%;
-  padding: 10px;
-  background: #0b1220;
+  max-width: 100%;
+  overflow-x: auto;
 }
 
-/* =========================================
-   COPY BUTTON
-========================================= */
-
-.copy-button {
-  min-height: 38px;
-
-  padding: 8px 12px;
-
-  font-size: 13px;
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
 /* =========================================
    DASHBOARD GRID
 ========================================= */
 
-.dashboard-grid {
-  width: 100%;
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(3, minmax(0, 1fr));
-
-  gap: 18px;
-}
-
-.dashboard-card {
-  width: 100%;
-
-  background: #111827;
-
-  border: 1px solid #1f2937;
-
-  border-radius: 14px;
-
-  padding: 20px;
-}
-
-/* =========================================
-   ADMIN GRID
-========================================= */
-
+.dashboard-grid,
 .admin-grid {
-  width: 100%;
+  width: 100% !important;
+  max-width: none !important;
 
   display: grid;
 
@@ -528,82 +335,38 @@ input[type="file"] {
 }
 
 /* =========================================
-   FULL WIDTH ELEMENT
-========================================= */
-
-.full-width {
-  width: 100% !important;
-  max-width: 100% !important;
-}
-
-/* =========================================
-   HORIZONTAL SCROLL PROTECTION
-========================================= */
-
-pre,
-code {
-  max-width: 100%;
-  overflow-x: auto;
-}
-
-iframe {
-  max-width: 100%;
-}
-
-/* =========================================
-   MOBILE RESPONSIVE
+   MOBILE
 ========================================= */
 
 @media (max-width: 768px) {
 
-  body {
-    font-size: 15px;
-  }
-
   header {
-    min-height: auto;
-
-    padding: 13px 14px;
-
-    flex-direction: column;
-    align-items: stretch;
-
-    text-align: center;
-  }
-
-  header h1 {
-    font-size: 21px;
-  }
-
-  nav {
-    width: 100%;
-
-    justify-content: center;
-
-    gap: 10px;
-  }
-
-  nav a,
-  nav button {
-    font-size: 14px;
+    width: 100% !important;
+    padding: 13px 12px;
   }
 
   main {
-    width: 100%;
+    width: 100% !important;
+    max-width: none !important;
 
-    max-width: none;
+    margin: 0 !important;
 
-    margin: 0;
-
-    padding: 18px 12px 40px;
+    padding: 16px 10px 40px !important;
   }
 
-  h2 {
-    font-size: 22px;
+  .container,
+  .content,
+  .page-container,
+  .main-container,
+  .wrapper {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
   }
 
-  h3 {
-    font-size: 18px;
+  main > section {
+    width: 100% !important;
+    max-width: none !important;
   }
 
   .card,
@@ -612,12 +375,15 @@ iframe {
   .wallet-box,
   .payment-box,
   .deposit-box,
-  .history-box {
-    width: 100%;
+  .history-box,
+  .dashboard-card {
+    width: 100% !important;
+    max-width: none !important;
 
-    padding: 16px;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 
-    border-radius: 12px;
+    padding: 15px;
   }
 
   .dashboard-grid,
@@ -625,25 +391,29 @@ iframe {
     grid-template-columns: 1fr;
   }
 
-  button,
-  .btn {
-    width: 100%;
-    min-height: 44px;
-  }
-
   input,
   textarea,
   select {
+    width: 100% !important;
     font-size: 16px;
   }
 
-  .balance,
-  .wallet-balance {
-    font-size: 27px;
+  button,
+  .btn {
+    width: 100%;
   }
 
-  .account-number {
-    font-size: 18px;
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  nav {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
   }
 
 }
@@ -654,12 +424,8 @@ iframe {
 
 @media (max-width: 480px) {
 
-  header {
-    padding: 12px 10px;
-  }
-
   main {
-    padding: 15px 10px 35px;
+    padding: 12px 8px 35px !important;
   }
 
   .card,
@@ -669,52 +435,7 @@ iframe {
   .payment-box,
   .deposit-box,
   .history-box {
-    padding: 14px;
+    padding: 13px;
   }
 
-  h2 {
-    font-size: 20px;
-  }
-
-  h3 {
-    font-size: 17px;
-  }
-
-  p {
-    font-size: 14px;
-  }
-
-  .balance,
-  .wallet-balance {
-    font-size: 25px;
-  }
-
-}
-
-/* =========================================
-   VERY SMALL PHONES
-========================================= */
-
-@media (max-width: 360px) {
-
-  main {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-  header {
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-  .card,
-  .task-card,
-  .admin-card,
-  .wallet-box,
-  .payment-box,
-  .deposit-box,
-  .history-box {
-    padding: 12px;
-  }
-
-  }
+   }

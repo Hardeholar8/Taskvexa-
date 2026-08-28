@@ -1,1112 +1,596 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>TaskVexa - Admin Dashboard</title>
 
 <style>
+*{box-sizing:border-box}
 
-* {
-  box-sizing: border-box;
+:root{
+  --bg:#070a10;
+  --sidebar:#0b0f17;
+  --card:#111722;
+  --border:#202b3b;
+  --text:#f8fafc;
+  --muted:#7f8da3;
+  --green:#4ade80;
+  --red:#f87171;
 }
 
-:root {
-  --bg: #070a10;
-  --sidebar: #0b0f17;
-  --card: #111722;
-  --card2: #0d131e;
-  --border: #202b3b;
-  --text: #f8fafc;
-  --muted: #7f8da3;
-  --green: #4ade80;
-  --red: #f87171;
+html,body{
+  margin:0;
+  padding:0;
+  min-height:100%;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
+body{min-height:100vh}
+
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:245px;
+  background:var(--sidebar);
+  border-right:1px solid var(--border);
+  padding:22px 14px;
+  overflow-y:auto;
 }
 
-body {
-  min-height: 100vh;
+.logo{
+  padding:5px 14px 22px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:18px;
 }
 
-/* =========================
-   SIDEBAR
-========================= */
-
-.sidebar {
-
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-
-  width: 245px;
-
-  background: var(--sidebar);
-
-  border-right: 1px solid var(--border);
-
-  padding: 22px 14px;
-
-  overflow-y: auto;
-
-  z-index: 100;
-
+.logo h1{
+  margin:0;
+  font-size:23px;
 }
 
-.logo {
-
-  padding: 5px 14px 22px;
-
-  border-bottom: 1px solid var(--border);
-
-  margin-bottom: 18px;
-
+.logo p{
+  margin:6px 0 0;
+  color:var(--muted);
+  font-size:12px;
 }
 
-.logo h1 {
-
-  margin: 0;
-
-  font-size: 23px;
-
+.nav-title{
+  color:#56657b;
+  font-size:10px;
+  font-weight:bold;
+  letter-spacing:1.3px;
+  margin:18px 14px 8px;
+  text-transform:uppercase;
 }
 
-.logo p {
-
-  margin: 6px 0 0;
-
-  color: var(--muted);
-
-  font-size: 12px;
-
-}
-
-.nav-title {
-
-  color: #56657b;
-
-  font-size: 10px;
-
-  font-weight: bold;
-
-  letter-spacing: 1.3px;
-
-  margin: 18px 14px 8px;
-
-  text-transform: uppercase;
-
-}
-
-.nav-link {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 12px;
-
-  width: 100%;
-
-  padding: 12px 14px;
-
-  margin: 4px 0;
-
-  border-radius: 11px;
-
-  color: #aeb9c9;
-
-  text-decoration: none;
-
-  font-size: 14px;
-
-  border: 0;
-
-  background: transparent;
-
-  cursor: pointer;
-
-  text-align: left;
-
+.nav-link{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  width:100%;
+  padding:12px 14px;
+  margin:4px 0;
+  border-radius:11px;
+  color:#aeb9c9;
+  text-decoration:none;
+  font-size:14px;
 }
 
 .nav-link:hover,
-.nav-link.active {
-
-  background: #171d2a;
-
-  color: white;
-
+.nav-link.active{
+  background:#171d2a;
+  color:white;
 }
 
-.nav-icon {
-
-  width: 23px;
-
-  text-align: center;
-
-  font-size: 16px;
-
+.nav-icon{
+  width:23px;
+  text-align:center;
+  font-size:16px;
 }
 
-.logout {
-
-  margin-top: 20px;
-
-  padding-top: 18px;
-
-  border-top: 1px solid var(--border);
-
+.logout{
+  margin-top:20px;
+  padding-top:18px;
+  border-top:1px solid var(--border);
 }
 
-#logoutButton {
-
-  color: var(--red);
-
+#logoutButton{
+  background:transparent;
+  border:0;
+  cursor:pointer;
+  color:#f87171;
 }
 
-/* =========================
-   MAIN
-========================= */
-
-.main {
-
-  margin-left: 245px;
-
-  min-height: 100vh;
-
+.main{
+  margin-left:245px;
+  min-height:100vh;
 }
 
-/* =========================
-   TOPBAR
-========================= */
-
-.topbar {
-
-  height: 70px;
-
-  background: rgba(7,10,16,.95);
-
-  border-bottom: 1px solid var(--border);
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: space-between;
-
-  padding: 0 28px;
-
-  position: sticky;
-
-  top: 0;
-
-  z-index: 20;
-
+.topbar{
+  height:70px;
+  background:rgba(7,10,16,.95);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:20;
 }
 
-.topbar-title {
-
-  font-size: 18px;
-
-  font-weight: bold;
-
+.topbar-title{
+  font-size:18px;
+  font-weight:bold;
 }
 
-.admin-status {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-
-  color: #aeb9c9;
-
-  font-size: 13px;
-
+.admin-status{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#aeb9c9;
+  font-size:13px;
 }
 
-.online-dot {
-
-  width: 8px;
-
-  height: 8px;
-
-  border-radius: 50%;
-
-  background: var(--green);
-
+.online-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
 }
 
-/* =========================
-   MOBILE MENU
-========================= */
-
-.mobile-menu {
-
-  display: none;
-
-  background: #151b28;
-
-  border: 1px solid var(--border);
-
-  color: white;
-
-  border-radius: 9px;
-
-  padding: 8px 11px;
-
-  cursor: pointer;
-
+.content{
+  max-width:1400px;
+  margin:auto;
+  padding:30px;
 }
 
-/* =========================
-   CONTENT
-========================= */
-
-.content {
-
-  max-width: 1400px;
-
-  margin: auto;
-
-  padding: 30px;
-
+.heading{
+  margin-bottom:20px;
 }
 
-.heading {
-
-  margin-bottom: 20px;
-
+.heading h2{
+  margin:0 0 8px;
+  font-size:29px;
 }
 
-.heading h2 {
-
-  margin: 0 0 8px;
-
-  font-size: 29px;
-
+.heading p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
 }
 
-.heading p {
-
-  margin: 0;
-
-  color: var(--muted);
-
-  font-size: 14px;
-
+#message{
+  margin-bottom:20px;
+  font-size:13px;
 }
 
-#message {
+.success{color:var(--green)}
+.error{color:var(--red)}
 
-  margin-bottom: 20px;
-
-  font-size: 13px;
-
+.refresh-button{
+  margin-bottom:20px;
+  padding:10px 16px;
+  background:#151d2a;
+  color:white;
+  border:1px solid #293548;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:700;
 }
 
-.success {
-
-  color: var(--green);
-
+.refresh-button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
 }
 
-.error {
-
-  color: var(--red);
-
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
+  margin-bottom:28px;
 }
 
-/* =========================
-   REFRESH
-========================= */
-
-.refresh-row {
-
-  margin-bottom: 22px;
-
+.stat{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:20px;
 }
 
-.refresh-button {
-
-  padding: 11px 16px;
-
-  background: #151d2a;
-
-  color: white;
-
-  border: 1px solid #293548;
-
-  border-radius: 10px;
-
-  cursor: pointer;
-
-  font-weight: 700;
-
+.stat-label{
+  color:var(--muted);
+  font-size:12px;
 }
 
-.refresh-button:hover {
-
-  background: #1c2636;
-
+.stat-value{
+  font-size:25px;
+  font-weight:800;
+  margin-top:12px;
 }
 
-.refresh-button:disabled {
-
-  opacity: .6;
-
-  cursor: not-allowed;
-
+.section-title{
+  margin:25px 0 14px;
 }
 
-/* =========================
-   STATS
-========================= */
-
-.stats {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(4, 1fr);
-
-  gap: 15px;
-
-  margin-bottom: 28px;
-
+.section-title h3{
+  margin:0;
+  font-size:17px;
 }
 
-.stat {
-
-  background: var(--card);
-
-  border: 1px solid var(--border);
-
-  border-radius: 17px;
-
-  padding: 20px;
-
+.management{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
 }
 
-.stat-label {
-
-  color: var(--muted);
-
-  font-size: 12px;
-
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:20px;
 }
 
-.stat-value {
-
-  font-size: 25px;
-
-  font-weight: 800;
-
-  margin-top: 12px;
-
+.card-head{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-bottom:12px;
 }
 
-/* =========================
-   MANAGEMENT
-========================= */
-
-.section-title {
-
-  margin: 25px 0 14px;
-
+.icon{
+  width:42px;
+  height:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#191f2c;
+  border:1px solid #293448;
+  border-radius:12px;
+  font-size:19px;
 }
 
-.section-title h3 {
-
-  margin: 0;
-
-  font-size: 17px;
-
+.card h3{
+  margin:0;
+  font-size:16px;
 }
 
-.management {
-
-  display: grid;
-
-  grid-template-columns:
-    repeat(2, 1fr);
-
-  gap: 15px;
-
+.card p{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.6;
+  margin:0 0 17px;
 }
 
-.card {
-
-  background: var(--card);
-
-  border: 1px solid var(--border);
-
-  border-radius: 18px;
-
-  padding: 20px;
-
+.button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:42px;
+  padding:10px 16px;
+  background:#f8fafc;
+  color:#090d14;
+  border:0;
+  border-radius:11px;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
 }
 
-.card-head {
-
-  display: flex;
-
-  align-items: center;
-
-  gap: 13px;
-
-  margin-bottom: 12px;
-
+.button:hover{
+  opacity:.9;
 }
 
-.icon {
-
-  width: 42px;
-
-  height: 42px;
-
-  display: flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  background: #191f2c;
-
-  border: 1px solid #293448;
-
-  border-radius: 12px;
-
-  font-size: 19px;
-
+.payment{
+  margin-top:15px;
+  background:linear-gradient(145deg,#121a29,#0d131e);
+  border:1px solid #29354a;
+  border-radius:20px;
+  padding:23px;
 }
 
-.card h3 {
-
-  margin: 0;
-
-  font-size: 16px;
-
+.info{
+  background:#0b111b;
+  border:1px solid #1f2b3d;
+  color:#8997aa;
+  padding:13px;
+  border-radius:11px;
+  margin-bottom:18px;
+  font-size:12px;
+  line-height:1.5;
 }
 
-.card p {
-
-  color: var(--muted);
-
-  font-size: 13px;
-
-  line-height: 1.6;
-
-  margin: 0 0 17px;
-
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
 }
 
-.button {
-
-  display: inline-flex;
-
-  align-items: center;
-
-  justify-content: center;
-
-  min-height: 42px;
-
-  padding: 10px 16px;
-
-  background: #f8fafc;
-
-  color: #090d14;
-
-  border: 0;
-
-  border-radius: 11px;
-
-  text-decoration: none;
-
-  font-size: 13px;
-
-  font-weight: 700;
-
+.form-group.full{
+  grid-column:1/-1;
 }
 
-.button:hover {
-
-  opacity: .9;
-
+label{
+  display:block;
+  color:#b9c4d3;
+  font-size:12px;
+  font-weight:bold;
+  margin-bottom:7px;
 }
 
-/* =========================
-   PAYMENT
-========================= */
-
-.payment {
-
-  margin-top: 15px;
-
-  background:
-    linear-gradient(
-      145deg,
-      #121a29,
-      #0d131e
-    );
-
-  border: 1px solid #29354a;
-
-  border-radius: 20px;
-
-  padding: 23px;
-
+input,textarea{
+  width:100%;
+  padding:13px;
+  background:#090e16;
+  border:1px solid #293548;
+  border-radius:10px;
+  color:white;
+  outline:none;
+  font-size:14px;
 }
 
-.info {
-
-  background: #0b111b;
-
-  border: 1px solid #1f2b3d;
-
-  color: #8997aa;
-
-  padding: 13px;
-
-  border-radius: 11px;
-
-  margin-bottom: 18px;
-
-  font-size: 12px;
-
-  line-height: 1.5;
-
+textarea{
+  min-height:90px;
+  resize:vertical;
 }
 
-.form-grid {
-
-  display: grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap: 15px;
-
+#paymentDetailsMessage{
+  margin-top:12px;
+  font-size:13px;
+  font-weight:bold;
 }
 
-.form-group.full {
-
-  grid-column: 1 / -1;
-
+.mobile-menu{
+  display:none;
+  background:#151b28;
+  border:1px solid var(--border);
+  color:white;
+  border-radius:9px;
+  padding:8px 11px;
+  cursor:pointer;
 }
 
-label {
-
-  display: block;
-
-  color: #b9c4d3;
-
-  font-size: 12px;
-
-  font-weight: bold;
-
-  margin-bottom: 7px;
-
+@media(max-width:1050px){
+  .stats{
+    grid-template-columns:1fr 1fr;
+  }
 }
 
-input,
-textarea {
+@media(max-width:800px){
 
-  width: 100%;
-
-  padding: 13px;
-
-  background: #090e16;
-
-  border: 1px solid #293548;
-
-  border-radius: 10px;
-
-  color: white;
-
-  outline: none;
-
-  font-size: 14px;
-
-}
-
-textarea {
-
-  min-height: 90px;
-
-  resize: vertical;
-
-}
-
-#paymentDetailsMessage {
-
-  margin-top: 12px;
-
-  font-size: 13px;
-
-  font-weight: bold;
-
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media(max-width:1050px) {
-
-  .stats {
-
-    grid-template-columns:
-      1fr 1fr;
-
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+    z-index:100;
   }
 
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .mobile-menu{
+    display:block;
+  }
+
+  .content{
+    padding:22px 15px 40px;
+  }
+
+  .management{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .form-group.full{
+    grid-column:auto;
+  }
 }
 
-@media(max-width:800px) {
+@media(max-width:500px){
 
-  .sidebar {
-
-    transform:
-      translateX(-100%);
-
-    transition: .25s;
-
+  .stats{
+    grid-template-columns:1fr;
   }
 
-  .sidebar.open {
-
-    transform:
-      translateX(0);
-
+  .topbar{
+    padding:0 15px;
   }
 
-  .main {
-
-    margin-left: 0;
-
+  .admin-status{
+    display:none;
   }
-
-  .mobile-menu {
-
-    display: block;
-
-  }
-
-  .content {
-
-    padding:
-      22px 15px 40px;
-
-  }
-
-  .management {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-  .form-grid {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-  .form-group.full {
-
-    grid-column: auto;
-
-  }
-
 }
-
-@media(max-width:500px) {
-
-  .stats {
-
-    grid-template-columns:
-      1fr;
-
-  }
-
-  .topbar {
-
-    padding: 0 15px;
-
-  }
-
-  .admin-status {
-
-    display: none;
-
-  }
-
-}
-
 </style>
 </head>
 
 <body>
 
-
-<!-- =========================
-     SIDEBAR
-========================= -->
-
-<aside
-  class="sidebar"
-  id="sidebar"
->
+<aside class="sidebar" id="sidebar">
 
   <div class="logo">
-
     <h1>TaskVexa</h1>
-
-    <p>
-      Admin Control Panel
-    </p>
-
+    <p>Admin Control Panel</p>
   </div>
 
+  <div class="nav-title">Overview</div>
 
-  <div class="nav-title">
-    Overview
-  </div>
-
-
-  <a
-    href="admin.html"
-    class="nav-link active"
-  >
-
-    <span class="nav-icon">
-      ⌂
-    </span>
-
+  <a href="admin.html" class="nav-link active">
+    <span class="nav-icon">⌂</span>
     Dashboard
-
   </a>
 
+  <div class="nav-title">Management</div>
 
-  <div class="nav-title">
-    Management
-  </div>
-
-
-  <a
-    href="worker.html"
-    class="nav-link"
-  >
-
-    <span class="nav-icon">
-      👥
-    </span>
-
+  <a href="worker.html" class="nav-link">
+    <span class="nav-icon">👥</span>
     Workers
-
   </a>
 
-
-  <a
-    href="promoters.html"
-    class="nav-link"
-  >
-
-    <span class="nav-icon">
-      📣
-    </span>
-
+  <a href="promoters.html" class="nav-link">
+    <span class="nav-icon">📣</span>
     Promoters
-
   </a>
 
-
-  <a
-    href="tasks.html"
-    class="nav-link"
-  >
-
-    <span class="nav-icon">
-      ✓
-    </span>
-
+  <a href="tasks.html" class="nav-link">
+    <span class="nav-icon">✓</span>
     Tasks
-
   </a>
 
-
-  <a
-    href="admin-submissions.html"
-    class="nav-link"
-  >
-
-    <span class="nav-icon">
-      📋
-    </span>
-
+  <a href="admin-submissions.html" class="nav-link">
+    <span class="nav-icon">📋</span>
     Submissions
-
   </a>
 
-
-  <a
-    href="admin-withdrawals.html"
-    class="nav-link"
-  >
-
-    <span class="nav-icon">
-      💳
-    </span>
-
+  <a href="admin-withdrawals.html" class="nav-link">
+    <span class="nav-icon">💳</span>
     Withdrawals
-
   </a>
 
-
-  <a
-    href="admin-promoter-wallet.html"
-    class="nav-link"
-  >
-
-    <span class="nav-icon">
-      💰
-    </span>
-
+  <a href="admin-promoter-wallet.html" class="nav-link">
+    <span class="nav-icon">💰</span>
     Promoter Wallet
-
   </a>
 
+  <div class="nav-title">Settings</div>
 
-  <div class="nav-title">
-    Settings
-  </div>
-
-
-  <a
-    href="settings.html"
-    class="nav-link"
-  >
-
-    <span class="nav-icon">
-      ⚙
-    </span>
-
+  <a href="settings.html" class="nav-link">
+    <span class="nav-icon">⚙</span>
     Platform Settings
-
   </a>
-
 
   <div class="logout">
-
-    <button
-      id="logoutButton"
-      class="nav-link"
-      type="button"
-    >
-
-      <span class="nav-icon">
-        ↪
-      </span>
-
+    <button id="logoutButton" class="nav-link">
+      <span class="nav-icon">↪</span>
       Logout
-
     </button>
-
   </div>
 
 </aside>
 
-
-<!-- =========================
-     MAIN
-========================= -->
-
 <div class="main">
-
 
   <div class="topbar">
 
-    <button
-      id="mobileMenu"
-      class="mobile-menu"
-      type="button"
-    >
+    <button id="mobileMenu" class="mobile-menu">
       ☰
     </button>
-
 
     <div class="topbar-title">
       Admin Dashboard
     </div>
 
-
     <div class="admin-status">
-
       <span class="online-dot"></span>
-
       Admin
-
     </div>
 
   </div>
 
-
   <main class="content">
 
-
     <div class="heading">
-
-      <h2>
-        Welcome to TaskVexa
-      </h2>
+      <h2>Welcome to TaskVexa</h2>
 
       <p>
         Manage workers, promoters, tasks, withdrawals and platform settings.
       </p>
-
     </div>
 
-
-    <div
-      id="message"
-    >
+    <div id="message">
       Checking admin access...
     </div>
 
-
-    <div class="refresh-row">
-
-      <button
-        id="refreshButton"
-        class="refresh-button"
-        type="button"
-      >
-        ↻ Refresh Dashboard
-      </button>
-
-    </div>
-
-
-    <!-- =========================
-         STATISTICS
-    ========================= -->
+    <button
+      id="refreshButton"
+      class="refresh-button"
+    >
+      ↻ Refresh Dashboard
+    </button>
 
     <section class="stats">
 
-
       <div class="stat">
-
         <div class="stat-label">
           Workers
         </div>
 
         <div
-          id="workerCount"
           class="stat-value"
+          id="workerCount"
         >
           —
         </div>
-
       </div>
 
-
       <div class="stat">
-
         <div class="stat-label">
           Promoters
         </div>
 
         <div
-          id="promoterCount"
           class="stat-value"
+          id="promoterCount"
         >
           —
         </div>
-
       </div>
 
-
       <div class="stat">
-
         <div class="stat-label">
           Active Tasks
         </div>
 
         <div
-          id="taskCount"
           class="stat-value"
+          id="taskCount"
         >
           —
         </div>
-
       </div>
 
-
       <div class="stat">
-
         <div class="stat-label">
           Pending Submissions
         </div>
 
         <div
-          id="submissionCount"
           class="stat-value"
+          id="submissionCount"
         >
           —
         </div>
-
       </div>
-
 
     </section>
 
-
-    <!-- =========================
-         MANAGEMENT
-    ========================= -->
-
     <div class="section-title">
-
-      <h3>
-        Management
-      </h3>
-
+      <h3>Management</h3>
     </div>
 
-
     <section class="management">
-
-
-      <!-- WORKERS -->
 
       <div class="card">
 
         <div class="card-head">
-
-          <div class="icon">
-            👥
-          </div>
+          <div class="icon">👥</div>
 
           <div>
-            <h3>
-              Workers
-            </h3>
+            <h3>Workers</h3>
           </div>
-
         </div>
 
         <p>
@@ -1122,23 +606,14 @@ textarea {
 
       </div>
 
-
-      <!-- PROMOTERS -->
-
       <div class="card">
 
         <div class="card-head">
-
-          <div class="icon">
-            📣
-          </div>
+          <div class="icon">📣</div>
 
           <div>
-            <h3>
-              Promoters
-            </h3>
+            <h3>Promoters</h3>
           </div>
-
         </div>
 
         <p>
@@ -1154,23 +629,14 @@ textarea {
 
       </div>
 
-
-      <!-- TASKS -->
-
       <div class="card">
 
         <div class="card-head">
-
-          <div class="icon">
-            ✓
-          </div>
+          <div class="icon">✓</div>
 
           <div>
-            <h3>
-              Task Management
-            </h3>
+            <h3>Task Management</h3>
           </div>
-
         </div>
 
         <p>
@@ -1186,23 +652,14 @@ textarea {
 
       </div>
 
-
-      <!-- SUBMISSIONS -->
-
       <div class="card">
 
         <div class="card-head">
-
-          <div class="icon">
-            📋
-          </div>
+          <div class="icon">📋</div>
 
           <div>
-            <h3>
-              Task Submissions
-            </h3>
+            <h3>Task Submissions</h3>
           </div>
-
         </div>
 
         <p>
@@ -1218,23 +675,14 @@ textarea {
 
       </div>
 
-
-      <!-- WITHDRAWALS -->
-
       <div class="card">
 
         <div class="card-head">
-
-          <div class="icon">
-            💳
-          </div>
+          <div class="icon">💳</div>
 
           <div>
-            <h3>
-              Withdrawals
-            </h3>
+            <h3>Withdrawals</h3>
           </div>
-
         </div>
 
         <p>
@@ -1250,23 +698,14 @@ textarea {
 
       </div>
 
-
-      <!-- PROMOTER WALLET -->
-
       <div class="card">
 
         <div class="card-head">
-
-          <div class="icon">
-            💰
-          </div>
+          <div class="icon">💰</div>
 
           <div>
-            <h3>
-              Promoter Wallet
-            </h3>
+            <h3>Promoter Wallet</h3>
           </div>
-
         </div>
 
         <p>
@@ -1282,41 +721,23 @@ textarea {
 
       </div>
 
-
     </section>
 
-
-    <!-- =========================
-         PAYMENT DETAILS
-    ========================= -->
-
     <div class="section-title">
-
-      <h3>
-        Promoter Deposit Payment Details
-      </h3>
-
+      <h3>Promoter Deposit Payment Details</h3>
     </div>
-
 
     <section class="payment">
 
-
       <div class="info">
-
         These payment details are displayed to promoters when they add funds.
-
       </div>
-
 
       <div class="form-grid">
 
-
         <div class="form-group">
 
-          <label>
-            Bank Name
-          </label>
+          <label>Bank Name</label>
 
           <input
             id="bankName"
@@ -1326,12 +747,9 @@ textarea {
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Account Name
-          </label>
+          <label>Account Name</label>
 
           <input
             id="accountName"
@@ -1341,12 +759,9 @@ textarea {
 
         </div>
 
-
         <div class="form-group">
 
-          <label>
-            Account Number
-          </label>
+          <label>Account Number</label>
 
           <input
             id="accountNumber"
@@ -1357,12 +772,9 @@ textarea {
 
         </div>
 
-
         <div class="form-group full">
 
-          <label>
-            Payment Instructions
-          </label>
+          <label>Payment Instructions</label>
 
           <textarea
             id="paymentInstructions"
@@ -1371,42 +783,28 @@ textarea {
 
         </div>
 
-
       </div>
 
-
       <br>
-
 
       <button
         id="savePaymentDetailsButton"
         class="button"
-        type="button"
       >
         Save Payment Details
       </button>
 
-
-      <div
-        id="paymentDetailsMessage"
-      ></div>
-
+      <div id="paymentDetailsMessage"></div>
 
     </section>
-
 
   </main>
 
 </div>
 
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-
-/* =====================================================
-   SUPABASE
-===================================================== */
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
@@ -1414,42 +812,26 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
-
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
   );
 
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
-
 const message =
-  document.getElementById(
-    "message"
-  );
-
-const logoutButton =
-  document.getElementById(
-    "logoutButton"
-  );
-
-const mobileMenu =
-  document.getElementById(
-    "mobileMenu"
-  );
-
-const sidebar =
-  document.getElementById(
-    "sidebar"
-  );
+  document.getElementById("message");
 
 const refreshButton =
-  document.getElementById(
-    "refreshButton"
-  );
+  document.getElementById("refreshButton");
+
+const logoutButton =
+  document.getElementById("logoutButton");
+
+const mobileMenu =
+  document.getElementById("mobileMenu");
+
+const sidebar =
+  document.getElementById("sidebar");
 
 const savePaymentDetailsButton =
   document.getElementById(
@@ -1457,89 +839,119 @@ const savePaymentDetailsButton =
   );
 
 
-/* =====================================================
+/* =========================
    MOBILE MENU
-===================================================== */
+========================= */
 
 mobileMenu.addEventListener(
   "click",
-  function() {
+  function(){
 
-    sidebar.classList.toggle(
-      "open"
-    );
+    sidebar.classList.toggle("open");
 
   }
 );
 
 
-/* =====================================================
-   ADMIN CHECK
-===================================================== */
+/* =========================
+   SET STAT
+========================= */
 
-async function checkAdmin() {
+function setStat(id,value){
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.auth.getSession();
+  document.getElementById(id).textContent =
+    Number(value || 0);
 
-
-  if (error) {
-
-    throw error;
-
-  }
+}
 
 
-  const session =
-    data?.session;
+/* =========================
+   CHECK ADMIN
+========================= */
 
+async function checkAdmin(){
 
-  if (!session) {
-
-    window.location.href =
-      "login.html";
-
-    return false;
-
-  }
-
-
-  const user =
-    session.user;
-
-
-  const {
-    data: profile,
-    error: profileError
-  } =
-  await supabaseClient
-    .from("profiles")
-    .select("role")
-    .eq(
-      "id",
-      user.id
-    )
-    .maybeSingle();
-
-
-  if (profileError) {
-
-    throw profileError;
-
-  }
-
-
-  if (
-    !profile ||
-    String(profile.role).toLowerCase() !==
-    "admin"
-  ) {
+  try{
 
     message.textContent =
-      "Access denied. Admin account required.";
+      "Checking admin access...";
+
+    message.className = "";
+
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.auth.getSession();
+
+    if(error){
+
+      throw error;
+
+    }
+
+    const session =
+      data?.session;
+
+    if(!session){
+
+      window.location.href =
+        "login.html";
+
+      return false;
+
+    }
+
+    const {
+      data: profile,
+      error: profileError
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq("id",session.user.id)
+        .maybeSingle();
+
+    if(profileError){
+
+      throw profileError;
+
+    }
+
+    if(
+      !profile ||
+      String(profile.role).toLowerCase() !==
+      "admin"
+    ){
+
+      message.textContent =
+        "Access denied. Admin account required.";
+
+      message.className =
+        "error";
+
+      return false;
+
+    }
+
+    message.textContent =
+      "Admin access confirmed.";
+
+    message.className =
+      "success";
+
+    return true;
+
+  }catch(error){
+
+    console.error(
+      "ADMIN CHECK ERROR:",
+      error
+    );
+
+    message.textContent =
+      "Admin check error: " +
+      error.message;
 
     message.className =
       "error";
@@ -1548,173 +960,260 @@ async function checkAdmin() {
 
   }
 
-
-  return true;
-
 }
 
 
-/* =====================================================
-   LOAD WORKER COUNT
-   USE THE SAME SECURE RPC AS worker.html
-===================================================== */
+/* =========================
+   LOAD DASHBOARD STATS
+========================= */
 
-async function loadWorkerCount() {
+async function loadStatistics(){
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.rpc(
-    "admin_get_workers"
-  );
+  try{
 
+    const {
+      data,
+      error
+    } =
+      await supabaseClient.rpc(
+        "admin_get_dashboard_stats"
+      );
 
-  if (error) {
+    if(error){
+
+      throw error;
+
+    }
+
+    console.log(
+      "DASHBOARD STATS:",
+      data
+    );
+
+    setStat(
+      "workerCount",
+      data?.workers
+    );
+
+    setStat(
+      "promoterCount",
+      data?.promoters
+    );
+
+    setStat(
+      "taskCount",
+      data?.active_tasks
+    );
+
+    setStat(
+      "submissionCount",
+      data?.pending_submissions
+    );
+
+  }catch(error){
 
     console.error(
-      "Worker count error:",
+      "STATISTICS ERROR:",
       error
     );
 
-    throw error;
+    message.textContent =
+      "Dashboard statistics error: " +
+      error.message;
+
+    message.className =
+      "error";
+
+    setStat("workerCount",0);
+    setStat("promoterCount",0);
+    setStat("taskCount",0);
+    setStat("submissionCount",0);
 
   }
-
-
-  const workers =
-    Array.isArray(data)
-      ? data
-      : [];
-
-
-  document.getElementById(
-    "workerCount"
-  ).textContent =
-    workers.length;
-
-
-  return workers.length;
 
 }
 
 
-/* =====================================================
-   LOAD PROMOTER COUNT
-===================================================== */
+/* =========================
+   LOAD PAYMENT DETAILS
+========================= */
 
-async function loadPromoterCount() {
+async function loadPaymentDetails(){
 
-  const {
-    count,
-    error
-  } =
-  await supabaseClient
-    .from("profiles")
-    .select(
-      "id",
-      {
-        count: "exact",
-        head: true
-      }
-    )
-    .eq(
-      "role",
-      "promoter"
-    );
+  try{
 
-
-  if (error) {
-
-    console.warn(
-      "Promoter count error:",
+    const {
+      data,
       error
-    );
+    } =
+      await supabaseClient
+        .from("promoter_payment_details")
+        .select(
+          "bank_name,account_name,account_number,instructions"
+        )
+        .order(
+          "updated_at",
+          {
+            ascending:false
+          }
+        )
+        .limit(1)
+        .maybeSingle();
+
+    if(error){
+
+      console.warn(
+        "Payment details:",
+        error
+      );
+
+      return;
+
+    }
+
+    if(!data){
+
+      return;
+
+    }
 
     document.getElementById(
-      "promoterCount"
-    ).textContent =
-      "0";
+      "bankName"
+    ).value =
+      data.bank_name || "";
 
-    return 0;
+    document.getElementById(
+      "accountName"
+    ).value =
+      data.account_name || "";
 
-  }
+    document.getElementById(
+      "accountNumber"
+    ).value =
+      data.account_number || "";
 
+    document.getElementById(
+      "paymentInstructions"
+    ).value =
+      data.instructions || "";
 
-  const result =
-    count ?? 0;
-
-
-  document.getElementById(
-    "promoterCount"
-  ).textContent =
-    result;
-
-
-  return result;
-
-}
-
-
-/* =====================================================
-   LOAD TASK COUNT
-===================================================== */
-
-async function loadTaskCount() {
-
-  const {
-    count,
-    error
-  } =
-  await supabaseClient
-    .from("tasks")
-    .select(
-      "id",
-      {
-        count: "exact",
-        head: true
-      }
-    )
-    .eq(
-      "status",
-      "active"
-    );
-
-
-  if (error) {
+  }catch(error){
 
     console.warn(
-      "Task count error:",
+      "Payment details loading error:",
       error
     );
 
-    document.getElementById(
-      "taskCount"
-    ).textContent =
-      "0";
-
-    return 0;
-
   }
-
-
-  const result =
-    count ?? 0;
-
-
-  document.getElementById(
-    "taskCount"
-  ).textContent =
-    result;
-
-
-  return result;
 
 }
 
 
-/* =====================================================
-   LOAD PENDING SUBMISSIONS
-===================================================== */
+/* =========================
+   INITIALIZE
+========================= */
 
-async function loadSubmissionCount(
+async function initializeDashboard(){
+
+  refreshButton.disabled =
+    true;
+
+  refreshButton.textContent =
+    "Loading...";
+
+  const isAdmin =
+    await checkAdmin();
+
+  if(!isAdmin){
+
+    refreshButton.disabled =
+      false;
+
+    refreshButton.textContent =
+      "↻ Refresh Dashboard";
+
+    return;
+
+  }
+
+  await Promise.all([
+    loadStatistics(),
+    loadPaymentDetails()
+  ]);
+
+  refreshButton.disabled =
+    false;
+
+  refreshButton.textContent =
+    "↻ Refresh Dashboard";
+
+}
+
+
+/* =========================
+   REFRESH
+========================= */
+
+refreshButton.addEventListener(
+  "click",
+  initializeDashboard
+);
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+logoutButton.addEventListener(
+  "click",
+  async function(){
+
+    try{
+
+      logoutButton.disabled =
+        true;
+
+      logoutButton.textContent =
+        "Logging out...";
+
+      await supabaseClient.auth.signOut();
+
+      window.location.href =
+        "login.html";
+
+    }catch(error){
+
+      console.error(
+        "LOGOUT ERROR:",
+        error
+      );
+
+      logoutButton.disabled =
+        false;
+
+      logoutButton.textContent =
+        "Logout";
+
+      message.textContent =
+        "Logout error: " +
+        error.message;
+
+      message.className =
+        "error";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   START
+========================= */
+
+initializeDashboard();
+
+</script>
+
+</body>
+  </html>

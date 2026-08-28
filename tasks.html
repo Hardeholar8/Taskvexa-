@@ -363,7 +363,7 @@ textarea{
 
 
   <div id="message" class="message">
-    Checking account...
+    Loading your tasks...
   </div>
 
 
@@ -407,7 +407,7 @@ textarea{
         >
 
         <div class="file-note">
-          Image/screenshot only. Maximum 5MB.
+          Screenshot/image only. Maximum 5MB.
         </div>
 
       </div>
@@ -474,7 +474,9 @@ window.supabase.createClient(
 );
 
 
-/* ELEMENTS */
+/* =========================
+   ELEMENTS
+========================= */
 
 const message =
 document.getElementById("message");
@@ -512,7 +514,9 @@ let selectedTask = null;
 let submissions = [];
 
 
-/* ESCAPE HTML */
+/* =========================
+   ESCAPE HTML
+========================= */
 
 function escapeHTML(value){
 
@@ -526,12 +530,17 @@ function escapeHTML(value){
 }
 
 
-/* MONEY */
+/* =========================
+   MONEY
+========================= */
 
 function formatMoney(value){
 
+  const number =
+    Number(value || 0);
+
   return "₦" +
-    Number(value || 0).toLocaleString(
+    number.toLocaleString(
       "en-NG",
       {
         minimumFractionDigits:0,
@@ -542,7 +551,9 @@ function formatMoney(value){
 }
 
 
-/* GET CURRENT USER */
+/* =========================
+   GET LOGGED-IN USER
+========================= */
 
 async function getCurrentUser(){
 
@@ -577,36 +588,52 @@ async function getCurrentUser(){
     data.user;
 
 
-  /*
-    Make sure only worker accounts
-    can use this page.
-  */
+  return currentUser;
+
+}
+
+
+/* =========================
+   CHECK WORKER
+========================= */
+
+async function checkWorker(){
+
+  const user =
+    await getCurrentUser();
+
+  if(!user){
+
+    return false;
+
+  }
+
 
   const {
     data:profile,
-    error:profileError
+    error
   } =
   await supabaseClient
     .from("profiles")
     .select("role")
     .eq(
       "id",
-      currentUser.id
+      user.id
     )
     .maybeSingle();
 
 
-  if(profileError){
+  if(error){
 
-    throw profileError;
+    throw error;
 
   }
 
 
   if(
     !profile ||
-    String(profile.role).toLowerCase() !==
-    "worker"
+    String(profile.role).toLowerCase()
+      !== "worker"
   ){
 
     message.textContent =
@@ -615,17 +642,26 @@ async function getCurrentUser(){
     message.className =
       "message error";
 
-    return null;
+    taskList.innerHTML =
+      `
+      <div class="empty">
+        Worker access required.
+      </div>
+      `;
+
+    return false;
 
   }
 
 
-  return currentUser;
+  return true;
 
 }
 
 
-/* LOAD ONLY THIS WORKER'S SUBMISSIONS */
+/* =========================
+   LOAD MY SUBMISSIONS
+========================= */
 
 async function loadMySubmissions(){
 
@@ -665,20 +701,43 @@ async function loadMySubmissions(){
 }
 
 
-/* FIND THIS WORKER'S SUBMISSION */
+/* =========================
+   GET LATEST SUBMISSION
+   FOR ONE TASK
+========================= */
 
 function getTaskSubmission(taskId){
 
-  return submissions.find(
-    item =>
-      String(item.task_id) ===
-      String(taskId)
+  const matches =
+    submissions.filter(
+      item =>
+        String(item.task_id) ===
+        String(taskId)
+    );
+
+
+  if(!matches.length){
+
+    return null;
+
+  }
+
+
+  matches.sort(
+    (a,b) =>
+      new Date(b.created_at || 0) -
+      new Date(a.created_at || 0)
   );
+
+
+  return matches[0];
 
 }
 
 
-/* LOAD ACTIVE TASKS */
+/* =========================
+   LOAD ACTIVE TASKS
+========================= */
 
 async function loadTasks(){
 
@@ -689,13 +748,20 @@ async function loadTasks(){
   `;
 
 
+  message.textContent =
+    "Loading your tasks...";
+
+  message.className =
+    "message";
+
+
   try{
 
-    const user =
-      await getCurrentUser();
+    const worker =
+      await checkWorker();
 
 
-    if(!user){
+    if(!worker){
 
       return;
 
@@ -703,762 +769,19 @@ async function loadTasks(){
 
 
     /*
-      Load only the logged-in worker's
-      submissions.
+      Load the worker's submissions first.
+      Only the latest submission for each task
+      will be displayed.
     */
 
     await loadMySubmissions();
 
 
     /*
-      WORKER TASKS:
-
-      Only active tasks.
-
-      No Level 1.
-
-      No Level 2.
-
-      No target level.
-
-      No workers needed.
-    */
-
-    const {
-      data,
-      error
-    } =
-    await supabaseClient
-      .from("tasks")
-      .select(
-        "id,title,description,platform,task_url,reward,status,created_at"
-      )
-      .eq(
-        "status",
-        "active"
-      )
-      .order(
-        "created_at",
-        {
-          ascending:false
-        }
-      );
-
-
-    if(error){
-
-      throw error;
-
-    }
-
-
-    renderTasks(
-      Array.isArray(data)
-        ? data
-        : []
-    );
-
-
-    message.textContent =
-      "Available tasks loaded.";
-
-    message.className =
-      "message success";
-
-
-  }catch(error){
-
-    console.error(
-      "WORKER TASK ERROR:",
-      error
-    );
-
-
-    taskList.innerHTML = `
-      <div class="empty error">
-        Unable to load tasks.<br><br>
-        ${escapeHTML(error.message)}
-      </div>
-    `;
-
-
-    message.textContent =
-      "Error: " +
-      error.message;
-
-    message.className =
-      "message error";
-
-  }
-
-}
-
-
-/* RENDER TASKS */
-
-function renderTasks(tasks){
-
-  if(!tasks.length){
-
-    taskList.innerHTML = `
-      <div class="empty">
-
-        <h3>
-          No active tasks
-        </h3>
-
-        <p>
-          There are currently no tasks available.
-        </p>
-
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  taskList.innerHTML =
-    "";
-
-
-  tasks.forEach(task => {
-
-    /*
-      IMPORTANT:
-
-      Only look for the submission
-      belonging to the current worker.
-    */
-
-    const submission =
-      getTaskSubmission(task.id);
-
-
-    const card =
-      document.createElement("section");
-
-    card.className =
-      "task-card";
-
-
-    let submissionHTML =
-      "";
-
-    let alreadySubmitted =
-      false;
-
-
-    if(submission){
-
-      const status =
-        String(
-          submission.status ||
-          "pending"
-        ).toLowerCase();
-
-
-      let statusClass =
-        "pending";
-
-      let statusText =
-        "Pending review";
-
-
-      if(status === "approved"){
-
-        statusClass =
-          "approved";
-
-        statusText =
-          "Approved";
-
-        alreadySubmitted =
-          true;
-
-      }
-
-
-      if(status === "rejected"){
-
-        statusClass =
-          "rejected";
-
-        statusText =
-          "Rejected";
-
-        /*
-          Worker can submit again
-          after rejection.
-        */
-
-        alreadySubmitted =
-          false;
-
-      }
-
-
-      if(
-        status !== "approved" &&
-        status !== "rejected"
-      ){
-
-        alreadySubmitted =
-          true;
-
-      }
-
-
-      submissionHTML = `
-
-        <div class="submission-status">
-
-          Submission:
-
-          <strong class="${statusClass}">
-            ${statusText}
-          </strong>
-
-          ${
-            status === "approved"
-            ?
-            `
-              <br>
-
-              Reward:
-
-              <strong class="approved">
-                ${formatMoney(
-                  submission.reward_amount
-                )}
-              </strong>
-            `
-            :
-            ""
-          }
-
-        </div>
-
-      `;
-
-    }
-
-
-    card.innerHTML = `
-
-      <div class="task-title">
-        ${escapeHTML(task.title)}
-      </div>
-
-
-      <div class="task-description">
-        ${escapeHTML(task.description)}
-      </div>
-
-
-      <div class="task-info">
-
-        <div class="info">
-
-          <small>
-            Platform
-          </small>
-
-          <strong>
-            ${escapeHTML(
-              task.platform || "-"
-            )}
-          </strong>
-
-        </div>
-
-
-        <div class="info">
-
-          <small>
-            Task Reward
-          </small>
-
-          <strong class="reward">
-
-            ${formatMoney(
-              task.reward
-            )}
-
-          </strong>
-
-        </div>
-
-      </div>
-
-
-      <div>
-
-        <button
-          class="button open-task"
-          data-id="${escapeHTML(task.id)}"
-          ${!task.task_url ? "disabled" : ""}
-        >
-          Open Task
-        </button>
-
-
-        <button
-          class="button submit-proof"
-          data-id="${escapeHTML(task.id)}"
-          ${alreadySubmitted ? "disabled" : ""}
-        >
-
-          ${
-            alreadySubmitted
-              ?
-              "Proof Submitted"
-              :
-              "Submit Proof"
-          }
-
-        </button>
-
-      </div>
-
-
-      ${submissionHTML}
-
-    `;
-
-
-    taskList.appendChild(card);
-
-  });
-
-
-  /* OPEN TASK BUTTON */
-
-  document
-    .querySelectorAll(".open-task")
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        function(){
-
-          const task =
-            tasks.find(
-              item =>
-                String(item.id) ===
-                String(
-                  button.dataset.id
-                )
-            );
-
-
-          if(
-            !task ||
-            !task.task_url
-          ){
-
-            alert(
-              "This task does not have a valid link."
-            );
-
-            return;
-
-          }
-
-
-          window.open(
-            task.task_url,
-            "_blank",
-            "noopener,noreferrer"
-          );
-
-        }
-      );
-
-    });
-
-
-  /* SUBMIT PROOF BUTTON */
-
-  document
-    .querySelectorAll(".submit-proof")
-    .forEach(button => {
-
-      button.addEventListener(
-        "click",
-        function(){
-
-          const task =
-            tasks.find(
-              item =>
-                String(item.id) ===
-                String(
-                  button.dataset.id
-                )
-            );
-
-
-          if(task){
-
-            openProofModal(task);
-
-          }
-
-        }
-      );
-
-    });
-
-}
-
-
-/* OPEN PROOF MODAL */
-
-function openProofModal(task){
-
-  selectedTask =
-    task;
-
-
-  proofForm.reset();
-
-
-  submitMessage.textContent =
-    "";
-
-  submitMessage.className =
-    "";
-
-
-  proofModal.classList.add(
-    "show"
-  );
-
-}
-
-
-/* CLOSE PROOF MODAL */
-
-function closeProofModal(){
-
-  selectedTask =
-    null;
-
-
-  proofForm.reset();
-
-
-  submitMessage.textContent =
-    "";
-
-
-  proofModal.classList.remove(
-    "show"
-  );
-
-}
-
-
-cancelProof.addEventListener(
-  "click",
-  closeProofModal
-);
-
-
-proofModal.addEventListener(
-  "click",
-  function(event){
-
-    if(
-      event.target ===
-      proofModal
-    ){
-
-      closeProofModal();
-
-    }
-
-  }
-);
-
-
-/* SUBMIT PROOF */
-
-proofForm.addEventListener(
-  "submit",
-  async function(event){
-
-    event.preventDefault();
-
-
-    if(
-      !currentUser ||
-      !selectedTask
-    ){
-
-      return;
-
-    }
-
-
-    const file =
-      proofFile.files[0];
-
-
-    if(!file){
-
-      submitMessage.textContent =
-        "Please select a screenshot.";
-
-      submitMessage.className =
-        "error";
-
-      return;
-
-    }
-
-
-    /*
-      Image only.
-    */
-
-    if(
-      !file.type ||
-      !file.type.startsWith(
-        "image/"
-      )
-    ){
-
-      submitMessage.textContent =
-        "Please upload an image screenshot only.";
-
-      submitMessage.className =
-        "error";
-
-      return;
-
-    }
-
-
-    /*
-      Maximum 5MB.
-    */
-
-    if(
-      file.size >
-      5 * 1024 * 1024
-    ){
-
-      submitMessage.textContent =
-        "Screenshot must not be larger than 5MB.";
-
-      submitMessage.className =
-        "error";
-
-      return;
-
-    }
-
-
-    try{
-
-      submitProofButton.disabled =
-        true;
-
-
-      submitProofButton.textContent =
-        "Checking...";
-
-
-      /*
-        Check whether THIS worker
-        already submitted this task.
-      */
-
-      const {
-        data:existing,
-        error:existingError
-      } =
-      await supabaseClient
-        .from("task_submissions")
-        .select(
-          "id,status"
-        )
-        .eq(
-          "task_id",
-          selectedTask.id
-        )
-        .eq(
-          "worker_id",
-          currentUser.id
-        )
-        .maybeSingle();
-
-
-      if(existingError){
-
-        throw existingError;
-
-      }
-
-
-      /*
-        Approved or pending:
-        do not allow another submission.
-      */
-
-      if(
-        existing &&
-        String(
-          existing.status
-        ).toLowerCase() !==
-        "rejected"
-      ){
-
-        throw new Error(
-          "You have already submitted this task."
-        );
-
-      }
-
-
-      /*
-        If rejected, remove the old
-        rejected submission so the worker
-        can submit again.
-      */
-
-      if(existing){
-
-        const {
-          error:deleteError
-        } =
-        await supabaseClient
-          .from(
-            "task_submissions"
-          )
-          .delete()
-          .eq(
-            "id",
-            existing.id
-          );
-
-
-        if(deleteError){
-
-          throw deleteError;
-
-        }
-
-      }
-
-
-      submitProofButton.textContent =
-        "Uploading...";
-
-
-      /*
-        Create unique proof path.
-      */
-
-      const extension =
-        file.name
-          .split(".")
-          .pop()
-          .toLowerCase() ||
-        "jpg";
-
-
-      const filePath =
-        currentUser.id +
-        "/" +
-        selectedTask.id +
-        "-" +
-        Date.now() +
-        "." +
-        extension;
-
-
-      /*
-        Upload screenshot.
-      */
-
-      const {
-        data:uploadData,
-        error:uploadError
-      } =
-      await supabaseClient
-        .storage
-        .from(
-          "task-proofs"
-        )
-        .upload(
-          filePath,
-          file,
-          {
-            cacheControl:"3600",
-            upsert:false,
-            contentType:file.type
-          }
-        );
-
-
-      if(uploadError){
-
-        throw uploadError;
-
-      }
-
-
-      submitProofButton.textContent =
-        "Submitting...";
-
-
-      /*
-        Create pending submission.
-
-        Reward is copied from the task
-        at the time of submission.
-      */
-
-      const {
-        error:submissionError
-      } =
-      await supabaseClient
-        .from(
-          "task_submissions"
-        )
-        .insert({
-
-          task_id:
-            selectedTask.id,
-
-          worker_id:
-            currentUser.id,
-
-          proof_url:
-            uploadData.path,
-
-          proof_text:
-            proofText.value.trim() ||
-            null,
-
-          status:
-            "pending",
-
-          reward_amount:
-            Number(
-              selectedTask.reward ||
-              0
-            )
-
-        });
-
-
-      if(submissionError){
-
-        /*
-          Remove uploaded screenshot
-          if database insert fails.
-        */
+      WORKER TASKS ONLY.
+
+      No:
+      - Level 1
+      - Level 2
+      - Workers Needed
+      - Target

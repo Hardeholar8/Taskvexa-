@@ -1,36 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>TaskVexa - Admin Submissions</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="style.css">
+<title>TaskVexa - Admin Submissions</title>
+
+<style>
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #080b12;
+  color: #f8fafc;
+  font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+
+header {
+  background: #0d111b;
+  border-bottom: 1px solid #202b3b;
+  padding: 18px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+header a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* MAIN */
+
+main {
+  max-width: 700px;
+  margin: auto;
+  padding: 25px 16px 60px;
+}
+
+.page-title {
+  margin-bottom: 22px;
+}
+
+.page-title h2 {
+  margin: 0 0 7px;
+  font-size: 27px;
+}
+
+.page-title p {
+  margin: 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* MESSAGE */
+
+#message {
+  margin-bottom: 15px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+/* SUBMISSION CARD */
+
+.submission-card {
+  background: linear-gradient(
+    145deg,
+    #111722,
+    #0d131e
+  );
+
+  border: 1px solid #202b3b;
+
+  border-radius: 20px;
+
+  padding: 20px;
+
+  margin-bottom: 17px;
+
+  box-shadow:
+    0 12px 30px rgba(0,0,0,.25);
+}
+
+/* TOP */
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+.card-top h3 {
+  margin: 0;
+  font-size: 19px;
+}
+
+.pending-badge {
+  background: #332b16;
+  color: #facc15;
+  border-radius: 20px;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* INFO */
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 11px 0;
+  border-top: 1px solid #1b2533;
+  font-size: 13px;
+}
+
+.info-label {
+  color: #64748b;
+}
+
+.info-value {
+  color: #e2e8f0;
+  text-align: right;
+  word-break: break-word;
+}
+
+.reward {
+  color: #4ade80;
+  font-weight: 800;
+}
+
+/* SCREENSHOT */
+
+.proof-box {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid #1b2533;
+}
+
+.proof-title {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.proof-image {
+  width: 100%;
+  max-height: 430px;
+  object-fit: contain;
+  border-radius: 14px;
+  background: #080b12;
+  border: 1px solid #2a3648;
+  display: block;
+  cursor: pointer;
+}
+
+.no-proof {
+  padding: 18px;
+  border-radius: 12px;
+  background: #0b1019;
+  color: #64748b;
+  text-align: center;
+  font-size: 13px;
+}
+
+/* BUTTONS */
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  flex: 1;
+}
+
+.approve-button {
+  background: #4ade80;
+  color: #06120b;
+}
+
+.reject-button {
+  background: #32191d;
+  color: #f87171;
+  border: 1px solid #54242b;
+}
+
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+/* EMPTY */
+
+.empty {
+  background: #111722;
+  border: 1px solid #202b3b;
+  border-radius: 18px;
+  padding: 35px 20px;
+  text-align: center;
+  color: #64748b;
+}
+
+/* ERROR */
+
+.error {
+  color: #f87171 !important;
+}
+
+/* LOADING */
+
+.loading {
+  text-align: center;
+  padding: 30px;
+  color: #64748b;
+}
+
+/* IMAGE MODAL */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.9);
+  z-index: 9999;
+  padding: 20px;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.close-modal {
+  position: fixed;
+  top: 18px;
+  right: 20px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* MOBILE */
+
+@media (max-width: 500px) {
+
+  main {
+    padding: 20px 12px 50px;
+  }
+
+  .card-top {
+    flex-direction: column;
+  }
+
+  .actions {
+    flex-direction: column;
+  }
+
+}
+
+</style>
 </head>
+
 
 <body>
 
+
 <header>
+
   <h1>TaskVexa Admin</h1>
 
   <a href="dashboard.html">
-    Dashboard
+    ← Dashboard
   </a>
+
 </header>
 
 
 <main>
 
-  <h2>Task Submissions</h2>
 
-  <div id="message">
+  <div class="page-title">
+
+    <h2>
+      Task Submissions
+    </h2>
+
+    <p>
+      Review worker proofs and approve or reject completed tasks.
+    </p>
+
+  </div>
+
+
+  <div id="message" class="loading">
     Loading submissions...
   </div>
 
+
   <div id="submissionList"></div>
 
+
 </main>
+
+
+<!-- IMAGE PREVIEW MODAL -->
+
+<div
+  id="imageModal"
+  class="modal"
+>
+
+  <span
+    id="closeModal"
+    class="close-modal"
+  >
+    ×
+  </span>
+
+  <img
+    id="modalImage"
+    src=""
+    alt="Proof Screenshot"
+  >
+
+</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -39,267 +360,57 @@
 <script>
 
 const SUPABASE_URL =
-  "https://dxtlnrthlpdaobnbazny.supabase.co";
-
+"https://dxtlnrthlpdaobnbazny.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 
 const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 
 const message =
-  document.getElementById(
-    "message"
-  );
-
+document.getElementById(
+  "message"
+);
 
 const submissionList =
-  document.getElementById(
-    "submissionList"
-  );
+document.getElementById(
+  "submissionList"
+);
 
 
 /* =========================
-   LOAD PENDING SUBMISSIONS
+   LOAD SUBMISSIONS
 ========================= */
 
 async function loadSubmissions() {
 
+  message.textContent =
+    "Loading submissions...";
+
+  message.className =
+    "loading";
+
+  submissionList.innerHTML =
+    "";
+
+
   try {
 
-    const {
-      data: { user },
-      error: userError
-    } =
-      await supabaseClient.auth.getUser();
-
-
-    if (userError || !user) {
-
-      window.location.href =
-        "login.html";
-
-      return;
-
-    }
-
-
     /*
-      Secure RPC gets pending
-      submissions + worker email.
+      Confirm logged-in admin.
     */
 
     const {
-      data: submissions,
-      error
-    } =
-      await supabaseClient.rpc(
-        "get_admin_pending_submissions"
-      );
-
-
-    if (error) {
-
-      throw error;
-
-    }
-
-
-    submissionList.innerHTML =
-      "";
-
-
-    if (
-      !submissions ||
-      submissions.length === 0
-    ) {
-
-      message.textContent =
-        "No pending submissions.";
-
-      return;
-
-    }
-
-
-    message.textContent =
-      "";
-
-
-    submissions.forEach(
-      submission => {
-
-        const card =
-          document.createElement(
-            "section"
-          );
-
-
-        card.className =
-          "task-card";
-
-
-        card.innerHTML = `
-
-          <h3>
-            ${escapeHTML(
-              submission.task_title ||
-              "Task"
-            )}
-          </h3>
-
-
-          <p>
-            <strong>Platform:</strong>
-            ${escapeHTML(
-              submission.task_platform ||
-              "Not specified"
-            )}
-          </p>
-
-
-          <p>
-            <strong>Reward:</strong>
-            ₦${Number(
-              submission.reward_amount ||
-              submission.task_reward ||
-              0
-            ).toLocaleString()}
-          </p>
-
-
-          <p>
-            <strong>Worker Email:</strong>
-            ${escapeHTML(
-              submission.worker_email ||
-              "Email unavailable"
-            )}
-          </p>
-
-
-          <p>
-            <strong>Worker ID:</strong>
-            ${escapeHTML(
-              submission.worker_id
-            )}
-          </p>
-
-
-          <p>
-            <strong>Status:</strong>
-            Pending
-          </p>
-
-
-          ${
-            submission.proof_url
-              ?
-              `
-              <p>
-
-                <a
-                  href="${escapeHTML(
-                    submission.proof_url
-                  )}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="task-button"
-                >
-                  View Screenshot
-                </a>
-
-              </p>
-              `
-              :
-              ""
-          }
-
-
-          <button
-            onclick="reviewSubmission(
-              '${submission.id}',
-              'approved'
-            )"
-          >
-            Approve
-          </button>
-
-
-          <button
-            onclick="reviewSubmission(
-              '${submission.id}',
-              'rejected'
-            )"
-          >
-            Reject
-          </button>
-
-        `;
-
-
-        submissionList.appendChild(
-          card
-        );
-
-      }
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      error
-    );
-
-
-    message.textContent =
-      "ERROR: " +
-      error.message;
-
-  }
-
-}
-
-
-/* =========================
-   SAFE REVIEW
-========================= */
-
-async function reviewSubmission(
-  submissionId,
-  newStatus
-) {
-
-  const action =
-    newStatus === "approved"
-      ? "approve"
-      : "reject";
-
-
-  if (
-    !confirm(
-      `Are you sure you want to ${action} this submission?`
-    )
-  ) {
-
-    return;
-
-  }
-
-
-  try {
-
-    const {
       data: { user },
       error: userError
     } =
-      await supabaseClient.auth.getUser();
+    await supabaseClient.auth.getUser();
 
 
     if (
@@ -316,23 +427,402 @@ async function reviewSubmission(
 
 
     /*
-      Use the safe database function.
+      Load pending submissions
+      using the existing secure RPC.
+    */
+
+    const {
+      data: submissions,
+      error
+    } =
+    await supabaseClient.rpc(
+      "get_admin_pending_submissions"
+    );
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    if (
+      !submissions ||
+      submissions.length === 0
+    ) {
+
+      message.textContent =
+        "No pending submissions.";
+
+      message.className =
+        "empty";
+
+      return;
+
+    }
+
+
+    message.textContent =
+      `${submissions.length} pending submission${
+        submissions.length === 1 ? "" : "s"
+      }`;
+
+    message.className =
+      "";
+
+
+    /*
+      Create cards.
+    */
+
+    submissions.forEach(
+      submission => {
+
+        const card =
+          document.createElement(
+            "section"
+          );
+
+        card.className =
+          "submission-card";
+
+
+        const reward =
+          Number(
+            submission.reward_amount ||
+            submission.task_reward ||
+            0
+          );
+
+
+        const date =
+          submission.created_at
+            ? new Date(
+                submission.created_at
+              ).toLocaleString(
+                "en-NG"
+              )
+            : "-";
+
+
+        card.innerHTML = `
+
+          <div class="card-top">
+
+            <h3>
+              ${escapeHTML(
+                submission.task_title ||
+                "Task"
+              )}
+            </h3>
+
+            <span class="pending-badge">
+              PENDING
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Platform
+            </span>
+
+            <span class="info-value">
+              ${escapeHTML(
+                submission.task_platform ||
+                "Not specified"
+              )}
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Reward
+            </span>
+
+            <span class="info-value reward">
+              ₦${reward.toLocaleString(
+                "en-NG"
+              )}
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Worker Email
+            </span>
+
+            <span class="info-value">
+              ${escapeHTML(
+                submission.worker_email ||
+                "Email unavailable"
+              )}
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Worker ID
+            </span>
+
+            <span class="info-value">
+              ${escapeHTML(
+                submission.worker_id ||
+                "-"
+              )}
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Submitted
+            </span>
+
+            <span class="info-value">
+              ${escapeHTML(date)}
+            </span>
+
+          </div>
+
+
+          <div class="proof-box">
+
+            <div class="proof-title">
+              📷 Worker Proof
+            </div>
+
+            ${
+              submission.proof_url
+              ?
+              `
+                <img
+                  src="${escapeHTML(
+                    submission.proof_url
+                  )}"
+                  class="proof-image"
+                  alt="Worker proof"
+                >
+              `
+              :
+              `
+                <div class="no-proof">
+                  No screenshot uploaded.
+                </div>
+              `
+            }
+
+          </div>
+
+
+          <div class="actions">
+
+            <button
+              class="approve-button"
+            >
+              ✓ Approve
+            </button>
+
+            <button
+              class="reject-button"
+            >
+              ✕ Reject
+            </button>
+
+          </div>
+
+        `;
+
+
+        const approveButton =
+          card.querySelector(
+            ".approve-button"
+          );
+
+        const rejectButton =
+          card.querySelector(
+            ".reject-button"
+          );
+
+
+        approveButton.addEventListener(
+          "click",
+          () => {
+
+            reviewSubmission(
+              submission.id,
+              "approved",
+              approveButton,
+              rejectButton
+            );
+
+          }
+        );
+
+
+        rejectButton.addEventListener(
+          "click",
+          () => {
+
+            reviewSubmission(
+              submission.id,
+              "rejected",
+              approveButton,
+              rejectButton
+            );
+
+          }
+        );
+
+
+        /*
+          Click screenshot to enlarge.
+        */
+
+        const proofImage =
+          card.querySelector(
+            ".proof-image"
+          );
+
+
+        if (proofImage) {
+
+          proofImage.addEventListener(
+            "click",
+            () => {
+
+              openImage(
+                proofImage.src
+              );
+
+            }
+          );
+
+        }
+
+
+        submissionList.appendChild(
+          card
+        );
+
+      }
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "SUBMISSIONS ERROR:",
+      error
+    );
+
+
+    message.textContent =
+      "Unable to load submissions: " +
+      error.message;
+
+    message.className =
+      "error";
+
+  }
+
+}
+
+
+/* =========================
+   REVIEW SUBMISSION
+========================= */
+
+async function reviewSubmission(
+  submissionId,
+  newStatus,
+  approveButton,
+  rejectButton
+) {
+
+  const action =
+    newStatus === "approved"
+      ? "approve"
+      : "reject";
+
+
+  const confirmation =
+    action === "approve"
+      ? "Approve this submission and credit the worker's reward?"
+      : "Reject this submission?";
+
+
+  if (
+    !confirm(
+      confirmation
+    )
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    approveButton.disabled =
+      true;
+
+    rejectButton.disabled =
+      true;
+
+
+    if (
+      action === "approve"
+    ) {
+
+      approveButton.textContent =
+        "Approving...";
+
+    } else {
+
+      rejectButton.textContent =
+        "Rejecting...";
+
+    }
+
+
+    /*
+      Use the existing secure
+      database function.
+
+      This keeps reward crediting
+      inside Supabase.
     */
 
     const {
       data,
       error
     } =
-      await supabaseClient.rpc(
-        "review_task_submission",
-        {
-          p_submission_id:
-            submissionId,
+    await supabaseClient.rpc(
+      "review_task_submission",
+      {
+        p_submission_id:
+          submissionId,
 
-          p_action:
-            action
-        }
-      );
+        p_action:
+          action
+      }
+    );
 
 
     if (error) {
@@ -348,6 +838,7 @@ async function reviewSubmission(
     ) {
 
       throw new Error(
+        data?.message ||
         "The submission could not be reviewed."
       );
 
@@ -359,7 +850,7 @@ async function reviewSubmission(
     ) {
 
       alert(
-        "Submission approved and reward credited successfully."
+        "Submission approved. Worker reward credited successfully."
       );
 
     } else {
@@ -371,12 +862,17 @@ async function reviewSubmission(
     }
 
 
-    loadSubmissions();
+    /*
+      Reload pending list.
+    */
+
+    await loadSubmissions();
 
 
   } catch (error) {
 
     console.error(
+      "REVIEW ERROR:",
       error
     );
 
@@ -386,13 +882,94 @@ async function reviewSubmission(
       error.message
     );
 
+
+    approveButton.disabled =
+      false;
+
+    rejectButton.disabled =
+      false;
+
+    approveButton.textContent =
+      "✓ Approve";
+
+    rejectButton.textContent =
+      "✕ Reject";
+
   }
 
 }
 
 
 /* =========================
-   SECURITY
+   IMAGE MODAL
+========================= */
+
+const imageModal =
+document.getElementById(
+  "imageModal"
+);
+
+const modalImage =
+document.getElementById(
+  "modalImage"
+);
+
+const closeModal =
+document.getElementById(
+  "closeModal"
+);
+
+
+function openImage(
+  imageUrl
+) {
+
+  modalImage.src =
+    imageUrl;
+
+  imageModal.style.display =
+    "flex";
+
+}
+
+
+closeModal.addEventListener(
+  "click",
+  () => {
+
+    imageModal.style.display =
+      "none";
+
+    modalImage.src =
+      "";
+
+  }
+);
+
+
+imageModal.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      imageModal
+    ) {
+
+      imageModal.style.display =
+        "none";
+
+      modalImage.src =
+        "";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   ESCAPE HTML
 ========================= */
 
 function escapeHTML(
@@ -439,6 +1016,5 @@ loadSubmissions();
 
 </script>
 
-
 </body>
-</html>
+  </html>

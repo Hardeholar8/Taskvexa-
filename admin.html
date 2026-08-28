@@ -3,416 +3,415 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>TaskVexa - Admin Dashboard</title>
 
 <style>
 *{box-sizing:border-box}
 
 :root{
-  --bg:#070a10;
-  --sidebar:#0b0f17;
-  --card:#111722;
-  --border:#202b3b;
-  --text:#f8fafc;
-  --muted:#7f8da3;
-  --green:#4ade80;
-  --red:#f87171;
+--bg:#070a10;
+--sidebar:#0b0f17;
+--card:#111722;
+--border:#202b3b;
+--text:#f8fafc;
+--muted:#7f8da3;
+--green:#4ade80;
+--red:#f87171;
 }
 
 html,body{
-  margin:0;
-  padding:0;
-  min-height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
+margin:0;
+padding:0;
+min-height:100%;
+background:var(--bg);
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
 }
 
 body{min-height:100vh}
 
 .sidebar{
-  position:fixed;
-  left:0;
-  top:0;
-  bottom:0;
-  width:245px;
-  background:var(--sidebar);
-  border-right:1px solid var(--border);
-  padding:22px 14px;
-  overflow-y:auto;
+position:fixed;
+left:0;
+top:0;
+bottom:0;
+width:245px;
+background:var(--sidebar);
+border-right:1px solid var(--border);
+padding:22px 14px;
+overflow-y:auto;
 }
 
 .logo{
-  padding:5px 14px 22px;
-  border-bottom:1px solid var(--border);
-  margin-bottom:18px;
+padding:5px 14px 22px;
+border-bottom:1px solid var(--border);
+margin-bottom:18px;
 }
 
 .logo h1{
-  margin:0;
-  font-size:23px;
+margin:0;
+font-size:23px;
 }
 
 .logo p{
-  margin:6px 0 0;
-  color:var(--muted);
-  font-size:12px;
+margin:6px 0 0;
+color:var(--muted);
+font-size:12px;
 }
 
 .nav-title{
-  color:#56657b;
-  font-size:10px;
-  font-weight:bold;
-  letter-spacing:1.3px;
-  margin:18px 14px 8px;
-  text-transform:uppercase;
+color:#56657b;
+font-size:10px;
+font-weight:bold;
+letter-spacing:1.3px;
+margin:18px 14px 8px;
+text-transform:uppercase;
 }
 
 .nav-link{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  width:100%;
-  padding:12px 14px;
-  margin:4px 0;
-  border-radius:11px;
-  color:#aeb9c9;
-  text-decoration:none;
-  font-size:14px;
+display:flex;
+align-items:center;
+gap:12px;
+width:100%;
+padding:12px 14px;
+margin:4px 0;
+border-radius:11px;
+color:#aeb9c9;
+text-decoration:none;
+font-size:14px;
 }
 
 .nav-link:hover,
 .nav-link.active{
-  background:#171d2a;
-  color:white;
+background:#171d2a;
+color:white;
 }
 
 .nav-icon{
-  width:23px;
-  text-align:center;
-  font-size:16px;
+width:23px;
+text-align:center;
+font-size:16px;
 }
 
 .logout{
-  margin-top:20px;
-  padding-top:18px;
-  border-top:1px solid var(--border);
+margin-top:20px;
+padding-top:18px;
+border-top:1px solid var(--border);
 }
 
 #logoutButton{
-  background:transparent;
-  border:0;
-  cursor:pointer;
-  color:#f87171;
+background:transparent;
+border:0;
+cursor:pointer;
+color:#f87171;
 }
 
 .main{
-  margin-left:245px;
-  min-height:100vh;
+margin-left:245px;
+min-height:100vh;
 }
 
 .topbar{
-  height:70px;
-  background:rgba(7,10,16,.95);
-  border-bottom:1px solid var(--border);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 28px;
-  position:sticky;
-  top:0;
-  z-index:20;
+height:70px;
+background:rgba(7,10,16,.95);
+border-bottom:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 28px;
+position:sticky;
+top:0;
+z-index:20;
 }
 
 .topbar-title{
-  font-size:18px;
-  font-weight:bold;
+font-size:18px;
+font-weight:bold;
 }
 
 .admin-status{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  color:#aeb9c9;
-  font-size:13px;
+display:flex;
+align-items:center;
+gap:8px;
+color:#aeb9c9;
+font-size:13px;
 }
 
 .online-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--green);
+width:8px;
+height:8px;
+border-radius:50%;
+background:var(--green);
 }
 
 .content{
-  max-width:1400px;
-  margin:auto;
-  padding:30px;
+max-width:1400px;
+margin:auto;
+padding:30px;
 }
 
 .heading{
-  margin-bottom:20px;
+margin-bottom:20px;
 }
 
 .heading h2{
-  margin:0 0 8px;
-  font-size:29px;
+margin:0 0 8px;
+font-size:29px;
 }
 
 .heading p{
-  margin:0;
-  color:var(--muted);
-  font-size:14px;
+margin:0;
+color:var(--muted);
+font-size:14px;
 }
 
 #message{
-  margin-bottom:20px;
-  font-size:13px;
+margin-bottom:20px;
+font-size:13px;
 }
 
 .success{color:var(--green)}
 .error{color:var(--red)}
 
 .refresh-button{
-  margin-bottom:20px;
-  padding:10px 16px;
-  background:#151d2a;
-  color:white;
-  border:1px solid #293548;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:700;
+margin-bottom:20px;
+padding:10px 16px;
+background:#151d2a;
+color:white;
+border:1px solid #293548;
+border-radius:10px;
+cursor:pointer;
+font-weight:700;
 }
 
 .refresh-button:disabled{
-  opacity:.6;
-  cursor:not-allowed;
+opacity:.6;
+cursor:not-allowed;
 }
 
 .stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:15px;
-  margin-bottom:28px;
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:15px;
+margin-bottom:28px;
 }
 
 .stat{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:17px;
-  padding:20px;
+background:var(--card);
+border:1px solid var(--border);
+border-radius:17px;
+padding:20px;
 }
 
 .stat-label{
-  color:var(--muted);
-  font-size:12px;
+color:var(--muted);
+font-size:12px;
 }
 
 .stat-value{
-  font-size:25px;
-  font-weight:800;
-  margin-top:12px;
+font-size:25px;
+font-weight:800;
+margin-top:12px;
 }
 
 .section-title{
-  margin:25px 0 14px;
+margin:25px 0 14px;
 }
 
 .section-title h3{
-  margin:0;
-  font-size:17px;
+margin:0;
+font-size:17px;
 }
 
 .management{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:15px;
 }
 
 .card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:18px;
-  padding:20px;
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:20px;
 }
 
 .card-head{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  margin-bottom:12px;
+display:flex;
+align-items:center;
+gap:13px;
+margin-bottom:12px;
 }
 
 .icon{
-  width:42px;
-  height:42px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:#191f2c;
-  border:1px solid #293448;
-  border-radius:12px;
-  font-size:19px;
+width:42px;
+height:42px;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#191f2c;
+border:1px solid #293448;
+border-radius:12px;
+font-size:19px;
 }
 
 .card h3{
-  margin:0;
-  font-size:16px;
+margin:0;
+font-size:16px;
 }
 
 .card p{
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.6;
-  margin:0 0 17px;
+color:var(--muted);
+font-size:13px;
+line-height:1.6;
+margin:0 0 17px;
 }
 
 .button{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:42px;
-  padding:10px 16px;
-  background:#f8fafc;
-  color:#090d14;
-  border:0;
-  border-radius:11px;
-  text-decoration:none;
-  font-size:13px;
-  font-weight:700;
-  cursor:pointer;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+min-height:42px;
+padding:10px 16px;
+background:#f8fafc;
+color:#090d14;
+border:0;
+border-radius:11px;
+text-decoration:none;
+font-size:13px;
+font-weight:700;
+cursor:pointer;
 }
 
 .button:hover{
-  opacity:.9;
+opacity:.9;
 }
 
 .payment{
-  margin-top:15px;
-  background:linear-gradient(145deg,#121a29,#0d131e);
-  border:1px solid #29354a;
-  border-radius:20px;
-  padding:23px;
+margin-top:15px;
+background:linear-gradient(145deg,#121a29,#0d131e);
+border:1px solid #29354a;
+border-radius:20px;
+padding:23px;
 }
 
 .info{
-  background:#0b111b;
-  border:1px solid #1f2b3d;
-  color:#8997aa;
-  padding:13px;
-  border-radius:11px;
-  margin-bottom:18px;
-  font-size:12px;
-  line-height:1.5;
+background:#0b111b;
+border:1px solid #1f2b3d;
+color:#8997aa;
+padding:13px;
+border-radius:11px;
+margin-bottom:18px;
+font-size:12px;
+line-height:1.5;
 }
 
 .form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
 }
 
 .form-group.full{
-  grid-column:1/-1;
+grid-column:1/-1;
 }
 
 label{
-  display:block;
-  color:#b9c4d3;
-  font-size:12px;
-  font-weight:bold;
-  margin-bottom:7px;
+display:block;
+color:#b9c4d3;
+font-size:12px;
+font-weight:bold;
+margin-bottom:7px;
 }
 
 input,textarea{
-  width:100%;
-  padding:13px;
-  background:#090e16;
-  border:1px solid #293548;
-  border-radius:10px;
-  color:white;
-  outline:none;
-  font-size:14px;
+width:100%;
+padding:13px;
+background:#090e16;
+border:1px solid #293548;
+border-radius:10px;
+color:white;
+outline:none;
+font-size:14px;
 }
 
 textarea{
-  min-height:90px;
-  resize:vertical;
+min-height:90px;
+resize:vertical;
 }
 
 #paymentDetailsMessage{
-  margin-top:12px;
-  font-size:13px;
-  font-weight:bold;
+margin-top:12px;
+font-size:13px;
+font-weight:bold;
 }
 
 .mobile-menu{
-  display:none;
-  background:#151b28;
-  border:1px solid var(--border);
-  color:white;
-  border-radius:9px;
-  padding:8px 11px;
-  cursor:pointer;
+display:none;
+background:#151b28;
+border:1px solid var(--border);
+color:white;
+border-radius:9px;
+padding:8px 11px;
+cursor:pointer;
 }
 
 @media(max-width:1050px){
-  .stats{
-    grid-template-columns:1fr 1fr;
-  }
+.stats{
+grid-template-columns:1fr 1fr;
+}
 }
 
 @media(max-width:800px){
 
-  .sidebar{
-    transform:translateX(-100%);
-    transition:.25s;
-    z-index:100;
-  }
+.sidebar{
+transform:translateX(-100%);
+transition:.25s;
+z-index:100;
+}
 
-  .sidebar.open{
-    transform:translateX(0);
-  }
+.sidebar.open{
+transform:translateX(0);
+}
 
-  .main{
-    margin-left:0;
-  }
+.main{
+margin-left:0;
+}
 
-  .mobile-menu{
-    display:block;
-  }
+.mobile-menu{
+display:block;
+}
 
-  .content{
-    padding:22px 15px 40px;
-  }
+.content{
+padding:22px 15px 40px;
+}
 
-  .management{
-    grid-template-columns:1fr;
-  }
+.management{
+grid-template-columns:1fr;
+}
 
-  .form-grid{
-    grid-template-columns:1fr;
-  }
+.form-grid{
+grid-template-columns:1fr;
+}
 
-  .form-group.full{
-    grid-column:auto;
-  }
+.form-group.full{
+grid-column:auto;
+}
 }
 
 @media(max-width:500px){
 
-  .stats{
-    grid-template-columns:1fr;
-  }
+.stats{
+grid-template-columns:1fr;
+}
 
-  .topbar{
-    padding:0 15px;
-  }
+.topbar{
+padding:0 15px;
+}
 
-  .admin-status{
-    display:none;
-  }
+.admin-status{
+display:none;
+}
 }
 </style>
 </head>
@@ -421,920 +420,1099 @@ textarea{
 
 <aside class="sidebar" id="sidebar">
 
-  <div class="logo">
-    <h1>TaskVexa</h1>
-    <p>Admin Control Panel</p>
-  </div>
+<div class="logo">
+<h1>TaskVexa</h1>
+<p>Admin Control Panel</p>
+</div>
 
-  <div class="nav-title">Overview</div>
+<div class="nav-title">Overview</div>
 
-  <a href="admin.html" class="nav-link active">
-    <span class="nav-icon">⌂</span>
-    Dashboard
-  </a>
+<a href="admin.html" class="nav-link active">
+<span class="nav-icon">⌂</span>
+Dashboard
+</a>
 
-  <div class="nav-title">Management</div>
+<div class="nav-title">Management</div>
 
-  <a href="worker.html" class="nav-link">
-    <span class="nav-icon">👥</span>
-    Workers
-  </a>
+<a href="worker.html" class="nav-link">
+<span class="nav-icon">👥</span>
+Workers
+</a>
 
-  <a href="promoters.html" class="nav-link">
-    <span class="nav-icon">📣</span>
-    Promoters
-  </a>
+<a href="promoters.html" class="nav-link">
+<span class="nav-icon">📣</span>
+Promoters
+</a>
 
-  <a href="tasks.html" class="nav-link">
-    <span class="nav-icon">✓</span>
-    Tasks
-  </a>
+<a href="tasks.html" class="nav-link">
+<span class="nav-icon">✓</span>
+Tasks
+</a>
 
-  <a href="admin-submissions.html" class="nav-link">
-    <span class="nav-icon">📋</span>
-    Submissions
-  </a>
+<a href="admin-submissions.html" class="nav-link">
+<span class="nav-icon">📋</span>
+Submissions
+</a>
 
-  <a href="admin-withdrawals.html" class="nav-link">
-    <span class="nav-icon">💳</span>
-    Withdrawals
-  </a>
+<a href="admin-withdrawals.html" class="nav-link">
+<span class="nav-icon">💳</span>
+Withdrawals
+</a>
 
-  <a href="admin-promoter-wallet.html" class="nav-link">
-    <span class="nav-icon">💰</span>
-    Promoter Wallet
-  </a>
+<a href="admin-promoter-wallet.html" class="nav-link">
+<span class="nav-icon">💰</span>
+Promoter Wallet
+</a>
 
-  <div class="nav-title">Settings</div>
+<div class="nav-title">Settings</div>
 
-  <a href="settings.html" class="nav-link">
-    <span class="nav-icon">⚙</span>
-    Platform Settings
-  </a>
+<a href="settings.html" class="nav-link">
+<span class="nav-icon">⚙</span>
+Platform Settings
+</a>
 
-  <div class="logout">
-    <button id="logoutButton" class="nav-link">
-      <span class="nav-icon">↪</span>
-      Logout
-    </button>
-  </div>
+<div class="logout">
+
+<button id="logoutButton" class="nav-link">
+<span class="nav-icon">↪</span>
+Logout
+</button>
+
+</div>
 
 </aside>
 
+
 <div class="main">
 
-  <div class="topbar">
-
-    <button
-      id="mobileMenu"
-      class="mobile-menu"
-    >
-      ☰
-    </button>
-
-    <div class="topbar-title">
-      Admin Dashboard
-    </div>
-
-    <div class="admin-status">
-      <span class="online-dot"></span>
-      Admin
-    </div>
-
-  </div>
-
-  <main class="content">
-
-    <div class="heading">
-
-      <h2>
-        Welcome to TaskVexa
-      </h2>
-
-      <p>
-        Manage workers, promoters, tasks, withdrawals and platform settings.
-      </p>
-
-    </div>
-
-    <div id="message">
-      Checking admin access...
-    </div>
-
-    <button
-      id="refreshButton"
-      class="refresh-button"
-    >
-      ↻ Refresh Dashboard
-    </button>
-
-    <section class="stats">
-
-      <div class="stat">
-
-        <div class="stat-label">
-          Workers
-        </div>
-
-        <div
-          class="stat-value"
-          id="workerCount"
-        >
-          —
-        </div>
-
-      </div>
-
-      <div class="stat">
-
-        <div class="stat-label">
-          Promoters
-        </div>
-
-        <div
-          class="stat-value"
-          id="promoterCount"
-        >
-          —
-        </div>
-
-      </div>
-
-      <div class="stat">
-
-        <div class="stat-label">
-          Active Tasks
-        </div>
-
-        <div
-          class="stat-value"
-          id="taskCount"
-        >
-          —
-        </div>
-
-      </div>
-
-      <div class="stat">
-
-        <div class="stat-label">
-          Pending Submissions
-        </div>
-
-        <div
-          class="stat-value"
-          id="submissionCount"
-        >
-          —
-        </div>
-
-      </div>
-
-    </section>
-
-    <div class="section-title">
-      <h3>Management</h3>
-    </div>
-
-    <section class="management">
-
-      <div class="card">
-
-        <div class="card-head">
-          <div class="icon">👥</div>
-
-          <div>
-            <h3>Workers</h3>
-          </div>
-        </div>
-
-        <p>
-          View and manage registered worker accounts.
-        </p>
-
-        <a
-          href="worker.html"
-          class="button"
-        >
-          Manage Workers
-        </a>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-head">
-          <div class="icon">📣</div>
-
-          <div>
-            <h3>Promoters</h3>
-          </div>
-        </div>
-
-        <p>
-          Manage promoter accounts and promoter activity.
-        </p>
-
-        <a
-          href="promoters.html"
-          class="button"
-        >
-          Manage Promoters
-        </a>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-head">
-          <div class="icon">✓</div>
-
-          <div>
-            <h3>Task Management</h3>
-          </div>
-        </div>
-
-        <p>
-          Create, edit and manage tasks available to workers.
-        </p>
-
-        <a
-          href="tasks.html"
-          class="button"
-        >
-          Manage Tasks
-        </a>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-head">
-          <div class="icon">📋</div>
-
-          <div>
-            <h3>Task Submissions</h3>
-          </div>
-        </div>
-
-        <p>
-          Review submitted screenshots and approve or reject worker submissions.
-        </p>
-
-        <a
-          href="admin-submissions.html"
-          class="button"
-        >
-          Review Submissions
-        </a>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-head">
-          <div class="icon">💳</div>
-
-          <div>
-            <h3>Withdrawals</h3>
-          </div>
-        </div>
-
-        <p>
-          View and manage worker withdrawal requests.
-        </p>
-
-        <a
-          href="admin-withdrawals.html"
-          class="button"
-        >
-          Manage Withdrawals
-        </a>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-head">
-          <div class="icon">💰</div>
-
-          <div>
-            <h3>Promoter Wallet</h3>
-          </div>
-        </div>
-
-        <p>
-          Manage promoter deposits and promoter wallet balances.
-        </p>
-
-        <a
-          href="admin-promoter-wallet.html"
-          class="button"
-        >
-          Manage Wallet
-        </a>
-
-      </div>
-
-    </section>
-
-    <div class="section-title">
-      <h3>Promoter Deposit Payment Details</h3>
-    </div>
-
-    <section class="payment">
-
-      <div class="info">
-        These payment details are displayed to promoters when they add funds.
-      </div>
-
-      <div class="form-grid">
-
-        <div class="form-group">
-
-          <label>
-            Bank Name
-          </label>
-
-          <input
-            id="bankName"
-            type="text"
-            placeholder="e.g. Opay"
-          >
-
-        </div>
-
-        <div class="form-group">
-
-          <label>
-            Account Name
-          </label>
-
-          <input
-            id="accountName"
-            type="text"
-            placeholder="Enter account name"
-          >
-
-        </div>
-
-        <div class="form-group">
-
-          <label>
-            Account Number
-          </label>
-
-          <input
-            id="accountNumber"
-            type="text"
-            inputmode="numeric"
-            placeholder="Enter account number"
-          >
-
-        </div>
-
-        <div class="form-group full">
-
-          <label>
-            Payment Instructions
-          </label>
-
-          <textarea
-            id="paymentInstructions"
-            placeholder="Enter payment instructions"
-          ></textarea>
-
-        </div>
-
-      </div>
-
-      <br>
-
-      <button
-        id="savePaymentDetailsButton"
-        class="button"
-      >
-        Save Payment Details
-      </button>
-
-      <div id="paymentDetailsMessage"></div>
-
-    </section>
-
-  </main>
+<div class="topbar">
+
+<button
+id="mobileMenu"
+class="mobile-menu"
+>
+☰
+</button>
+
+<div class="topbar-title">
+Admin Dashboard
+</div>
+
+<div class="admin-status">
+<span class="online-dot"></span>
+Admin
+</div>
 
 </div>
+
+
+<main class="content">
+
+<div class="heading">
+
+<h2>
+Welcome to TaskVexa
+</h2>
+
+<p>
+Manage workers, promoters, tasks, withdrawals and platform settings.
+</p>
+
+</div>
+
+
+<div id="message">
+Checking admin access...
+</div>
+
+
+<button
+id="refreshButton"
+class="refresh-button"
+>
+↻ Refresh Dashboard
+</button>
+
+
+<section class="stats">
+
+<div class="stat">
+
+<div class="stat-label">
+Workers
+</div>
+
+<div
+class="stat-value"
+id="workerCount"
+>
+—
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-label">
+Promoters
+</div>
+
+<div
+class="stat-value"
+id="promoterCount"
+>
+—
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-label">
+Active Tasks
+</div>
+
+<div
+class="stat-value"
+id="taskCount"
+>
+—
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-label">
+Pending Submissions
+</div>
+
+<div
+class="stat-value"
+id="submissionCount"
+>
+—
+</div>
+
+</div>
+
+</section>
+
+
+<div class="section-title">
+<h3>Management</h3>
+</div>
+
+
+<section class="management">
+
+
+<div class="card">
+
+<div class="card-head">
+
+<div class="icon">
+👥
+</div>
+
+<div>
+<h3>Workers</h3>
+</div>
+
+</div>
+
+<p>
+View and manage registered worker accounts.
+</p>
+
+<a
+href="worker.html"
+class="button"
+>
+Manage Workers
+</a>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-head">
+
+<div class="icon">
+📣
+</div>
+
+<div>
+<h3>Promoters</h3>
+</div>
+
+</div>
+
+<p>
+Manage promoter accounts and promoter activity.
+</p>
+
+<a
+href="promoters.html"
+class="button"
+>
+Manage Promoters
+</a>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-head">
+
+<div class="icon">
+✓
+</div>
+
+<div>
+<h3>Task Management</h3>
+</div>
+
+</div>
+
+<p>
+Create, edit and manage tasks available to workers.
+</p>
+
+<a
+href="tasks.html"
+class="button"
+>
+Manage Tasks
+</a>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-head">
+
+<div class="icon">
+📋
+</div>
+
+<div>
+<h3>Task Submissions</h3>
+</div>
+
+</div>
+
+<p>
+Review submitted screenshots and approve or reject worker submissions.
+</p>
+
+<a
+href="admin-submissions.html"
+class="button"
+>
+Review Submissions
+</a>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-head">
+
+<div class="icon">
+💳
+</div>
+
+<div>
+<h3>Withdrawals</h3>
+</div>
+
+</div>
+
+<p>
+View and manage worker withdrawal requests.
+</p>
+
+<a
+href="admin-withdrawals.html"
+class="button"
+>
+Manage Withdrawals
+</a>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-head">
+
+<div class="icon">
+💰
+</div>
+
+<div>
+<h3>Promoter Wallet</h3>
+</div>
+
+</div>
+
+<p>
+Manage promoter deposits and promoter wallet balances.
+</p>
+
+<a
+href="admin-promoter-wallet.html"
+class="button"
+>
+Manage Wallet
+</a>
+
+</div>
+
+</section>
+
+
+<div class="section-title">
+<h3>Promoter Deposit Payment Details</h3>
+</div>
+
+
+<section class="payment">
+
+<div class="info">
+These payment details are displayed to promoters when they add funds.
+</div>
+
+
+<div class="form-grid">
+
+
+<div class="form-group">
+
+<label>
+Bank Name
+</label>
+
+<input
+id="bankName"
+type="text"
+placeholder="e.g. Opay"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Account Name
+</label>
+
+<input
+id="accountName"
+type="text"
+placeholder="Enter account name"
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label>
+Account Number
+</label>
+
+<input
+id="accountNumber"
+type="text"
+inputmode="numeric"
+placeholder="Enter account number"
+>
+
+</div>
+
+
+<div class="form-group full">
+
+<label>
+Payment Instructions
+</label>
+
+<textarea
+id="paymentInstructions"
+placeholder="Enter payment instructions"
+></textarea>
+
+</div>
+
+</div>
+
+
+<br>
+
+
+<button
+id="savePaymentDetailsButton"
+class="button"
+>
+Save Payment Details
+</button>
+
+
+<div id="paymentDetailsMessage"></div>
+
+</section>
+
+</main>
+
+</div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
 const SUPABASE_URL =
-  "https://dxtlnrthlpdaobnbazny.supabase.co";
+"https://dxtlnrthlpdaobnbazny.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
 
 const message =
-  document.getElementById("message");
+document.getElementById("message");
 
 const refreshButton =
-  document.getElementById("refreshButton");
+document.getElementById("refreshButton");
 
 const logoutButton =
-  document.getElementById("logoutButton");
+document.getElementById("logoutButton");
 
 const mobileMenu =
-  document.getElementById("mobileMenu");
+document.getElementById("mobileMenu");
 
 const sidebar =
-  document.getElementById("sidebar");
+document.getElementById("sidebar");
 
 const savePaymentDetailsButton =
-  document.getElementById(
-    "savePaymentDetailsButton"
-  );
-
-
-/* =========================
-   MOBILE MENU
-========================= */
-
-mobileMenu.addEventListener(
-  "click",
-  function(){
-
-    sidebar.classList.toggle("open");
-
-  }
+document.getElementById(
+"savePaymentDetailsButton"
 );
 
 
 /* =========================
-   SET STATISTIC
+MOBILE MENU
 ========================= */
 
-function setStat(id,value){
+mobileMenu.addEventListener(
+"click",
+function(){
 
-  document.getElementById(id).textContent =
-    Number(value ?? 0);
+sidebar.classList.toggle("open");
 
 }
+);
 
 
 /* =========================
-   CHECK ADMIN
+CHECK ADMIN
 ========================= */
 
 async function checkAdmin(){
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.getSession();
+const {
+data,
+error
+} =
+await supabaseClient.auth.getSession();
 
-  if(error){
 
-    throw error;
+if(error){
 
-  }
+throw error;
 
-  const session =
-    data?.session;
+}
 
-  if(!session){
 
-    window.location.href =
-      "login.html";
+const session =
+data?.session;
 
-    return false;
 
-  }
+if(!session){
 
-  const {
-    data: profile,
-    error: profileError
-  } =
-    await supabaseClient
-      .from("profiles")
-      .select("role")
-      .eq(
-        "id",
-        session.user.id
-      )
-      .maybeSingle();
+window.location.href =
+"login.html";
 
-  if(profileError){
+return false;
 
-    throw profileError;
+}
 
-  }
 
-  if(
-    !profile ||
-    String(profile.role).toLowerCase() !==
-    "admin"
-  ){
+const {
+data:profile,
+error:profileError
+} =
+await supabaseClient
+.from("profiles")
+.select("role")
+.eq(
+"id",
+session.user.id
+)
+.maybeSingle();
 
-    message.textContent =
-      "Access denied. Admin account required.";
 
-    message.className =
-      "error";
+if(profileError){
 
-    return false;
+throw profileError;
 
-  }
+}
 
-  message.textContent =
-    "Admin access confirmed.";
 
-  message.className =
-    "success";
+if(
+!profile ||
+String(profile.role).toLowerCase() !==
+"admin"
+){
 
-  return true;
+message.textContent =
+"Access denied. Admin account required.";
+
+message.className =
+"error";
+
+return false;
+
+}
+
+
+message.textContent =
+"Admin access confirmed.";
+
+message.className =
+"success";
+
+return true;
 
 }
 
 
 /* =========================
-   LOAD STATISTICS
+LOAD DASHBOARD STATISTICS
 ========================= */
 
 async function loadStatistics(){
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.rpc(
-      "admin_get_dashboard_stats"
-    );
+/*
+IMPORTANT:
+The Supabase function returns:
 
-  if(error){
-
-    throw error;
-
+[
+  {
+    workers: 1,
+    promoters: 1,
+    active_tasks: 3,
+    pending_submissions: 0
   }
+]
 
-  console.log(
-    "Dashboard RPC result:",
-    data
-  );
+So we read data[0].
+*/
 
-
-  /*
-    IMPORTANT:
-
-    admin_get_dashboard_stats()
-    returns RETURNS TABLE(...)
-
-    Supabase therefore gives us:
-
-    [
-      {
-        workers: 1,
-        promoters: 0,
-        active_tasks: 3,
-        pending_submissions: 0
-      }
-    ]
-
-    We must read data[0].
-  */
-
-  const stats =
-    Array.isArray(data)
-      ? data[0]
-      : data;
+const {
+data,
+error
+} =
+await supabaseClient
+.rpc(
+"admin_get_dashboard_stats"
+);
 
 
-  if(!stats){
+if(error){
 
-    throw new Error(
-      "Dashboard statistics returned no data."
-    );
+console.error(
+"STATISTICS RPC ERROR:",
+error
+);
 
-  }
+throw error;
+
+}
 
 
-  setStat(
-    "workerCount",
-    stats.workers
-  );
+console.log(
+"Dashboard statistics:",
+data
+);
 
-  setStat(
-    "promoterCount",
-    stats.promoters
-  );
 
-  setStat(
-    "taskCount",
-    stats.active_tasks
-  );
+if(
+!data ||
+!Array.isArray(data) ||
+data.length === 0
+){
 
-  setStat(
-    "submissionCount",
-    stats.pending_submissions
-  );
+throw new Error(
+"No dashboard statistics were returned."
+);
+
+}
+
+
+const stats =
+data[0];
+
+
+/* WORKERS */
+
+document.getElementById(
+"workerCount"
+).textContent =
+Number(
+stats.workers ?? 0
+);
+
+
+/* PROMOTERS */
+
+document.getElementById(
+"promoterCount"
+).textContent =
+Number(
+stats.promoters ?? 0
+);
+
+
+/* ACTIVE TASKS */
+
+document.getElementById(
+"taskCount"
+).textContent =
+Number(
+stats.active_tasks ?? 0
+);
+
+
+/* PENDING SUBMISSIONS */
+
+document.getElementById(
+"submissionCount"
+).textContent =
+Number(
+stats.pending_submissions ?? 0
+);
 
 }
 
 
 /* =========================
-   LOAD PAYMENT DETAILS
+LOAD PAYMENT DETAILS
 ========================= */
 
 async function loadPaymentDetails(){
 
-  try{
+try{
 
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("promoter_payment_details")
-        .select(
-          "bank_name,account_name,account_number,instructions"
-        )
-        .order(
-          "updated_at",
-          {
-            ascending:false
-          }
-        )
-        .limit(1)
-        .maybeSingle();
+const {
+data,
+error
+} =
+await supabaseClient
+.from("promoter_payment_details")
+.select(
+"bank_name,account_name,account_number,instructions"
+)
+.order(
+"updated_at",
+{
+ascending:false
+}
+)
+.limit(1)
+.maybeSingle();
 
-    if(error){
 
-      console.warn(
-        "Payment details:",
-        error
-      );
+if(error){
 
-      return;
+console.warn(
+"Payment details:",
+error
+);
 
-    }
+return;
 
-    if(!data){
+}
 
-      return;
 
-    }
+if(!data){
 
-    document.getElementById(
-      "bankName"
-    ).value =
-      data.bank_name || "";
+return;
 
-    document.getElementById(
-      "accountName"
-    ).value =
-      data.account_name || "";
+}
 
-    document.getElementById(
-      "accountNumber"
-    ).value =
-      data.account_number || "";
 
-    document.getElementById(
-      "paymentInstructions"
-    ).value =
-      data.instructions || "";
+document.getElementById(
+"bankName"
+).value =
+data.bank_name || "";
 
-  }catch(error){
 
-    console.warn(
-      "Payment details error:",
-      error
-    );
+document.getElementById(
+"accountName"
+).value =
+data.account_name || "";
 
-  }
+
+document.getElementById(
+"accountNumber"
+).value =
+data.account_number || "";
+
+
+document.getElementById(
+"paymentInstructions"
+).value =
+data.instructions || "";
+
+}catch(error){
+
+console.warn(
+"Payment details loading error:",
+error
+);
+
+}
 
 }
 
 
 /* =========================
-   SAVE PAYMENT DETAILS
+SAVE PAYMENT DETAILS
 ========================= */
 
 savePaymentDetailsButton.addEventListener(
-  "click",
-  async function(){
+"click",
+async function(){
 
-    const bank =
-      document.getElementById(
-        "bankName"
-      ).value.trim();
-
-    const account =
-      document.getElementById(
-        "accountName"
-      ).value.trim();
-
-    const number =
-      document.getElementById(
-        "accountNumber"
-      ).value.trim();
-
-    const instructions =
-      document.getElementById(
-        "paymentInstructions"
-      ).value.trim();
-
-    const result =
-      document.getElementById(
-        "paymentDetailsMessage"
-      );
+const bank =
+document.getElementById(
+"bankName"
+).value.trim();
 
 
-    if(
-      !bank ||
-      !account ||
-      !number
-    ){
-
-      result.textContent =
-        "Please complete the bank, account name and account number.";
-
-      result.className =
-        "error";
-
-      return;
-
-    }
+const account =
+document.getElementById(
+"accountName"
+).value.trim();
 
 
-    try{
-
-      savePaymentDetailsButton.disabled =
-        true;
-
-      savePaymentDetailsButton.textContent =
-        "Saving...";
+const number =
+document.getElementById(
+"accountNumber"
+).value.trim();
 
 
-      const {
-        data,
-        error
-      } =
-        await supabaseClient.rpc(
-          "admin_update_promoter_payment_details",
-          {
-            p_bank_name:bank,
-            p_account_name:account,
-            p_account_number:number,
-            p_instructions:
-              instructions || null
-          }
-        );
+const instructions =
+document.getElementById(
+"paymentInstructions"
+).value.trim();
 
 
-      if(error){
-
-        throw error;
-
-      }
-
-
-      if(
-        !data ||
-        data.success !== true
-      ){
-
-        throw new Error(
-          data?.message ||
-          "Unable to save payment details."
-        );
-
-      }
+const result =
+document.getElementById(
+"paymentDetailsMessage"
+);
 
 
-      result.textContent =
-        "Payment details saved successfully.";
+if(
+!bank ||
+!account ||
+!number
+){
 
-      result.className =
-        "success";
+result.textContent =
+"Please complete the bank, account name and account number.";
 
-    }catch(error){
+result.className =
+"error";
 
-      console.error(
-        "SAVE PAYMENT ERROR:",
-        error
-      );
+return;
 
-      result.textContent =
-        "Error: " +
-        error.message;
+}
 
-      result.className =
-        "error";
 
-    }finally{
+try{
 
-      savePaymentDetailsButton.disabled =
-        false;
+savePaymentDetailsButton.disabled =
+true;
 
-      savePaymentDetailsButton.textContent =
-        "Save Payment Details";
+savePaymentDetailsButton.textContent =
+"Saving...";
 
-    }
 
-  }
+const {
+data,
+error
+} =
+await supabaseClient.rpc(
+"admin_update_promoter_payment_details",
+{
+p_bank_name:bank,
+p_account_name:account,
+p_account_number:number,
+p_instructions:
+instructions || null
+}
+);
+
+
+if(error){
+
+throw error;
+
+}
+
+
+if(
+!data ||
+data.success !== true
+){
+
+throw new Error(
+data?.message ||
+"Unable to save payment details."
+);
+
+}
+
+
+result.textContent =
+"Payment details saved successfully.";
+
+result.className =
+"success";
+
+
+}catch(error){
+
+console.error(
+"SAVE PAYMENT ERROR:",
+error
+);
+
+result.textContent =
+"Error: " +
+error.message;
+
+result.className =
+"error";
+
+
+}finally{
+
+savePaymentDetailsButton.disabled =
+false;
+
+savePaymentDetailsButton.textContent =
+"Save Payment Details";
+
+}
+
+}
 );
 
 
 /* =========================
-   INITIALIZE DASHBOARD
+REFRESH DASHBOARD
 ========================= */
 
-async function initializeDashboard(){
+async function refreshDashboard(){
 
-  refreshButton.disabled =
-    true;
+refreshButton.disabled =
+true;
 
-  refreshButton.textContent =
-    "Loading...";
-
-
-  try{
-
-    const isAdmin =
-      await checkAdmin();
+refreshButton.textContent =
+"Loading...";
 
 
-    if(!isAdmin){
+/*
+Reset values while loading.
+*/
 
-      return;
+document.getElementById(
+"workerCount"
+).textContent =
+"—";
 
-    }
+document.getElementById(
+"promoterCount"
+).textContent =
+"—";
+
+document.getElementById(
+"taskCount"
+).textContent =
+"—";
+
+document.getElementById(
+"submissionCount"
+).textContent =
+"—";
 
 
-    await loadStatistics();
+try{
 
-    await loadPaymentDetails();
+const isAdmin =
+await checkAdmin();
 
 
-  }catch(error){
+if(!isAdmin){
 
-    console.error(
-      "DASHBOARD ERROR:",
-      error
-    );
+return;
 
-    message.textContent =
-      "Dashboard error: " +
-      error.message;
+}
 
-    message.className =
-      "error";
 
-  }finally{
+await loadStatistics();
 
-    refreshButton.disabled =
-      false;
+await loadPaymentDetails();
 
-    refreshButton.textContent =
-      "↻ Refresh Dashboard";
 
-  }
+/*
+Show successful result.
+*/
+
+message.textContent =
+"Dashboard statistics loaded successfully.";
+
+message.className =
+"success";
+
+
+}catch(error){
+
+console.error(
+"DASHBOARD ERROR:",
+error
+);
+
+
+message.textContent =
+"Dashboard error: " +
+error.message;
+
+message.className =
+"error";
+
+
+}finally{
+
+refreshButton.disabled =
+false;
+
+refreshButton.textContent =
+"↻ Refresh Dashboard";
+
+}
 
 }
 
 
 /* =========================
-   REFRESH
+REFRESH BUTTON
 ========================= */
 
 refreshButton.addEventListener(
-  "click",
-  initializeDashboard
+"click",
+refreshDashboard
 );
 
 
 /* =========================
-   LOGOUT
+LOGOUT
 ========================= */
 
 logoutButton.addEventListener(
-  "click",
-  async function(){
+"click",
+async function(){
 
-    try{
+try{
 
-      logoutButton.disabled =
-        true;
+logoutButton.disabled =
+true;
 
-      logoutButton.textContent =
-        "Logging out...";
+logoutButton.textContent =
+"Logging out...";
 
-      co
+
+const {
+error
+} =
+await supabaseClient.auth.signOut();
+
+
+if(error){
+
+throw error;
+
+}
+
+
+window.location.href =
+"login.html";
+
+
+}catch(error){
+
+console.error(
+"LOGOUT ERROR:",
+error
+);
+
+
+logoutButton.disabled =
+false;
+
+logoutButton.textContent =
+"Logout";
+
+
+message.textContent =
+"Logout error: " +
+error.message;
+
+message.className =
+"error";
+
+}
+
+}
+);
+
+
+/* =========================
+START
+========================= */
+
+refreshDashboard();
+
+</script>
+
+</body>
+  </html>

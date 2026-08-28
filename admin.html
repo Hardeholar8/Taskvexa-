@@ -1,737 +1,542 @@
-<!DOCTYPE html><html lang="en"><head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <title>TaskVexa - Admin Dashboard</title>  <link rel="stylesheet" href="style.css">  <style>
-    .admin-card {
-      padding: 20px;
-      margin: 15px 0;
-      border-radius: 16px;
-      background: #ffffff;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-    }
-
-    .admin-card h3 {
-      margin-top: 0;
-    }
-
-    .admin-button {
-      display: inline-block;
-      padding: 11px 18px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 600;
-      background: #111827;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .admin-button:hover {
-      opacity: 0.9;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 6px;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      box-sizing: border-box;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-    }
-
-    .form-group textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .success {
-      color: #15803d;
-      font-weight: 600;
-    }
-
-    .error {
-      color: #dc2626;
-      font-weight: 600;
-    }
-
-    .info-box {
-      background: #f3f4f6;
-      padding: 15px;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
-  </style></head><body><header>  <h1>
-    TaskVexa Admin
-  </h1>  <!-- Worker dashboard link removed -->  <button id="logoutButton" class="admin-button">
-    Logout
-  </button></header><main>  <h2>
-    Admin Dashboard
-  </h2>  <p id="message">
-    Checking admin access...
-  </p>  <section
-    id="adminContent"
-    style="display:none;"
-  ><!-- PROMOTER PAYMENT DETAILS -->
-
-<div class="admin-card">
-
-  <h3>
-    Promoter Deposit Payment Details
-  </h3>
-
-  <p>
-    These details are shown to promoters when they press
-    <strong>Add Funds</strong>.
-  </p>
-
-  <div class="info-box">
-
-    <p>
-      <strong>Important:</strong>
-      Enter the account where promoters should make their deposit payment.
-    </p>
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label for="bankName">
-      Bank Name
-    </label>
-
-    <input
-      type="text"
-      id="bankName"
-      placeholder="e.g. Opay"
-    >
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label for="accountName">
-      Account Name
-    </label>
-
-    <input
-      type="text"
-      id="accountName"
-      placeholder="Enter account name"
-    >
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label for="accountNumber">
-      Account Number
-    </label>
-
-    <input
-      type="text"
-      id="accountNumber"
-      inputmode="numeric"
-      placeholder="Enter account number"
-    >
-
-  </div>
-
-
-  <div class="form-group">
-
-    <label for="paymentInstructions">
-      Payment Instructions
-    </label>
-
-    <textarea
-      id="paymentInstructions"
-      placeholder="Enter instructions promoters should follow after making payment"
-    ></textarea>
-
-  </div>
-
-
-  <button
-    id="savePaymentDetailsButton"
-    class="admin-button"
-  >
-    Save Payment Details
-  </button>
-
-
-  <p id="paymentDetailsMessage"></p>
-
-</div>
-
-
-<!-- TASK MANAGEMENT -->
-
-<div class="admin-card">
-
-  <h3>
-    Task Management
-  </h3>
-
-  <p>
-    Create and manage TaskVexa tasks.
-  </p>
-
-  <a
-    href="tasks.html"
-    class="admin-button"
-  >
-    View Tasks
-  </a>
-
-</div>
-
-
-<!-- TASK SUBMISSIONS -->
-
-<div class="admin-card">
-
-  <h3>
-    Task Submissions
-  </h3>
-
-  <p>
-    Review worker task proofs.
-  </p>
-
-  <a
-    href="admin-submissions.html"
-    class="admin-button"
-  >
-    Review Submissions
-  </a>
-
-</div>
-
-
-<!-- WITHDRAWALS -->
-
-<div class="admin-card">
-
-  <h3>
-    Withdrawal Requests
-  </h3>
-
-  <p>
-    View and manage worker withdrawal requests.
-  </p>
-
-  <a
-    href="admin-withdrawals.html"
-    class="admin-button"
-  >
-    Manage Withdrawals
-  </a>
-
-</div>
-
-
-<!-- PROMOTER WALLET -->
-
-<div class="admin-card">
-
-  <h3>
-    Promoter Wallet & Deposits
-  </h3>
-
-  <p>
-    Manage promoter deposit requests and wallet balances.
-  </p>
-
-  <a
-    href="admin-promoter-wallet.html"
-    class="admin-button"
-  >
-    Manage Promoter Wallet
-  </a>
-
-</div>
-
-
-<!-- WORKERS -->
-
-<div class="admin-card">
-
-  <h3>
-    Workers
-  </h3>
-
-  <p>
-    Manage worker accounts.
-  </p>
-
-</div>
-
-
-<!-- PROMOTERS -->
-
-<div class="admin-card">
-
-  <h3>
-    Promoters
-  </h3>
-
-  <p>
-    Manage promoter accounts and tasks.
-  </p>
-
-</div>
-
-
-<!-- SETTINGS -->
-
-<div class="admin-card">
-
-  <h3>
-    Settings
-  </h3>
-
-  <p>
-    Manage TaskVexa platform settings.
-  </p>
-
-</div>
-
-  </section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-
-const SUPABASE_URL =
-  "https://dxtlnrthlpdaobnbazny.supabase.co";
-
-
-const SUPABASE_KEY =
-  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
-
-
-const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
-
-
-/* ==========================================
-   ELEMENTS
-========================================== */
-
-const message =
-  document.getElementById(
-    "message"
-  );
-
-const adminContent =
-  document.getElementById(
-    "adminContent"
-  );
-
-const logoutButton =
-  document.getElementById(
-    "logoutButton"
-  );
-
-const bankName =
-  document.getElementById(
-    "bankName"
-  );
-
-const accountName =
-  document.getElementById(
-    "accountName"
-  );
-
-const accountNumber =
-  document.getElementById(
-    "accountNumber"
-  );
-
-const paymentInstructions =
-  document.getElementById(
-    "paymentInstructions"
-  );
-
-const savePaymentDetailsButton =
-  document.getElementById(
-    "savePaymentDetailsButton"
-  );
-
-const paymentDetailsMessage =
-  document.getElementById(
-    "paymentDetailsMessage"
-  );
-
-
-let currentUser = null;
-
-
-/* ==========================================
-   CHECK ADMIN
-========================================== */
-
-async function checkAdmin() {
-
-  try {
-
-    const {
-      data: { user },
-      error: userError
-    } =
-      await supabaseClient.auth.getUser();
-
-
-    if (
-      userError ||
-      !user
-    ) {
-
-      window.location.href =
-        "login.html";
-
-      return false;
-
-    }
-
-
-    currentUser =
-      user;
-
-
-    const {
-      data: profile,
-      error
-    } =
-      await supabaseClient
-        .from("profiles")
-        .select("role")
-        .eq(
-          "id",
-          user.id
-        )
-        .maybeSingle();
-
-
-    if (error) {
-
-      throw error;
-
-    }
-
-
-    if (
-      !profile ||
-      profile.role !== "admin"
-    ) {
-
-      message.textContent =
-        "Access denied. Admin account required.";
-
-      message.className =
-        "error";
-
-      return false;
-
-    }
-
-
-    message.textContent =
-      "Admin access confirmed.";
-
-    message.className =
-      "success";
-
-
-    adminContent.style.display =
-      "block";
-
-
-    await loadPaymentDetails();
-
-
-    return true;
-
-
-  } catch (error) {
-
-    console.error(
-      "ADMIN ACCESS ERROR:",
-      error
-    );
-
-
-    message.textContent =
-      "Error: " +
-      error.message;
-
-    message.className =
-      "error";
-
-
-    return false;
-
-  }
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TaskVexa - Admin Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+* {
+  box-sizing: border-box;
 }
 
-
-/* ==========================================
-   LOAD PAYMENT DETAILS
-========================================== */
-
-async function loadPaymentDetails() {
-
-  try {
-
-    const {
-      data,
-      error
-    } =
-      await supabaseClient
-        .from("promoter_payment_details")
-        .select(
-          "bank_name, account_name, account_number, instructions"
-        )
-        .order(
-          "updated_at",
-          {
-            ascending: false
-          }
-        )
-        .limit(1)
-        .maybeSingle();
-
-
-    if (error) {
-
-      throw error;
-
-    }
-
-
-    if (!data) {
-
-      return;
-
-    }
-
-
-    bankName.value =
-      data.bank_name || "";
-
-
-    accountName.value =
-      data.account_name || "";
-
-
-    accountNumber.value =
-      data.account_number || "";
-
-
-    paymentInstructions.value =
-      data.instructions || "";
-
-
-  } catch (error) {
-
-    console.error(
-      "LOAD PAYMENT DETAILS ERROR:",
-      error
-    );
-
-
-    paymentDetailsMessage.textContent =
-      "Unable to load payment details.";
-
-    paymentDetailsMessage.className =
-      "error";
-
-  }
-
+:root {
+  --bg: #070a10;
+  --sidebar: #0b0f17;
+  --card: #111722;
+  --card2: #0d131e;
+  --border: #202b3b;
+  --text: #f8fafc;
+  --muted: #7f8da3;
+  --soft: #cbd5e1;
+  --accent: #8b5cf6;
+  --accent2: #6d28d9;
+  --green: #4ade80;
+  --yellow: #facc15;
+  --red: #f87171;
 }
 
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-/* ==========================================
-   SAVE PAYMENT DETAILS
-========================================== */
+body {
+  min-height: 100vh;
+}
 
-savePaymentDetailsButton.addEventListener(
-  "click",
-  async function() {
+/* =========================
+   SIDEBAR
+========================= */
 
-    const bank =
-      bankName.value.trim();
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 250px;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+  padding: 22px 14px;
+  z-index: 1000;
+  overflow-y: auto;
+}
 
-    const account =
-      accountName.value.trim();
+.logo {
+  padding: 8px 14px 25px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+}
 
-    const number =
-      accountNumber.value.trim();
+.logo h1 {
+  margin: 0;
+  font-size: 23px;
+  letter-spacing: -0.5px;
+}
 
-    const instructions =
-      paymentInstructions.value.trim();
+.logo span {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 12px;
+}
 
+.nav-title {
+  color: #4f5d73;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  padding: 10px 14px 8px;
+  text-transform: uppercase;
+}
 
-    if (!bank) {
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 12px 14px;
+  margin: 4px 0;
+  border-radius: 11px;
+  color: #aeb9c9;
+  text-decoration: none;
+  font-size: 14px;
+  transition: .2s;
+}
 
-      paymentDetailsMessage.textContent =
-        "Please enter the bank name.";
+.nav-link:hover,
+.nav-link.active {
+  background: #171d2a;
+  color: white;
+}
 
-      paymentDetailsMessage.className =
-        "error";
+.nav-icon {
+  width: 24px;
+  text-align: center;
+  font-size: 16px;
+}
 
-      return;
+.logout-nav {
+  margin-top: 25px;
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+}
 
-    }
+#logoutButton {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
 
+/* =========================
+   MAIN
+========================= */
 
-    if (!account) {
+.main {
+  margin-left: 250px;
+  min-height: 100vh;
+}
 
-      paymentDetailsMessage.textContent =
-        "Please enter the account name.";
+/* =========================
+   TOPBAR
+========================= */
 
-      paymentDetailsMessage.className =
-        "error";
+.topbar {
+  height: 72px;
+  border-bottom: 1px solid var(--border);
+  background: rgba(7,10,16,.92);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  backdrop-filter: blur(12px);
+}
 
-      return;
+.topbar-title {
+  font-size: 18px;
+  font-weight: 700;
+}
 
-    }
+.admin-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #aeb9c9;
+  font-size: 13px;
+}
 
+.online-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--green);
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(74,222,128,.6);
+}
 
-    if (!number) {
+/* =========================
+   CONTENT
+========================= */
 
-      paymentDetailsMessage.textContent =
-        "Please enter the account number.";
+.content {
+  padding: 30px;
+  max-width: 1400px;
+  margin: auto;
+}
 
-      paymentDetailsMessage.className =
-        "error";
+.page-heading {
+  margin-bottom: 25px;
+}
 
-      return;
+.page-heading h2 {
+  margin: 0 0 8px;
+  font-size: 29px;
+}
 
-    }
+.page-heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
 
+#message {
+  margin-bottom: 20px;
+  font-size: 13px;
+}
 
-    try {
+.success {
+  color: var(--green);
+}
 
-      savePaymentDetailsButton.disabled =
-        true;
+.error {
+  color: var(--red);
+}
 
-      savePaymentDetailsButton.textContent =
-        "Saving...";
+/* =========================
+   OVERVIEW CARDS
+========================= */
 
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 25px;
+}
 
-      const {
-        data,
-        error
-      } =
-        await supabaseClient.rpc(
-          "admin_update_promoter_payment_details",
-          {
-            p_bank_name:
-              bank,
+.stat-card {
+  background: linear-gradient(145deg, #131a27, #0d121b);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  padding: 20px;
+  min-height: 125px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.2);
+}
 
-            p_account_name:
-              account,
+.stat-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-            p_account_number:
-              number,
+.stat-label {
+  color: var(--muted);
+  font-size: 12px;
+}
 
-            p_instructions:
-              instructions || null
-          }
-        );
+.stat-icon {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1a2030;
+  border-radius: 10px;
+  font-size: 17px;
+}
 
+.stat-value {
+  margin-top: 18px;
+  font-size: 24px;
+  font-weight: 800;
+}
 
-      if (error) {
+/* =========================
+   SECTION
+========================= */
 
-        throw error;
+.section-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 28px 0 14px;
+}
 
-      }
+.section-title h3 {
+  margin: 0;
+  font-size: 17px;
+}
 
+.section-title span {
+  color: var(--muted);
+  font-size: 12px;
+}
 
-      if (
-        !data ||
-        data.success !== true
-      ) {
+/* =========================
+   MANAGEMENT GRID
+========================= */
 
-        throw new Error(
-          data?.message ||
-          "Unable to save payment details."
-        );
+.management-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
 
-      }
+.admin-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.18);
+}
 
+.admin-card:hover {
+  border-color: #303d52;
+}
 
-      paymentDetailsMessage.textContent =
-        "Payment details saved successfully.";
+.card-head {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin-bottom: 13px;
+}
 
-      paymentDetailsMessage.className =
-        "success";
+.card-icon {
+  width: 42px;
+  height: 42px;
+  background: #191f2c;
+  border: 1px solid #293448;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+}
 
+.admin-card h3 {
+  margin: 0;
+  font-size: 16px;
+}
 
-    } catch (error) {
+.admin-card p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0 0 17px;
+}
 
-      console.error(
-        "SAVE PAYMENT DETAILS ERROR:",
-        error
-      );
+/* =========================
+   BUTTON
+========================= */
 
+.admin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  padding: 10px 16px;
+  border-radius: 11px;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  background: #f8fafc;
+  color: #090d14;
+  border: none;
+  cursor: pointer;
+  transition: .2s;
+}
 
-      paymentDetailsMessage.textContent =
-        "Error: " +
-        error.message;
+.admin-button:hover {
+  transform: translateY(-1px);
+  opacity: .9;
+}
 
-      paymentDetailsMessage.className =
-        "error";
+.secondary-button {
+  background: #1a2130;
+  color: #dbe4f0;
+  border: 1px solid #2b374a;
+}
 
-    } finally {
+/* =========================
+   PAYMENT DETAILS
+========================= */
 
-      savePaymentDetailsButton.disabled =
-        false;
+.payment-card {
+  background: linear-gradient(145deg, #121a29, #0d131e);
+  border: 1px solid #29354a;
+  border-radius: 20px;
+  padding: 23px;
+  margin-top: 16px;
+}
 
-      savePaymentDetailsButton.textContent =
-        "Save Payment Details";
+.payment-card .card-head {
+  margin-bottom: 20px;
+}
 
-    }
+.info-box {
+  background: #0b111b;
+  border: 1px solid #1f2b3d;
+  color: #8997aa;
+  padding: 13px;
+  border-radius: 11px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  line-height: 1.5;
+}
 
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.form-group {
+  margin-bottom: 5px;
+}
+
+.form-group.full {
+  grid-column: 1 / -1;
+}
+
+.form-group label {
+  display: block;
+  color: #b9c4d3;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 7px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 13px;
+  background: #090e16;
+  border: 1px solid #293548;
+  border-radius: 10px;
+  color: white;
+  outline: none;
+  font-size: 14px;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #59677e;
+}
+
+.form-group textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #4f5c70;
+}
+
+#paymentDetailsMessage {
+  margin-top: 13px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* =========================
+   QUICK LINKS
+========================= */
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.quick-link {
+  display: block;
+  background: #0d131e;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 17px;
+  text-decoration: none;
+  color: white;
+  transition: .2s;
+}
+
+.quick-link:hover {
+  background: #151c29;
+  transform: translateY(-2px);
+}
+
+.quick-link-icon {
+  font-size: 21px;
+  margin-bottom: 10px;
+}
+
+.quick-link strong {
+  display: block;
+  font-size: 13px;
+}
+
+.quick-link small {
+  display: block;
+  color: var(--muted);
+  margin-top: 5px;
+  font-size: 11px;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-menu {
+  display: none;
+  background: #151b28;
+  border: 1px solid var(--border);
+  color: white;
+  border-radius: 9px;
+  padding: 9px 11px;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+@media (max-width: 1050px) {
+  .overview-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-);
 
-
-/* ==========================================
-   LOGOUT
-========================================== */
-
-logoutButton.addEventListener(
-  "click",
-  async function() {
-
-    await supabaseClient.auth.signOut();
-
-    window.location.href =
-      "login.html";
-
+  .quick-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
-);
+}
 
+@media (max-width: 800px) {
+  .sidebar {
+    transform: translateX(-100%);
+    transition: .25s;
+  }
 
-/* ==========================================
-   START
-========================================== */
+  .sidebar.open {
+    transform: translateX(0);
+  }
 
-checkAdmin();
+  .main {
+    margin-left: 0;
+  }
 
-</script></body></html>
+  .mobile-menu {
+    display: block;
+  }
+
+  .topbar {
+    padding: 0 16px;
+  }
+
+  .content {
+    padding: 22px 15px 40px;
+ 

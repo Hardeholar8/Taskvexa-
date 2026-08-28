@@ -1,149 +1,446 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TaskVexa - Task Management</title><style>
+<title>TaskVexa - Available Tasks</title>
+
+<style>
 *{box-sizing:border-box}
+
 :root{
---bg:#070a10;--sidebar:#0b0f17;--card:#111722;--card2:#0d131e;
---border:#202b3b;--text:#f8fafc;--muted:#7f8da3;
---green:#4ade80;--red:#f87171;--yellow:#facc15;
+  --bg:#070a10;
+  --card:#111722;
+  --card2:#0d131e;
+  --border:#202b3b;
+  --text:#f8fafc;
+  --muted:#7f8da3;
+  --green:#4ade80;
+  --red:#f87171;
+  --yellow:#facc15;
 }
-body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-.sidebar{position:fixed;left:0;top:0;bottom:0;width:245px;background:var(--sidebar);border-right:1px solid var(--border);padding:22px 14px;overflow-y:auto}
-.logo{padding:5px 14px 22px;border-bottom:1px solid var(--border);margin-bottom:18px}
-.logo h1{margin:0;font-size:23px}.logo p{margin:6px 0 0;color:var(--muted);font-size:12px}
-.nav-title{color:#56657b;font-size:10px;font-weight:bold;letter-spacing:1.3px;margin:18px 14px 8px;text-transform:uppercase}
-.nav-link{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin:4px 0;border-radius:11px;color:#aeb9c9;text-decoration:none;font-size:14px;border:0;background:transparent;cursor:pointer;text-align:left}
-.nav-link:hover,.nav-link.active{background:#171d2a;color:white}
-.nav-icon{width:23px;text-align:center;font-size:16px}
-.main{margin-left:245px;min-height:100vh}
-.topbar{height:70px;background:#070a10;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;z-index:20}
-.topbar-title{font-size:18px;font-weight:bold}.admin-status{color:#aeb9c9;font-size:13px}
-.mobile-menu{display:none;background:#151b28;border:1px solid var(--border);color:white;border-radius:9px;padding:8px 11px;cursor:pointer}
-.content{max-width:1200px;margin:auto;padding:30px}
-.heading{margin-bottom:20px}.heading h2{margin:0 0 8px;font-size:29px}.heading p{margin:0;color:var(--muted);font-size:14px}
-#message{margin-bottom:20px;font-size:13px}.success{color:var(--green)}.error{color:var(--red)}
-.form-card,.task-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:22px;margin-bottom:20px}
-.form-card h3,.task-card h3{margin-top:0}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.full{grid-column:1/-1}
-label{display:block;color:#b9c4d3;font-size:12px;font-weight:bold;margin-bottom:7px}
-input,textarea,select{width:100%;padding:13px;background:#090e16;border:1px solid #293548;border-radius:10px;color:white;outline:none;font-size:14px}
-textarea{min-height:110px;resize:vertical}select{cursor:pointer}
-input:focus,textarea:focus,select:focus{border-color:#64748b}
-.button{min-height:42px;padding:10px 16px;background:#f8fafc;color:#090d14;border:0;border-radius:11px;font-size:13px;font-weight:700;cursor:pointer;margin-right:7px;margin-top:8px}
-.button:disabled{opacity:.6;cursor:not-allowed}
-.button.secondary{background:#151d2a;color:white;border:1px solid #293548}
-.button.danger{background:#32191d;color:#f87171;border:1px solid #5b292f}
-.button.warning{background:#332b16;color:#facc15;border:1px solid #5c4b20}
-.button.green{background:#102d20;color:#4ade80;border:1px solid #1f5c3a}
-#formMessage{margin-top:15px;font-size:13px;font-weight:bold}
-.task-list-title{margin:30px 0 15px}.task-card h3{font-size:19px;margin-bottom:10px}
-.task-description{color:#94a3b8;line-height:1.6;margin-bottom:18px;white-space:pre-wrap}
-.task-info{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px}
-.info{background:var(--card2);border:1px solid #1d2838;border-radius:11px;padding:13px}
-.info small{display:block;color:#64748b;font-size:10px;margin-bottom:6px}
-.info strong{display:block;font-size:13px;word-break:break-word}.reward{color:var(--green)}
-.status{display:inline-block;padding:6px 11px;border-radius:20px;font-size:11px;font-weight:bold}
-.status.active{background:#102d20;color:var(--green)}
-.status.paused{background:#332b16;color:var(--yellow)}
-.status.closed{background:#32191d;color:var(--red)}
-.empty,.loading{background:var(--card);border:1px solid var(--border);border-radius:17px;padding:30px 20px;text-align:center;color:var(--muted)}
-@media(max-width:900px){.task-info{grid-template-columns:1fr 1fr}}
-@media(max-width:800px){
-.sidebar{transform:translateX(-100%);transition:.25s;z-index:100}.sidebar.open{transform:translateX(0)}
-.main{margin-left:0}.mobile-menu{display:block}.content{padding:22px 15px 40px}
-.form-grid{grid-template-columns:1fr}.full{grid-column:auto}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
 }
-@media(max-width:500px){
-.task-info{grid-template-columns:1fr}.topbar{padding:0 15px}.admin-status{display:none}
+
+header{
+  height:70px;
+  background:#070a10;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 22px;
+  position:sticky;
+  top:0;
+  z-index:20;
 }
-</style></head><body><aside class="sidebar" id="sidebar"><div class="logo">
-<h1>TaskVexa</h1>
-<p>Admin Control Panel</p>
-</div><div class="nav-title">Overview</div><a href="admin.html" class="nav-link">
-<span class="nav-icon">⌂</span>Dashboard
-</a><div class="nav-title">Management</div><a href="worker.html" class="nav-link">
-<span class="nav-icon">👥</span>Workers
-</a><a href="promoters.html" class="nav-link">
-<span class="nav-icon">📣</span>Promoters
-</a><a href="tasks.html" class="nav-link active">
-<span class="nav-icon">✓</span>Tasks
-</a><a href="admin-submissions.html" class="nav-link">
-<span class="nav-icon">📋</span>Submissions
-</a><a href="admin-withdrawals.html" class="nav-link">
-<span class="nav-icon">💳</span>Withdrawals
-</a><a href="admin-promoter-wallet.html" class="nav-link">
-<span class="nav-icon">💰</span>Promoter Wallet
-</a><div class="nav-title">Settings</div><a href="settings.html" class="nav-link">
-<span class="nav-icon">⚙</span>Platform Settings
-</a><div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--border);"><button id="logoutButton" class="nav-link" style="color:#f87171">
-<span class="nav-icon">↪</span>Logout
-</button></div>
-</aside><div class="main"><div class="topbar"><button id="mobileMenu" class="mobile-menu">☰</button>
 
-<div class="topbar-title">Task Management</div><div class="admin-status">Admin</div></div><main class="content"><div class="heading"><h2>Task Management</h2><p>
-Create, edit, activate, pause and close tasks available to workers.
-</p></div><div id="message">Checking admin access...</div><section class="form-card"><h3 id="formTitle">Create New Task</h3><form id="taskForm"><div class="form-grid"><div class="full"><label>Task Title</label>
+.logo{
+  font-size:21px;
+  font-weight:800;
+}
 
-<input id="title" type="text"
-placeholder="Enter task title" required>
+.header-right{
+  display:flex;
+  gap:8px;
+}
 
-</div><div class="full"><label>Description / Instructions</label>
+.back-button,
+.logout{
+  padding:9px 13px;
+  border-radius:9px;
+  font-size:13px;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-<textarea id="description"
-placeholder="Enter complete task instructions"
-required></textarea></div><div><label>Platform</label>
+.back-button{
+  background:#151d2a;
+  color:white;
+  border:1px solid #293548;
+  text-decoration:none;
+}
 
-<input id="platform"
-type="text"
-placeholder="Telegram"
-required>
+.logout{
+  background:#32191d;
+  color:#f87171;
+  border:1px solid #5b292f;
+}
 
-</div><div><label>Task Link</label>
+.content{
+  max-width:1100px;
+  margin:auto;
+  padding:28px 18px 50px;
+}
 
-<input id="taskUrl"
-type="url"
-placeholder="https://..."
-required>
+.heading{
+  margin-bottom:22px;
+}
 
-</div><div><label>Worker Reward</label>
+.heading h1{
+  margin:0 0 8px;
+  font-size:28px;
+}
 
-<input id="reward"
-type="number"
-min="0"
-step="0.01"
-placeholder="100"
-required>
+.heading p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+}
 
-</div><div><label>Workers Needed</label>
+.message{
+  margin-bottom:18px;
+  font-size:13px;
+}
 
-<input id="workersNeeded"
-type="number"
-min="1"
-value="1"
-required>
+.success{color:var(--green)}
+.error{color:var(--red)}
+.pending{color:var(--yellow)}
+.approved{color:var(--green)}
+.rejected{color:var(--red)}
 
-</div><div><label>Target Level</label>
+.loading,
+.empty{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:35px 20px;
+  text-align:center;
+  color:var(--muted);
+}
 
-<select id="targetLevel"><option value="level_1">Level 1</option>
-<option value="level_2">Level 2</option>
-<option value="both">Both Levels</option></select></div><div><label>Task Status</label>
+.task-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:18px;
+}
 
-<select id="taskStatus"><option value="active">Active</option>
-<option value="paused">Paused</option>
-<option value="closed">Closed</option></select></div></div><br><button type="submit" id="saveButton" class="button">
-Create Task
-</button><button type="button" id="cancelButton"
-class="button secondary"
-style="display:none">
-Cancel Edit
-</button>
+.task-title{
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:9px;
+}
 
-</form><div id="formMessage"></div></section><div class="task-list-title">
-<h3>Existing Tasks</h3>
-</div><div id="taskList"><div class="loading">Loading tasks...</div></div></main>
-</div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+.task-description{
+  color:#a4b0c0;
+  line-height:1.6;
+  white-space:pre-wrap;
+  margin-bottom:18px;
+}
+
+.task-info{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.info{
+  background:var(--card2);
+  border:1px solid #1d2838;
+  border-radius:11px;
+  padding:13px;
+}
+
+.info small{
+  display:block;
+  color:#64748b;
+  font-size:10px;
+  margin-bottom:6px;
+}
+
+.info strong{
+  font-size:14px;
+  word-break:break-word;
+}
+
+.reward{
+  color:var(--green);
+  font-size:17px;
+}
+
+.button{
+  min-height:42px;
+  padding:10px 16px;
+  border:0;
+  border-radius:10px;
+  font-size:13px;
+  font-weight:700;
+  cursor:pointer;
+  margin:4px 6px 4px 0;
+}
+
+.open-task{
+  background:#f8fafc;
+  color:#090d14;
+}
+
+.submit-proof{
+  background:#151d2a;
+  color:white;
+  border:1px solid #293548;
+}
+
+.button:disabled{
+  opacity:.55;
+  cursor:not-allowed;
+}
+
+.submission-status{
+  margin-top:14px;
+  padding:12px;
+  border-radius:10px;
+  font-size:12px;
+  background:#0b111b;
+  border:1px solid #1f2b3d;
+}
+
+/* MODAL */
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.78);
+  z-index:100;
+  padding:20px;
+  overflow-y:auto;
+}
+
+.modal.show{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.modal-box{
+  width:100%;
+  max-width:500px;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:22px;
+}
+
+.modal-box h2{
+  margin:0 0 8px;
+}
+
+.modal-description{
+  color:var(--muted);
+  font-size:13px;
+  margin-bottom:18px;
+  line-height:1.5;
+}
+
+.form-group{
+  margin-bottom:16px;
+}
+
+label{
+  display:block;
+  color:#b9c4d3;
+  font-size:12px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+input,
+textarea{
+  width:100%;
+  padding:13px;
+  background:#090e16;
+  border:1px solid #293548;
+  border-radius:10px;
+  color:white;
+  outline:none;
+  font-size:14px;
+}
+
+textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.file-note{
+  color:#64748b;
+  font-size:11px;
+  margin-top:7px;
+}
+
+.modal-actions{
+  display:flex;
+  gap:8px;
+  margin-top:18px;
+}
+
+.cancel{
+  background:#151d2a;
+  color:white;
+  border:1px solid #293548;
+}
+
+.send{
+  background:#f8fafc;
+  color:#090d14;
+}
+
+#submitMessage{
+  margin-top:12px;
+  font-size:13px;
+  font-weight:bold;
+}
+
+@media(max-width:700px){
+
+  header{
+    padding:0 13px;
+  }
+
+  .back-button,
+  .logout{
+    padding:8px 9px;
+    font-size:11px;
+  }
+
+  .content{
+    padding:22px 13px 40px;
+  }
+
+  .heading h1{
+    font-size:24px;
+  }
+
+  .task-info{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+  <div class="logo">
+    TaskVexa
+  </div>
+
+  <div class="header-right">
+
+    <a href="worker.html" class="back-button">
+      ← Dashboard
+    </a>
+
+    <button id="logoutButton" class="logout">
+      Logout
+    </button>
+
+  </div>
+
+</header>
+
+<main class="content">
+
+  <div class="heading">
+    <h1>Available Tasks</h1>
+    <p>Complete tasks and submit your screenshot proof for review.</p>
+  </div>
+
+  <div id="message" class="message">
+    Checking account...
+  </div>
+
+  <div id="taskList">
+    <div class="loading">
+      Loading tasks...
+    </div>
+  </div>
+
+</main>
+
+
+<!-- PROOF MODAL -->
+
+<div id="proofModal" class="modal">
+
+  <div class="modal-box">
+
+    <h2>Submit Task Proof</h2>
+
+    <div class="modal-description">
+      Complete the task first, then upload a screenshot proving that you completed it.
+    </div>
+
+    <form id="proofForm">
+
+      <div class="form-group">
+
+        <label>Screenshot Proof</label>
+
+        <input
+          id="proofFile"
+          type="file"
+          accept="image/*"
+          required
+        >
+
+        <div class="file-note">
+          Image/screenshot only. Maximum 5MB.
+        </div>
+
+      </div>
+
+      <div class="form-group">
+
+        <label>Additional Note (Optional)</label>
+
+        <textarea
+          id="proofText"
+          placeholder="Add any information for the admin..."
+        ></textarea>
+
+      </div>
+
+      <div id="submitMessage"></div>
+
+      <div class="modal-actions">
+
+        <button
+          type="button"
+          id="cancelProof"
+          class="button cancel"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          id="submitProofButton"
+          class="button send"
+        >
+          Submit Proof
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
 
 const SUPABASE_URL =
 "https://dxtlnrthlpdaobnbazny.supabase.co";
@@ -153,784 +450,885 @@ const SUPABASE_KEY =
 
 const supabaseClient =
 window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
+
+
+/* ELEMENTS */
 
 const message =
 document.getElementById("message");
 
-const taskForm =
-document.getElementById("taskForm");
-
 const taskList =
 document.getElementById("taskList");
 
-const formMessage =
-document.getElementById("formMessage");
+const proofModal =
+document.getElementById("proofModal");
 
-const saveButton =
-document.getElementById("saveButton");
+const proofForm =
+document.getElementById("proofForm");
 
-const cancelButton =
-document.getElementById("cancelButton");
+const proofFile =
+document.getElementById("proofFile");
 
-const formTitle =
-document.getElementById("formTitle");
+const proofText =
+document.getElementById("proofText");
+
+const submitProofButton =
+document.getElementById("submitProofButton");
+
+const submitMessage =
+document.getElementById("submitMessage");
+
+const cancelProof =
+document.getElementById("cancelProof");
 
 const logoutButton =
 document.getElementById("logoutButton");
 
-const mobileMenu =
-document.getElementById("mobileMenu");
 
-const sidebar =
-document.getElementById("sidebar");
+let currentUser = null;
+let selectedTask = null;
+let submissions = [];
 
-let editingTaskId = null;
-let allTasks = [];
 
-mobileMenu.addEventListener("click",()=>{
-sidebar.classList.toggle("open");
-});
+/* ESCAPE */
 
 function escapeHTML(value){
 
-return String(value ?? "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
+
+
+/* MONEY */
 
 function formatMoney(value){
 
-return "₦" +
-Number(value || 0).toLocaleString(
-"en-NG",
-{
-minimumFractionDigits:0,
-maximumFractionDigits:2
-}
-);
+  return "₦" +
+    Number(value || 0).toLocaleString(
+      "en-NG",
+      {
+        minimumFractionDigits:0,
+        maximumFractionDigits:2
+      }
+    );
 
 }
 
-function formatDate(value){
 
-if(!value) return "-";
+/* GET USER */
 
-const d = new Date(value);
+async function getCurrentUser(){
 
-if(Number.isNaN(d.getTime())) return "-";
+  const {
+    data,
+    error
+  } =
+  await supabaseClient.auth.getUser();
 
-return d.toLocaleString(
-"en-NG",
-{
-dateStyle:"medium",
-timeStyle:"short"
-}
-);
+  if(error) throw error;
 
-}
+  if(!data || !data.user){
 
-function levelsFromSelect(){
+    window.location.href="login.html";
+    return null;
 
-const value =
-document.getElementById(
-"targetLevel"
-).value;
+  }
 
-if(value === "both"){
-return ["level_1","level_2"];
-}
+  currentUser = data.user;
 
-return [value];
 
-}
+  const {
+    data:profile,
+    error:profileError
+  } =
+  await supabaseClient
+    .from("profiles")
+    .select("role")
+    .eq("id",currentUser.id)
+    .maybeSingle();
 
-function displayLevels(levels){
+  if(profileError) throw profileError;
 
-if(!Array.isArray(levels)) return "-";
 
-return levels.map(level=>{
+  if(
+    !profile ||
+    String(profile.role).toLowerCase() !== "worker"
+  ){
 
-if(level === "level_1") return "Level 1";
-if(level === "level_2") return "Level 2";
-if(level === "worker") return "Worker";
+    message.textContent =
+      "This page is for worker accounts only.";
 
-return level;
+    message.className =
+      "message error";
 
-}).join(", ");
+    return null;
 
-}
+  }
 
-/* ADMIN CHECK */
-
-async function getAdmin(){
-
-const {
-data,
-error
-} =
-await supabaseClient.auth.getUser();
-
-if(error) throw error;
-
-if(!data || !data.user){
-
-window.location.href="login.html";
-return null;
+  return currentUser;
 
 }
 
-const {
-data:profile,
-error:profileError
-} =
-await supabaseClient
-.from("profiles")
-.select("role")
-.eq("id",data.user.id)
-.maybeSingle();
 
-if(profileError) throw profileError;
+/* LOAD SUBMISSIONS */
 
-if(
-!profile ||
-String(profile.role).toLowerCase() !== "admin"
-){
+async function loadMySubmissions(){
 
-message.textContent =
-"Access denied. Admin account required.";
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("task_submissions")
+    .select(
+      "id,task_id,status,reward_amount,created_at"
+    )
+    .eq(
+      "worker_id",
+      currentUser.id
+    )
+    .order(
+      "created_at",
+      {ascending:false}
+    );
 
-message.className="error";
+  if(error) throw error;
 
-return null;
+  submissions =
+    Array.isArray(data)
+      ? data
+      : [];
 
 }
 
-return data.user;
+
+/* FIND SUBMISSION */
+
+function getTaskSubmission(taskId){
+
+  return submissions.find(
+    item =>
+      String(item.task_id) ===
+      String(taskId)
+  );
 
 }
 
-/* LOAD TASKS */
+
+/* LOAD ACTIVE TASKS */
 
 async function loadTasks(){
 
-taskList.innerHTML =
-`<div class="loading">Loading tasks...</div>`;
+  taskList.innerHTML = `
+    <div class="loading">
+      Loading tasks...
+    </div>
+  `;
 
-try{
+  try{
 
-const user = await getAdmin();
+    const user =
+      await getCurrentUser();
 
-if(!user) return;
+    if(!user) return;
 
-const {
-data,
-error
-} =
-await supabaseClient.rpc(
-"admin_list_tasks"
-);
 
-if(error) throw error;
+    await loadMySubmissions();
 
-allTasks =
-Array.isArray(data) ? data : [];
 
-renderTasks();
+    /*
+      WORKER PAGE:
+      Only ACTIVE tasks.
+      No Level 1 / Level 2 display.
+    */
 
-message.textContent =
-"Admin access confirmed.";
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("tasks")
+      .select(
+        "id,title,description,platform,task_url,reward,workers_needed,status,created_at"
+      )
+      .eq(
+        "status",
+        "active"
+      )
+      .order(
+        "created_at",
+        {ascending:false}
+      );
 
-message.className="success";
 
-}catch(error){
+    if(error) throw error;
 
-console.error(error);
 
-taskList.innerHTML = `
-<div class="empty error">
-Unable to load tasks.<br><br>
-${escapeHTML(error.message)}
-</div>
-`;
+    renderTasks(
+      Array.isArray(data)
+        ? data
+        : []
+    );
 
-message.textContent =
-"Task loading error: " +
-error.message;
 
-message.className="error";
+    message.textContent =
+      "Available tasks loaded.";
+
+    message.className =
+      "message success";
+
+
+  }catch(error){
+
+    console.error(
+      "WORKER TASK ERROR:",
+      error
+    );
+
+    taskList.innerHTML = `
+      <div class="empty error">
+        Unable to load tasks.<br><br>
+        ${escapeHTML(error.message)}
+      </div>
+    `;
+
+    message.textContent =
+      "Error: " + error.message;
+
+    message.className =
+      "message error";
+
+  }
 
 }
 
-}
 
 /* RENDER */
 
-function renderTasks(){
+function renderTasks(tasks){
 
-if(!allTasks.length){
+  if(!tasks.length){
 
-taskList.innerHTML =
-`<div class="empty">No tasks found.</div>`;
+    taskList.innerHTML = `
+      <div class="empty">
+        <h3>No active tasks</h3>
+        <p>There are currently no tasks available.</p>
+      </div>
+    `;
 
-return;
+    return;
 
-}
+  }
 
-taskList.innerHTML="";
 
-allTasks.forEach(task=>{
+  taskList.innerHTML = "";
 
-const card =
-document.createElement("section");
 
-card.className="task-card";
+  tasks.forEach(task => {
 
-const status =
-String(task.status || "closed").toLowerCase();
+    const submission =
+      getTaskSubmission(task.id);
 
-const statusClass =
-status === "paused"
-? "paused"
-: status === "closed"
-? "closed"
-: "active";
 
-card.innerHTML = `
+    const card =
+      document.createElement("section");
 
-<h3>${escapeHTML(task.title)}</h3>
+    card.className =
+      "task-card";
 
-<div class="task-description">
-${escapeHTML(task.description)}
-</div>
 
-<div class="task-info">
+    let submissionHTML = "";
 
-<div class="info">
-<small>Platform</small>
-<strong>${escapeHTML(task.platform)}</strong>
-</div>
+    let alreadySubmitted =
+      Boolean(submission);
 
-<div class="info">
-<small>Reward</small>
-<strong class="reward">
-${formatMoney(task.reward)}
-</strong>
-</div>
 
-<div class="info">
-<small>Workers Needed</small>
-<strong>${escapeHTML(task.workers_needed)}</strong>
-</div>
+    if(submission){
 
-<div class="info">
-<small>Target Level</small>
-<strong>${escapeHTML(displayLevels(task.target_levels))}</strong>
-</div>
+      const status =
+        String(
+          submission.status || "pending"
+        ).toLowerCase();
 
-</div>
 
-<div class="task-info">
+      let statusClass =
+        "pending";
 
-<div class="info">
-<small>Status</small>
-<strong>
-<span class="status ${statusClass}">
-${escapeHTML(status)}
-</span>
-</strong>
-</div>
+      let statusText =
+        "Pending review";
 
-<div class="info">
-<small>Created</small>
-<strong>
-${escapeHTML(formatDate(task.created_at))}
-</strong>
-</div>
 
-<div class="info">
-<small>Task Link</small>
-<strong>
-<a href="${escapeHTML(task.task_url)}"
-target="_blank"
-rel="noopener"
-style="color:#60a5fa">
-Open Link
-</a>
-</strong>
-</div>
+      if(status === "approved"){
 
-<div class="info">
-<small>Source</small>
-<strong>${escapeHTML(task.source || "admin")}</strong>
-</div>
+        statusClass =
+          "approved";
 
-</div>
+        statusText =
+          "Approved";
 
-<div>
+      }
 
-<button
-class="button edit-button"
-data-id="${task.id}">
-Edit
-</button>
 
-${
-status === "active"
-?
-`<button
-class="button warning pause-button"
-data-id="${task.id}">
-Pause
-</button>`
-:
-`<button
-class="button green activate-button"
-data-id="${task.id}">
-Activate
-</button>`
-}
+      if(status === "rejected"){
 
-${
-status !== "closed"
-?
-`<button
-class="button danger close-button"
-data-id="${task.id}">
-Close
-</button>`
-:
-""
-}
+        statusClass =
+          "rejected";
 
-<button
-class="button danger delete-button"
-data-id="${task.id}">
-Delete
-</button>
+        statusText =
+          "Rejected";
 
-</div>
-`;
+        /*
+          Allow rejected task to be submitted again.
+        */
 
-taskList.appendChild(card);
+        alreadySubmitted = false;
 
-});
+      }
 
-document.querySelectorAll(".edit-button")
-.forEach(btn=>{
-btn.onclick=()=>editTask(btn.dataset.id);
-});
 
-document.querySelectorAll(".pause-button")
-.forEach(btn=>{
-btn.onclick=()=>changeStatus(
-btn.dataset.id,"paused"
-);
-});
+      submissionHTML = `
+        <div class="submission-status">
 
-document.querySelectorAll(".activate-button")
-.forEach(btn=>{
-btn.onclick=()=>changeStatus(
-btn.dataset.id,"active"
-);
-});
+          Submission:
+          <strong class="${statusClass}">
+            ${statusText}
+          </strong>
 
-document.querySelectorAll(".close-button")
-.forEach(btn=>{
-btn.onclick=()=>changeStatus(
-btn.dataset.id,"closed"
-);
-});
+          ${
+            status === "approved"
+            ?
+            `
+            <br>
+            Reward:
+            <strong class="approved">
+              ${formatMoney(
+                submission.reward_amount
+              )}
+            </strong>
+            `
+            :
+            ""
+          }
 
-document.querySelectorAll(".delete-button")
-.forEach(btn=>{
-btn.onclick=()=>deleteTask(
-btn.dataset.id
-);
-});
+        </div>
+      `;
 
-}
+    }
 
-/* CREATE / UPDATE */
 
-taskForm.addEventListener(
-"submit",
-async function(e){
+    card.innerHTML = `
 
-e.preventDefault();
+      <div class="task-title">
+        ${escapeHTML(task.title)}
+      </div>
 
-formMessage.textContent="";
+      <div class="task-description">
+        ${escapeHTML(task.description)}
+      </div>
 
-saveButton.disabled=true;
+      <div class="task-info">
 
-saveButton.textContent =
-editingTaskId
-? "Saving..."
-: "Creating...";
+        <div class="info">
+          <small>Platform</small>
+          <strong>
+            ${escapeHTML(task.platform || "-")}
+          </strong>
+        </div>
 
-try{
+        <div class="info">
+          <small>Task Reward</small>
+          <strong class="reward">
+            ${formatMoney(task.reward)}
+          </strong>
+        </div>
 
-await getAdmin();
+        <div class="info">
+          <small>Workers Needed</small>
+          <strong>
+            ${escapeHTML(
+              task.workers_needed ?? 1
+            )}
+          </strong>
+        </div>
 
-const title =
-document.getElementById("title")
-.value.trim();
+      </div>
 
-const description =
-document.getElementById("description")
-.value.trim();
+      <div>
 
-const platform =
-document.getElementById("platform")
-.value.trim();
+        <button
+          class="button open-task"
+          data-id="${escapeHTML(task.id)}"
+          ${!task.task_url ? "disabled" : ""}
+        >
+          Open Task
+        </button>
 
-const taskUrl =
-document.getElementById("taskUrl")
-.value.trim();
+        <button
+          class="button submit-proof"
+          data-id="${escapeHTML(task.id)}"
+          ${alreadySubmitted ? "disabled" : ""}
+        >
+          ${
+            alreadySubmitted
+              ? "Proof Submitted"
+              : "Submit Proof"
+          }
+        </button>
 
-const reward =
-Number(
-document.getElementById("reward").value
-);
+      </div>
 
-const workersNeeded =
-Number(
-document.getElementById("workersNeeded").value
-);
+      ${submissionHTML}
 
-const targetLevels =
-levelsFromSelect();
+    `;
 
-const status =
-document.getElementById("taskStatus").value;
 
-let result;
+    taskList.appendChild(card);
 
-if(editingTaskId){
+  });
 
-result =
-await supabaseClient.rpc(
-"admin_update_task",
-{
-p_id:editingTaskId,
-p_title:title,
-p_description:description,
-p_platform:platform,
-p_task_url:taskUrl,
-p_reward:reward,
-p_workers_needed:workersNeeded,
-p_target_levels:targetLevels,
-p_status:status
-}
-);
 
-}else{
+  /* OPEN TASK */
 
-result =
-await supabaseClient.rpc(
-"admin_create_task",
-{
-p_title:title,
-p_description:description,
-p_platform:platform,
-p_task_url:taskUrl,
-p_reward:reward,
-p_workers_needed:workersNeeded,
-p_target_levels:targetLevels,
-p_status:status
-}
-);
+  document
+    .querySelectorAll(".open-task")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          const task =
+            tasks.find(
+              item =>
+                String(item.id) ===
+                String(button.dataset.id)
+            );
+
+
+          if(
+            !task ||
+            !task.task_url
+          ){
+
+            alert(
+              "This task does not have a valid link."
+            );
+
+            return;
+
+          }
+
+
+          window.open(
+            task.task_url,
+            "_blank",
+            "noopener,noreferrer"
+          );
+
+        }
+      );
+
+    });
+
+
+  /* SUBMIT PROOF */
+
+  document
+    .querySelectorAll(".submit-proof")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        function(){
+
+          const task =
+            tasks.find(
+              item =>
+                String(item.id) ===
+                String(button.dataset.id)
+            );
+
+          if(task){
+
+            openProofModal(task);
+
+          }
+
+        }
+      );
+
+    });
 
 }
 
-if(result.error)
-throw result.error;
 
-formMessage.textContent =
-editingTaskId
-? "Task updated successfully."
-: "Task created successfully.";
+/* OPEN MODAL */
 
-formMessage.className="success";
+function openProofModal(task){
 
-resetForm();
+  selectedTask =
+    task;
 
-await loadTasks();
+  proofForm.reset();
 
-}catch(error){
+  submitMessage.textContent =
+    "";
 
-console.error(error);
+  submitMessage.className =
+    "";
 
-formMessage.textContent =
-"Error: " + error.message;
-
-formMessage.className="error";
-
-}finally{
-
-saveButton.disabled=false;
-
-saveButton.textContent =
-editingTaskId
-? "Save Changes"
-: "Create Task";
+  proofModal.classList.add("show");
 
 }
 
-});
 
-/* EDIT */
+/* CLOSE MODAL */
 
-function editTask(id){
+function closeProofModal(){
 
-const task =
-allTasks.find(
-t=>String(t.id) === String(id)
+  selectedTask =
+    null;
+
+  proofForm.reset();
+
+  submitMessage.textContent =
+    "";
+
+  proofModal.classList.remove("show");
+
+}
+
+
+cancelProof.addEventListener(
+  "click",
+  closeProofModal
 );
 
-if(!task) return;
 
-editingTaskId=task.id;
+proofModal.addEventListener(
+  "click",
+  function(event){
 
-formTitle.textContent="Edit Task";
+    if(event.target === proofModal){
 
-saveButton.textContent="Save Changes";
+      closeProofModal();
 
-cancelButton.style.display="inline-block";
+    }
 
-document.getElementById("title").value =
-task.title || "";
-
-document.getElementById("description").value =
-task.description || "";
-
-document.getElementById("platform").value =
-task.platform || "";
-
-document.getElementById("taskUrl").value =
-task.task_url || "";
-
-document.getElementById("reward").value =
-task.reward || 0;
-
-document.getElementById("workersNeeded").value =
-task.workers_needed || 1;
-
-document.getElementById("taskStatus").value =
-task.status || "active";
-
-const levels =
-Array.isArray(task.target_levels)
-? task.target_levels
-: [];
-
-if(
-levels.includes("level_1") &&
-levels.includes("level_2")
-){
-
-document.getElementById("targetLevel").value =
-"both";
-
-}else if(levels.includes("level_2")){
-
-document.getElementById("targetLevel").value =
-"level_2";
-
-}else{
-
-document.getElementById("targetLevel").value =
-"level_1";
-
-}
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}
-
-/* CANCEL */
-
-cancelButton.addEventListener(
-"click",
-resetForm
+  }
 );
 
-function resetForm(){
 
-editingTaskId=null;
+/* SUBMIT PROOF */
 
-taskForm.reset();
+proofForm.addEventListener(
+  "submit",
+  async function(event){
 
-document.getElementById(
-"workersNeeded"
-).value=1;
+    event.preventDefault();
 
-document.getElementById(
-"targetLevel"
-).value="level_1";
 
-document.getElementById(
-"taskStatus"
-).value="active";
+    if(!currentUser || !selectedTask){
 
-formTitle.textContent =
-"Create New Task";
+      return;
 
-saveButton.textContent =
-"Create Task";
+    }
 
-cancelButton.style.display="none";
 
-}
+    const file =
+      proofFile.files[0];
 
-/* STATUS */
 
-async function changeStatus(id,status){
+    if(!file){
 
-const task =
-allTasks.find(
-t=>String(t.id) === String(id)
+      submitMessage.textContent =
+        "Please select a screenshot.";
+
+      submitMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    if(
+      !file.type ||
+      !file.type.startsWith("image/")
+    ){
+
+      submitMessage.textContent =
+        "Please upload an image screenshot only.";
+
+      submitMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    if(
+      file.size >
+      5 * 1024 * 1024
+    ){
+
+      submitMessage.textContent =
+        "Screenshot must not be larger than 5MB.";
+
+      submitMessage.className =
+        "error";
+
+      return;
+
+    }
+
+
+    try{
+
+      submitProofButton.disabled =
+        true;
+
+      submitProofButton.textContent =
+        "Checking...";
+
+
+      /*
+        Check for duplicate submission.
+      */
+
+      const {
+        data:existing,
+        error:existingError
+      } =
+      await supabaseClient
+        .from("task_submissions")
+        .select("id,status")
+        .eq(
+          "task_id",
+          selectedTask.id
+        )
+        .eq(
+          "worker_id",
+          currentUser.id
+        )
+        .maybeSingle();
+
+
+      if(existingError){
+
+        throw existingError;
+
+      }
+
+
+      if(
+        existing &&
+        String(existing.status).toLowerCase()
+        !== "rejected"
+      ){
+
+        throw new Error(
+          "You have already submitted this task."
+        );
+
+      }
+
+
+      /*
+        If previous submission was rejected,
+        remove it before creating the new one.
+      */
+
+      if(existing){
+
+        const {
+          error:deleteError
+        } =
+        await supabaseClient
+          .from("task_submissions")
+          .delete()
+          .eq(
+            "id",
+            existing.id
+          );
+
+        if(deleteError){
+
+          throw deleteError;
+
+        }
+
+      }
+
+
+      submitProofButton.textContent =
+        "Uploading...";
+
+
+      const extension =
+        file.name
+          .split(".")
+          .pop()
+          .toLowerCase() || "jpg";
+
+
+      const filePath =
+        currentUser.id +
+        "/" +
+        selectedTask.id +
+        "-" +
+        Date.now() +
+        "." +
+        extension;
+
+
+      const {
+        data:uploadData,
+        error:uploadError
+      } =
+      await supabaseClient
+        .storage
+        .from("task-proofs")
+        .upload(
+          filePath,
+          file,
+          {
+            cacheControl:"3600",
+            upsert:false,
+            contentType:file.type
+          }
+        );
+
+
+      if(uploadError){
+
+        throw uploadError;
+
+      }
+
+
+      submitProofButton.textContent =
+        "Submitting...";
+
+
+      const {
+        error:submissionError
+      } =
+      await supabaseClient
+        .from("task_submissions")
+        .insert({
+          task_id:
+            selectedTask.id,
+
+          worker_id:
+            currentUser.id,
+
+          proof_url:
+            uploadData.path,
+
+          proof_text:
+            proofText.value.trim() || null,
+
+          status:
+            "pending",
+
+          reward_amount:
+            Number(
+              selectedTask.reward || 0
+            )
+        });
+
+
+      if(submissionError){
+
+        await supabaseClient
+          .storage
+          .from("task-proofs")
+          .remove([
+            uploadData.path
+          ]);
+
+        throw submissionError;
+
+      }
+
+
+      submitMessage.textContent =
+        "Proof submitted successfully. Waiting for admin review.";
+
+      submitMessage.className =
+        "success";
+
+
+      setTimeout(
+        async function(){
+
+          closeProofModal();
+
+          await loadTasks();
+
+        },
+        1200
+      );
+
+
+    }catch(error){
+
+      console.error(
+        "SUBMIT PROOF ERROR:",
+        error
+      );
+
+      submitMessage.textContent =
+        error.message ||
+        "Unable to submit proof.";
+
+      submitMessage.className =
+        "error";
+
+    }finally{
+
+      submitProofButton.disabled =
+        false;
+
+      submitProofButton.textContent =
+        "Submit Proof";
+
+    }
+
+  }
 );
 
-if(!task) return;
-
-const action =
-status === "active"
-? "activate"
-: status === "paused"
-? "pause"
-: "close";
-
-if(
-!confirm(
-`Are you sure you want to ${action} this task?`
-)
-){
-
-return;
-
-}
-
-try{
-
-await getAdmin();
-
-const {
-error
-} =
-await supabaseClient.rpc(
-"admin_set_task_status",
-{
-p_id:id,
-p_status:status
-}
-);
-
-if(error) throw error;
-
-message.textContent =
-"Task status updated successfully.";
-
-message.className="success";
-
-await loadTasks();
-
-}catch(error){
-
-message.textContent =
-"Error: " + error.message;
-
-message.className="error";
-
-}
-
-}
-
-/* DELETE */
-
-async function deleteTask(id){
-
-if(
-!confirm(
-"Delete this task permanently?"
-)
-){
-
-return;
-
-}
-
-try{
-
-await getAdmin();
-
-const {
-error
-} =
-await supabaseClient.rpc(
-"admin_delete_task",
-{
-p_id:id
-}
-);
-
-if(error) throw error;
-
-message.textContent =
-"Task deleted successfully.";
-
-message.className="success";
-
-await loadTasks();
-
-}catch(error){
-
-message.textContent =
-"Delete error: " +
-error.message;
-
-message.className="error";
-
-}
-
-}
 
 /* LOGOUT */
 
 logoutButton.addEventListener(
-"click",
-async function(){
+  "click",
+  async function(){
 
-try{
+    await supabaseClient.auth.signOut();
 
-await supabaseClient.auth.signOut();
+    window.location.href =
+      "login.html";
 
-window.location.href="login.html";
+  }
+);
 
-}catch(error){
-
-message.textContent =
-"Logout error: " +
-error.message;
-
-message.className="error";
-
-}
-
-});
 
 /* START */
 
 loadTasks();
 
-</script></body>
+</script>
+
+</body>
 </html>

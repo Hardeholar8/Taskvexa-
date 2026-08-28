@@ -19,9 +19,8 @@
   --border: #202b3b;
   --text: #f8fafc;
   --muted: #7f8da3;
-  --soft: #cbd5e1;
+  --accent: #8b5cf6;
   --green: #4ade80;
-  --yellow: #facc15;
   --red: #f87171;
 }
 
@@ -29,6 +28,7 @@ html,
 body {
   margin: 0;
   padding: 0;
+  min-height: 100%;
   background: var(--bg);
   color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
@@ -38,9 +38,7 @@ body {
   min-height: 100vh;
 }
 
-/* =========================
-   SIDEBAR
-========================= */
+/* SIDEBAR */
 
 .sidebar {
   position: fixed;
@@ -50,14 +48,13 @@ body {
   width: 250px;
   background: var(--sidebar);
   border-right: 1px solid var(--border);
-  padding: 22px 14px;
-  z-index: 1000;
+  padding: 20px 14px;
   overflow-y: auto;
-  transition: .25s;
+  z-index: 1000;
 }
 
 .logo {
-  padding: 8px 14px 25px;
+  padding: 8px 14px 22px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 18px;
 }
@@ -67,93 +64,89 @@ body {
   font-size: 23px;
 }
 
-.logo span {
-  display: block;
-  margin-top: 5px;
+.logo p {
+  margin: 5px 0 0;
   color: var(--muted);
   font-size: 12px;
 }
 
 .nav-title {
-  color: #4f5d73;
+  color: #526078;
   font-size: 10px;
   font-weight: 800;
-  letter-spacing: 1.4px;
-  padding: 10px 14px 8px;
-  text-transform: uppercase;
+  letter-spacing: 1.3px;
+  margin: 15px 14px 8px;
 }
 
 .nav-link {
   display: flex;
   align-items: center;
   gap: 12px;
-  width: 100%;
   padding: 12px 14px;
   margin: 4px 0;
   border-radius: 11px;
   color: #aeb9c9;
   text-decoration: none;
   font-size: 14px;
-  transition: .2s;
 }
 
 .nav-link:hover,
 .nav-link.active {
   background: #171d2a;
-  color: white;
+  color: #fff;
 }
 
 .nav-icon {
   width: 24px;
   text-align: center;
-  font-size: 16px;
-}
-
-.logout-nav {
-  margin-top: 25px;
-  border-top: 1px solid var(--border);
-  padding-top: 18px;
+  font-size: 17px;
 }
 
 .logout-button {
-  border: 0;
-  background: transparent;
+  width: 100%;
+  margin-top: 25px;
+  padding: 12px 14px;
+  background: #171d28;
+  border: 1px solid #293548;
+  border-radius: 11px;
+  color: #f87171;
+  font-weight: 700;
   cursor: pointer;
+  text-align: left;
 }
 
-/* =========================
-   MAIN
-========================= */
+.logout-button:hover {
+  background: #21171b;
+}
+
+/* MAIN */
 
 .main {
   margin-left: 250px;
   min-height: 100vh;
 }
 
-/* =========================
-   TOPBAR
-========================= */
+/* TOPBAR */
 
 .topbar {
-  height: 72px;
+  height: 70px;
+  background: rgba(7,10,16,.95);
   border-bottom: 1px solid var(--border);
-  background: rgba(7,10,16,.94);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 30px;
+  padding: 0 28px;
   position: sticky;
   top: 0;
   z-index: 900;
-  backdrop-filter: blur(12px);
 }
 
 .topbar-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
 }
 
-.admin-badge {
+.admin-status {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -166,47 +159,30 @@ body {
   height: 8px;
   background: var(--green);
   border-radius: 50%;
-  box-shadow: 0 0 10px rgba(74,222,128,.6);
 }
 
-.mobile-menu {
-  display: none;
-  background: #151b28;
-  border: 1px solid var(--border);
-  color: white;
-  border-radius: 9px;
-  padding: 8px 11px;
-  cursor: pointer;
-  font-size: 18px;
-}
-
-/* =========================
-   CONTENT
-========================= */
+/* CONTENT */
 
 .content {
-  padding: 30px;
   max-width: 1400px;
   margin: auto;
+  padding: 30px;
 }
 
-.page-heading {
-  margin-bottom: 25px;
-}
-
-.page-heading h2 {
-  margin: 0 0 8px;
+.heading h2 {
+  margin: 0 0 7px;
   font-size: 29px;
 }
 
-.page-heading p {
+.heading p {
   margin: 0;
   color: var(--muted);
   font-size: 14px;
 }
 
-#message {
-  margin-bottom: 20px;
+.message {
+  margin: 18px 0;
+  color: var(--muted);
   font-size: 13px;
 }
 
@@ -218,62 +194,40 @@ body {
   color: var(--red);
 }
 
-/* =========================
-   OVERVIEW
-========================= */
+/* DASHBOARD */
 
-.overview-grid {
+.dashboard-content {
+  display: none;
+}
+
+.overview {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-  margin-bottom: 28px;
+  gap: 15px;
+  margin-top: 25px;
 }
 
-.stat-card {
-  background: linear-gradient(145deg, #131a27, #0d121b);
+.stat {
+  background: linear-gradient(145deg,#131a27,#0d121b);
   border: 1px solid var(--border);
   border-radius: 17px;
-  padding: 20px;
-  min-height: 125px;
-  box-shadow: 0 12px 30px rgba(0,0,0,.2);
+  padding: 19px;
 }
 
-.stat-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.stat-label {
+.stat small {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
 }
 
-.stat-icon {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #1a2030;
-  border-radius: 10px;
-  font-size: 17px;
+.stat strong {
+  display: block;
+  margin-top: 13px;
+  font-size: 23px;
 }
 
-.stat-value {
-  margin-top: 18px;
-  font-size: 24px;
-  font-weight: 800;
-}
-
-/* =========================
-   SECTION
-========================= */
+/* MANAGEMENT */
 
 .section-title {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin: 30px 0 14px;
 }
 
@@ -282,38 +236,24 @@ body {
   font-size: 17px;
 }
 
-.section-title span {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-/* =========================
-   MANAGEMENT GRID
-========================= */
-
-.management-grid {
+.management {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px;
+  gap: 15px;
 }
 
-.admin-card {
+.card {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 18px;
+  border-radius: 17px;
   padding: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,.18);
-}
-
-.admin-card:hover {
-  border-color: #303d52;
 }
 
 .card-head {
   display: flex;
   align-items: center;
-  gap: 13px;
-  margin-bottom: 13px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .card-icon {
@@ -328,60 +268,53 @@ body {
   font-size: 19px;
 }
 
-.admin-card h3 {
+.card h3 {
   margin: 0;
   font-size: 16px;
 }
 
-.admin-card p {
+.card p {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.6;
-  margin: 0 0 17px;
+  margin: 0 0 16px;
 }
 
-/* =========================
-   BUTTON
-========================= */
-
-.admin-button {
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 42px;
-  padding: 10px 16px;
-  border-radius: 11px;
+  padding: 11px 16px;
+  min-height: 40px;
+  background: #f8fafc;
+  color: #080c13;
+  border-radius: 10px;
   text-decoration: none;
+  border: none;
   font-size: 13px;
   font-weight: 700;
-  background: #f8fafc;
-  color: #090d14;
-  border: none;
   cursor: pointer;
-  transition: .2s;
 }
 
-.admin-button:hover {
-  transform: translateY(-1px);
+.button:hover {
   opacity: .9;
+  transform: translateY(-1px);
 }
 
-.secondary-button {
+.secondary {
   background: #1a2130;
   color: #dbe4f0;
   border: 1px solid #2b374a;
 }
 
-/* =========================
-   PAYMENT CARD
-========================= */
+/* PAYMENT */
 
 .payment-card {
-  background: linear-gradient(145deg, #121a29, #0d131e);
-  border: 1px solid #29354a;
-  border-radius: 20px;
-  padding: 23px;
   margin-top: 16px;
+  background: linear-gradient(145deg,#121a29,#0d131e);
+  border: 1px solid #29354a;
+  border-radius: 18px;
+  padding: 22px;
 }
 
 .info-box {
@@ -389,16 +322,15 @@ body {
   border: 1px solid #1f2b3d;
   color: #8997aa;
   padding: 13px;
-  border-radius: 11px;
-  margin-bottom: 20px;
+  border-radius: 10px;
   font-size: 12px;
-  line-height: 1.5;
+  margin-bottom: 18px;
 }
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
 }
 
 .form-group.full {
@@ -430,71 +362,32 @@ body {
   resize: vertical;
 }
 
-.form-group input::placeholder,
-.form-group textarea::placeholder {
-  color: #4f5c70;
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #6b7280;
 }
 
 #paymentDetailsMessage {
-  margin-top: 13px;
   font-size: 13px;
   font-weight: 600;
 }
 
-/* =========================
-   QUICK LINKS
-========================= */
+/* MOBILE */
 
-.quick-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-}
-
-.quick-link {
-  display: block;
-  background: #0d131e;
+.mobile-button {
+  display: none;
+  background: #151b28;
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 17px;
-  text-decoration: none;
   color: white;
-  transition: .2s;
+  border-radius: 9px;
+  padding: 8px 11px;
+  cursor: pointer;
+  font-size: 18px;
 }
-
-.quick-link:hover {
-  background: #151c29;
-  transform: translateY(-2px);
-}
-
-.quick-link-icon {
-  font-size: 21px;
-  margin-bottom: 10px;
-}
-
-.quick-link strong {
-  display: block;
-  font-size: 13px;
-}
-
-.quick-link small {
-  display: block;
-  color: var(--muted);
-  margin-top: 5px;
-  font-size: 11px;
-}
-
-/* =========================
-   MOBILE
-========================= */
 
 @media (max-width: 1050px) {
 
-  .overview-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .quick-grid {
+  .overview {
     grid-template-columns: repeat(2, 1fr);
   }
 
@@ -504,6 +397,7 @@ body {
 
   .sidebar {
     transform: translateX(-100%);
+    transition: .25s;
   }
 
   .sidebar.open {
@@ -514,37 +408,37 @@ body {
     margin-left: 0;
   }
 
-  .mobile-menu {
+  .mobile-button {
     display: block;
-  }
-
-  .topbar {
-    padding: 0 16px;
   }
 
   .content {
     padding: 22px 15px 40px;
   }
 
-  .management-grid {
+  .topbar {
+    padding: 0 15px;
+  }
+
+  .management {
     grid-template-columns: 1fr;
   }
 
 }
 
-@media (max-width: 550px) {
+@media (max-width: 520px) {
 
-  .overview-grid {
+  .overview {
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
 
-  .stat-card {
+  .stat {
     padding: 15px;
   }
 
-  .stat-value {
-    font-size: 20px;
+  .stat strong {
+    font-size: 19px;
   }
 
   .form-grid {
@@ -555,25 +449,19 @@ body {
     grid-column: auto;
   }
 
-  .quick-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-
 }
 </style>
 </head>
 
 <body>
 
-<!-- =========================
-     SIDEBAR
-========================= -->
+<!-- SIDEBAR -->
 
-<aside class="sidebar" id="sidebar">
+<aside id="sidebar" class="sidebar">
 
   <div class="logo">
     <h1>TaskVexa</h1>
-    <span>Administration Panel</span>
+    <p>Administration Panel</p>
   </div>
 
   <div class="nav-title">
@@ -585,40 +473,34 @@ body {
     Dashboard
   </a>
 
+  <div class="nav-title">
+    Management
+  </div>
+
+  <a href="worker.html" class="nav-link">
+    <span class="nav-icon">👥</span>
+    Workers
+  </a>
+
+  <a href="promoters.html" class="nav-link">
+    <span class="nav-icon">📢</span>
+    Promoters
+  </a>
+
   <a href="tasks.html" class="nav-link">
-    <span class="nav-icon">📋</span>
+    <span class="nav-icon">✓</span>
     Tasks
   </a>
 
   <a href="admin-submissions.html" class="nav-link">
-    <span class="nav-icon">📝</span>
+    <span class="nav-icon">📋</span>
     Submissions
   </a>
 
   <a href="admin-withdrawals.html" class="nav-link">
-    <span class="nav-icon">💸</span>
+    <span class="nav-icon">💳</span>
     Withdrawals
   </a>
-
-  <div class="nav-title">
-    Users
-  </div>
-
-  <!-- CONNECTED TO worker.html -->
-
-  <a href="worker.html" class="nav-link">
-    <span class="nav-icon">👷</span>
-    Workers
-  </a>
-
-  <a href="admin-promoters.html" class="nav-link">
-    <span class="nav-icon">📣</span>
-    Promoters
-  </a>
-
-  <div class="nav-title">
-    Finance
-  </div>
 
   <a href="admin-promoter-wallet.html" class="nav-link">
     <span class="nav-icon">💰</span>
@@ -630,45 +512,39 @@ body {
   </div>
 
   <a href="#payment" class="nav-link">
-    <span class="nav-icon">⚙️</span>
+    <span class="nav-icon">⚙</span>
     Payment Details
   </a>
 
-  <div class="logout-nav">
-
-    <button
-      id="logoutButton"
-      class="nav-link logout-button"
-    >
-      <span class="nav-icon">↪</span>
-      Logout
-    </button>
-
-  </div>
+  <button id="logoutButton" class="logout-button">
+    🚪 Logout
+  </button>
 
 </aside>
 
 
-<!-- =========================
-     MAIN
-========================= -->
+<!-- MAIN -->
 
 <div class="main">
 
-  <div class="topbar">
+  <header class="topbar">
 
-    <button
-      id="mobileMenu"
-      class="mobile-menu"
-    >
-      ☰
-    </button>
+    <div style="display:flex;align-items:center;gap:12px;">
 
-    <div class="topbar-title">
-      Admin Dashboard
+      <button
+        id="mobileButton"
+        class="mobile-button"
+      >
+        ☰
+      </button>
+
+      <div class="topbar-title">
+        Admin Dashboard
+      </div>
+
     </div>
 
-    <div class="admin-badge">
+    <div class="admin-status">
 
       <span class="online-dot"></span>
 
@@ -676,12 +552,12 @@ body {
 
     </div>
 
-  </div>
+  </header>
 
 
   <main class="content">
 
-    <div class="page-heading">
+    <div class="heading">
 
       <h2>
         Welcome to TaskVexa
@@ -694,149 +570,152 @@ body {
     </div>
 
 
-    <p id="message">
+    <div
+      id="message"
+      class="message"
+    >
       Checking admin access...
-    </p>
+    </div>
 
 
-    <section
-      id="adminContent"
-      style="display:none;"
+    <div
+      id="dashboardContent"
+      class="dashboard-content"
     >
 
 
-      <!-- =========================
-           OVERVIEW
-      ========================== -->
+      <!-- OVERVIEW -->
 
-      <div class="overview-grid">
+      <div class="overview">
 
-        <div class="stat-card">
+        <div class="stat">
 
-          <div class="stat-top">
+          <small>
+            Workers
+          </small>
 
-            <span class="stat-label">
-              Workers
-            </span>
-
-            <span class="stat-icon">
-              👷
-            </span>
-
-          </div>
-
-          <div
-            id="workerCount"
-            class="stat-value"
-          >
+          <strong id="workerCount">
             —
-          </div>
+          </strong>
 
         </div>
 
 
-        <div class="stat-card">
+        <div class="stat">
 
-          <div class="stat-top">
+          <small>
+            Promoters
+          </small>
 
-            <span class="stat-label">
-              Promoters
-            </span>
-
-            <span class="stat-icon">
-              📣
-            </span>
-
-          </div>
-
-          <div
-            id="promoterCount"
-            class="stat-value"
-          >
+          <strong id="promoterCount">
             —
-          </div>
+          </strong>
 
         </div>
 
 
-        <div class="stat-card">
+        <div class="stat">
 
-          <div class="stat-top">
+          <small>
+            Active Tasks
+          </small>
 
-            <span class="stat-label">
-              Active Tasks
-            </span>
-
-            <span class="stat-icon">
-              📋
-            </span>
-
-          </div>
-
-          <div
-            id="taskCount"
-            class="stat-value"
-          >
+          <strong id="taskCount">
             —
-          </div>
+          </strong>
 
         </div>
 
 
-        <div class="stat-card">
+        <div class="stat">
 
-          <div class="stat-top">
+          <small>
+            Pending Withdrawals
+          </small>
 
-            <span class="stat-label">
-              Pending Submissions
-            </span>
-
-            <span class="stat-icon">
-              📝
-            </span>
-
-          </div>
-
-          <div
-            id="submissionCount"
-            class="stat-value"
-          >
+          <strong id="withdrawalCount">
             —
-          </div>
+          </strong>
 
         </div>
 
       </div>
 
 
-      <!-- =========================
-           MANAGEMENT
-      ========================== -->
+      <!-- MANAGEMENT -->
 
       <div class="section-title">
-
         <h3>
           Management
         </h3>
-
-        <span>
-          TaskVexa controls
-        </span>
-
       </div>
 
 
-      <div class="management-grid">
+      <div class="management">
 
 
-        <!-- TASKS -->
-
-        <section class="admin-card">
+        <div class="card">
 
           <div class="card-head">
 
             <div class="card-icon">
-              📋
+              👥
+            </div>
+
+            <h3>
+              Workers
+            </h3>
+
+          </div>
+
+          <p>
+            View and manage registered worker accounts.
+          </p>
+
+          <a
+            href="worker.html"
+            class="button"
+          >
+            Manage Workers
+          </a>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="card-head">
+
+            <div class="card-icon">
+              📢
+            </div>
+
+            <h3>
+              Promoters
+            </h3>
+
+          </div>
+
+          <p>
+            View and manage promoter accounts and activities.
+          </p>
+
+          <a
+            href="promoters.html"
+            class="button"
+          >
+            Manage Promoters
+          </a>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="card-head">
+
+            <div class="card-icon">
+              ✓
             </div>
 
             <h3>
@@ -846,431 +725,4 @@ body {
           </div>
 
           <p>
-            Create, edit and manage tasks available to workers.
-          </p>
-
-          <a
-            href="tasks.html"
-            class="admin-button"
-          >
-            Manage Tasks
-          </a>
-
-        </section>
-
-
-        <!-- SUBMISSIONS -->
-
-        <section class="admin-card">
-
-          <div class="card-head">
-
-            <div class="card-icon">
-              📝
-            </div>
-
-            <h3>
-              Task Submissions
-            </h3>
-
-          </div>
-
-          <p>
-            Review worker screenshots and approve or reject submitted proofs.
-          </p>
-
-          <a
-            href="admin-submissions.html"
-            class="admin-button"
-          >
-            Review Submissions
-          </a>
-
-        </section>
-
-
-        <!-- WITHDRAWALS -->
-
-        <section class="admin-card">
-
-          <div class="card-head">
-
-            <div class="card-icon">
-              💸
-            </div>
-
-            <h3>
-              Withdrawal Requests
-            </h3>
-
-          </div>
-
-          <p>
-            Review and manage worker withdrawal requests.
-          </p>
-
-          <a
-            href="admin-withdrawals.html"
-            class="admin-button"
-          >
-            Manage Withdrawals
-          </a>
-
-        </section>
-
-
-        <!-- PROMOTER WALLET -->
-
-        <section class="admin-card">
-
-          <div class="card-head">
-
-            <div class="card-icon">
-              💰
-            </div>
-
-            <h3>
-              Promoter Wallet
-            </h3>
-
-          </div>
-
-          <p>
-            Manage promoter deposit requests and promoter wallet balances.
-          </p>
-
-          <a
-            href="admin-promoter-wallet.html"
-            class="admin-button"
-          >
-            Open Promoter Wallet
-          </a>
-
-        </section>
-
-
-        <!-- WORKERS -->
-
-        <section class="admin-card">
-
-          <div class="card-head">
-
-            <div class="card-icon">
-              👷
-            </div>
-
-            <h3>
-              Workers
-            </h3>
-
-          </div>
-
-          <p>
-            View registered workers, their activation level, status and wallet balance.
-          </p>
-
-          <a
-            href="worker.html"
-            class="admin-button"
-          >
-            Manage Workers
-          </a>
-
-        </section>
-
-
-        <!-- PROMOTERS -->
-
-        <section class="admin-card">
-
-          <div class="card-head">
-
-            <div class="card-icon">
-              📣
-            </div>
-
-            <h3>
-              Promoters
-            </h3>
-
-          </div>
-
-          <p>
-            View and manage promoter accounts and promoter activity.
-          </p>
-
-          <a
-            href="admin-promoters.html"
-            class="admin-button"
-          >
-            Manage Promoters
-          </a>
-
-        </section>
-
-
-      </div>
-
-
-      <!-- =========================
-           PAYMENT DETAILS
-      ========================== -->
-
-      <div
-        id="payment"
-        class="section-title"
-      >
-
-        <h3>
-          Promoter Payment Details
-        </h3>
-
-        <span>
-          Deposit account
-        </span>
-
-      </div>
-
-
-      <section class="payment-card">
-
-        <div class="card-head">
-
-          <div class="card-icon">
-            🏦
-          </div>
-
-          <div>
-
-            <h3>
-              Promoter Deposit Payment Details
-            </h3>
-
-          </div>
-
-        </div>
-
-
-        <div class="info-box">
-
-          These details are shown to promoters when they press
-          <strong>Add Funds</strong>.
-
-        </div>
-
-
-        <div class="form-grid">
-
-
-          <div class="form-group">
-
-            <label>
-              Bank Name
-            </label>
-
-            <input
-              type="text"
-              id="bankName"
-              placeholder="e.g. Opay"
-            >
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label>
-              Account Name
-            </label>
-
-            <input
-              type="text"
-              id="accountName"
-              placeholder="Enter account name"
-            >
-
-          </div>
-
-
-          <div class="form-group">
-
-            <label>
-              Account Number
-            </label>
-
-            <input
-              type="text"
-              id="accountNumber"
-              inputmode="numeric"
-              placeholder="Enter account number"
-            >
-
-          </div>
-
-
-          <div class="form-group full">
-
-            <label>
-              Payment Instructions
-            </label>
-
-            <textarea
-              id="paymentInstructions"
-              placeholder="Enter instructions promoters should follow after making payment"
-            ></textarea>
-
-          </div>
-
-
-        </div>
-
-
-        <button
-          id="savePaymentDetailsButton"
-          class="admin-button"
-        >
-          Save Payment Details
-        </button>
-
-
-        <p id="paymentDetailsMessage"></p>
-
-      </section>
-
-
-      <!-- =========================
-           QUICK LINKS
-      ========================== -->
-
-      <div class="section-title">
-
-        <h3>
-          Quick Access
-        </h3>
-
-        <span>
-          Frequently used pages
-        </span>
-
-      </div>
-
-
-      <div class="quick-grid">
-
-
-        <a
-          href="worker.html"
-          class="quick-link"
-        >
-
-          <div class="quick-link-icon">
-            👷
-          </div>
-
-          <strong>
-            Workers
-          </strong>
-
-          <small>
-            View worker accounts
-          </small>
-
-        </a>
-
-
-        <a
-          href="admin-submissions.html"
-          class="quick-link"
-        >
-
-          <div class="quick-link-icon">
-            📝
-          </div>
-
-          <strong>
-            Submissions
-          </strong>
-
-          <small>
-            Review proofs
-          </small>
-
-        </a>
-
-
-        <a
-          href="admin-withdrawals.html"
-          class="quick-link"
-        >
-
-          <div class="quick-link-icon">
-            💸
-          </div>
-
-          <strong>
-            Withdrawals
-          </strong>
-
-          <small>
-            Manage requests
-          </small>
-
-        </a>
-
-
-        <a
-          href="admin-promoter-wallet.html"
-          class="quick-link"
-        >
-
-          <div class="quick-link-icon">
-            💰
-          </div>
-
-          <strong>
-            Promoter Wallet
-          </strong>
-
-          <small>
-            Manage deposits
-          </small>
-
-        </a>
-
-
-      </div>
-
-
-    </section>
-
-  </main>
-
-</div>
-
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-
-const SUPABASE_URL =
-"https://dxtlnrthlpdaobnbazny.supabase.co";
-
-const SUPABASE_KEY =
-"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
-
-const supabaseClient =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
-
-
-/* =========================
-   ELEMENTS
-========================= */
-
-const message =
-document.getElementById("message");
-
-const adminContent =
-  
+            Create, edit and manage

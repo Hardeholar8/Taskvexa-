@@ -47,6 +47,7 @@ header{
 
 .header-right{
   display:flex;
+  align-items:center;
   gap:8px;
 }
 
@@ -56,7 +57,6 @@ header{
   border-radius:9px;
   font-size:13px;
   font-weight:bold;
-  cursor:pointer;
 }
 
 .back-button{
@@ -70,6 +70,7 @@ header{
   background:#32191d;
   color:#f87171;
   border:1px solid #5b292f;
+  cursor:pointer;
 }
 
 .content{
@@ -100,6 +101,9 @@ header{
 
 .success{color:var(--green)}
 .error{color:var(--red)}
+.pending{color:var(--yellow)}
+.approved{color:var(--green)}
+.rejected{color:var(--red)}
 
 .loading,
 .empty{
@@ -160,22 +164,12 @@ header{
 
 .reward{
   color:var(--green);
-  font-size:17px!important;
-}
-
-.status{
-  display:inline-block;
-  padding:5px 9px;
-  border-radius:20px;
-  background:#102d20;
-  color:var(--green);
-  font-size:11px;
+  font-size:17px !important;
 }
 
 .button{
   min-height:42px;
   padding:10px 16px;
-  border:0;
   border-radius:10px;
   font-size:13px;
   font-weight:700;
@@ -186,6 +180,7 @@ header{
 .open-task{
   background:#f8fafc;
   color:#090d14;
+  border:0;
 }
 
 .submit-proof{
@@ -208,17 +203,13 @@ header{
   border:1px solid #1f2b3d;
 }
 
-.pending{color:var(--yellow)}
-.approved{color:var(--green)}
-.rejected{color:var(--red)}
-
 /* MODAL */
 
 .modal{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.75);
+  background:rgba(0,0,0,.78);
   z-index:100;
   padding:20px;
   overflow-y:auto;
@@ -250,6 +241,10 @@ header{
   line-height:1.5;
 }
 
+.form-group{
+  margin-bottom:16px;
+}
+
 label{
   display:block;
   color:#b9c4d3;
@@ -275,10 +270,6 @@ textarea{
   resize:vertical;
 }
 
-.form-group{
-  margin-bottom:16px;
-}
-
 .file-note{
   color:#64748b;
   font-size:11px;
@@ -300,6 +291,7 @@ textarea{
 .send{
   background:#f8fafc;
   color:#090d14;
+  border:0;
 }
 
 #submitMessage{
@@ -339,50 +331,50 @@ textarea{
 
 <header>
 
-<div class="logo">
-TaskVexa
-</div>
+  <div class="logo">
+    TaskVexa
+  </div>
 
-<div class="header-right">
+  <div class="header-right">
 
-<a href="worker.html" class="back-button">
-← Dashboard
-</a>
+    <a href="worker.html" class="back-button">
+      ← Dashboard
+    </a>
 
-<button id="logoutButton" class="logout">
-Logout
-</button>
+    <button id="logoutButton" class="logout">
+      Logout
+    </button>
 
-</div>
+  </div>
 
 </header>
 
 
 <main class="content">
 
-<div class="heading">
+  <div class="heading">
 
-<h1>Available Tasks</h1>
+    <h1>Available Tasks</h1>
 
-<p>
-Complete available tasks and submit your screenshot proof for review.
-</p>
+    <p>
+      Complete a task, open its link, then submit your screenshot proof.
+    </p>
 
-</div>
-
-
-<div id="message" class="message">
-Checking account...
-</div>
+  </div>
 
 
-<div id="taskList">
+  <div id="message" class="message">
+    Checking account...
+  </div>
 
-<div class="loading">
-Loading tasks...
-</div>
 
-</div>
+  <div id="taskList">
+
+    <div class="loading">
+      Loading tasks...
+    </div>
+
+  </div>
 
 </main>
 
@@ -391,77 +383,75 @@ Loading tasks...
 
 <div id="proofModal" class="modal">
 
-<div class="modal-box">
+  <div class="modal-box">
 
-<h2>Submit Task Proof</h2>
+    <h2>Submit Task Proof</h2>
 
-<div class="modal-description">
-Complete the task first, then upload a screenshot showing that you completed it.
-</div>
+    <div id="selectedTaskInfo" class="modal-description"></div>
 
 
-<form id="proofForm">
+    <form id="proofForm">
 
-<div class="form-group">
+      <div class="form-group">
 
-<label>
-Screenshot Proof
-</label>
+        <label>
+          Screenshot Proof
+        </label>
 
-<input
-id="proofFile"
-type="file"
-accept="image/*"
-required
->
+        <input
+          id="proofFile"
+          type="file"
+          accept="image/png,image/jpeg,image/jpg,image/webp"
+          required
+        >
 
-<div class="file-note">
-Screenshot/image only. Maximum 5MB.
-</div>
+        <div class="file-note">
+          Screenshot/image only. Maximum 5MB.
+        </div>
 
-</div>
-
-
-<div class="form-group">
-
-<label>
-Additional Note (Optional)
-</label>
-
-<textarea
-id="proofText"
-placeholder="Add any information the admin should know..."
-></textarea>
-
-</div>
+      </div>
 
 
-<div id="submitMessage"></div>
+      <div class="form-group">
+
+        <label>
+          Additional Note (Optional)
+        </label>
+
+        <textarea
+          id="proofText"
+          placeholder="Add any information for the admin..."
+        ></textarea>
+
+      </div>
 
 
-<div class="modal-actions">
+      <div id="submitMessage"></div>
 
-<button
-type="button"
-id="cancelProof"
-class="button cancel"
->
-Cancel
-</button>
 
-<button
-type="submit"
-id="submitProofButton"
-class="button send"
->
-Submit Proof
-</button>
+      <div class="modal-actions">
 
-</div>
+        <button
+          type="button"
+          id="cancelProof"
+          class="button cancel"
+        >
+          Cancel
+        </button>
 
-</form>
+        <button
+          type="submit"
+          id="submitProofButton"
+          class="button send"
+        >
+          Submit Proof
+        </button>
 
-</div>
+      </div>
+
+    </form>
+
+  </div>
 
 </div>
 
@@ -478,12 +468,14 @@ const SUPABASE_KEY =
 
 const supabaseClient =
 window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
 
-/* ELEMENTS */
+/* =========================
+   ELEMENTS
+========================= */
 
 const message =
 document.getElementById("message");
@@ -512,6 +504,9 @@ document.getElementById("submitMessage");
 const cancelProof =
 document.getElementById("cancelProof");
 
+const selectedTaskInfo =
+document.getElementById("selectedTaskInfo");
+
 const logoutButton =
 document.getElementById("logoutButton");
 
@@ -521,982 +516,217 @@ let selectedTask = null;
 let submissions = [];
 
 
-/* ESCAPE */
+/* =========================
+   ESCAPE HTML
+========================= */
 
 function escapeHTML(value){
 
-return String(value ?? "")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-/* MONEY */
+/* =========================
+   MONEY
+========================= */
 
 function formatMoney(value){
 
-return "₦" +
-Number(value || 0).toLocaleString(
-"en-NG",
-{
-minimumFractionDigits:0,
-maximumFractionDigits:2
-}
-);
+  return "₦" +
+    Number(value || 0).toLocaleString(
+      "en-NG",
+      {
+        minimumFractionDigits:0,
+        maximumFractionDigits:2
+      }
+    );
 
 }
 
 
-/* USER */
+/* =========================
+   CURRENT USER
+========================= */
 
 async function getCurrentUser(){
 
-const {
-data,
-error
-} =
-await supabaseClient.auth.getUser();
+  const {
+    data,
+    error
+  } =
+  await supabaseClient.auth.getUser();
 
 
-if(error){
+  if(error){
 
-throw error;
+    throw error;
+
+  }
+
+
+  if(
+    !data ||
+    !data.user
+  ){
+
+    window.location.href =
+      "login.html";
+
+    return null;
+
+  }
+
+
+  currentUser =
+    data.user;
+
+
+  const {
+    data:profile,
+    error:profileError
+  } =
+  await supabaseClient
+    .from("profiles")
+    .select("role")
+    .eq(
+      "id",
+      currentUser.id
+    )
+    .maybeSingle();
+
+
+  if(profileError){
+
+    throw profileError;
+
+  }
+
+
+  if(
+    !profile ||
+    String(profile.role).toLowerCase() !==
+    "worker"
+  ){
+
+    message.textContent =
+      "This page is for worker accounts only.";
+
+    message.className =
+      "message error";
+
+    return null;
+
+  }
+
+
+  return currentUser;
 
 }
 
 
-if(!data || !data.user){
-
-window.location.href =
-"login.html";
-
-return null;
-
-}
-
-
-currentUser =
-data.user;
-
-
-/* Worker only */
-
-const {
-data:profile,
-error:profileError
-} =
-await supabaseClient
-.from("profiles")
-.select("role")
-.eq(
-"id",
-currentUser.id
-)
-.maybeSingle();
-
-
-if(profileError){
-
-throw profileError;
-
-}
-
-
-if(
-!profile ||
-String(profile.role).toLowerCase() !==
-"worker"
-){
-
-message.textContent =
-"This page is for worker accounts only.";
-
-message.className =
-"message error";
-
-return null;
-
-}
-
-
-return currentUser;
-
-}
-
-
-/* LOAD MY SUBMISSIONS */
+/* =========================
+   LOAD SUBMISSIONS
+========================= */
 
 async function loadMySubmissions(){
 
-const {
-data,
-error
-} =
-await supabaseClient
-.from("task_submissions")
-.select(
-"id,task_id,status,reward_amount,created_at"
-)
-.eq(
-"worker_id",
-currentUser.id
-)
-.order(
-"created_at",
-{
-ascending:false
+  const {
+    data,
+    error
+  } =
+  await supabaseClient
+    .from("task_submissions")
+    .select(
+      "id,task_id,status,reward_amount,created_at"
+    )
+    .eq(
+      "worker_id",
+      currentUser.id
+    )
+    .order(
+      "created_at",
+      {
+        ascending:false
+      }
+    );
+
+
+  if(error){
+
+    throw error;
+
+  }
+
+
+  submissions =
+    Array.isArray(data)
+      ? data
+      : [];
+
 }
-);
 
 
-if(error){
-
-throw error;
-
-}
-
-
-submissions =
-Array.isArray(data)
-? data
-: [];
-
-}
-
-
-/* FIND SUBMISSION */
+/* =========================
+   FIND SUBMISSION
+========================= */
 
 function getTaskSubmission(taskId){
 
-return submissions.find(
-submission =>
-String(submission.task_id) ===
-String(taskId)
-);
+  return submissions.find(
+    item =>
+      String(item.task_id) ===
+      String(taskId)
+  );
 
 }
 
 
-/* LOAD ACTIVE TASKS */
+/* =========================
+   LOAD TASKS
+========================= */
 
 async function loadTasks(){
 
-taskList.innerHTML = `
-<div class="loading">
-Loading tasks...
-</div>
-`;
+  taskList.innerHTML = `
+    <div class="loading">
+      Loading tasks...
+    </div>
+  `;
 
 
-try{
+  try{
 
-const user =
-await getCurrentUser();
+    const user =
+      await getCurrentUser();
 
 
-if(!user){
+    if(!user){
 
-return;
+      return;
 
-}
+    }
 
 
-await loadMySubmissions();
+    await loadMySubmissions();
 
 
-const {
-data,
-error
-} =
-await supabaseClient
-.from("tasks")
-.select(
-"id,title,description,platform,task_url,reward,workers_needed,status,created_at"
-)
-.eq(
-"status",
-"active"
-)
-.order(
-"created_at",
-{
-ascending:false
-}
-);
+    /*
+      IMPORTANT:
+      No level system here.
+      Every active task is loaded.
+    */
 
-
-if(error){
-
-throw error;
-
-}
-
-
-const tasks =
-Array.isArray(data)
-? data
-: [];
-
-
-renderTasks(tasks);
-
-
-message.textContent =
-"Available tasks loaded.";
-
-message.className =
-"message success";
-
-
-}catch(error){
-
-console.error(
-"WORKER TASK ERROR:",
-error
-);
-
-
-taskList.innerHTML = `
-<div class="empty error">
-Unable to load tasks.<br><br>
-${escapeHTML(error.message)}
-</div>
-`;
-
-
-message.textContent =
-"Error: " +
-error.message;
-
-message.className =
-"message error";
-
-}
-
-}
-
-
-/* RENDER */
-
-function renderTasks(tasks){
-
-if(!tasks.length){
-
-taskList.innerHTML = `
-<div class="empty">
-<h3>No active tasks</h3>
-<p>
-There are currently no tasks available.
-</p>
-</div>
-`;
-
-return;
-
-}
-
-
-taskList.innerHTML = "";
-
-
-tasks.forEach(task => {
-
-const submission =
-getTaskSubmission(task.id);
-
-const card =
-document.createElement("section");
-
-card.className =
-"task-card";
-
-
-let submissionHTML = "";
-
-let alreadySubmitted =
-false;
-
-let submissionStatus = "";
-
-
-if(submission){
-
-alreadySubmitted =
-true;
-
-submissionStatus =
-String(
-submission.status || "pending"
-).toLowerCase();
-
-
-let statusClass =
-"pending";
-
-let statusText =
-"Pending review";
-
-
-if(submissionStatus === "approved"){
-
-statusClass =
-"approved";
-
-statusText =
-"Approved";
-
-}
-
-
-if(submissionStatus === "rejected"){
-
-statusClass =
-"rejected";
-
-statusText =
-"Rejected";
-
-}
-
-
-submissionHTML = `
-<div class="submission-status">
-
-Submission:
-<strong class="${statusClass}">
-${statusText}
-</strong>
-
-${
-submissionStatus === "approved"
-?
-`
-<br>
-Reward:
-<strong class="approved">
-${formatMoney(submission.reward_amount)}
-</strong>
-`
-:
-""
-}
-
-</div>
-`;
-
-}
-
-
-card.innerHTML = `
-
-<div class="task-title">
-${escapeHTML(task.title)}
-</div>
-
-
-<div class="task-description">
-${escapeHTML(task.description)}
-</div>
-
-
-<div class="task-info">
-
-<div class="info">
-
-<small>Platform</small>
-
-<strong>
-${escapeHTML(task.platform || "-")}
-</strong>
-
-</div>
-
-
-<div class="info">
-
-<small>Task Reward</small>
-
-<strong class="reward">
-${formatMoney(task.reward)}
-</strong>
-
-</div>
-
-
-<div class="info">
-
-<small>Workers Needed</small>
-
-<strong>
-${escapeHTML(task.workers_needed ?? 1)}
-</strong>
-
-</div>
-
-</div>
-
-
-<div>
-
-<button
-class="button open-task"
-data-id="${escapeHTML(task.id)}"
-${!task.task_url ? "disabled" : ""}
->
-Open Task
-</button>
-
-
-<button
-class="button submit-proof"
-data-id="${escapeHTML(task.id)}"
-${alreadySubmitted ? "disabled" : ""}
->
-
-${
-alreadySubmitted
-? "Proof Submitted"
-: "Submit Proof"
-}
-
-</button>
-
-</div>
-
-
-${submissionHTML}
-
-`;
-
-
-taskList.appendChild(card);
-
-});
-
-
-/* OPEN TASK */
-
-document
-.querySelectorAll(".open-task")
-.forEach(button => {
-
-button.addEventListener(
-"click",
-function(){
-
-const task =
-tasks.find(
-item =>
-String(item.id) ===
-String(button.dataset.id)
-);
-
-
-if(!task || !task.task_url){
-
-alert(
-"This task does not have a valid link."
-);
-
-return;
-
-}
-
-
-window.open(
-task.task_url,
-"_blank"
-);
-
-}
-);
-
-});
-
-
-/* SUBMIT */
-
-document
-.querySelectorAll(".submit-proof")
-.forEach(button => {
-
-button.addEventListener(
-"click",
-function(){
-
-const task =
-tasks.find(
-item =>
-String(item.id) ===
-String(button.dataset.id)
-);
-
-
-if(!task){
-
-return;
-
-}
-
-
-const existing =
-getTaskSubmission(task.id);
-
-
-if(existing){
-
-alert(
-"You have already submitted this task."
-);
-
-return;
-
-}
-
-
-openProofModal(task);
-
-}
-);
-
-});
-
-}
-
-
-/* OPEN MODAL */
-
-function openProofModal(task){
-
-selectedTask =
-task;
-
-proofForm.reset();
-
-submitMessage.textContent = "";
-
-submitMessage.className = "";
-
-proofModal.classList.add("show");
-
-}
-
-
-/* CLOSE MODAL */
-
-function closeProofModal(){
-
-selectedTask =
-null;
-
-proofForm.reset();
-
-submitMessage.textContent = "";
-
-proofModal.classList.remove("show");
-
-}
-
-
-cancelProof.addEventListener(
-"click",
-closeProofModal
-);
-
-
-proofModal.addEventListener(
-"click",
-function(event){
-
-if(event.target === proofModal){
-
-closeProofModal();
-
-}
-
-}
-);
-
-
-/* SUBMIT PROOF */
-
-proofForm.addEventListener(
-"submit",
-async function(event){
-
-event.preventDefault();
-
-
-if(!currentUser){
-
-return;
-
-}
-
-
-if(!selectedTask){
-
-return;
-
-}
-
-
-const file =
-proofFile.files[0];
-
-
-if(!file){
-
-submitMessage.textContent =
-"Please select a screenshot.";
-
-submitMessage.className =
-"error";
-
-return;
-
-}
-
-
-if(
-!file.type ||
-!file.type.startsWith("image/")
-){
-
-submitMessage.textContent =
-"Please upload an image screenshot only.";
-
-submitMessage.className =
-"error";
-
-return;
-
-}
-
-
-if(
-file.size >
-5 * 1024 * 1024
-){
-
-submitMessage.textContent =
-"Screenshot must not be larger than 5MB.";
-
-submitMessage.className =
-"error";
-
-return;
-
-}
-
-
-try{
-
-submitProofButton.disabled =
-true;
-
-submitProofButton.textContent =
-"Checking...";
-
-
-/*
-CHECK THAT TASK IS STILL ACTIVE
-*/
-
-const {
-data:latestTask,
-error:taskError
-} =
-await supabaseClient
-.from("tasks")
-.select(
-"id,status,reward"
-)
-.eq(
-"id",
-selectedTask.id
-)
-.maybeSingle();
-
-
-if(taskError){
-
-throw taskError;
-
-}
-
-
-if(
-!latestTask ||
-String(latestTask.status).toLowerCase() !==
-"active"
-){
-
-throw new Error(
-"This task is no longer available."
-);
-
-}
-
-
-/*
-CHECK DUPLICATE AGAIN
-*/
-
-const {
-data:existing,
-error:existingError
-} =
-await supabaseClient
-.from("task_submissions")
-.select("id,status")
-.eq(
-"task_id",
-selectedTask.id
-)
-.eq(
-"worker_id",
-currentUser.id
-)
-.maybeSingle();
-
-
-if(existingError){
-
-throw existingError;
-
-}
-
-
-if(existing){
-
-throw new Error(
-"You have already submitted this task."
-);
-
-}
-
-
-/*
-UPLOAD PROOF
-*/
-
-submitProofButton.textContent =
-"Uploading...";
-
-
-const extension =
-file.name
-.split(".")
-.pop()
-.toLowerCase() || "jpg";
-
-
-const filePath =
-currentUser.id +
-"/" +
-selectedTask.id +
-"-" +
-Date.now() +
-"." +
-extension;
-
-
-const {
-data:uploadData,
-error:uploadError
-} =
-await supabaseClient
-.storage
-.from("task-proofs")
-.upload(
-filePath,
-file,
-{
-cacheControl:"3600",
-upsert:false,
-contentType:file.type
-}
-);
-
-
-if(uploadError){
-
-throw uploadError;
-
-}
-
-
-/*
-CREATE SUBMISSION
-
-The reward is copied from the
-current task price.
-*/
-
-const {
-data:inserted,
-error:submissionError
-} =
-await supabaseClient
-.from("task_submissions")
-.insert({
-task_id:selectedTask.id,
-worker_id:currentUser.id,
-proof_url:uploadData.path,
-proof_text:
-proofText.value.trim() || null,
-status:"pending",
-reward_amount:
-Number(latestTask.reward || 0)
-})
-.select()
-.single();
-
-
-if(submissionError){
-
-/* Remove uploaded proof */
-
-await supabaseClient
-.storage
-.from("task-proofs")
-.remove([
-uploadData.path
-]);
-
-throw submissionError;
-
-}
-
-
-/*
-SUCCESS
-*/
-
-submissions.unshift(inserted);
-
-
-submitMessage.textContent =
-"Proof submitted successfully. Waiting for admin review.";
-
-submitMessage.className =
-"success";
-
-
-setTimeout(
-function(){
-
-closeProofModal();
-
-renderTasks(
-Array.from(
-document.querySelectorAll(".task-card")
-).length
-? getCurrentlyDisplayedTasks()
-: []
-);
-
-loadTasks();
-
-},
-1000
-);
-
-
-}catch(error){
-
-console.error(
-"SUBMIT PROOF ERROR:",
-error
-);
-
-
-submitMessage.textContent =
-"Error: " +
-error.message;
-
-submitMessage.className =
-"error";
-
-}finally{
-
-submitProofButton.disabled =
-false;
-
-submitProofButton.textContent =
-"Submit Proof";
-
-}
-
-}
-);
-
-
-/*
-HELPER
-
-Reloads tasks from Supabase after
-submission. The main loadTasks()
-function remains the source of truth.
-*/
-
-function getCurrentlyDisplayedTasks(){
-
-return [];
-
-}
-
-
-/* LOGOUT */
-
-logoutButton.addEventListener(
-"click",
-async function(){
-
-logoutButton.disabled =
-true;
-
-logoutButton.textContent =
-"Logging out...";
-
-
-try{
-
-await supabaseClient.auth.signOut();
-
-window.location.href =
-"login.html";
-
-}catch(error){
-
-logoutButton.disabled =
-false;
-
-logoutButton.textContent =
-"Logout";
-
-message.textContent =
-"Logout error: " +
-error.message;
-
-message.className =
-"message error";
-
-}
-
-});
-
-
-/* START */
-
-loadTasks();
-
-</script>
-
-</body>
-  </html>
+    const {
+      data,
+      error
+    } =
+    await supabaseClient
+      .from("tasks")
+      .select(
+        "id,title,description,platform

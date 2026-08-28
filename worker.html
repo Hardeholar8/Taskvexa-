@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TaskVexa - Workers</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #070a10;
+  color: #f8fafc;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+header {
+  height: 70px;
+  background: #0b0f17;
+  border-bottom: 1px solid #202b3b;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 21px;
+}
+
+header a {
+  color: #cbd5e1;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+main {
+  max-width: 1100px;
+  margin: auto;
+  padding: 25px 16px 50px;
+}
+
+.page-title h2 {
+  margin: 0 0 7px;
+  font-size: 27px;
+}
+
+.page-title p {
+  color: #7f8da3;
+  margin: 0 0 25px;
+  font-size: 14px;
+}
+
+.message {
+  color: #7f8da3;
+  font-size: 14px;
+  margin-bottom: 18px;
+}
+
+.error {
+  color: #f87171;
+}
+
+.worker-card {
+  background: #111722;
+  border: 1px solid #202b3b;
+  border-radius: 17px;
+  padding: 19px;
+  margin-bottom: 14px;
+}
+
+.worker-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 15px;
+}
+
+.worker-name {
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.worker-email {
+  color: #7f8da3;
+  font-size: 12px;
+  margin-top: 5px;
+  word-break: break-word;
+}
+
+.status {
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.status.active {
+  background: #102d20;
+  color: #4ade80;
+}
+
+.status.inactive {
+  background: #32191d;
+  color: #f87171;
+}
+
+.worker-info {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.info {
+  background: #0d131e;
+  border: 1px solid #1d2838;
+  border-radius: 11px;
+  padding: 12px;
+}
+
+.info small {
+  display: block;
+  color: #64748b;
+  font-size: 10px;
+  margin-bottom: 5px;
+}
+
+.info strong {
+  font-size: 13px;
+  word-break: break-word;
+}
+
+@media (max-width: 650px) {
+  .worker-info {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .worker-top {
+    align-items: flex-start;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>TaskVexa</h1>
+  <a href="admin.html">← Admin Dashboard</a>
+</header>
+
+<main>
+
+  <div class="page-title">
+    <h2>Workers</h2>
+    <p>View registered worker accounts and their account information.</p>
+  </div>
+
+  <div id="message" class="message">
+    Loading workers...
+  </div>
+
+  <div id="workerList"></div>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+const message =
+document.getElementById("message");
+
+const workerList =
+document.getElementById("workerList");
+
+
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+function formatMoney(amount) {
+
+  return "₦" +
+    Number(amount || 0).toLocaleString(
+      "en-NG",
+      {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }
+    );
+
+}
+
+
+async function loadWorkers() {
+
+  try {
+
+    /*
+      Check logged-in admin.
+    */
+
+    const {
+      data: { user },
+      error: authError
+    } =
+    await supabaseClient.auth.getUser();
+
+    if (authError || !user) {
+
+      window.location.href =
+        "login.html";
+
+      return;
+
+    }
+
+
+    /*
+      Check admin role.
+    */
+
+    const {
+      data: profile,
+      error: profileError
+    } =
+    await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (profileError) {
+
+      throw profileError;
+
+    }
+
+
+    if (
+      !profile ||
+      profile.role !== "admin"
+    ) {
+
+      message.textContent =
+        "Access denied. Admin account required.";
+
+      message.className =
+        "message error";
+
+      return;
+
+    }
+
+
+    /*
+      Load workers.
+    */
+
+    const {
+      data: workers,
+      error: workersError
+    } =
+    await supabaseClient
+      .from("profiles")
+      .select("*")
+      .eq("role", "worker")
+      .order(
+        "created_at",
+        {
+          ascending: false
+        }
+      );
+
+
+    if (workersError) {
+
+      throw workersError;
+
+    }
+
+
+    workerList.innerHTML = "";
+
+
+    if (
+      !workers ||
+      workers.length === 0
+    ) {
+
+      message.textContent =
+        "No worker accounts found.";
+
+      return;
+
+    }
+
+
+    message.textContent =
+      `${workers.length} worker account(s) found.`;
+
+
+    /*
+      Load wallet balances.
+    */
+
+    const workerIds =
+      workers.map(
+        worker => worker.id
+      );
+
+
+    const {
+      data: wallets,
+      error: walletError
+    } =
+    await supabaseClient
+      .from("wallets")
+      .select("user_id, balance")
+      .in(
+        "user_id",
+        workerIds
+      );
+
+
+    if (walletError) {
+
+      console.warn(
+        "Wallet loading warning:",
+        walletError
+      );
+
+    }
+
+
+    const walletMap = {};
+
+
+    (wallets || []).forEach(
+      wallet => {
+
+        walletMap[
+          wallet.user_id
+        ] =
+          wallet.balance || 0;
+
+      }
+    );
+
+
+    /*
+      Display workers.
+    */
+
+    workers.forEach(
+      worker => {
+
+        const card =
+          document.createElement(
+            "section"
+          );
+
+        card.className =
+          "worker-card";
+
+
+        const name =
+          worker.full_name ||
+          worker.name ||
+          "Worker";
+
+
+        const email =
+          worker.email ||
+          "Email unavailable";
+
+
+        const level =
+          worker.activation_level ||
+          worker.level ||
+          "Not activated";
+
+
+        const status =
+          worker.status ||
+          "active";
+
+
+        const created =
+          worker.created_at
+          ? new Date(
+              worker.created_at
+            ).toLocaleString("en-NG")
+          : "-";
+
+
+        const balance =
+          walletMap[
+            worker.id
+          ] || 0;
+
+
+        const active =
+          String(status).toLowerCase() ===
+          "active";
+
+
+        card.innerHTML = `
+
+          <div class="worker-top">
+
+            <div>
+
+              <div class="worker-name">
+                ${escapeHTML(name)}
+              </div>
+
+              <div class="worker-email">
+                ${escapeHTML(email)}
+              </div>
+
+            </div>
+
+            <span class="status ${
+              active
+                ? "active"
+                : "inactive"
+            }">
+
+              ${
+                active
+                  ? "Active"
+                  : "Inactive"
+              }
+
+            </span>
+
+          </div>
+
+
+          <div class="worker-info">
+
+            <div class="info">
+
+              <small>
+                Balance
+              </small>
+
+              <strong>
+                ${formatMoney(balance)}
+              </strong>
+
+            </div>
+
+
+            <div class="info">
+
+              <small>
+                Activation Level
+              </small>
+
+              <strong>
+                ${escapeHTML(level)}
+              </strong>
+
+            </div>
+
+
+            <div class="info">
+
+              <small>
+                Registered
+              </small>
+
+              <strong>
+                ${escapeHTML(created)}
+              </strong>
+
+            </div>
+
+
+            <div class="info">
+
+              <small>
+                Worker ID
+              </small>
+
+              <strong>
+                ${escapeHTML(worker.id)}
+              </strong>
+
+            </div>
+
+          </div>
+
+        `;
+
+
+        workerList.appendChild(
+          card
+        );
+
+      }
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "WORKERS ERROR:",
+      error
+    );
+
+    message.textContent =
+      "Unable to load workers: " +
+      error.message;
+
+    message.className =
+      "message error";
+
+  }
+
+}
+
+
+loadWorkers();
+
+</script>
+
+</body>
+  </html>

@@ -3,328 +3,266 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>TaskVexa - Workers</title>
 
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+
+:root{
+--bg:#070a10;
+--sidebar:#0b0f17;
+--card:#111722;
+--card2:#0d131e;
+--border:#202b3b;
+--text:#f8fafc;
+--muted:#7f8da3;
+--green:#4ade80;
+--red:#f87171;
 }
 
-:root {
-  --bg: #070a10;
-  --sidebar: #0b0f17;
-  --card: #111722;
-  --card2: #0d131e;
-  --border: #202b3b;
-  --text: #f8fafc;
-  --muted: #7f8da3;
-  --green: #4ade80;
-  --red: #f87171;
-  --yellow: #facc15;
-  --blue: #60a5fa;
+html,body{
+margin:0;
+padding:0;
+min-height:100%;
+background:var(--bg);
+color:var(--text);
+font-family:Arial,Helvetica,sans-serif;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  min-height: 100%;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Arial, Helvetica, sans-serif;
+body{min-height:100vh}
+
+header{
+height:70px;
+background:var(--sidebar);
+border-bottom:1px solid var(--border);
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 20px;
 }
 
-body {
-  min-height: 100vh;
+header h1{
+margin:0;
+font-size:21px;
 }
 
-/* HEADER */
-
-header {
-  height: 70px;
-  background: var(--sidebar);
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
+header a{
+color:#cbd5e1;
+text-decoration:none;
+font-size:14px;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 21px;
+header a:hover{color:white}
+
+main{
+max-width:1200px;
+margin:auto;
+padding:25px 16px 60px;
 }
 
-header a {
-  color: #cbd5e1;
-  text-decoration: none;
-  font-size: 14px;
+.page-title{margin-bottom:24px}
+
+.page-title h2{
+margin:0 0 7px;
+font-size:28px;
 }
 
-header a:hover {
-  color: white;
+.page-title p{
+margin:0;
+color:var(--muted);
+font-size:14px;
 }
 
-/* MAIN */
-
-main {
-  max-width: 1200px;
-  margin: auto;
-  padding: 25px 16px 60px;
+.message{
+margin-bottom:18px;
+font-size:14px;
+color:var(--muted);
 }
 
-/* TITLE */
+.message.success{color:var(--green)}
+.message.error{color:var(--red)}
 
-.page-title {
-  margin-bottom: 24px;
+.stats{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:14px;
+margin-bottom:22px;
 }
 
-.page-title h2 {
-  margin: 0 0 7px;
-  font-size: 28px;
+.stat-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:17px;
+padding:20px;
 }
 
-.page-title p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 14px;
+.stat-label{
+color:var(--muted);
+font-size:12px;
 }
 
-/* MESSAGE */
-
-.message {
-  margin-bottom: 18px;
-  font-size: 14px;
-  color: var(--muted);
+.stat-value{
+margin-top:11px;
+font-size:25px;
+font-weight:800;
 }
 
-.message.success {
-  color: var(--green);
+.controls{
+display:flex;
+gap:10px;
+margin-bottom:22px;
 }
 
-.message.error {
-  color: var(--red);
+.search{
+flex:1;
+padding:13px 14px;
+background:#090e16;
+border:1px solid #293548;
+border-radius:10px;
+color:white;
+outline:none;
+font-size:14px;
 }
 
-/* STATS */
+.search:focus{border-color:#59677e}
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  margin-bottom: 22px;
+.search::placeholder{color:#4f5c70}
+
+.refresh-button{
+padding:12px 17px;
+border:1px solid #293548;
+border-radius:10px;
+background:#151d2a;
+color:white;
+cursor:pointer;
+font-weight:700;
+white-space:nowrap;
 }
 
-.stat-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 17px;
-  padding: 20px;
+.refresh-button:hover{background:#1c2636}
+
+.refresh-button:disabled{
+opacity:.6;
+cursor:not-allowed;
 }
 
-.stat-label {
-  color: var(--muted);
-  font-size: 12px;
+.worker-card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:17px;
+padding:19px;
+margin-bottom:14px;
 }
 
-.stat-value {
-  margin-top: 11px;
-  font-size: 25px;
-  font-weight: 800;
+.worker-top{
+display:flex;
+align-items:flex-start;
+justify-content:space-between;
+gap:15px;
+margin-bottom:17px;
 }
 
-/* CONTROLS */
-
-.controls {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 22px;
+.worker-name{
+font-size:17px;
+font-weight:800;
 }
 
-.search {
-  flex: 1;
-  padding: 13px 14px;
-  background: #090e16;
-  border: 1px solid #293548;
-  border-radius: 10px;
-  color: white;
-  outline: none;
-  font-size: 14px;
+.worker-id{
+color:var(--muted);
+font-size:12px;
+margin-top:6px;
+word-break:break-all;
 }
 
-.search:focus {
-  border-color: #59677e;
+.worker-email{
+color:#cbd5e1;
+font-size:13px;
+margin-top:8px;
+word-break:break-all;
 }
 
-.search::placeholder {
-  color: #4f5c70;
+.status{
+padding:6px 11px;
+border-radius:20px;
+font-size:11px;
+font-weight:700;
+white-space:nowrap;
 }
 
-.refresh-button {
-  padding: 12px 17px;
-  border: 1px solid #293548;
-  border-radius: 10px;
-  background: #151d2a;
-  color: white;
-  cursor: pointer;
-  font-weight: 700;
-  white-space: nowrap;
+.status.active{
+background:#102d20;
+color:var(--green);
 }
 
-.refresh-button:hover {
-  background: #1c2636;
+.worker-info{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:10px;
 }
 
-.refresh-button:disabled {
-  opacity: .6;
-  cursor: not-allowed;
+.info{
+background:var(--card2);
+border:1px solid #1d2838;
+border-radius:11px;
+padding:13px;
+min-width:0;
 }
 
-/* WORKER CARD */
-
-.worker-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 17px;
-  padding: 19px;
-  margin-bottom: 14px;
+.info small{
+display:block;
+color:#64748b;
+font-size:10px;
+margin-bottom:6px;
 }
 
-.worker-top {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 15px;
-  margin-bottom: 17px;
+.info strong{
+display:block;
+font-size:13px;
+word-break:break-word;
 }
 
-.worker-name {
-  font-size: 17px;
-  font-weight: 800;
+.empty,.loading{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:17px;
+padding:30px 20px;
+text-align:center;
+color:var(--muted);
 }
 
-.worker-id {
-  color: var(--muted);
-  font-size: 12px;
-  margin-top: 6px;
-  word-break: break-all;
+.error-box{color:var(--red)}
+
+@media(max-width:850px){
+
+.worker-info{
+grid-template-columns:1fr 1fr;
 }
 
-.status {
-  padding: 6px 11px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  white-space: nowrap;
+.stats{
+grid-template-columns:1fr 1fr;
 }
-
-.status.active {
-  background: #102d20;
-  color: var(--green);
-}
-
-.status.inactive {
-  background: #32191d;
-  color: var(--red);
-}
-
-/* INFO */
-
-.worker-info {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
-}
-
-.info {
-  background: var(--card2);
-  border: 1px solid #1d2838;
-  border-radius: 11px;
-  padding: 13px;
-  min-width: 0;
-}
-
-.info small {
-  display: block;
-  color: #64748b;
-  font-size: 10px;
-  margin-bottom: 6px;
-}
-
-.info strong {
-  display: block;
-  font-size: 13px;
-  word-break: break-word;
-}
-
-/* EMPTY / LOADING */
-
-.empty,
-.loading {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 17px;
-  padding: 30px 20px;
-  text-align: center;
-  color: var(--muted);
-}
-
-.error-box {
-  color: var(--red);
-}
-
-/* MOBILE */
-
-@media (max-width: 850px) {
-
-  .worker-info {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .stats {
-    grid-template-columns: 1fr 1fr;
-  }
 
 }
 
-@media (max-width: 550px) {
+@media(max-width:550px){
 
-  header {
-    padding: 0 15px;
-  }
+header{padding:0 15px}
 
-  header h1 {
-    font-size: 19px;
-  }
+header h1{font-size:19px}
 
-  header a {
-    font-size: 12px;
-  }
+header a{font-size:12px}
 
-  main {
-    padding: 22px 14px 50px;
-  }
+main{padding:22px 14px 50px}
 
-  .stats {
-    grid-template-columns: 1fr;
-  }
+.stats{grid-template-columns:1fr}
 
-  .controls {
-    flex-direction: column;
-  }
+.controls{flex-direction:column}
 
-  .refresh-button {
-    width: 100%;
-  }
+.refresh-button{width:100%}
 
-  .worker-top {
-    flex-direction: column;
-  }
+.worker-top{flex-direction:column}
 
-  .worker-info {
-    grid-template-columns: 1fr 1fr;
-  }
+.worker-info{grid-template-columns:1fr 1fr}
 
 }
 </style>
@@ -333,121 +271,103 @@ main {
 <body>
 
 <header>
+<h1>TaskVexa</h1>
 
-  <h1>TaskVexa</h1>
-
-  <a href="admin.html">
-    ← Admin Dashboard
-  </a>
-
+<a href="admin.html">
+← Admin Dashboard
+</a>
 </header>
+
 
 <main>
 
-  <div class="page-title">
+<div class="page-title">
 
-    <h2>Workers</h2>
+<h2>Workers</h2>
 
-    <p>
-      View and manage registered worker accounts.
-    </p>
+<p>
+View and manage registered worker accounts.
+</p>
 
-  </div>
-
-  <div
-    id="message"
-    class="message"
-  >
-    Checking admin access...
-  </div>
+</div>
 
 
-  <!-- STATISTICS -->
-
-  <section class="stats">
-
-    <div class="stat-card">
-
-      <div class="stat-label">
-        Total Workers
-      </div>
-
-      <div
-        id="totalWorkers"
-        class="stat-value"
-      >
-        —
-      </div>
-
-    </div>
+<div id="message" class="message">
+Checking admin access...
+</div>
 
 
-    <div class="stat-card">
+<section class="stats">
 
-      <div class="stat-label">
-        Active Workers
-      </div>
+<div class="stat-card">
 
-      <div
-        id="activeWorkers"
-        class="stat-value"
-      >
-        —
-      </div>
+<div class="stat-label">
+Total Workers
+</div>
 
-    </div>
+<div id="totalWorkers" class="stat-value">
+—
+</div>
 
-
-    <div class="stat-card">
-
-      <div class="stat-label">
-        Total Worker Balance
-      </div>
-
-      <div
-        id="totalBalance"
-        class="stat-value"
-      >
-        ₦0.00
-      </div>
-
-    </div>
-
-  </section>
+</div>
 
 
-  <!-- SEARCH / REFRESH -->
+<div class="stat-card">
 
-  <div class="controls">
+<div class="stat-label">
+Active Workers
+</div>
 
-    <input
-      id="searchInput"
-      class="search"
-      type="text"
-      placeholder="Search by worker ID or account type..."
-      autocomplete="off"
-    >
+<div id="activeWorkers" class="stat-value">
+—
+</div>
 
-    <button
-      id="refreshButton"
-      class="refresh-button"
-      type="button"
-    >
-      ↻ Refresh Workers
-    </button>
-
-  </div>
+</div>
 
 
-  <!-- WORKERS -->
+<div class="stat-card">
 
-  <div id="workerList">
+<div class="stat-label">
+Total Worker Balance
+</div>
 
-    <div class="loading">
-      Loading workers...
-    </div>
+<div id="totalBalance" class="stat-value">
+₦0.00
+</div>
 
-  </div>
+</div>
+
+</section>
+
+
+<div class="controls">
+
+<input
+id="searchInput"
+class="search"
+type="text"
+placeholder="Search by email, worker ID or account type..."
+autocomplete="off"
+>
+
+<button
+id="refreshButton"
+class="refresh-button"
+type="button"
+>
+↻ Refresh Workers
+</button>
+
+</div>
+
+
+<div id="workerList">
+
+<div class="loading">
+Loading workers...
+</div>
+
+</div>
 
 </main>
 
@@ -456,685 +376,546 @@ main {
 
 <script>
 
-/* =====================================================
-   SUPABASE CONFIGURATION
-===================================================== */
-
 const SUPABASE_URL =
-  "https://dxtlnrthlpdaobnbazny.supabase.co";
+"https://dxtlnrthlpdaobnbazny.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
-
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
-
-/* =====================================================
-   ELEMENTS
-===================================================== */
 
 const message =
-  document.getElementById("message");
+document.getElementById("message");
 
 const workerList =
-  document.getElementById("workerList");
+document.getElementById("workerList");
 
 const refreshButton =
-  document.getElementById("refreshButton");
+document.getElementById("refreshButton");
 
 const searchInput =
-  document.getElementById("searchInput");
+document.getElementById("searchInput");
 
 const totalWorkers =
-  document.getElementById("totalWorkers");
+document.getElementById("totalWorkers");
 
 const activeWorkers =
-  document.getElementById("activeWorkers");
+document.getElementById("activeWorkers");
 
 const totalBalance =
-  document.getElementById("totalBalance");
+document.getElementById("totalBalance");
 
-
-/* =====================================================
-   DATA
-===================================================== */
 
 let allWorkers = [];
 
 
-/* =====================================================
-   ESCAPE HTML
-===================================================== */
+function escapeHTML(value){
 
-function escapeHTML(value) {
-
-  return String(value ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+return String(value ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
-/* =====================================================
-   FORMAT MONEY
-===================================================== */
+function formatMoney(amount){
 
-function formatMoney(amount) {
+const number =
+Number(amount || 0);
 
-  const number =
-    Number(amount || 0);
-
-  return "₦" +
-    number.toLocaleString(
-      "en-NG",
-      {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }
-    );
+return "₦" +
+number.toLocaleString(
+"en-NG",
+{
+minimumFractionDigits:2,
+maximumFractionDigits:2
+}
+);
 
 }
 
 
-/* =====================================================
-   FORMAT DATE
-===================================================== */
+function formatDate(value){
 
-function formatDate(value) {
+if(!value){
+return "-";
+}
 
-  if (!value) {
-    return "-";
-  }
+const date =
+new Date(value);
 
-  const date =
-    new Date(value);
+if(Number.isNaN(date.getTime())){
+return "-";
+}
 
-  if (
-    Number.isNaN(
-      date.getTime()
-    )
-  ) {
-    return "-";
-  }
-
-  return date.toLocaleString(
-    "en-NG",
-    {
-      dateStyle: "medium",
-      timeStyle: "short"
-    }
-  );
+return date.toLocaleString(
+"en-NG",
+{
+dateStyle:"medium",
+timeStyle:"short"
+}
+);
 
 }
 
 
-/* =====================================================
-   CHECK ADMIN SESSION
-===================================================== */
+async function checkAdmin(){
 
-async function checkAdmin() {
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.auth.getSession();
+const {
+data,
+error
+} =
+await supabaseClient.auth.getSession();
 
 
-  if (error) {
-    throw error;
-  }
+if(error){
+throw error;
+}
 
 
-  const session =
-    data?.session;
+const session =
+data?.session;
 
 
-  if (!session) {
+if(!session){
 
-    message.textContent =
-      "You are not logged in. Redirecting...";
+message.textContent =
+"You are not logged in. Redirecting...";
 
-    window.location.href =
-      "login.html";
+window.location.href =
+"login.html";
 
-    return false;
-
-  }
-
-
-  const user =
-    session.user;
-
-
-  /* -----------------------------------------------
-     Check admin profile
-  ------------------------------------------------ */
-
-  const {
-    data: profile,
-    error: profileError
-  } =
-  await supabaseClient
-    .from("profiles")
-    .select("role")
-    .eq(
-      "id",
-      user.id
-    )
-    .maybeSingle();
-
-
-  if (profileError) {
-    throw profileError;
-  }
-
-
-  if (
-    !profile ||
-    String(profile.role).toLowerCase() !==
-    "admin"
-  ) {
-
-    message.textContent =
-      "Access denied. Admin account required.";
-
-    message.className =
-      "message error";
-
-    return false;
-
-  }
-
-
-  return true;
+return false;
 
 }
 
 
-/* =====================================================
-   LOAD WORKERS
-===================================================== */
-
-async function loadWorkers() {
-
-  try {
-
-    refreshButton.disabled =
-      true;
-
-    refreshButton.textContent =
-      "Loading...";
+const user =
+session.user;
 
 
-    message.textContent =
-      "Checking admin access...";
-
-    message.className =
-      "message";
-
-
-    workerList.innerHTML = `
-      <div class="loading">
-        Loading worker accounts...
-      </div>
-    `;
+const {
+data:profile,
+error:profileError
+} =
+await supabaseClient
+.from("profiles")
+.select("role")
+.eq("id",user.id)
+.maybeSingle();
 
 
-    /* -----------------------------------------------
-       ADMIN CHECK
-    ------------------------------------------------ */
-
-    const allowed =
-      await checkAdmin();
+if(profileError){
+throw profileError;
+}
 
 
-    if (!allowed) {
-      return;
-    }
+if(
+!profile ||
+String(profile.role).toLowerCase() !==
+"admin"
+){
 
+message.textContent =
+"Access denied. Admin account required.";
 
-    message.textContent =
-      "Admin access confirmed. Loading workers...";
+message.className =
+"message error";
 
-
-    /* -----------------------------------------------
-       IMPORTANT:
-       USE THE SECURE RPC THAT ALREADY EXISTS
-    ------------------------------------------------ */
-
-    const {
-      data: workers,
-      error: workersError
-    } =
-    await supabaseClient.rpc(
-      "admin_get_workers"
-    );
-
-
-    if (workersError) {
-
-      console.error(
-        "admin_get_workers error:",
-        workersError
-      );
-
-      throw workersError;
-
-    }
-
-
-    allWorkers =
-      Array.isArray(workers)
-        ? workers
-        : [];
-
-
-    /* -----------------------------------------------
-       UPDATE STATISTICS
-    ------------------------------------------------ */
-
-    updateStatistics();
-
-
-    /* -----------------------------------------------
-       DISPLAY
-    ------------------------------------------------ */
-
-    renderWorkers(
-      allWorkers
-    );
-
-
-    if (
-      allWorkers.length > 0
-    ) {
-
-      message.textContent =
-        "Worker accounts loaded successfully.";
-
-      message.className =
-        "message success";
-
-    } else {
-
-      message.textContent =
-        "No worker accounts found.";
-
-      message.className =
-        "message";
-
-    }
-
-
-  } catch (error) {
-
-    console.error(
-      "WORKER PAGE ERROR:",
-      error
-    );
-
-
-    totalWorkers.textContent =
-      "0";
-
-    activeWorkers.textContent =
-      "0";
-
-    totalBalance.textContent =
-      "₦0.00";
-
-
-    workerList.innerHTML = `
-      <div class="empty error-box">
-        Unable to load worker accounts.
-        <br><br>
-        ${escapeHTML(
-          error?.message ||
-          "Unknown error"
-        )}
-      </div>
-    `;
-
-
-    message.textContent =
-      "Worker loading error: " +
-      (
-        error?.message ||
-        "Unknown error"
-      );
-
-    message.className =
-      "message error";
-
-
-  } finally {
-
-    refreshButton.disabled =
-      false;
-
-    refreshButton.textContent =
-      "↻ Refresh Workers";
-
-  }
+return false;
 
 }
 
 
-/* =====================================================
-   UPDATE STATISTICS
-===================================================== */
-
-function updateStatistics() {
-
-  const total =
-    allWorkers.length;
-
-
-  /*
-    The secure RPC returns worker accounts
-    that have passed the admin check.
-
-    The current worker RPC does not return a
-    separate status field, so loaded workers
-    are counted as active accounts.
-  */
-
-  const active =
-    allWorkers.length;
-
-
-  const balance =
-    allWorkers.reduce(
-      (
-        sum,
-        worker
-      ) => {
-
-        return sum +
-          Number(
-            worker.balance || 0
-          );
-
-      },
-      0
-    );
-
-
-  totalWorkers.textContent =
-    total;
-
-
-  activeWorkers.textContent =
-    active;
-
-
-  totalBalance.textContent =
-    formatMoney(
-      balance
-    );
+return true;
 
 }
 
 
-/* =====================================================
-   RENDER WORKERS
-===================================================== */
+async function loadWorkers(){
 
-function renderWorkers(
-  workers
-) {
+try{
 
-  workerList.innerHTML =
-    "";
+refreshButton.disabled = true;
 
+refreshButton.textContent =
+"Loading...";
 
-  if (
-    !workers ||
-    workers.length === 0
-  ) {
+message.textContent =
+"Checking admin access...";
 
-    workerList.innerHTML = `
-      <div class="empty">
-        No worker accounts have been registered yet.
-      </div>
-    `;
-
-    return;
-
-  }
+message.className =
+"message";
 
 
-  workers.forEach(
-    worker => {
-
-      const card =
-        document.createElement(
-          "section"
-        );
+workerList.innerHTML = `
+<div class="loading">
+Loading worker accounts...
+</div>
+`;
 
 
-      card.className =
-        "worker-card";
+const allowed =
+await checkAdmin();
 
 
-      const workerId =
-        worker.id ||
-        "Unavailable";
+if(!allowed){
+return;
+}
 
 
-      const role =
-        worker.role ||
-        "worker";
+message.textContent =
+"Admin access confirmed. Loading workers...";
 
 
-      const balance =
-        Number(
-          worker.balance || 0
-        );
+const {
+data:workers,
+error:workersError
+} =
+await supabaseClient.rpc(
+"admin_get_workers"
+);
 
 
-      const created =
-        formatDate(
-          worker.created_at
-        );
+if(workersError){
+throw workersError;
+}
 
 
-      const updated =
-        formatDate(
-          worker.updated_at
-        );
+allWorkers =
+Array.isArray(workers)
+? workers
+: [];
 
 
-      card.innerHTML = `
+updateStatistics();
 
-        <div class="worker-top">
-
-          <div>
-
-            <div class="worker-name">
-              Worker Account
-            </div>
-
-            <div class="worker-id">
-              ${escapeHTML(workerId)}
-            </div>
-
-          </div>
-
-          <span class="status active">
-            Active
-          </span>
-
-        </div>
+renderWorkers(allWorkers);
 
 
-        <div class="worker-info">
+if(allWorkers.length > 0){
 
-          <div class="info">
+message.textContent =
+"Worker accounts loaded successfully.";
 
-            <small>
-              Account Type
-            </small>
+message.className =
+"message success";
 
-            <strong>
-              ${escapeHTML(role)}
-            </strong>
+}else{
 
-          </div>
+message.textContent =
+"No worker accounts found.";
 
-
-          <div class="info">
-
-            <small>
-              Balance
-            </small>
-
-            <strong>
-              ${formatMoney(balance)}
-            </strong>
-
-          </div>
-
-
-          <div class="info">
-
-            <small>
-              Registered
-            </small>
-
-            <strong>
-              ${escapeHTML(created)}
-            </strong>
-
-          </div>
-
-
-          <div class="info">
-
-            <small>
-              Last Updated
-            </small>
-
-            <strong>
-              ${escapeHTML(updated)}
-            </strong>
-
-          </div>
-
-        </div>
-
-      `;
-
-
-      workerList.appendChild(
-        card
-      );
-
-    }
-  );
+message.className =
+"message";
 
 }
 
 
-/* =====================================================
-   SEARCH WORKERS
-===================================================== */
+}catch(error){
 
-function searchWorkers() {
-
-  const query =
-    searchInput.value
-      .trim()
-      .toLowerCase();
+console.error(
+"WORKER PAGE ERROR:",
+error
+);
 
 
-  if (!query) {
-
-    renderWorkers(
-      allWorkers
-    );
-
-    return;
-
-  }
+totalWorkers.textContent = "0";
+activeWorkers.textContent = "0";
+totalBalance.textContent = "₦0.00";
 
 
-  const filtered =
-    allWorkers.filter(
-      worker => {
-
-        const id =
-          String(
-            worker.id || ""
-          ).toLowerCase();
-
-
-        const role =
-          String(
-            worker.role || ""
-          ).toLowerCase();
+workerList.innerHTML = `
+<div class="empty error-box">
+Unable to load worker accounts.
+<br><br>
+${escapeHTML(
+error?.message ||
+"Unknown error"
+)}
+</div>
+`;
 
 
-        return (
-          id.includes(query) ||
-          role.includes(query)
-        );
+message.textContent =
+"Worker loading error: " +
+(error?.message || "Unknown error");
 
-      }
-    );
+message.className =
+"message error";
 
 
-  renderWorkers(
-    filtered
-  );
+}finally{
+
+refreshButton.disabled = false;
+
+refreshButton.textContent =
+"↻ Refresh Workers";
+
+}
 
 }
 
 
-/* =====================================================
-   REFRESH BUTTON
-===================================================== */
+function updateStatistics(){
+
+const total =
+allWorkers.length;
+
+const active =
+allWorkers.length;
+
+const balance =
+allWorkers.reduce(
+(sum,worker) =>
+sum + Number(worker.balance || 0),
+0
+);
+
+
+totalWorkers.textContent =
+total;
+
+activeWorkers.textContent =
+active;
+
+totalBalance.textContent =
+formatMoney(balance);
+
+}
+
+
+function renderWorkers(workers){
+
+workerList.innerHTML = "";
+
+
+if(!workers || workers.length === 0){
+
+workerList.innerHTML = `
+<div class="empty">
+No worker accounts have been registered yet.
+</div>
+`;
+
+return;
+
+}
+
+
+workers.forEach(worker => {
+
+const card =
+document.createElement("section");
+
+card.className =
+"worker-card";
+
+
+const workerId =
+worker.id ||
+"Unavailable";
+
+
+const role =
+worker.role ||
+"worker";
+
+
+const email =
+worker.email ||
+"No email available";
+
+
+const balance =
+Number(worker.balance || 0);
+
+
+const created =
+formatDate(worker.created_at);
+
+
+const updated =
+formatDate(worker.updated_at);
+
+
+card.innerHTML = `
+
+<div class="worker-top">
+
+<div>
+
+<div class="worker-name">
+Worker Account
+</div>
+
+<div class="worker-id">
+${escapeHTML(workerId)}
+</div>
+
+<div class="worker-email">
+✉ ${escapeHTML(email)}
+</div>
+
+</div>
+
+<span class="status active">
+Active
+</span>
+
+</div>
+
+
+<div class="worker-info">
+
+<div class="info">
+
+<small>
+Email
+</small>
+
+<strong>
+${escapeHTML(email)}
+</strong>
+
+</div>
+
+
+<div class="info">
+
+<small>
+Account Type
+</small>
+
+<strong>
+${escapeHTML(role)}
+</strong>
+
+</div>
+
+
+<div class="info">
+
+<small>
+Balance
+</small>
+
+<strong>
+${formatMoney(balance)}
+</strong>
+
+</div>
+
+
+<div class="info">
+
+<small>
+Registered
+</small>
+
+<strong>
+${escapeHTML(created)}
+</strong>
+
+</div>
+
+</div>
+
+<div style="margin-top:10px">
+
+<div class="info">
+
+<small>
+Last Updated
+</small>
+
+<strong>
+${escapeHTML(updated)}
+</strong>
+
+</div>
+
+</div>
+
+`;
+
+
+workerList.appendChild(card);
+
+});
+
+}
+
+
+function searchWorkers(){
+
+const query =
+searchInput.value
+.trim()
+.toLowerCase();
+
+
+if(!query){
+
+renderWorkers(allWorkers);
+
+return;
+
+}
+
+
+const filtered =
+allWorkers.filter(worker => {
+
+const id =
+String(worker.id || "")
+.toLowerCase();
+
+const role =
+String(worker.role || "")
+.toLowerCase();
+
+const email =
+String(worker.email || "")
+.toLowerCase();
+
+return (
+id.includes(query) ||
+role.includes(query) ||
+email.includes(query)
+);
+
+});
+
+
+renderWorkers(filtered);
+
+}
+
 
 refreshButton.addEventListener(
-  "click",
-  function() {
-
-    loadWorkers();
-
-  }
+"click",
+loadWorkers
 );
 
-
-/* =====================================================
-   SEARCH
-===================================================== */
 
 searchInput.addEventListener(
-  "input",
-  function() {
-
-    searchWorkers();
-
-  }
+"input",
+searchWorkers
 );
 
-
-/* =====================================================
-   START
-===================================================== */
 
 loadWorkers();
 
 </script>
 
 </body>
-</html>
+  </html>

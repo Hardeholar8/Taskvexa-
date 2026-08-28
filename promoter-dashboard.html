@@ -6,14 +6,16 @@
 *{box-sizing:border-box}
 
 :root{
-  --bg:#070a10;
-  --sidebar:#0b0f17;
-  --card:#111722;
-  --card2:#0d131e;
-  --border:#202b3b;
+  --bg:#060912;
+  --bg2:#0a0f1a;
+  --sidebar:#090e17;
+  --card:#101724;
+  --card2:#0c131f;
+  --border:#1e2a3b;
   --text:#f8fafc;
-  --muted:#7f8da3;
+  --muted:#8491a5;
   --green:#4ade80;
+  --green2:#22c55e;
   --red:#f87171;
   --yellow:#facc15;
   --blue:#60a5fa;
@@ -21,7 +23,9 @@
 
 body{
   margin:0;
-  background:var(--bg);
+  background:
+    radial-gradient(circle at 80% 0%,rgba(34,197,94,.07),transparent 30%),
+    var(--bg);
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
 }
@@ -32,7 +36,7 @@ body{
   top:0;
   bottom:0;
   width:245px;
-  background:var(--sidebar);
+  background:rgba(9,14,23,.98);
   border-right:1px solid var(--border);
   padding:22px 14px;
   overflow-y:auto;
@@ -47,7 +51,8 @@ body{
 
 .logo h1{
   margin:0;
-  font-size:23px;
+  font-size:24px;
+  letter-spacing:.3px;
 }
 
 .logo p{
@@ -84,7 +89,7 @@ body{
 
 .nav-link:hover,
 .nav-link.active{
-  background:#171d2a;
+  background:#171f2d;
   color:white;
 }
 
@@ -111,7 +116,7 @@ body{
 
 .topbar{
   height:70px;
-  background:#070a10;
+  background:rgba(6,9,18,.94);
   border-bottom:1px solid var(--border);
   display:flex;
   align-items:center;
@@ -120,6 +125,7 @@ body{
   position:sticky;
   top:0;
   z-index:20;
+  backdrop-filter:blur(12px);
 }
 
 .topbar-title{
@@ -127,9 +133,20 @@ body{
   font-weight:bold;
 }
 
-.status-user{
+.topbar-right{
+  display:flex;
+  align-items:center;
+  gap:9px;
   color:#aeb9c9;
   font-size:13px;
+}
+
+.online-dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:var(--green);
+  box-shadow:0 0 10px rgba(74,222,128,.6);
 }
 
 .content{
@@ -139,12 +156,12 @@ body{
 }
 
 .heading{
-  margin-bottom:20px;
+  margin-bottom:22px;
 }
 
 .heading h2{
   margin:0 0 8px;
-  font-size:29px;
+  font-size:30px;
 }
 
 .heading p{
@@ -153,36 +170,28 @@ body{
   font-size:14px;
 }
 
-.message{
-  margin-bottom:20px;
+#accessMessage{
   font-size:13px;
+  margin-top:14px;
 }
 
 .success{color:var(--green)}
 .error{color:var(--red)}
-.warning{color:var(--yellow)}
+.pending{color:var(--yellow)}
+.live{color:var(--green)}
 
-.hidden{
-  display:none !important;
-}
-
-.grid{
+.dashboard-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:15px;
+  gap:16px;
   margin-bottom:22px;
 }
 
-.card{
-  background:var(--card);
+.stat-card{
+  background:linear-gradient(145deg,#121a28,#0d131e);
   border:1px solid var(--border);
   border-radius:18px;
-  padding:22px;
-  margin-bottom:22px;
-}
-
-.stat{
-  min-height:120px;
+  padding:20px;
 }
 
 .stat-label{
@@ -191,71 +200,51 @@ body{
 }
 
 .stat-value{
-  font-size:27px;
+  font-size:25px;
   font-weight:800;
-  margin-top:13px;
+  margin-top:10px;
 }
 
-.balance{
+.stat-value.green{
   color:var(--green);
+}
+
+.card{
+  background:linear-gradient(145deg,#111824,#0d131e);
+  border:1px solid var(--border);
+  border-radius:19px;
+  padding:22px;
+  margin-bottom:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
 }
 
 .card h3{
   margin:0 0 8px;
-  font-size:17px;
+  font-size:18px;
 }
 
-.card-description{
+.card-subtitle{
   color:var(--muted);
   font-size:13px;
-  line-height:1.6;
-  margin-bottom:18px;
+  margin-bottom:20px;
 }
 
-.form-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+.wallet-card{
+  background:
+    radial-gradient(circle at 90% 10%,rgba(74,222,128,.13),transparent 35%),
+    linear-gradient(145deg,#122018,#0d1513);
+  border-color:#21412d;
 }
 
-.full{
-  grid-column:1/-1;
-}
-
-.form-group{
-  margin-bottom:2px;
-}
-
-label{
-  display:block;
-  color:#b9c4d3;
+.wallet-label{
+  color:#8fa497;
   font-size:12px;
-  font-weight:bold;
-  margin-bottom:7px;
 }
 
-input,
-textarea,
-select{
-  width:100%;
-  padding:13px;
-  background:#090e16;
-  border:1px solid #293548;
-  border-radius:10px;
-  color:white;
-  outline:none;
-  font-size:14px;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-  border-color:#4b5d78;
-}
-
-textarea{
-  min-height:115px;
-  resize:vertical;
+.wallet-balance{
+  font-size:34px;
+  font-weight:800;
+  margin:8px 0 18px;
 }
 
 .button{
@@ -265,7 +254,7 @@ textarea{
   min-height:42px;
   padding:10px 17px;
   background:#f8fafc;
-  color:#090d14;
+  color:#080c13;
   border:0;
   border-radius:11px;
   font-size:13px;
@@ -275,7 +264,7 @@ textarea{
 }
 
 .button:disabled{
-  opacity:.55;
+  opacity:.6;
   cursor:not-allowed;
 }
 
@@ -291,72 +280,139 @@ textarea{
   border:1px solid #55262d;
 }
 
-.price-box{
-  background:#0b111b;
-  border:1px solid #26364d;
-  border-radius:13px;
-  padding:16px;
-  margin:17px 0;
+.warning{
+  background:#332b16;
+  color:var(--yellow);
+  border:1px solid #55471d;
 }
 
-.price-line{
+.form-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+
+.form-group{
+  margin-bottom:2px;
+}
+
+.form-group.full{
+  grid-column:1/-1;
+}
+
+label{
+  display:block;
+  color:#b9c4d3;
+  font-size:12px;
+  font-weight:bold;
+  margin-bottom:7px;
+}
+
+input,
+textarea,
+select{
+  width:100%;
+  padding:13px;
+  background:#080d15;
+  border:1px solid #293548;
+  border-radius:10px;
+  color:white;
+  outline:none;
+  font-size:14px;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#3f8056;
+  box-shadow:0 0 0 3px rgba(74,222,128,.08);
+}
+
+textarea{
+  min-height:120px;
+  resize:vertical;
+}
+
+select{
+  appearance:auto;
+}
+
+.cost-box{
+  grid-column:1/-1;
+  background:#0b1510;
+  border:1px solid #21412d;
+  border-radius:14px;
+  padding:17px;
+}
+
+.cost-line{
   display:flex;
   justify-content:space-between;
   gap:15px;
-  padding:8px 0;
+  margin:8px 0;
   font-size:13px;
 }
 
-.price-line span:first-child{
+.cost-line span:first-child{
   color:var(--muted);
 }
 
-.price-line span:last-child{
-  font-weight:bold;
+.total-cost{
+  color:var(--green);
+  font-size:22px;
+  font-weight:800;
 }
 
-.total{
-  color:var(--green);
-  font-size:20px;
+.form-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:18px;
+}
+
+#taskMessage,
+#myTasksMessage{
+  font-size:13px;
+  margin-top:14px;
 }
 
 .task-card{
-  background:var(--card2);
+  background:#0b121d;
   border:1px solid var(--border);
-  border-radius:16px;
+  border-radius:15px;
   padding:18px;
-  margin-top:14px;
+  margin-top:13px;
 }
 
 .task-card h4{
   margin:0 0 12px;
-  font-size:17px;
+  font-size:16px;
 }
 
-.task-row{
+.info-row{
   display:flex;
   justify-content:space-between;
   gap:15px;
   padding:9px 0;
-  border-top:1px solid #1b2533;
+  border-top:1px solid #1a2534;
   font-size:13px;
 }
 
-.task-row span:first-child{
+.info-row span:first-child{
   color:#64748b;
 }
 
-.task-row span:last-child{
+.info-row span:last-child{
+  font-weight:700;
   text-align:right;
-  font-weight:bold;
 }
 
 .status{
   display:inline-block;
   padding:5px 9px;
   border-radius:8px;
-  font-size:11px;
-  font-weight:bold;
+  font-size:10px;
+  font-weight:800;
 }
 
 .status-active{
@@ -380,15 +436,20 @@ textarea{
   color:var(--red);
 }
 
-.status-draft{
-  background:#1c2533;
-  color:#aeb9c9;
-}
-
 .empty{
   text-align:center;
   padding:30px;
   color:#64748b;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.loading{
+  color:var(--muted);
+  text-align:center;
+  padding:25px;
 }
 
 .mobile-menu{
@@ -401,8 +462,19 @@ textarea{
   cursor:pointer;
 }
 
-@media(max-width:950px){
-  .grid{
+.login-box{
+  max-width:500px;
+  margin:60px auto;
+  text-align:center;
+}
+
+.login-box p{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+@media(max-width:1000px){
+  .dashboard-grid{
     grid-template-columns:1fr 1fr;
   }
 }
@@ -434,16 +506,33 @@ textarea{
     grid-template-columns:1fr;
   }
 
-  .full{
+  .form-group.full,
+  .cost-box{
     grid-column:auto;
   }
 
-  .grid{
+}
+
+@media(max-width:550px){
+
+  .dashboard-grid{
     grid-template-columns:1fr;
   }
 
-  .status-user{
+  .topbar{
+    padding:0 15px;
+  }
+
+  .topbar-right{
     display:none;
+  }
+
+  .heading h2{
+    font-size:25px;
+  }
+
+  .wallet-balance{
+    font-size:29px;
   }
 }
 </style></head><body><aside class="sidebar" id="sidebar">  <div class="logo">
@@ -455,11 +544,11 @@ textarea{
   </a>  <div class="nav-title">Promoter</div>  <a href="promoter-wallet.html" class="nav-link">
     <span class="nav-icon">💰</span>
     Wallet
-  </a>  <a href="promoter-dashboard.html#createTask" class="nav-link">
-    <span class="nav-icon">➕</span>
+  </a>  <a href="#createTask" class="nav-link" id="createTaskNav">
+    <span class="nav-icon">＋</span>
     Create Task
-  </a>  <a href="promoter-dashboard.html#myTasks" class="nav-link">
-    <span class="nav-icon">📋</span>
+  </a>  <a href="#myTasks" class="nav-link" id="myTasksNav">
+    <span class="nav-icon">✓</span>
     My Tasks
   </a>  <div class="logout">
     <button id="logoutButton" class="nav-link">
@@ -474,7 +563,8 @@ textarea{
   Promoter Dashboard
 </div>
 
-<div id="userStatus" class="status-user">
+<div class="topbar-right">
+  <span class="online-dot"></span>
   Promoter
 </div>
 
@@ -486,11 +576,10 @@ textarea{
     Create and manage tasks for workers from your promoter dashboard.
   </p>
 
-</div>
+  <p id="accessMessage">
+    Starting dashboard...
+  </p>
 
-
-<div id="pageMessage" class="message">
-  Loading dashboard...
 </div>
 
 
@@ -499,65 +588,76 @@ textarea{
 
   <!-- STATS -->
 
-  <div class="grid">
+  <div class="dashboard-grid">
 
-    <div class="card stat">
-
+    <div class="stat-card">
       <div class="stat-label">
         Wallet Balance
       </div>
 
-      <div id="walletBalance" class="stat-value balance">
-        ₦0
+      <div class="stat-value green">
+        ₦<span id="statWallet">0</span>
       </div>
-
-      <br>
-
-      <a href="promoter-wallet.html" class="button">
-        Manage Wallet
-      </a>
-
     </div>
 
-
-    <div class="card stat">
-
+    <div class="stat-card">
       <div class="stat-label">
         My Tasks
       </div>
 
-      <div id="taskCount" class="stat-value">
-        0
+      <div class="stat-value">
+        <span id="statTasks">0</span>
       </div>
-
     </div>
 
-
-    <div class="card stat">
-
+    <div class="stat-card">
       <div class="stat-label">
-        Account
+        Live Tasks
       </div>
 
       <div class="stat-value">
-        Promoter
+        <span id="statLive">0</span>
       </div>
-
     </div>
 
   </div>
 
 
+  <!-- WALLET -->
+
+  <section class="card wallet-card">
+
+    <div class="wallet-label">
+      PROMOTER WALLET
+    </div>
+
+    <div class="wallet-balance">
+      ₦<span id="walletBalance">0</span>
+    </div>
+
+    <a
+      href="promoter-wallet.html"
+      class="button"
+    >
+      Add Funds / Manage Wallet
+    </a>
+
+  </section>
+
+
   <!-- CREATE TASK -->
 
-  <section id="createTask" class="card">
+  <section
+    id="createTask"
+    class="card"
+  >
 
-    <h3>Create New Task</h3>
+    <h3>Create Task</h3>
 
-    <p class="card-description">
-      Select a platform and enter the number of workers you need.
-      Task pricing is controlled automatically by admin.
-    </p>
+    <div class="card-subtitle">
+      Select a platform and enter the number of workers required.
+      Task pricing is controlled by admin.
+    </div>
 
 
     <div class="form-grid">
@@ -588,7 +688,7 @@ textarea{
         <select id="taskPlatform">
 
           <option value="">
-            Select platform
+            Loading platforms...
           </option>
 
         </select>
@@ -642,49 +742,85 @@ textarea{
 
       </div>
 
+
+      <div
+        id="priceBox"
+        class="cost-box hidden"
+      >
+
+        <div class="cost-line">
+
+          <span>
+            Price Per Worker
+          </span>
+
+          <strong>
+            ₦<span id="pricePerWorker">0</span>
+          </strong>
+
+        </div>
+
+        <div class="cost-line">
+
+          <span>
+            Total Cost
+          </span>
+
+          <strong class="total-cost">
+            ₦<span id="totalCost">0</span>
+          </strong>
+
+        </div>
+
+        <div class="card-subtitle" style="margin:10px 0 0;">
+          The total amount is deducted from your promoter wallet
+          when the task is successfully submitted.
+        </div>
+
+      </div>
+
     </div>
 
 
-    <div id="priceBox" class="price-box hidden">
+    <div class="form-actions">
 
-      <div class="price-line">
-        <span>Price Per Worker</span>
-        <span>₦<span id="pricePerWorker">0</span></span>
-      </div>
+      <button
+        id="submitTaskButton"
+        class="button"
+        disabled
+      >
+        Submit Task
+      </button>
 
-      <div class="price-line">
-        <span>Total Cost</span>
-        <span class="total">₦<span id="totalCost">0</span></span>
-      </div>
-
-      <div class="price-line">
-        <span>Wallet Balance</span>
-        <span>₦<span id="walletPreview">0</span></span>
-      </div>
+      <button
+        id="clearTaskButton"
+        class="button secondary"
+        type="button"
+      >
+        Clear
+      </button>
 
     </div>
 
-
-    <button
-      id="submitTaskButton"
-      class="button"
-      disabled
-    >
-      Submit Task
-    </button>
-
-    <p id="taskMessage" class="message"></p>
+    <p id="taskMessage"></p>
 
   </section>
 
 
   <!-- MY TASKS -->
 
-  <section id="myTasks" class="card">
+  <section
+    id="myTasks"
+    class="card"
+  >
 
     <h3>My Tasks</h3>
 
-    <p id="myTasksMessage" class="message">
+    <div class="card-subtitle">
+      Tasks you have submitted from this promoter account.
+    </div>
+
+    <p id="myTasksMessage">
       Loading your tasks...
     </p>
 
@@ -695,92 +831,172 @@ textarea{
 
 </section>
 
+
+<!-- LOGIN ERROR -->
+
+<section
+  id="loginBox"
+  class="card login-box hidden"
+>
+
+  <h3>Session Required</h3>
+
+  <p>
+    Your TaskVexa session could not be found.
+    Please log in again to access the promoter dashboard.
+  </p>
+
+  <a
+    href="login.html"
+    class="button"
+  >
+    Go to Login
+  </a>
+
+</section>
+
   </main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+
 "use strict";
 
 
+/* ================================
+   SUPABASE
+================================ */
+
 const SUPABASE_URL =
-"https://dxtlnrthlpdaobnbazny.supabase.co";
+  "https://dxtlnrthlpdaobnbazny.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 
 const supabaseClient =
-window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY,
-  {
-    auth:{
-      persistSession:true,
-      autoRefreshToken:true,
-      detectSessionInUrl:true
+  window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY,
+    {
+      auth:{
+        persistSession:true,
+        autoRefreshToken:true,
+        detectSessionInUrl:true
+      }
     }
-  }
-);
+  );
 
 
-const pageMessage =
-document.getElementById("pageMessage");
+/* ================================
+   ELEMENTS
+================================ */
+
+const accessMessage =
+  document.getElementById("accessMessage");
 
 const dashboardContent =
-document.getElementById("dashboardContent");
+  document.getElementById("dashboardContent");
+
+const loginBox =
+  document.getElementById("loginBox");
 
 const walletBalance =
-document.getElementById("walletBalance");
+  document.getElementById("walletBalance");
 
-const walletPreview =
-document.getElementById("walletPreview");
+const statWallet =
+  document.getElementById("statWallet");
 
-const taskCount =
-document.getElementById("taskCount");
+const statTasks =
+  document.getElementById("statTasks");
+
+const statLive =
+  document.getElementById("statLive");
 
 const taskPlatform =
-document.getElementById("taskPlatform");
+  document.getElementById("taskPlatform");
 
 const workersNeeded =
-document.getElementById("workersNeeded");
+  document.getElementById("workersNeeded");
 
 const priceBox =
-document.getElementById("priceBox");
+  document.getElementById("priceBox");
 
 const pricePerWorker =
-document.getElementById("pricePerWorker");
+  document.getElementById("pricePerWorker");
 
 const totalCost =
-document.getElementById("totalCost");
+  document.getElementById("totalCost");
 
 const submitTaskButton =
-document.getElementById("submitTaskButton");
+  document.getElementById("submitTaskButton");
+
+const clearTaskButton =
+  document.getElementById("clearTaskButton");
 
 const taskMessage =
-document.getElementById("taskMessage");
+  document.getElementById("taskMessage");
 
 const myTasksMessage =
-document.getElementById("myTasksMessage");
+  document.getElementById("myTasksMessage");
 
 const myTasksList =
-document.getElementById("myTasksList");
+  document.getElementById("myTasksList");
 
 const logoutButton =
-document.getElementById("logoutButton");
-
-const mobileMenu =
-document.getElementById("mobileMenu");
+  document.getElementById("logoutButton");
 
 const sidebar =
-document.getElementById("sidebar");
+  document.getElementById("sidebar");
+
+const mobileMenu =
+  document.getElementById("mobileMenu");
 
 
 let currentUser = null;
-let currentWalletBalance = 0;
 let settings = [];
 let selectedSetting = null;
 
 
+/* ================================
+   TIMEOUT HELPER
+================================ */
+
+function withTimeout(
+  promise,
+  milliseconds,
+  errorMessage
+){
+
+  return Promise.race([
+
+    promise,
+
+    new Promise(
+      (_,reject) => {
+
+        setTimeout(
+          () => reject(
+            new Error(
+              errorMessage
+            )
+          ),
+          milliseconds
+        );
+
+      }
+    )
+
+  ]);
+
+}
+
+
+/* ================================
+   ESCAPE HTML
+================================ */
+
 function escapeHTML(value){
 
   return String(value ?? "")
+
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
@@ -790,206 +1006,269 @@ function escapeHTML(value){
 }
 
 
-function naira(value){
+/* ================================
+   FORMAT MONEY
+================================ */
 
-  return "₦" +
-    Number(value || 0).toLocaleString(
-      "en-NG",
-      {
-        minimumFractionDigits:0,
-        maximumFractionDigits:2
-      }
-    );
+function formatMoney(value){
 
-}
-
-
-function showError(text){
-
-  pageMessage.textContent = text;
-  pageMessage.className = "message error";
+  return Number(
+    value || 0
+  ).toLocaleString(
+    "en-NG",
+    {
+      minimumFractionDigits:0,
+      maximumFractionDigits:2
+    }
+  );
 
 }
 
 
-function showSuccess(text){
+/* ================================
+   STATUS CLASS
+================================ */
 
-  pageMessage.textContent = text;
-  pageMessage.className = "message success";
+function statusClass(status){
 
-}
-
-
-function getStatusClass(status){
-
-  const value =
-    String(status || "draft").toLowerCase();
-
-  if(value === "active"){
-    return "status-active";
-  }
-
-  if(value === "pending"){
-    return "status-pending";
-  }
-
-  if(value === "paused"){
-    return "status-paused";
-  }
-
-  if(value === "closed"){
-    return "status-closed";
-  }
-
-  if(value === "rejected"){
-    return "status-rejected";
-  }
-
-  return "status-draft";
-
-}
-
-
-/*
-==================================================
-SAFE SESSION CHECK
-==================================================
-*/
-
-async function getCurrentUser(){
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.auth.getSession();
-
-  if(error){
-    throw error;
-  }
-
-  if(
-    !data ||
-    !data.session ||
-    !data.session.user
+  switch(
+    String(status || "").toLowerCase()
   ){
 
-    window.location.href = "login.html";
+    case "active":
+      return "status-active";
+
+    case "pending":
+      return "status-pending";
+
+    case "paused":
+      return "status-paused";
+
+    case "closed":
+    case "rejected":
+      return "status-closed";
+
+    default:
+      return "status-pending";
+
+  }
+
+}
+
+
+/* ================================
+   SAFE SESSION CHECK
+================================ */
+
+async function getCurrentSession(){
+
+  accessMessage.textContent =
+    "Checking session...";
+
+  accessMessage.className = "";
+
+
+  let sessionResult;
+
+
+  try{
+
+    sessionResult =
+      await withTimeout(
+        supabaseClient.auth.getSession(),
+        5000,
+        "Session check timed out."
+      );
+
+  }catch(error){
+
+    throw new Error(
+      "Unable to read your login session. Please refresh the page."
+    );
+
+  }
+
+
+  const session =
+    sessionResult?.data?.session;
+
+
+  if(!session){
+
     return null;
 
   }
 
-  return data.session.user;
+
+  return session;
 
 }
 
 
-/*
-==================================================
-CHECK PROMOTER PROFILE
-==================================================
-*/
+/* ================================
+   CHECK PROMOTER
+================================ */
 
-async function checkPromoterProfile(){
+async function checkPromoter(){
 
-  const user =
-    await getCurrentUser();
+  const session =
+    await getCurrentSession();
 
-  if(!user){
+
+  if(!session){
+
+    dashboardContent.classList.add(
+      "hidden"
+    );
+
+    loginBox.classList.remove(
+      "hidden"
+    );
+
+    accessMessage.textContent =
+      "No active login session.";
+
+    accessMessage.className =
+      "error";
+
     return false;
+
   }
 
+
   currentUser =
-    user;
+    session.user;
 
 
-  const {
-    data:profile,
-    error
-  } =
-  await supabaseClient
-    .from("profiles")
-    .select("role")
-    .eq("id",user.id)
-    .maybeSingle();
+  accessMessage.textContent =
+    "Checking promoter account...";
 
 
-  if(error){
-    throw error;
+  const result =
+    await withTimeout(
+
+      supabaseClient
+        .from("profiles")
+        .select("role")
+        .eq(
+          "id",
+          currentUser.id
+        )
+        .maybeSingle(),
+
+      5000,
+
+      "Profile check timed out."
+
+    );
+
+
+  if(result.error){
+
+    throw result.error;
+
+  }
+
+
+  const profile =
+    result.data;
+
+
+  if(
+    !profile
+  ){
+
+    throw new Error(
+      "Your account profile was not found."
+    );
+
   }
 
 
   if(
-    !profile ||
-    String(profile.role || "").toLowerCase() !== "promoter"
+    String(profile.role || "")
+      .toLowerCase()
+      !== "promoter"
   ){
 
-    showError(
-      "Access denied. This page is for promoter accounts."
-    );
+    accessMessage.textContent =
+      "Access denied. Promoter account required.";
+
+    accessMessage.className =
+      "error";
 
     return false;
 
   }
 
 
-  document.getElementById("userStatus").textContent =
-    user.email || "Promoter";
+  accessMessage.textContent =
+    "Promoter account confirmed.";
+
+  accessMessage.className =
+    "success";
 
 
-  dashboardContent.classList.remove("hidden");
+  dashboardContent.classList.remove(
+    "hidden"
+  );
+
 
   return true;
 
 }
 
 
-/*
-==================================================
-LOAD WALLET
-==================================================
-*/
+/* ================================
+   LOAD WALLET
+================================ */
 
 async function loadWallet(){
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
-    .from("wallets")
-    .select("balance")
-    .eq("user_id",currentUser.id)
-    .maybeSingle();
+  const result =
+    await withTimeout(
+
+      supabaseClient
+        .from("wallets")
+        .select("balance")
+        .eq(
+          "user_id",
+          currentUser.id
+        )
+        .maybeSingle(),
+
+      5000,
+
+      "Wallet request timed out."
+
+    );
 
 
-  if(error){
-    throw error;
+  if(result.error){
+
+    throw result.error;
+
   }
 
 
-  currentWalletBalance =
-    Number(data?.balance || 0);
+  const balance =
+    Number(
+      result.data?.balance || 0
+    );
 
 
   walletBalance.textContent =
-    naira(currentWalletBalance)
-      .replace("₦","");
+    formatMoney(balance);
 
-
-  walletPreview.textContent =
-    Number(currentWalletBalance).toLocaleString(
-      "en-NG"
-    );
+  statWallet.textContent =
+    formatMoney(balance);
 
 }
 
 
-/*
-==================================================
-LOAD PLATFORM SETTINGS
-==================================================
-*/
+/* ================================
+   LOAD PLATFORM SETTINGS
+================================ */
 
 async function loadSettings(){
 
@@ -1000,22 +1279,31 @@ async function loadSettings(){
   `;
 
 
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.rpc(
-    "get_promoter_task_settings"
-  );
+  const result =
+    await withTimeout(
+
+      supabaseClient.rpc(
+        "get_promoter_task_settings"
+      ),
+
+      5000,
+
+      "Platform settings request timed out."
+
+    );
 
 
-  if(error){
-    throw error;
+  if(result.error){
+
+    throw result.error;
+
   }
 
 
   settings =
-    Array.isArray(data) ? data : [];
+    Array.isArray(result.data)
+      ? result.data
+      : [];
 
 
   taskPlatform.innerHTML = `
@@ -1025,288 +1313,8 @@ async function loadSettings(){
   `;
 
 
-  if(settings.length === 0){
-
-    taskPlatform.innerHTML = `
-      <option value="">
-        No platforms configured
-      </option>
-    `;
-
-    submitTaskButton.disabled = true;
-
-    taskMessage.textContent =
-      "No promoter platforms have been configured by admin.";
-
-    taskMessage.className =
-      "message error";
-
-    return;
-
-  }
-
-
-  settings.forEach(function(setting){
-
-    const option =
-      document.createElement("option");
-
-    option.value =
-      setting.platform;
-
-    option.textContent =
-      setting.platform;
-
-    taskPlatform.appendChild(option);
-
-  });
-
-}
-
-
-/*
-==================================================
-UPDATE COST
-==================================================
-*/
-
-function updateCost(){
-
-  const platform =
-    taskPlatform.value;
-
-  selectedSetting =
-    settings.find(function(setting){
-
-      return String(setting.platform) ===
-        String(platform);
-
-    });
-
-
-  const workers =
-    Number(workersNeeded.value);
-
-
   if(
-    !selectedSetting ||
-    !Number.isInteger(workers) ||
-    workers < 1
+    settings.length === 0
   ){
 
-    priceBox.classList.add("hidden");
-    submitTaskButton.disabled = true;
-
-    return;
-
-  }
-
-
-  const price =
-    Number(
-      selectedSetting.promoter_price || 0
-    );
-
-
-  const total =
-    price * workers;
-
-
-  pricePerWorker.textContent =
-    price.toLocaleString("en-NG");
-
-
-  totalCost.textContent =
-    total.toLocaleString("en-NG");
-
-
-  walletPreview.textContent =
-    currentWalletBalance.toLocaleString("en-NG");
-
-
-  priceBox.classList.remove("hidden");
-
-
-  submitTaskButton.disabled =
-    total > currentWalletBalance;
-
-}
-
-
-/*
-==================================================
-LOAD MY TASKS
-==================================================
-*/
-
-async function loadMyTasks(){
-
-  myTasksMessage.textContent =
-    "Loading your tasks...";
-
-  myTasksList.innerHTML = "";
-
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient.rpc(
-    "get_my_promoter_tasks"
-  );
-
-
-  if(error){
-    throw error;
-  }
-
-
-  const tasks =
-    Array.isArray(data) ? data : [];
-
-
-  taskCount.textContent =
-    tasks.length;
-
-
-  if(tasks.length === 0){
-
-    myTasksMessage.textContent =
-      "You have not created any tasks yet.";
-
-    return;
-
-  }
-
-
-  myTasksMessage.textContent = "";
-
-
-  tasks.forEach(function(task){
-
-    const status =
-      String(task.status || "draft").toLowerCase();
-
-
-    const card =
-      document.createElement("div");
-
-    card.className =
-      "task-card";
-
-
-    card.innerHTML = `
-
-      <h4>
-        ${escapeHTML(task.title)}
-      </h4>
-
-      <div class="task-row">
-        <span>Platform</span>
-        <span>
-          ${escapeHTML(task.platform || "Not specified")}
-        </span>
-      </div>
-
-      <div class="task-row">
-        <span>Workers Requested</span>
-        <span>
-          ${Number(task.workers_needed || 0)}
-        </span>
-      </div>
-
-      <div class="task-row">
-        <span>Amount Charged</span>
-        <span>
-          ${naira(task.promoter_charge)}
-        </span>
-      </div>
-
-      <div class="task-row">
-        <span>Status</span>
-        <span>
-          <span class="status ${getStatusClass(status)}">
-            ${escapeHTML(status.toUpperCase())}
-          </span>
-        </span>
-      </div>
-
-    `;
-
-
-    myTasksList.appendChild(card);
-
-  });
-
-}
-
-
-/*
-==================================================
-SUBMIT TASK
-==================================================
-*/
-
-submitTaskButton.addEventListener(
-  "click",
-  async function(){
-
-    const title =
-      document.getElementById("taskTitle")
-        .value.trim();
-
-    const description =
-      document.getElementById("taskDescription")
-        .value.trim();
-
-    const platform =
-      taskPlatform.value;
-
-    const taskUrl =
-      document.getElementById("taskUrl")
-        .value.trim();
-
-    const workers =
-      Number(workersNeeded.value);
-
-
-    if(!title){
-
-      taskMessage.textContent =
-        "Please enter a task title.";
-
-      taskMessage.className =
-        "message error";
-
-      return;
-
-    }
-
-
-    if(!description){
-
-      taskMessage.textContent =
-        "Please enter task instructions.";
-
-      taskMessage.className =
-        "message error";
-
-      return;
-
-    }
-
-
-    if(!platform){
-
-      taskMessage.textContent =
-        "Please select a platform.";
-
-      taskMessage.className =
-        "message error";
-
-      return;
-
-    }
-
-
-   
+    taskPlatform.innerHTML =

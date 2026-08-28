@@ -1,151 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaskVexa - Promoter Wallet Management</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    .wallet-card {
-      background: #f3f4f6;
-      padding: 18px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
+<title>TaskVexa - Promoter Wallet Management</title>
 
-    .deposit-card {
-      background: white;
-      border: 1px solid #ddd;
-      padding: 18px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-    }
+<link rel="stylesheet" href="style.css">
 
-    .amount {
-      font-size: 24px;
-      font-weight: bold;
-    }
+<style>
+.box {
+  background:#f3f4f6;
+  padding:20px;
+  margin:15px 0;
+  border-radius:12px;
+}
 
-    .pending {
-      color: #b45309;
-      font-weight: bold;
-    }
+.deposit-card {
+  background:white;
+  padding:18px;
+  margin:15px 0;
+  border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
 
-    .approved {
-      color: #15803d;
-      font-weight: bold;
-    }
+.deposit-card p {
+  margin:8px 0;
+}
 
-    .rejected {
-      color: #dc2626;
-      font-weight: bold;
-    }
+.proof-image {
+  width:100%;
+  max-width:500px;
+  max-height:500px;
+  object-fit:contain;
+  display:block;
+  margin:15px 0;
+  border-radius:10px;
+  border:1px solid #ddd;
+  background:#f9fafb;
+}
 
-    .error {
-      color: #dc2626;
-    }
+.proof-link {
+  display:inline-block;
+  margin:8px 0 15px;
+  padding:10px 14px;
+  background:#2563eb;
+  color:white;
+  text-decoration:none;
+  border-radius:8px;
+}
 
-    .success {
-      color: #15803d;
-    }
+button {
+  padding:11px 18px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  margin:5px 5px 5px 0;
+}
 
-    textarea {
-      width: 100%;
-      box-sizing: border-box;
-      min-height: 70px;
-      padding: 10px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      margin: 10px 0;
-    }
+.approve {
+  background:#16a34a;
+  color:white;
+}
 
-    button {
-      padding: 10px 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-right: 8px;
-    }
+.reject {
+  background:#dc2626;
+  color:white;
+}
 
-    .approve-button {
-      background: #15803d;
-      color: white;
-    }
+.refresh {
+  background:#374151;
+  color:white;
+}
 
-    .reject-button {
-      background: #dc2626;
-      color: white;
-    }
+.note-input {
+  width:100%;
+  box-sizing:border-box;
+  padding:11px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  margin:8px 0;
+}
 
-    .refresh-button {
-      background: #374151;
-      color: white;
-    }
+.success {
+  color:#15803d;
+}
 
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-  </style>
+.error {
+  color:#dc2626;
+}
+
+.pending {
+  color:#b45309;
+}
+
+.status {
+  font-weight:bold;
+}
+
+.hidden {
+  display:none;
+}
+</style>
 </head>
 
 <body>
 
 <header>
   <h1>TaskVexa</h1>
-  <a href="dashboard.html">Dashboard</a>
+
+  <a href="admin-dashboard.html">
+    Dashboard
+  </a>
 </header>
 
 <main>
 
-  <h2>Promoter Wallet Management</h2>
+<h2>Promoter Wallet Management</h2>
 
-  <p id="accessMessage">
-    Checking admin access...
-  </p>
+<p id="accessMessage">
+Checking admin access...
+</p>
 
-  <button
-    id="refreshButton"
-    class="refresh-button"
-    style="display:none;"
-  >
-    Refresh
-  </button>
-
-  <p id="pageMessage"></p>
+<button
+type="button"
+class="refresh"
+id="refreshButton"
+>
+Refresh
+</button>
 
 
-  <!-- PENDING DEPOSITS -->
+<!-- PENDING -->
 
-  <section
-    id="pendingSection"
-    style="display:none;"
-  >
+<section class="box">
 
-    <h3>Pending Deposits</h3>
+<h3>
+Pending Deposits
+</h3>
 
-    <div id="pendingList">
-      Loading...
-    </div>
+<div id="pendingDeposits">
+Loading...
+</div>
 
-  </section>
+</section>
 
 
-  <!-- REVIEWED DEPOSITS -->
+<!-- HISTORY -->
 
-  <section
-    id="historySection"
-    style="display:none;"
-  >
+<section class="box">
 
-    <h3>Deposit History</h3>
+<h3>
+Deposit History
+</h3>
 
-    <div id="historyList">
-      Loading...
-    </div>
+<div id="depositHistory">
+Loading...
+</div>
 
-  </section>
+</section>
 
 </main>
 
@@ -155,107 +168,100 @@
 <script>
 
 const SUPABASE_URL =
-  "https://dxtlnrthlpdaobnbazny.supabase.co";
+"https://dxtlnrthlpdaobnbazny.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+const PROOF_BUCKET =
+"task-proofs";
 
 
 const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 
-let currentUser = null;
+/* ================================
+   ADMIN CHECK
+================================ */
 
+async function checkAdmin() {
 
-const accessMessage =
+  const message =
   document.getElementById(
     "accessMessage"
   );
 
-const pendingSection =
-  document.getElementById(
-    "pendingSection"
-  );
-
-const historySection =
-  document.getElementById(
-    "historySection"
-  );
-
-const pendingList =
-  document.getElementById(
-    "pendingList"
-  );
-
-const historyList =
-  document.getElementById(
-    "historyList"
-  );
-
-const pageMessage =
-  document.getElementById(
-    "pageMessage"
-  );
-
-const refreshButton =
-  document.getElementById(
-    "refreshButton"
-  );
-
-
-/* ==========================================
-   CHECK ADMIN
-========================================== */
-
-async function checkAdmin() {
-
   try {
 
     const {
-      data: {
-        user
-      },
-      error: userError
+      data: sessionData,
+      error: sessionError
     } =
-      await supabaseClient.auth.getUser();
+    await supabaseClient.auth.getSession();
 
 
-    if (userError || !user) {
-
-      window.location.href =
-        "login.html";
-
-      return false;
-
+    if (sessionError) {
+      throw sessionError;
     }
 
 
-    currentUser =
-      user;
+    if (!sessionData.session) {
+
+      message.textContent =
+      "You are not logged in.";
+
+      message.className =
+      "error";
+
+      return false;
+    }
+
+
+    const {
+      data: userData,
+      error: userError
+    } =
+    await supabaseClient.auth.getUser();
+
+
+    if (userError) {
+      throw userError;
+    }
+
+
+    const user =
+    userData.user;
+
+
+    if (!user) {
+
+      message.textContent =
+      "User not found.";
+
+      message.className =
+      "error";
+
+      return false;
+    }
 
 
     const {
       data: profile,
-      error
+      error: profileError
     } =
-      await supabaseClient
-        .from("profiles")
-        .select("role")
-        .eq(
-          "id",
-          user.id
-        )
-        .maybeSingle();
+    await supabaseClient
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .maybeSingle();
 
 
-    if (error) {
-
-      throw error;
-
+    if (profileError) {
+      throw profileError;
     }
 
 
@@ -264,32 +270,21 @@ async function checkAdmin() {
       profile.role !== "admin"
     ) {
 
-      accessMessage.textContent =
-        "Access denied. Admin account required.";
+      message.textContent =
+      "Admin access required.";
 
-      accessMessage.className =
-        "error";
+      message.className =
+      "error";
 
       return false;
-
     }
 
 
-    accessMessage.textContent =
-      "Admin access confirmed.";
+    message.textContent =
+    "Admin access confirmed.";
 
-    accessMessage.className =
-      "success";
-
-
-    pendingSection.style.display =
-      "block";
-
-    historySection.style.display =
-      "block";
-
-    refreshButton.style.display =
-      "inline-block";
+    message.className =
+    "success";
 
 
     return true;
@@ -297,660 +292,654 @@ async function checkAdmin() {
 
   } catch (error) {
 
-    console.error(
-      "ADMIN ACCESS ERROR:",
-      error
-    );
+    message.textContent =
+    "Error: " +
+    error.message;
 
-    accessMessage.textContent =
-      "Access Error: " +
-      error.message;
-
-    accessMessage.className =
-      "error";
+    message.className =
+    "error";
 
     return false;
-
   }
-
 }
 
 
-/* ==========================================
+/* ================================
    LOAD DEPOSITS
-========================================== */
+================================ */
 
 async function loadDeposits() {
 
-  pendingList.textContent =
-    "Loading...";
+  const pendingBox =
+  document.getElementById(
+    "pendingDeposits"
+  );
 
-  historyList.textContent =
-    "Loading...";
+  const historyBox =
+  document.getElementById(
+    "depositHistory"
+  );
+
+
+  pendingBox.textContent =
+  "Loading...";
+
+  historyBox.textContent =
+  "Loading...";
 
 
   try {
+
+    /*
+      Admin can read the deposit
+      records through the existing
+      admin permissions.
+    */
 
     const {
       data,
       error
     } =
-      await supabaseClient
-        .from("promoter_deposit_requests")
-        .select(
-          "id, promoter_id, amount, payment_reference, proof_url, status, admin_note, created_at, reviewed_at"
-        )
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
+    await supabaseClient
+      .from("promoter_deposit_requests")
+      .select("*")
+      .order(
+        "created_at",
+        {
+          ascending:false
+        }
+      );
 
 
     if (error) {
-
       throw error;
-
     }
 
 
-    const deposits =
-      data || [];
-
-
     const pending =
-      deposits.filter(
-        item =>
-          item.status ===
-          "pending"
-      );
+    (data || []).filter(
+      item =>
+      String(item.status)
+        .toLowerCase()
+      === "pending"
+    );
 
 
     const reviewed =
-      deposits.filter(
-        item =>
-          item.status !==
-          "pending"
-      );
-
-
-    renderPending(
-      pending
+    (data || []).filter(
+      item =>
+      String(item.status)
+        .toLowerCase()
+      !== "pending"
     );
 
-    renderHistory(
-      reviewed
+
+    /* PENDING */
+
+    pendingBox.innerHTML =
+    "";
+
+
+    if (pending.length === 0) {
+
+      pendingBox.textContent =
+      "No pending deposits.";
+
+    } else {
+
+      for (const item of pending) {
+
+        await renderPendingDeposit(
+          item,
+          pendingBox
+        );
+      }
+    }
+
+
+    /* HISTORY */
+
+    historyBox.innerHTML =
+    "";
+
+
+    if (reviewed.length === 0) {
+
+      historyBox.textContent =
+      "No reviewed deposits.";
+
+    } else {
+
+      for (const item of reviewed) {
+
+        await renderHistoryDeposit(
+          item,
+          historyBox
+        );
+      }
+    }
+
+
+  } catch (error) {
+
+    pendingBox.innerHTML =
+    "<p class='error'>Error loading deposits: " +
+    escapeHTML(error.message) +
+    "</p>";
+
+    historyBox.textContent =
+    "Unable to load deposit history.";
+
+    console.error(error);
+  }
+}
+
+
+/* ================================
+   RENDER PENDING
+================================ */
+
+async function renderPendingDeposit(
+  item,
+  container
+) {
+
+  const card =
+  document.createElement(
+    "div"
+  );
+
+  card.className =
+  "deposit-card";
+
+
+  card.innerHTML = `
+
+    <h4>
+      Promoter
+    </h4>
+
+    <p>
+      <strong>ID:</strong>
+      ${escapeHTML(item.promoter_id)}
+    </p>
+
+    <p>
+      <strong>Amount:</strong>
+      ₦${Number(
+        item.amount || 0
+      ).toLocaleString("en-NG")}
+    </p>
+
+    <p>
+      <strong>Payment Reference:</strong>
+      ${escapeHTML(
+        item.payment_reference
+      )}
+    </p>
+
+    <p>
+      <strong>Submitted:</strong>
+      ${formatDate(
+        item.created_at
+      )}
+    </p>
+
+    <div class="proof-area">
+      Loading screenshot...
+    </div>
+
+    <label>
+      Optional admin note
+    </label>
+
+    <input
+      type="text"
+      class="note-input"
+      placeholder="Optional admin note"
+    >
+
+    <br>
+
+    <button
+      type="button"
+      class="approve"
+    >
+      Approve
+    </button>
+
+    <button
+      type="button"
+      class="reject"
+    >
+      Reject
+    </button>
+
+    <p class="action-message"></p>
+
+  `;
+
+
+  container.appendChild(
+    card
+  );
+
+
+  /* SCREENSHOT */
+
+  const proofArea =
+  card.querySelector(
+    ".proof-area"
+  );
+
+
+  if (item.proof_path) {
+
+    try {
+
+      const {
+        data,
+        error
+      } =
+      await supabaseClient.storage
+        .from(PROOF_BUCKET)
+        .createSignedUrl(
+          item.proof_path,
+          3600
+        );
+
+
+      if (error) {
+        throw error;
+      }
+
+
+      if (
+        data &&
+        data.signedUrl
+      ) {
+
+        proofArea.innerHTML = `
+
+          <strong>
+            Payment Screenshot
+          </strong>
+
+          <br>
+
+          <img
+            class="proof-image"
+            src="${escapeAttribute(
+              data.signedUrl
+            )}"
+            alt="Payment screenshot"
+          >
+
+          <a
+            class="proof-link"
+            href="${escapeAttribute(
+              data.signedUrl
+            )}"
+            target="_blank"
+            rel="noopener"
+          >
+            View Screenshot
+          </a>
+
+        `;
+
+      } else {
+
+        proofArea.innerHTML =
+        "<p class='error'>Screenshot URL could not be created.</p>";
+      }
+
+
+    } catch (error) {
+
+      console.error(
+        "Proof error:",
+        error
+      );
+
+      proofArea.innerHTML =
+      "<p class='error'>Unable to load screenshot: " +
+      escapeHTML(error.message) +
+      "</p>";
+    }
+
+
+  } else if (item.proof_url) {
+
+    proofArea.innerHTML = `
+
+      <strong>
+        Payment Screenshot
+      </strong>
+
+      <br>
+
+      <img
+        class="proof-image"
+        src="${escapeAttribute(
+          item.proof_url
+        )}"
+        alt="Payment screenshot"
+      >
+
+      <a
+        class="proof-link"
+        href="${escapeAttribute(
+          item.proof_url
+        )}"
+        target="_blank"
+        rel="noopener"
+      >
+        View Screenshot
+      </a>
+
+    `;
+
+  } else {
+
+    proofArea.innerHTML =
+    "<p class='error'>No payment screenshot attached.</p>";
+  }
+
+
+  /* APPROVE */
+
+  card.querySelector(
+    ".approve"
+  ).addEventListener(
+    "click",
+    () =>
+    reviewDeposit(
+      item.id,
+      "approved",
+      card
+    )
+  );
+
+
+  /* REJECT */
+
+  card.querySelector(
+    ".reject"
+  ).addEventListener(
+    "click",
+    () =>
+    reviewDeposit(
+      item.id,
+      "rejected",
+      card
+    )
+  );
+}
+
+
+/* ================================
+   RENDER HISTORY
+================================ */
+
+async function renderHistoryDeposit(
+  item,
+  container
+) {
+
+  const card =
+  document.createElement(
+    "div"
+  );
+
+  card.className =
+  "deposit-card";
+
+
+  card.innerHTML = `
+
+    <p>
+      <strong>Promoter ID:</strong>
+      ${escapeHTML(item.promoter_id)}
+    </p>
+
+    <p>
+      <strong>Amount:</strong>
+      ₦${Number(
+        item.amount || 0
+      ).toLocaleString("en-NG")}
+    </p>
+
+    <p>
+      <strong>Payment Reference:</strong>
+      ${escapeHTML(
+        item.payment_reference
+      )}
+    </p>
+
+    <p>
+      <strong>Status:</strong>
+      <span class="status">
+        ${escapeHTML(item.status)}
+      </span>
+    </p>
+
+    ${
+      item.admin_note
+      ? `
+        <p>
+          <strong>Admin Note:</strong>
+          ${escapeHTML(item.admin_note)}
+        </p>
+      `
+      : ""
+    }
+
+  `;
+
+
+  container.appendChild(
+    card
+  );
+}
+
+
+/* ================================
+   REVIEW DEPOSIT
+================================ */
+
+async function reviewDeposit(
+  depositId,
+  newStatus,
+  card
+) {
+
+  const note =
+  card.querySelector(
+    ".note-input"
+  ).value.trim();
+
+
+  const message =
+  card.querySelector(
+    ".action-message"
+  );
+
+
+  const buttons =
+  card.querySelectorAll(
+    "button"
+  );
+
+
+  buttons.forEach(
+    button =>
+    button.disabled = true
+  );
+
+
+  message.textContent =
+  "Processing...";
+
+
+  try {
+
+    /*
+      Try the existing RPC first.
+      If your admin page already has
+      its own review function, use it.
+    */
+
+    const {
+      data,
+      error
+    } =
+    await supabaseClient.rpc(
+      "review_promoter_deposit",
+      {
+        p_deposit_id:
+        depositId,
+
+        p_status:
+        newStatus,
+
+        p_admin_note:
+        note || null
+      }
+    );
+
+
+    if (error) {
+      throw error;
+    }
+
+
+    if (
+      data &&
+      data.success === false
+    ) {
+
+      throw new Error(
+        data.message ||
+        "Review failed."
+      );
+    }
+
+
+    message.textContent =
+    newStatus === "approved"
+    ? "Deposit approved successfully."
+    : "Deposit rejected successfully.";
+
+
+    message.className =
+    "success";
+
+
+    setTimeout(
+      loadDeposits,
+      800
     );
 
 
   } catch (error) {
 
-    console.error(
-      "LOAD DEPOSITS ERROR:",
-      error
+    console.error(error);
+
+
+    message.textContent =
+    "Error: " +
+    error.message;
+
+    message.className =
+    "error";
+
+
+    buttons.forEach(
+      button =>
+      button.disabled = false
     );
-
-    pendingList.innerHTML =
-      `<p class="error">
-        Unable to load deposits:
-        ${escapeHTML(error.message)}
-      </p>`;
-
-    historyList.innerHTML =
-      `<p class="error">
-        Unable to load history.
-      </p>`;
-
   }
-
 }
 
 
-/* ==========================================
-   RENDER PENDING
-========================================== */
+/* ================================
+   HELPERS
+================================ */
 
-function renderPending(
-  deposits
-) {
+function formatDate(value) {
 
-  pendingList.innerHTML =
-    "";
-
-
-  if (
-    deposits.length === 0
-  ) {
-
-    pendingList.innerHTML =
-      "<p>No pending deposits.</p>";
-
-    return;
-
+  if (!value) {
+    return "-";
   }
 
-
-  deposits.forEach(
-    deposit => {
-
-      const card =
-        document.createElement(
-          "div"
-        );
-
-      card.className =
-        "deposit-card";
-
-
-      card.innerHTML = `
-
-        <h4>
-          Promoter
-        </h4>
-
-        <p>
-          ID:
-          <strong>
-            ${escapeHTML(
-              deposit.promoter_id
-            )}
-          </strong>
-        </p>
-
-        <p class="amount">
-          ₦${Number(
-            deposit.amount
-          ).toLocaleString(
-            "en-NG"
-          )}
-        </p>
-
-        <p>
-          <strong>
-            Payment Reference:
-          </strong>
-          ${escapeHTML(
-            deposit.payment_reference
-          )}
-        </p>
-
-        ${
-          deposit.proof_url
-            ? `
-              <p>
-                <a
-                  href="${escapeAttribute(
-                    deposit.proof_url
-                  )}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  View Payment Proof
-                </a>
-              </p>
-            `
-            : ""
-        }
-
-        <small>
-          Submitted:
-          ${new Date(
-            deposit.created_at
-          ).toLocaleString()}
-        </small>
-
-        <textarea
-          id="note-${deposit.id}"
-          placeholder="Optional admin note"
-        ></textarea>
-
-        <br>
-
-        <button
-          class="approve-button"
-          onclick="approveDeposit('${deposit.id}')"
-        >
-          Approve
-        </button>
-
-        <button
-          class="reject-button"
-          onclick="rejectDeposit('${deposit.id}')"
-        >
-          Reject
-        </button>
-
-      `;
-
-
-      pendingList.appendChild(
-        card
-      );
-
-    }
-  );
-
+  return new Date(value)
+    .toLocaleString("en-NG");
 }
 
 
-/* ==========================================
-   APPROVE
-========================================== */
-
-window.approveDeposit =
-  async function(
-    requestId
-  ) {
-
-    if (
-      !confirm(
-        "Approve this deposit and credit the promoter wallet?"
-      )
-    ) {
-
-      return;
-
-    }
-
-
-    const note =
-      document.getElementById(
-        "note-" +
-        requestId
-      )?.value.trim() || null;
-
-
-    try {
-
-      pageMessage.textContent =
-        "Approving deposit...";
-
-      pageMessage.className =
-        "";
-
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient.rpc(
-          "approve_promoter_deposit",
-          {
-            p_request_id:
-              requestId,
-
-            p_note:
-              note
-
-          }
-        );
-
-
-      if (error) {
-
-        throw error;
-
-      }
-
-
-      if (
-        !data ||
-        data.success !== true
-      ) {
-
-        throw new Error(
-          data?.message ||
-          "Deposit approval failed."
-        );
-
-      }
-
-
-      pageMessage.textContent =
-        "Deposit approved and promoter wallet credited.";
-
-      pageMessage.className =
-        "success";
-
-
-      await loadDeposits();
-
-
-    } catch (error) {
-
-      console.error(
-        "APPROVE ERROR:",
-        error
-      );
-
-      pageMessage.textContent =
-        "Error: " +
-        error.message;
-
-      pageMessage.className =
-        "error";
-
-    }
-
-  };
-
-
-/* ==========================================
-   REJECT
-========================================== */
-
-window.rejectDeposit =
-  async function(
-    requestId
-  ) {
-
-    if (
-      !confirm(
-        "Reject this deposit?"
-      )
-    ) {
-
-      return;
-
-    }
-
-
-    const note =
-      document.getElementById(
-        "note-" +
-        requestId
-      )?.value.trim() || null;
-
-
-    try {
-
-      pageMessage.textContent =
-        "Rejecting deposit...";
-
-      pageMessage.className =
-        "";
-
-
-      const {
-        data,
-        error
-      } =
-        await supabaseClient.rpc(
-          "reject_promoter_deposit",
-          {
-            p_request_id:
-              requestId,
-
-            p_note:
-              note
-
-          }
-        );
-
-
-      if (error) {
-
-        throw error;
-
-      }
-
-
-      if (
-        !data ||
-        data.success !== true
-      ) {
-
-        throw new Error(
-          data?.message ||
-          "Deposit rejection failed."
-        );
-
-      }
-
-
-      pageMessage.textContent =
-        "Deposit rejected.";
-
-      pageMessage.className =
-        "success";
-
-
-      await loadDeposits();
-
-
-    } catch (error) {
-
-      console.error(
-        "REJECT ERROR:",
-        error
-      );
-
-      pageMessage.textContent =
-        "Error: " +
-        error.message;
-
-      pageMessage.className =
-        "error";
-
-    }
-
-  };
-
-
-/* ==========================================
-   HISTORY
-========================================== */
-
-function renderHistory(
-  deposits
-) {
-
-  historyList.innerHTML =
-    "";
-
-
-  if (
-    deposits.length === 0
-  ) {
-
-    historyList.innerHTML =
-      "<p>No reviewed deposits yet.</p>";
-
-    return;
-
-  }
-
-
-  deposits.forEach(
-    deposit => {
-
-      const card =
-        document.createElement(
-          "div"
-        );
-
-      card.className =
-        "deposit-card";
-
-
-      card.innerHTML = `
-
-        <p>
-          Promoter ID:
-          <strong>
-            ${escapeHTML(
-              deposit.promoter_id
-            )}
-          </strong>
-        </p>
-
-        <p class="amount">
-          ₦${Number(
-            deposit.amount
-          ).toLocaleString(
-            "en-NG"
-          )}
-        </p>
-
-        <p>
-          Reference:
-          ${escapeHTML(
-            deposit.payment_reference
-          )}
-        </p>
-
-        <p class="${escapeHTML(
-          deposit.status
-        )}">
-          Status:
-          ${escapeHTML(
-            deposit.status
-          )}
-        </p>
-
-        ${
-          deposit.admin_note
-            ? `
-              <p>
-                Admin Note:
-                ${escapeHTML(
-                  deposit.admin_note
-                )}
-              </p>
-            `
-            : ""
-        }
-
-        <small>
-          Submitted:
-          ${new Date(
-            deposit.created_at
-          ).toLocaleString()}
-        </small>
-
-      `;
-
-
-      historyList.appendChild(
-        card
-      );
-
-    }
-  );
-
+function escapeHTML(value) {
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 
-/* ==========================================
+function escapeAttribute(value) {
+
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/"/g,"&quot;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;");
+}
+
+
+/* ================================
    REFRESH
-========================================== */
+================================ */
 
-refreshButton.addEventListener(
+document
+.getElementById("refreshButton")
+.addEventListener(
   "click",
   async function() {
 
-    refreshButton.disabled =
-      true;
+    this.disabled = true;
 
-    refreshButton.textContent =
-      "Refreshing...";
-
+    this.textContent =
+    "Refreshing...";
 
     await loadDeposits();
 
+    this.disabled = false;
 
-    refreshButton.disabled =
-      false;
-
-    refreshButton.textContent =
-      "Refresh";
-
+    this.textContent =
+    "Refresh";
   }
 );
 
 
-/* ==========================================
-   ESCAPE HTML
-========================================== */
-
-function escapeHTML(
-  value
-) {
-
-  return String(
-    value ?? ""
-  )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-function escapeAttribute(
-  value
-) {
-
-  return String(
-    value ?? ""
-  )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    );
-
-}
-
-
-/* ==========================================
+/* ================================
    START
-========================================== */
+================================ */
 
 async function initialize() {
 
   const allowed =
-    await checkAdmin();
+  await checkAdmin();
 
 
   if (!allowed) {
-
     return;
-
   }
 
 
   await loadDeposits();
-
 }
 
 

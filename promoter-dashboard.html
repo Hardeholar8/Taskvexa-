@@ -1,19 +1,25 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TaskVexa - Promoter Dashboard</title><style>
-*{box-sizing:border-box}
+
+<title>TaskVexa - Promoter Dashboard</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
 
 :root{
-  --bg:#060912;
-  --bg2:#0a0f1a;
-  --sidebar:#090e17;
-  --card:#101724;
-  --card2:#0c131f;
-  --border:#1e2a3b;
+  --bg:#070a10;
+  --sidebar:#0b0f17;
+  --card:#111722;
+  --card2:#0d131e;
+  --border:#202b3b;
+  --border2:#293548;
   --text:#f8fafc;
-  --muted:#8491a5;
+  --muted:#7f8da3;
   --green:#4ade80;
   --green2:#22c55e;
   --red:#f87171;
@@ -21,14 +27,20 @@
   --blue:#60a5fa;
 }
 
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   margin:0;
   background:
-    radial-gradient(circle at 80% 0%,rgba(34,197,94,.07),transparent 30%),
+    radial-gradient(circle at top right,#101b2d 0,transparent 35%),
     var(--bg);
   color:var(--text);
   font-family:Arial,Helvetica,sans-serif;
 }
+
+/* SIDEBAR */
 
 .sidebar{
   position:fixed;
@@ -36,7 +48,7 @@ body{
   top:0;
   bottom:0;
   width:245px;
-  background:rgba(9,14,23,.98);
+  background:rgba(11,15,23,.97);
   border-right:1px solid var(--border);
   padding:22px 14px;
   overflow-y:auto;
@@ -89,7 +101,7 @@ body{
 
 .nav-link:hover,
 .nav-link.active{
-  background:#171f2d;
+  background:#171d2a;
   color:white;
 }
 
@@ -109,6 +121,8 @@ body{
   color:var(--red);
 }
 
+/* MAIN */
+
 .main{
   margin-left:245px;
   min-height:100vh;
@@ -116,7 +130,7 @@ body{
 
 .topbar{
   height:70px;
-  background:rgba(6,9,18,.94);
+  background:rgba(7,10,16,.92);
   border-bottom:1px solid var(--border);
   display:flex;
   align-items:center;
@@ -136,7 +150,7 @@ body{
 .topbar-right{
   display:flex;
   align-items:center;
-  gap:9px;
+  gap:10px;
   color:#aeb9c9;
   font-size:13px;
 }
@@ -146,8 +160,10 @@ body{
   height:8px;
   border-radius:50%;
   background:var(--green);
-  box-shadow:0 0 10px rgba(74,222,128,.6);
+  box-shadow:0 0 10px rgba(74,222,128,.7);
 }
+
+/* CONTENT */
 
 .content{
   max-width:1250px;
@@ -155,43 +171,59 @@ body{
   padding:30px;
 }
 
-.heading{
-  margin-bottom:22px;
+.hero{
+  background:
+    linear-gradient(145deg,#131d2d,#0d131e);
+  border:1px solid var(--border2);
+  border-radius:22px;
+  padding:28px;
+  margin-bottom:20px;
 }
 
-.heading h2{
+.hero h2{
   margin:0 0 8px;
   font-size:30px;
 }
 
-.heading p{
+.hero p{
   margin:0;
   color:var(--muted);
   font-size:14px;
+  line-height:1.6;
 }
 
 #accessMessage{
+  margin-top:15px;
   font-size:13px;
-  margin-top:14px;
 }
 
-.success{color:var(--green)}
-.error{color:var(--red)}
-.pending{color:var(--yellow)}
-.live{color:var(--green)}
+.success{
+  color:var(--green);
+}
 
-.dashboard-grid{
+.error{
+  color:var(--red);
+}
+
+.pending{
+  color:var(--yellow);
+}
+
+/* STATS */
+
+.stats{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
+  grid-template-columns:repeat(4,1fr);
+  gap:15px;
   margin-bottom:22px;
 }
 
-.stat-card{
-  background:linear-gradient(145deg,#121a28,#0d131e);
+.stat{
+  background:var(--card);
   border:1px solid var(--border);
   border-radius:18px;
   padding:20px;
+  min-height:120px;
 }
 
 .stat-label{
@@ -200,52 +232,86 @@ body{
 }
 
 .stat-value{
-  font-size:25px;
+  font-size:26px;
   font-weight:800;
-  margin-top:10px;
+  margin-top:12px;
 }
 
-.stat-value.green{
+.stat-wallet{
   color:var(--green);
 }
 
+/* GRID */
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+}
+
 .card{
-  background:linear-gradient(145deg,#111824,#0d131e);
+  background:var(--card);
   border:1px solid var(--border);
-  border-radius:19px;
+  border-radius:20px;
   padding:22px;
-  margin-bottom:20px;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);
+  margin-bottom:18px;
+}
+
+.card.full{
+  grid-column:1/-1;
+}
+
+.card-head{
+  display:flex;
+  align-items:center;
+  gap:13px;
+  margin-bottom:18px;
+}
+
+.card-icon{
+  width:44px;
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:13px;
+  background:#191f2c;
+  border:1px solid var(--border2);
+  font-size:20px;
 }
 
 .card h3{
-  margin:0 0 8px;
-  font-size:18px;
+  margin:0;
+  font-size:17px;
 }
 
 .card-subtitle{
   color:var(--muted);
-  font-size:13px;
-  margin-bottom:20px;
+  font-size:12px;
+  margin-top:4px;
 }
+
+/* WALLET */
 
 .wallet-card{
   background:
-    radial-gradient(circle at 90% 10%,rgba(74,222,128,.13),transparent 35%),
-    linear-gradient(145deg,#122018,#0d1513);
-  border-color:#21412d;
-}
-
-.wallet-label{
-  color:#8fa497;
-  font-size:12px;
+    linear-gradient(145deg,#12251b,#0e1715);
+  border-color:#234b34;
 }
 
 .wallet-balance{
-  font-size:34px;
-  font-weight:800;
+  font-size:35px;
+  font-weight:900;
+  color:var(--green);
   margin:8px 0 18px;
 }
+
+.wallet-label{
+  color:#8fa39a;
+  font-size:12px;
+}
+
+/* BUTTONS */
 
 .button{
   display:inline-flex;
@@ -254,7 +320,7 @@ body{
   min-height:42px;
   padding:10px 17px;
   background:#f8fafc;
-  color:#080c13;
+  color:#090d14;
   border:0;
   border-radius:11px;
   font-size:13px;
@@ -263,15 +329,19 @@ body{
   text-decoration:none;
 }
 
+.button:hover{
+  opacity:.92;
+}
+
 .button:disabled{
-  opacity:.6;
+  opacity:.55;
   cursor:not-allowed;
 }
 
 .secondary{
   background:#182131;
   color:white;
-  border:1px solid #293548;
+  border:1px solid var(--border2);
 }
 
 .danger{
@@ -286,14 +356,24 @@ body{
   border:1px solid #55471d;
 }
 
+.green{
+  background:#12331f;
+  color:var(--green);
+  border:1px solid #245b38;
+}
+
+.button-row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+/* FORM */
+
 .form-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:16px;
-}
-
-.form-group{
-  margin-bottom:2px;
 }
 
 .form-group.full{
@@ -313,8 +393,8 @@ textarea,
 select{
   width:100%;
   padding:13px;
-  background:#080d15;
-  border:1px solid #293548;
+  background:#090e16;
+  border:1px solid var(--border2);
   border-radius:10px;
   color:white;
   outline:none;
@@ -324,69 +404,66 @@ select{
 input:focus,
 textarea:focus,
 select:focus{
-  border-color:#3f8056;
-  box-shadow:0 0 0 3px rgba(74,222,128,.08);
+  border-color:#45617f;
 }
 
 textarea{
-  min-height:120px;
+  min-height:110px;
   resize:vertical;
 }
 
-select{
-  appearance:auto;
-}
-
-.cost-box{
-  grid-column:1/-1;
-  background:#0b1510;
-  border:1px solid #21412d;
+.price-box{
+  margin-top:16px;
+  background:#0b111b;
+  border:1px solid var(--border2);
   border-radius:14px;
-  padding:17px;
+  padding:16px;
 }
 
-.cost-line{
+.price-line{
   display:flex;
   justify-content:space-between;
   gap:15px;
-  margin:8px 0;
+  padding:8px 0;
+  border-bottom:1px solid #1c2635;
   font-size:13px;
 }
 
-.cost-line span:first-child{
+.price-line:last-child{
+  border-bottom:0;
+}
+
+.price-line span:first-child{
   color:var(--muted);
 }
 
-.total-cost{
+.total-price{
   color:var(--green);
-  font-size:22px;
+  font-size:20px;
   font-weight:800;
 }
 
-.form-actions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:18px;
-}
-
-#taskMessage,
-#myTasksMessage{
-  font-size:13px;
-  margin-top:14px;
-}
+/* TASKS */
 
 .task-card{
-  background:#0b121d;
+  background:var(--card2);
   border:1px solid var(--border);
-  border-radius:15px;
-  padding:18px;
-  margin-top:13px;
+  border-radius:17px;
+  padding:19px;
+  margin-bottom:13px;
 }
 
 .task-card h4{
-  margin:0 0 12px;
-  font-size:16px;
+  margin:0 0 10px;
+  font-size:17px;
+}
+
+.task-description{
+  color:#94a3b8;
+  line-height:1.6;
+  font-size:13px;
+  white-space:pre-wrap;
+  margin-bottom:13px;
 }
 
 .info-row{
@@ -394,7 +471,7 @@ select{
   justify-content:space-between;
   gap:15px;
   padding:9px 0;
-  border-top:1px solid #1a2534;
+  border-top:1px solid #1b2533;
   font-size:13px;
 }
 
@@ -403,8 +480,12 @@ select{
 }
 
 .info-row span:last-child{
-  font-weight:700;
   text-align:right;
+  font-weight:700;
+}
+
+.reward{
+  color:var(--green);
 }
 
 .status{
@@ -412,7 +493,8 @@ select{
   padding:5px 9px;
   border-radius:8px;
   font-size:10px;
-  font-weight:800;
+  font-weight:bold;
+  text-transform:uppercase;
 }
 
 .status-active{
@@ -436,21 +518,108 @@ select{
   color:var(--red);
 }
 
+.status-approved{
+  background:#12331f;
+  color:var(--green);
+}
+
+/* TRANSACTIONS */
+
+.transaction{
+  padding:13px 0;
+  border-bottom:1px solid #1b2533;
+}
+
+.transaction:last-child{
+  border-bottom:0;
+}
+
+.transaction-top{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  font-size:13px;
+}
+
+.transaction-description{
+  color:var(--muted);
+  font-size:12px;
+  margin-top:5px;
+}
+
+.transaction-amount{
+  font-weight:800;
+}
+
+.charge{
+  color:var(--red);
+}
+
+.deposit{
+  color:var(--green);
+}
+
+/* PAYMENT */
+
+.payment-box{
+  background:#0b111b;
+  border:1px solid var(--border2);
+  border-radius:15px;
+  padding:17px;
+}
+
+.payment-row{
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:10px 0;
+  border-bottom:1px solid #1b2533;
+  font-size:13px;
+}
+
+.payment-row:last-child{
+  border-bottom:0;
+}
+
+.payment-row span:first-child{
+  color:var(--muted);
+}
+
+.payment-row span:last-child{
+  text-align:right;
+  font-weight:bold;
+}
+
+.instructions{
+  white-space:pre-wrap;
+  color:#aeb9c9;
+  line-height:1.6;
+  font-size:13px;
+  margin-top:13px;
+}
+
+/* MESSAGES */
+
+.message-box{
+  padding:12px 14px;
+  border-radius:10px;
+  font-size:13px;
+  margin-top:13px;
+}
+
 .empty{
   text-align:center;
   padding:30px;
   color:#64748b;
 }
 
-.hidden{
-  display:none !important;
-}
-
 .loading{
-  color:var(--muted);
   text-align:center;
   padding:25px;
+  color:var(--muted);
 }
+
+/* MOBILE */
 
 .mobile-menu{
   display:none;
@@ -462,407 +631,682 @@ select{
   cursor:pointer;
 }
 
-.login-box{
-  max-width:500px;
-  margin:60px auto;
-  text-align:center;
+.hidden{
+  display:none !important;
 }
 
-.login-box p{
-  color:var(--muted);
-  line-height:1.6;
+@media(max-width:1050px){
+
+.stats{
+  grid-template-columns:1fr 1fr;
 }
 
-@media(max-width:1000px){
-  .dashboard-grid{
-    grid-template-columns:1fr 1fr;
-  }
+.dashboard-grid{
+  grid-template-columns:1fr;
+}
+
+.card.full{
+  grid-column:auto;
+}
+
 }
 
 @media(max-width:800px){
 
-  .sidebar{
-    transform:translateX(-100%);
-    transition:.25s;
-  }
+.sidebar{
+  transform:translateX(-100%);
+  transition:.25s;
+}
 
-  .sidebar.open{
-    transform:translateX(0);
-  }
+.sidebar.open{
+  transform:translateX(0);
+}
 
-  .main{
-    margin-left:0;
-  }
+.main{
+  margin-left:0;
+}
 
-  .mobile-menu{
-    display:block;
-  }
+.mobile-menu{
+  display:block;
+}
 
-  .content{
-    padding:22px 15px 40px;
-  }
+.topbar{
+  padding:0 15px;
+}
 
-  .form-grid{
-    grid-template-columns:1fr;
-  }
+.content{
+  padding:20px 14px 40px;
+}
 
-  .form-group.full,
-  .cost-box{
-    grid-column:auto;
-  }
+.form-grid{
+  grid-template-columns:1fr;
+}
+
+.form-group.full{
+  grid-column:auto;
+}
+
+.hero{
+  padding:22px;
+}
+
+.hero h2{
+  font-size:25px;
+}
 
 }
 
-@media(max-width:550px){
+@media(max-width:500px){
 
-  .dashboard-grid{
-    grid-template-columns:1fr;
-  }
-
-  .topbar{
-    padding:0 15px;
-  }
-
-  .topbar-right{
-    display:none;
-  }
-
-  .heading h2{
-    font-size:25px;
-  }
-
-  .wallet-balance{
-    font-size:29px;
-  }
+.stats{
+  grid-template-columns:1fr;
 }
-</style></head><body><aside class="sidebar" id="sidebar">  <div class="logo">
+
+.topbar-right{
+  display:none;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar" id="sidebar">
+
+  <div class="logo">
     <h1>TaskVexa</h1>
     <p>Promoter Control Panel</p>
-  </div>  <div class="nav-title">Overview</div>  <a href="promoter-dashboard.html" class="nav-link active">
+  </div>
+
+  <div class="nav-title">Overview</div>
+
+  <a href="promoter-dashboard.html" class="nav-link active">
     <span class="nav-icon">⌂</span>
     Dashboard
-  </a>  <div class="nav-title">Promoter</div>  <a href="promoter-wallet.html" class="nav-link">
+  </a>
+
+  <div class="nav-title">Promoter</div>
+
+  <a href="promoter-wallet.html" class="nav-link">
     <span class="nav-icon">💰</span>
     Wallet
-  </a>  <a href="#createTask" class="nav-link" id="createTaskNav">
+  </a>
+
+  <a href="#createTask" class="nav-link">
     <span class="nav-icon">＋</span>
     Create Task
-  </a>  <a href="#myTasks" class="nav-link" id="myTasksNav">
+  </a>
+
+  <a href="#myTasks" class="nav-link">
     <span class="nav-icon">✓</span>
     My Tasks
-  </a>  <div class="logout">
+  </a>
+
+  <a href="#transactions" class="nav-link">
+    <span class="nav-icon">↕</span>
+    Transactions
+  </a>
+
+  <div class="logout">
+
     <button id="logoutButton" class="nav-link">
       <span class="nav-icon">↪</span>
       Logout
     </button>
-  </div></aside><div class="main">  <div class="topbar"><button id="mobileMenu" class="mobile-menu">
-  ☰
-</button>
 
-<div class="topbar-title">
-  Promoter Dashboard
-</div>
+  </div>
 
-<div class="topbar-right">
-  <span class="online-dot"></span>
-  Promoter
-</div>
-
-  </div>  <main class="content"><div class="heading">
-
-  <h2>Welcome to TaskVexa</h2>
-
-  <p>
-    Create and manage tasks for workers from your promoter dashboard.
-  </p>
-
-  <p id="accessMessage">
-    Starting dashboard...
-  </p>
-
-</div>
+</aside>
 
 
-<section id="dashboardContent" class="hidden">
+<!-- MAIN -->
 
+<div class="main">
 
-  <!-- STATS -->
+  <div class="topbar">
 
-  <div class="dashboard-grid">
+    <button id="mobileMenu" class="mobile-menu">
+      ☰
+    </button>
 
-    <div class="stat-card">
-      <div class="stat-label">
-        Wallet Balance
-      </div>
-
-      <div class="stat-value green">
-        ₦<span id="statWallet">0</span>
-      </div>
+    <div class="topbar-title">
+      Promoter Dashboard
     </div>
 
-    <div class="stat-card">
-      <div class="stat-label">
-        My Tasks
-      </div>
-
-      <div class="stat-value">
-        <span id="statTasks">0</span>
-      </div>
-    </div>
-
-    <div class="stat-card">
-      <div class="stat-label">
-        Live Tasks
-      </div>
-
-      <div class="stat-value">
-        <span id="statLive">0</span>
-      </div>
+    <div class="topbar-right">
+      <span class="online-dot"></span>
+      Promoter
     </div>
 
   </div>
 
 
-  <!-- WALLET -->
+  <main class="content">
 
-  <section class="card wallet-card">
+    <!-- HERO -->
 
-    <div class="wallet-label">
-      PROMOTER WALLET
-    </div>
+    <section class="hero">
 
-    <div class="wallet-balance">
-      ₦<span id="walletBalance">0</span>
-    </div>
+      <h2>
+        Welcome to TaskVexa
+      </h2>
 
-    <a
-      href="promoter-wallet.html"
-      class="button"
-    >
-      Add Funds / Manage Wallet
-    </a>
+      <p>
+        Create and manage tasks for workers from your promoter dashboard.
+        Your platform prices and worker rewards are controlled automatically
+        by the TaskVexa admin settings.
+      </p>
 
-  </section>
+      <p id="accessMessage">
+        Starting dashboard...
+      </p>
 
-
-  <!-- CREATE TASK -->
-
-  <section
-    id="createTask"
-    class="card"
-  >
-
-    <h3>Create Task</h3>
-
-    <div class="card-subtitle">
-      Select a platform and enter the number of workers required.
-      Task pricing is controlled by admin.
-    </div>
+    </section>
 
 
-    <div class="form-grid">
+    <!-- STATS -->
 
+    <section class="stats">
 
-      <div class="form-group">
+      <div class="stat">
 
-        <label for="taskTitle">
-          Task Title
-        </label>
-
-        <input
-          id="taskTitle"
-          type="text"
-          maxlength="150"
-          placeholder="Enter task title"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="taskPlatform">
-          Platform
-        </label>
-
-        <select id="taskPlatform">
-
-          <option value="">
-            Loading platforms...
-          </option>
-
-        </select>
-
-      </div>
-
-
-      <div class="form-group full">
-
-        <label for="taskDescription">
-          Task Instructions
-        </label>
-
-        <textarea
-          id="taskDescription"
-          placeholder="Enter the instructions workers should follow"
-        ></textarea>
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="workersNeeded">
-          Number of Workers Needed
-        </label>
-
-        <input
-          id="workersNeeded"
-          type="number"
-          min="1"
-          step="1"
-          value="1"
-          inputmode="numeric"
-        >
-
-      </div>
-
-
-      <div class="form-group">
-
-        <label for="taskUrl">
-          Task Link
-        </label>
-
-        <input
-          id="taskUrl"
-          type="url"
-          placeholder="https://example.com/task"
-        >
-
-      </div>
-
-
-      <div
-        id="priceBox"
-        class="cost-box hidden"
-      >
-
-        <div class="cost-line">
-
-          <span>
-            Price Per Worker
-          </span>
-
-          <strong>
-            ₦<span id="pricePerWorker">0</span>
-          </strong>
-
+        <div class="stat-label">
+          Wallet Balance
         </div>
 
-        <div class="cost-line">
-
-          <span>
-            Total Cost
-          </span>
-
-          <strong class="total-cost">
-            ₦<span id="totalCost">0</span>
-          </strong>
-
-        </div>
-
-        <div class="card-subtitle" style="margin:10px 0 0;">
-          The total amount is deducted from your promoter wallet
-          when the task is successfully submitted.
+        <div
+          class="stat-value stat-wallet"
+          id="walletBalance"
+        >
+          ₦0
         </div>
 
       </div>
 
-    </div>
+
+      <div class="stat">
+
+        <div class="stat-label">
+          My Tasks
+        </div>
+
+        <div
+          class="stat-value"
+          id="taskCount"
+        >
+          0
+        </div>
+
+      </div>
 
 
-    <div class="form-actions">
+      <div class="stat">
 
-      <button
-        id="submitTaskButton"
-        class="button"
-        disabled
+        <div class="stat-label">
+          Live Tasks
+        </div>
+
+        <div
+          class="stat-value"
+          id="liveTaskCount"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          Pending Tasks
+        </div>
+
+        <div
+          class="stat-value"
+          id="pendingTaskCount"
+        >
+          0
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <div class="dashboard-grid">
+
+
+      <!-- WALLET -->
+
+      <section class="card wallet-card">
+
+        <div class="card-head">
+
+          <div class="card-icon">
+            💰
+          </div>
+
+          <div>
+
+            <h3>
+              Promoter Wallet
+            </h3>
+
+            <div class="card-subtitle">
+              Manage your task posting balance
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="wallet-label">
+          Available Balance
+        </div>
+
+        <div
+          class="wallet-balance"
+          id="walletBalanceLarge"
+        >
+          ₦0
+        </div>
+
+
+        <div class="button-row">
+
+          <a
+            href="promoter-wallet.html"
+            class="button green"
+          >
+            Manage Wallet
+          </a>
+
+          <button
+            type="button"
+            class="button secondary"
+            id="refreshButton"
+          >
+            ↻ Refresh
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- PAYMENT DETAILS -->
+
+      <section class="card">
+
+        <div class="card-head">
+
+          <div class="card-icon">
+            🏦
+          </div>
+
+          <div>
+
+            <h3>
+              Deposit Payment Details
+            </h3>
+
+            <div class="card-subtitle">
+              Use these details when adding funds
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="paymentDetails"
+          class="loading"
+        >
+          Loading payment details...
+        </div>
+
+      </section>
+
+
+      <!-- CREATE TASK -->
+
+      <section
+        class="card full"
+        id="createTask"
       >
-        Submit Task
-      </button>
 
-      <button
-        id="clearTaskButton"
-        class="button secondary"
-        type="button"
+        <div class="card-head">
+
+          <div class="card-icon">
+            ＋
+          </div>
+
+          <div>
+
+            <h3>
+              Create New Task
+            </h3>
+
+            <div class="card-subtitle">
+              Submit a task for workers
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+          <div class="form-group">
+
+            <label>
+              Task Title
+            </label>
+
+            <input
+              type="text"
+              id="taskTitle"
+              placeholder="Enter task title"
+              maxlength="150"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Platform
+            </label>
+
+            <select id="taskPlatform">
+
+              <option value="">
+                Loading platforms...
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="form-group full">
+
+            <label>
+              Task Instructions
+            </label>
+
+            <textarea
+              id="taskDescription"
+              placeholder="Enter the instructions workers should follow"
+            ></textarea>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Number of Workers Needed
+            </label>
+
+            <input
+              type="number"
+              id="workersNeeded"
+              min="1"
+              step="1"
+              value="1"
+              inputmode="numeric"
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>
+              Task Link
+            </label>
+
+            <input
+              type="url"
+              id="taskUrl"
+              placeholder="https://example.com/task"
+            >
+
+          </div>
+
+        </div>
+
+
+        <!-- PRICE -->
+
+        <div
+          id="priceBox"
+          class="price-box hidden"
+        >
+
+          <div class="price-line">
+
+            <span>
+              Price Per Worker
+            </span>
+
+            <strong>
+              ₦<span id="pricePerWorker">0</span>
+            </strong>
+
+          </div>
+
+
+          <div class="price-line">
+
+            <span>
+              Workers Needed
+            </span>
+
+            <strong id="priceWorkers">
+              1
+            </strong>
+
+          </div>
+
+
+          <div class="price-line">
+
+            <span>
+              Total Task Cost
+            </span>
+
+            <strong class="total-price">
+              ₦<span id="totalCost">0</span>
+            </strong>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="taskMessage"
+          class="message-box hidden"
+        ></div>
+
+
+        <div
+          class="button-row"
+          style="margin-top:18px;"
+        >
+
+          <button
+            id="submitTaskButton"
+            class="button green"
+            disabled
+          >
+            Submit Task
+          </button>
+
+          <button
+            id="clearTaskButton"
+            type="button"
+            class="button secondary"
+          >
+            Clear
+          </button>
+
+        </div>
+
+      </section>
+
+
+      <!-- MY TASKS -->
+
+      <section
+        class="card full"
+        id="myTasks"
       >
-        Clear
-      </button>
+
+        <div class="card-head">
+
+          <div class="card-icon">
+            ✓
+          </div>
+
+          <div>
+
+            <h3>
+              My Tasks
+            </h3>
+
+            <div class="card-subtitle">
+              Tasks submitted from your promoter account
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div id="myTasksMessage" class="loading">
+          Loading your tasks...
+        </div>
+
+        <div id="myTasksList"></div>
+
+      </section>
+
+
+      <!-- TRANSACTIONS -->
+
+      <section
+        class="card"
+        id="transactions"
+      >
+
+        <div class="card-head">
+
+          <div class="card-icon">
+            ↕
+          </div>
+
+          <div>
+
+            <h3>
+              Wallet Transactions
+            </h3>
+
+            <div class="card-subtitle">
+              Recent promoter wallet activity
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div id="transactionsList">
+
+          <div class="loading">
+            Loading transactions...
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- QUICK INFO -->
+
+      <section class="card">
+
+        <div class="card-head">
+
+          <div class="card-icon">
+            ℹ
+          </div>
+
+          <div>
+
+            <h3>
+              Promoter Information
+            </h3>
+
+            <div class="card-subtitle">
+              How task posting works
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="info-row">
+          <span>Task price</span>
+          <span>Controlled by admin</span>
+        </div>
+
+        <div class="info-row">
+          <span>Worker reward</span>
+          <span>Controlled by admin</span>
+        </div>
+
+        <div class="info-row">
+          <span>Wallet deduction</span>
+          <span>Automatic</span>
+        </div>
+
+        <div class="info-row">
+          <span>Task status</span>
+          <span>Automatic</span>
+        </div>
+
+      </section>
+
 
     </div>
 
-    <p id="taskMessage"></p>
+  </main>
 
-  </section>
-
-
-  <!-- MY TASKS -->
-
-  <section
-    id="myTasks"
-    class="card"
-  >
-
-    <h3>My Tasks</h3>
-
-    <div class="card-subtitle">
-      Tasks you have submitted from this promoter account.
-    </div>
-
-    <p id="myTasksMessage">
-      Loading your tasks...
-    </p>
-
-    <div id="myTasksList"></div>
-
-  </section>
+</div>
 
 
-</section>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
-<!-- LOGIN ERROR -->
-
-<section
-  id="loginBox"
-  class="card login-box hidden"
->
-
-  <h3>Session Required</h3>
-
-  <p>
-    Your TaskVexa session could not be found.
-    Please log in again to access the promoter dashboard.
-  </p>
-
-  <a
-    href="login.html"
-    class="button"
-  >
-    Go to Login
-  </a>
-
-</section>
-
-  </main></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-
+<script>
 "use strict";
 
 
-/* ================================
+/* =========================================
    SUPABASE
-================================ */
+========================================= */
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
@@ -870,45 +1314,34 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
-
 const supabaseClient =
   window.supabase.createClient(
     SUPABASE_URL,
-    SUPABASE_KEY,
-    {
-      auth:{
-        persistSession:true,
-        autoRefreshToken:true,
-        detectSessionInUrl:true
-      }
-    }
+    SUPABASE_KEY
   );
 
 
-/* ================================
+/* =========================================
    ELEMENTS
-================================ */
+========================================= */
 
 const accessMessage =
   document.getElementById("accessMessage");
 
-const dashboardContent =
-  document.getElementById("dashboardContent");
-
-const loginBox =
-  document.getElementById("loginBox");
-
 const walletBalance =
   document.getElementById("walletBalance");
 
-const statWallet =
-  document.getElementById("statWallet");
+const walletBalanceLarge =
+  document.getElementById("walletBalanceLarge");
 
-const statTasks =
-  document.getElementById("statTasks");
+const taskCount =
+  document.getElementById("taskCount");
 
-const statLive =
-  document.getElementById("statLive");
+const liveTaskCount =
+  document.getElementById("liveTaskCount");
+
+const pendingTaskCount =
+  document.getElementById("pendingTaskCount");
 
 const taskPlatform =
   document.getElementById("taskPlatform");
@@ -919,402 +1352,4 @@ const workersNeeded =
 const priceBox =
   document.getElementById("priceBox");
 
-const pricePerWorker =
-  document.getElementById("pricePerWorker");
-
-const totalCost =
-  document.getElementById("totalCost");
-
-const submitTaskButton =
-  document.getElementById("submitTaskButton");
-
-const clearTaskButton =
-  document.getElementById("clearTaskButton");
-
-const taskMessage =
-  document.getElementById("taskMessage");
-
-const myTasksMessage =
-  document.getElementById("myTasksMessage");
-
-const myTasksList =
-  document.getElementById("myTasksList");
-
-const logoutButton =
-  document.getElementById("logoutButton");
-
-const sidebar =
-  document.getElementById("sidebar");
-
-const mobileMenu =
-  document.getElementById("mobileMenu");
-
-
-let currentUser = null;
-let settings = [];
-let selectedSetting = null;
-
-
-/* ================================
-   TIMEOUT HELPER
-================================ */
-
-function withTimeout(
-  promise,
-  milliseconds,
-  errorMessage
-){
-
-  return Promise.race([
-
-    promise,
-
-    new Promise(
-      (_,reject) => {
-
-        setTimeout(
-          () => reject(
-            new Error(
-              errorMessage
-            )
-          ),
-          milliseconds
-        );
-
-      }
-    )
-
-  ]);
-
-}
-
-
-/* ================================
-   ESCAPE HTML
-================================ */
-
-function escapeHTML(value){
-
-  return String(value ?? "")
-
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-
-}
-
-
-/* ================================
-   FORMAT MONEY
-================================ */
-
-function formatMoney(value){
-
-  return Number(
-    value || 0
-  ).toLocaleString(
-    "en-NG",
-    {
-      minimumFractionDigits:0,
-      maximumFractionDigits:2
-    }
-  );
-
-}
-
-
-/* ================================
-   STATUS CLASS
-================================ */
-
-function statusClass(status){
-
-  switch(
-    String(status || "").toLowerCase()
-  ){
-
-    case "active":
-      return "status-active";
-
-    case "pending":
-      return "status-pending";
-
-    case "paused":
-      return "status-paused";
-
-    case "closed":
-    case "rejected":
-      return "status-closed";
-
-    default:
-      return "status-pending";
-
-  }
-
-}
-
-
-/* ================================
-   SAFE SESSION CHECK
-================================ */
-
-async function getCurrentSession(){
-
-  accessMessage.textContent =
-    "Checking session...";
-
-  accessMessage.className = "";
-
-
-  let sessionResult;
-
-
-  try{
-
-    sessionResult =
-      await withTimeout(
-        supabaseClient.auth.getSession(),
-        5000,
-        "Session check timed out."
-      );
-
-  }catch(error){
-
-    throw new Error(
-      "Unable to read your login session. Please refresh the page."
-    );
-
-  }
-
-
-  const session =
-    sessionResult?.data?.session;
-
-
-  if(!session){
-
-    return null;
-
-  }
-
-
-  return session;
-
-}
-
-
-/* ================================
-   CHECK PROMOTER
-================================ */
-
-async function checkPromoter(){
-
-  const session =
-    await getCurrentSession();
-
-
-  if(!session){
-
-    dashboardContent.classList.add(
-      "hidden"
-    );
-
-    loginBox.classList.remove(
-      "hidden"
-    );
-
-    accessMessage.textContent =
-      "No active login session.";
-
-    accessMessage.className =
-      "error";
-
-    return false;
-
-  }
-
-
-  currentUser =
-    session.user;
-
-
-  accessMessage.textContent =
-    "Checking promoter account...";
-
-
-  const result =
-    await withTimeout(
-
-      supabaseClient
-        .from("profiles")
-        .select("role")
-        .eq(
-          "id",
-          currentUser.id
-        )
-        .maybeSingle(),
-
-      5000,
-
-      "Profile check timed out."
-
-    );
-
-
-  if(result.error){
-
-    throw result.error;
-
-  }
-
-
-  const profile =
-    result.data;
-
-
-  if(
-    !profile
-  ){
-
-    throw new Error(
-      "Your account profile was not found."
-    );
-
-  }
-
-
-  if(
-    String(profile.role || "")
-      .toLowerCase()
-      !== "promoter"
-  ){
-
-    accessMessage.textContent =
-      "Access denied. Promoter account required.";
-
-    accessMessage.className =
-      "error";
-
-    return false;
-
-  }
-
-
-  accessMessage.textContent =
-    "Promoter account confirmed.";
-
-  accessMessage.className =
-    "success";
-
-
-  dashboardContent.classList.remove(
-    "hidden"
-  );
-
-
-  return true;
-
-}
-
-
-/* ================================
-   LOAD WALLET
-================================ */
-
-async function loadWallet(){
-
-  const result =
-    await withTimeout(
-
-      supabaseClient
-        .from("wallets")
-        .select("balance")
-        .eq(
-          "user_id",
-          currentUser.id
-        )
-        .maybeSingle(),
-
-      5000,
-
-      "Wallet request timed out."
-
-    );
-
-
-  if(result.error){
-
-    throw result.error;
-
-  }
-
-
-  const balance =
-    Number(
-      result.data?.balance || 0
-    );
-
-
-  walletBalance.textContent =
-    formatMoney(balance);
-
-  statWallet.textContent =
-    formatMoney(balance);
-
-}
-
-
-/* ================================
-   LOAD PLATFORM SETTINGS
-================================ */
-
-async function loadSettings(){
-
-  taskPlatform.innerHTML = `
-    <option value="">
-      Loading platforms...
-    </option>
-  `;
-
-
-  const result =
-    await withTimeout(
-
-      supabaseClient.rpc(
-        "get_promoter_task_settings"
-      ),
-
-      5000,
-
-      "Platform settings request timed out."
-
-    );
-
-
-  if(result.error){
-
-    throw result.error;
-
-  }
-
-
-  settings =
-    Array.isArray(result.data)
-      ? result.data
-      : [];
-
-
-  taskPlatform.innerHTML = `
-    <option value="">
-      Select platform
-    </option>
-  `;
-
-
-  if(
-    settings.length === 0
-  ){
-
-    taskPlatform.innerHTML =
+const pricePerWorke

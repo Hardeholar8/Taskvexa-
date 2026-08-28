@@ -1,7 +1,12 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TaskVexa - Available Tasks</title><link rel="stylesheet" href="style.css"><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TaskVexa - Tasks</title>
+
+<style>
 * {
   box-sizing: border-box;
 }
@@ -16,18 +21,15 @@ body {
 header {
   background: #0d111b;
   border-bottom: 1px solid #202b3b;
-  padding: 17px 18px;
+  padding: 18px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 10;
 }
 
 header h1 {
   margin: 0;
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 800;
 }
 
@@ -43,243 +45,187 @@ main {
   padding: 24px 16px 60px;
 }
 
-.page-header {
-  margin-bottom: 22px;
-}
-
-.back-link {
-  display: inline-block;
-  color: #94a3b8;
-  text-decoration: none;
-  font-size: 14px;
-  margin-bottom: 18px;
-}
-
-.page-header h2 {
+.page-title h2 {
   margin: 0 0 7px;
   font-size: 28px;
 }
 
-.page-header p {
-  margin: 0;
-  color: #64748b;
+.page-title p {
+  margin: 0 0 24px;
+  color: #94a3b8;
   line-height: 1.5;
 }
 
-/* LOADING */
+/* MESSAGE */
 
-.loading-box {
-  background: #111722;
-  border: 1px solid #202b3b;
-  border-radius: 18px;
-  padding: 28px 20px;
-  text-align: center;
+#message {
   color: #94a3b8;
-}
-
-.loader {
-  width: 28px;
-  height: 28px;
-  border: 3px solid #273244;
-  border-top-color: #f8fafc;
-  border-radius: 50%;
-  animation: spin .8s linear infinite;
-  margin: 0 auto 13px;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
+  text-align: center;
+  padding: 25px 10px;
 }
 
 /* TASK CARD */
 
 .task-card {
-  background: linear-gradient(145deg, #121925, #0d121c);
+  background: linear-gradient(145deg, #111722, #0d131e);
   border: 1px solid #202b3b;
   border-radius: 20px;
   padding: 20px;
-  margin-bottom: 15px;
-  box-shadow: 0 12px 30px rgba(0,0,0,.22);
+  margin-bottom: 16px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.25);
 }
 
 .task-card h3 {
-  margin: 0 0 9px;
+  margin: 0 0 10px;
   font-size: 19px;
 }
 
 .task-description {
   color: #94a3b8;
-  font-size: 14px;
-  line-height: 1.55;
-  margin-bottom: 17px;
+  line-height: 1.5;
+  margin-bottom: 18px;
 }
 
 .task-info {
   display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 17px;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 12px 0;
+  border-top: 1px solid #1b2533;
 }
 
-.info-box {
-  flex: 1;
-  min-width: 120px;
-  background: #0a0f18;
-  border: 1px solid #202b3b;
-  border-radius: 13px;
-  padding: 11px;
-}
-
-.info-label {
+.task-info span:first-child {
   color: #64748b;
-  font-size: 11px;
-  margin-bottom: 5px;
 }
 
-.info-value {
-  color: #f8fafc;
-  font-size: 14px;
+.task-info span:last-child {
+  color: #e2e8f0;
   font-weight: 700;
+  text-align: right;
 }
 
-.reward-value {
-  font-size: 16px;
+.reward {
+  color: #4ade80 !important;
+  font-size: 17px;
+}
+
+.task-button {
+  width: 100%;
+  display: block;
+  margin-top: 17px;
+  padding: 14px;
+  border: none;
+  border-radius: 13px;
+  background: #f8fafc;
+  color: #080b12;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 800;
+  cursor: pointer;
 }
 
 /* STATUS */
 
 .submission-status {
-  border-radius: 12px;
-  padding: 11px 12px;
-  margin-bottom: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
   font-size: 13px;
-  font-weight: 700;
+  margin: 12px 0;
 }
 
 .pending-status {
-  background: #302815;
+  background: #332b16;
   color: #facc15;
-  border: 1px solid #51431d;
 }
 
 .rejected-status {
-  background: #30191d;
+  background: #32191d;
   color: #f87171;
-  border: 1px solid #51252b;
-}
-
-/* BUTTON */
-
-.task-button {
-  width: 100%;
-  display: block;
-  text-align: center;
-  padding: 13px;
-  border: none;
-  border-radius: 12px;
-  background: #f8fafc;
-  color: #080b12;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 800;
-  cursor: pointer;
-}
-
-.task-button:hover {
-  opacity: .9;
-}
-
-.task-button.secondary {
-  background: #182131;
-  color: #f8fafc;
-  border: 1px solid #2a3648;
 }
 
 /* DETAILS */
+
+#taskDetailsSection {
+  display: none;
+}
+
+.back-button {
+  background: transparent;
+  color: #cbd5e1;
+  border: 1px solid #2a3648;
+  border-radius: 10px;
+  padding: 10px 14px;
+  cursor: pointer;
+  margin-bottom: 22px;
+}
 
 .details-card {
   background: #111722;
   border: 1px solid #202b3b;
   border-radius: 20px;
   padding: 20px;
-  box-shadow: 0 12px 30px rgba(0,0,0,.25);
 }
 
 .details-card h2 {
   margin-top: 0;
-  font-size: 23px;
+  font-size: 24px;
 }
 
-.detail-description {
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 13px 0;
+  border-bottom: 1px solid #1b2533;
+}
+
+.detail-row span:first-child {
+  color: #64748b;
+}
+
+.detail-row span:last-child {
+  color: #e2e8f0;
+  font-weight: 700;
+  text-align: right;
+}
+
+.instructions {
+  margin-top: 22px;
+}
+
+.instructions h3 {
+  margin-bottom: 8px;
+}
+
+.instructions p {
   color: #cbd5e1;
-  line-height: 1.65;
-  font-size: 14px;
+  line-height: 1.6;
   white-space: pre-wrap;
 }
 
-.detail-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin: 18px 0;
-}
-
-.detail-box {
-  background: #0a0f18;
-  border: 1px solid #202b3b;
-  border-radius: 13px;
-  padding: 13px;
-}
-
-.detail-box small {
-  display: block;
-  color: #64748b;
-  font-size: 11px;
-  margin-bottom: 6px;
-}
-
-.detail-box strong {
-  font-size: 15px;
-}
-
-/* PROOF */
-
 .proof-section {
-  margin-top: 22px;
+  margin-top: 25px;
   padding-top: 20px;
   border-top: 1px solid #202b3b;
 }
 
-.proof-section h3 {
-  margin: 0 0 7px;
-}
-
 .proof-section p {
-  color: #64748b;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.file-box {
-  margin: 15px 0;
-  padding: 14px;
-  border: 1px dashed #344258;
-  border-radius: 13px;
-  background: #0a0f18;
+  color: #94a3b8;
 }
 
 input[type="file"] {
   width: 100%;
+  padding: 12px;
+  border: 1px solid #2a3648;
+  border-radius: 12px;
+  background: #0b1019;
   color: #cbd5e1;
-  font-size: 13px;
 }
 
 #proofMessage {
-  margin-top: 13px;
-  font-size: 13px;
+  margin-top: 14px;
   line-height: 1.5;
+  font-size: 14px;
 }
 
 .success {
@@ -290,216 +236,140 @@ input[type="file"] {
   color: #f87171;
 }
 
-.warning {
-  color: #facc15;
-}
-
-/* EMPTY */
-
-.empty-box {
+.no-tasks {
+  text-align: center;
+  padding: 35px 15px;
+  color: #64748b;
   background: #111722;
   border: 1px solid #202b3b;
   border-radius: 18px;
-  padding: 30px 20px;
-  text-align: center;
 }
+</style>
+</head>
 
-.empty-icon {
-  font-size: 30px;
-  margin-bottom: 10px;
-}
+<body>
 
-.empty-box h3 {
-  margin: 0 0 7px;
-}
+<header>
+  <h1>TaskVexa</h1>
+  <a href="dashboard.html">← Dashboard</a>
+</header>
 
-.empty-box p {
-  margin: 0;
-  color: #64748b;
-  font-size: 13px;
-  line-height: 1.5;
-}
+<main>
 
-/* ERROR */
+  <!-- TASK LIST -->
 
-.error-box {
-  background: #241419;
-  border: 1px solid #51252b;
-  color: #f87171;
-  border-radius: 15px;
-  padding: 16px;
-  font-size: 13px;
-  line-height: 1.5;
-}
+  <section id="taskListSection">
 
-/* MOBILE */
-
-@media (max-width: 480px) {
-
-  main {
-    padding-left: 13px;
-    padding-right: 13px;
-  }
-
-  .page-header h2 {
-    font-size: 25px;
-  }
-
-  .detail-grid {
-    grid-template-columns: 1fr;
-  }
-
-}
-</style></head><body><header>
-  <h1>TaskVexa</h1>  <a href="dashboard.html">
-    Dashboard
-  </a>
-</header><main>  <!-- TASK LIST -->  <section id="taskListSection"><div class="page-header">
-
-  <a href="dashboard.html" class="back-link">
-    ← Dashboard
-  </a>
-
-  <h2>
-    Available Tasks
-  </h2>
-
-  <p>
-    Complete tasks and submit your proof for review.
-  </p>
-
-</div>
-
-<div id="message" class="loading-box">
-
-  <div class="loader"></div>
-
-  Loading tasks...
-
-</div>
-
-<div id="taskList"></div>
-
-  </section>  <!-- TASK DETAILS -->  <section
-    id="taskDetailsSection"
-    style="display:none;"
-  ><a
-  href="#"
-  id="backButton"
-  class="back-link"
->
-  ← Back to Tasks
-</a>
-
-<div class="details-card">
-
-  <h2 id="detailTitle">
-    Task
-  </h2>
-
-  <div class="detail-grid">
-
-    <div class="detail-box">
-
-      <small>
-        Platform
-      </small>
-
-      <strong id="detailPlatform">
-        -
-      </strong>
-
+    <div class="page-title">
+      <h2>Available Tasks</h2>
+      <p>Complete tasks and submit your proof for review.</p>
     </div>
 
-    <div class="detail-box">
-
-      <small>
-        Reward
-      </small>
-
-      <strong>
-        ₦<span id="detailReward">0</span>
-      </strong>
-
+    <div id="message">
+      Loading tasks...
     </div>
 
-  </div>
+    <div id="taskList"></div>
+
+  </section>
 
 
-  <h3>
-    Instructions
-  </h3>
+  <!-- TASK DETAILS -->
 
-  <div
-    id="detailDescription"
-    class="detail-description"
-  ></div>
-
-
-  <br>
-
-
-  <a
-    id="openTaskButton"
-    href="#"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="task-button"
-  >
-    Open Task
-  </a>
-
-
-  <div class="proof-section">
-
-    <h3>
-      Submit Proof
-    </h3>
-
-    <p>
-      Upload a screenshot showing that you completed this task.
-    </p>
-
-    <div class="file-box">
-
-      <input
-        type="file"
-        id="proofFile"
-        accept="image/*"
-      >
-
-    </div>
+  <section id="taskDetailsSection">
 
     <button
-      id="submitProofButton"
-      class="task-button"
+      id="backButton"
+      class="back-button"
     >
-      Submit Proof
+      ← Back to Tasks
     </button>
 
-    <div id="proofMessage"></div>
+    <div class="details-card">
 
-  </div>
+      <h2 id="detailTitle"></h2>
 
-</div>
+      <div class="detail-row">
+        <span>Platform</span>
+        <span id="detailPlatform"></span>
+      </div>
 
-  </section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+      <div class="detail-row">
+        <span>Reward</span>
+        <span
+          id="detailReward"
+          class="reward"
+        ></span>
+      </div>
 
-/* =========================
-   SUPABASE
-========================= */
+
+      <div class="instructions">
+
+        <h3>Instructions</h3>
+
+        <p id="detailDescription"></p>
+
+      </div>
+
+
+      <a
+        id="openTaskButton"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="task-button"
+      >
+        Open Task
+      </a>
+
+
+      <div class="proof-section">
+
+        <h3>Submit Proof</h3>
+
+        <p>
+          Upload a screenshot showing that you completed this task.
+        </p>
+
+        <input
+          type="file"
+          id="proofFile"
+          accept="image/*"
+        >
+
+        <button
+          id="submitProofButton"
+          class="task-button"
+        >
+          Submit Proof
+        </button>
+
+        <div id="proofMessage"></div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
 
 const SUPABASE_URL =
-  "https://dxtlnrthlpdaobnbazny.supabase.co";
+"https://dxtlnrthlpdaobnbazny.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 const supabaseClient =
-  window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
 
 
 /* =========================
@@ -507,35 +377,25 @@ const supabaseClient =
 ========================= */
 
 const taskList =
-  document.getElementById("taskList");
+document.getElementById("taskList");
 
 const message =
-  document.getElementById("message");
+document.getElementById("message");
 
 const taskListSection =
-  document.getElementById(
-    "taskListSection"
-  );
+document.getElementById("taskListSection");
 
 const taskDetailsSection =
-  document.getElementById(
-    "taskDetailsSection"
-  );
+document.getElementById("taskDetailsSection");
 
 const backButton =
-  document.getElementById(
-    "backButton"
-  );
+document.getElementById("backButton");
 
 const submitProofButton =
-  document.getElementById(
-    "submitProofButton"
-  );
+document.getElementById("submitProofButton");
 
 const proofMessage =
-  document.getElementById(
-    "proofMessage"
-  );
+document.getElementById("proofMessage");
 
 
 let currentUser = null;
@@ -544,20 +404,19 @@ let selectedSubmissionStatus = null;
 
 
 /* =========================
-   MONEY
+   FORMAT MONEY
 ========================= */
 
 function formatMoney(amount) {
 
-  return Number(
-    amount || 0
-  ).toLocaleString(
-    "en-NG",
-    {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 2
-    }
-  );
+  return "₦" +
+    Number(amount || 0).toLocaleString(
+      "en-NG",
+      {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2
+      }
+    );
 
 }
 
@@ -568,35 +427,18 @@ function formatMoney(amount) {
 
 function escapeHTML(value) {
 
-  return String(
-    value ?? ""
-  )
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-  .replace(
-    /</g,
-    "&lt;"
-  )
-  .replace(
-    />/g,
-    "&gt;"
-  )
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-  .replace(
-    /'/g,
-    "&#039;"
-  );
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 
 }
 
 
 /* =========================
-   GET LOGGED USER
+   GET LOGGED IN USER
 ========================= */
 
 async function getCurrentUser() {
@@ -607,126 +449,19 @@ async function getCurrentUser() {
   } =
   await supabaseClient.auth.getUser();
 
-
   if (error) {
-
-    throw new Error(
-      "Unable to verify your login: " +
-      error.message
-    );
-
+    throw error;
   }
 
-
-  if (
-    !data ||
-    !data.user
-  ) {
+  if (!data || !data.user) {
 
     window.location.href =
       "login.html";
 
     return null;
-
   }
-
 
   return data.user;
-
-}
-
-
-/* =========================
-   CHECK WORKER ROLE
-========================= */
-
-async function checkWorker() {
-
-  const user =
-    await getCurrentUser();
-
-
-  if (!user) {
-    return null;
-  }
-
-
-  const {
-    data: profile,
-    error
-  } =
-  await supabaseClient
-    .from("profiles")
-    .select("role")
-    .eq(
-      "id",
-      user.id
-    )
-    .maybeSingle();
-
-
-  if (error) {
-
-    throw new Error(
-      "Could not load your profile: " +
-      error.message
-    );
-
-  }
-
-
-  if (!profile) {
-
-    throw new Error(
-      "Your profile could not be found."
-    );
-
-  }
-
-
-  const role =
-    String(
-      profile.role || ""
-    ).toLowerCase();
-
-
-  if (
-    role === "promoter"
-  ) {
-
-    window.location.href =
-      "promoter-dashboard.html";
-
-    return null;
-
-  }
-
-
-  if (
-    role === "admin"
-  ) {
-
-    window.location.href =
-      "admin.html";
-
-    return null;
-
-  }
-
-
-  if (
-    role !== "worker"
-  ) {
-
-    throw new Error(
-      "Worker account required."
-    );
-
-  }
-
-
-  return user;
-
 }
 
 
@@ -736,36 +471,30 @@ async function checkWorker() {
 
 async function loadTasks() {
 
-  message.innerHTML = `
+  message.textContent =
+    "Loading tasks...";
 
-    <div class="loader"></div>
-
-    Loading tasks...
-
-  `;
-
+  taskList.innerHTML = "";
 
   try {
 
-    const user =
-      await checkWorker();
-
-
-    if (!user) {
-      return;
-    }
-
+    /*
+      Get logged-in user.
+    */
 
     currentUser =
-      user;
+      await getCurrentUser();
+
+    if (!currentUser) {
+      return;
+    }
 
 
     /*
       Load active tasks.
 
-      IMPORTANT:
-      We only select the columns
-      needed by the worker page.
+      Only select the columns
+      required by this page.
     */
 
     const {
@@ -774,16 +503,9 @@ async function loadTasks() {
     } =
     await supabaseClient
       .from("tasks")
-      .select(`
-        id,
-        title,
-        description,
-        platform,
-        reward,
-        task_url,
-        status,
-        created_at
-      `)
+      .select(
+        "id, title, description, platform, reward, task_url, status, created_at"
+      )
       .eq(
         "status",
         "active"
@@ -797,18 +519,15 @@ async function loadTasks() {
 
 
     if (taskError) {
-
-      throw new Error(
-        "Could not load tasks: " +
-        taskError.message
-      );
-
+      throw taskError;
     }
 
 
     /*
-      Load this worker's
-      submissions.
+      Load worker submissions.
+
+      If there are no submissions,
+      the result is simply empty.
     */
 
     const {
@@ -817,15 +536,12 @@ async function loadTasks() {
     } =
     await supabaseClient
       .from("task_submissions")
-      .select(`
-        id,
-        task_id,
-        status,
-        created_at
-      `)
+      .select(
+        "id, task_id, status, created_at"
+      )
       .eq(
         "worker_id",
-        user.id
+        currentUser.id
       )
       .order(
         "created_at",
@@ -836,31 +552,25 @@ async function loadTasks() {
 
 
     if (submissionError) {
-
-      throw new Error(
-        "Could not load your submissions: " +
-        submissionError.message
-      );
-
+      throw submissionError;
     }
 
 
     /*
-      Latest submission per task.
+      Latest submission status
+      for each task.
     */
 
     const submissionMap = {};
 
 
-    (
-      submissions || []
-    ).forEach(
+    (submissions || []).forEach(
       submission => {
 
         if (
-          !submissionMap[
+          submissionMap[
             submission.task_id
-          ]
+          ] === undefined
         ) {
 
           submissionMap[
@@ -876,29 +586,25 @@ async function loadTasks() {
     );
 
 
-    taskList.innerHTML =
-      "";
-
-
     /*
       Approved tasks disappear.
 
-      Pending stays visible.
+      Pending tasks remain visible.
 
-      Rejected stays visible.
+      Rejected tasks remain visible
+      so the worker can submit again.
     */
 
     const visibleTasks =
-      (
-        tasks || []
-      ).filter(
+      (tasks || []).filter(
         task => {
 
-          return (
+          const status =
             submissionMap[
               task.id
-            ] !== "approved"
-          );
+            ];
+
+          return status !== "approved";
 
         }
       );
@@ -909,36 +615,21 @@ async function loadTasks() {
     ) {
 
       message.innerHTML = `
-
-        <div class="empty-box">
-
-          <div class="empty-icon">
-            ✓
-          </div>
-
-          <h3>
-            No tasks available
-          </h3>
-
-          <p>
-            There are no available tasks for you right now.
-          </p>
-
+        <div class="no-tasks">
+          No tasks are currently available.
         </div>
-
       `;
 
       return;
-
     }
 
 
-    message.innerHTML =
+    message.textContent =
       "";
 
 
     /*
-      CREATE TASK CARDS
+      Display tasks.
     */
 
     visibleTasks.forEach(
@@ -947,7 +638,7 @@ async function loadTasks() {
         const submissionStatus =
           submissionMap[
             task.id
-          ] || null;
+          ];
 
 
         const card =
@@ -972,9 +663,7 @@ async function loadTasks() {
           statusHTML = `
 
             <div class="submission-status pending-status">
-
-              ⏳ Proof submitted — Pending Review
-
+              ⏳ Your proof is pending admin review.
             </div>
 
           `;
@@ -990,9 +679,7 @@ async function loadTasks() {
           statusHTML = `
 
             <div class="submission-status rejected-status">
-
-              ❌ Proof rejected — You can submit again
-
+              ❌ Previous proof rejected — you can submit again.
             </div>
 
           `;
@@ -1003,58 +690,37 @@ async function loadTasks() {
         card.innerHTML = `
 
           <h3>
-            ${escapeHTML(
-              task.title
-            )}
+            ${escapeHTML(task.title)}
           </h3>
 
           <div class="task-description">
-
-            ${escapeHTML(
-              task.description ||
-              "Complete the task according to the instructions."
-            )}
-
+            ${escapeHTML(task.description)}
           </div>
-
 
           <div class="task-info">
 
-            <div class="info-box">
+            <span>Platform</span>
 
-              <div class="info-label">
-                Platform
-              </div>
-
-              <div class="info-value">
-                ${escapeHTML(
-                  task.platform ||
-                  "Not specified"
-                )}
-              </div>
-
-            </div>
-
-
-            <div class="info-box">
-
-              <div class="info-label">
-                Reward
-              </div>
-
-              <div class="info-value reward-value">
-                ₦${formatMoney(
-                  task.reward
-                )}
-              </div>
-
-            </div>
+            <span>
+              ${escapeHTML(
+                task.platform ||
+                "Not specified"
+              )}
+            </span>
 
           </div>
 
+          <div class="task-info">
+
+            <span>Reward</span>
+
+            <span class="reward">
+              ${formatMoney(task.reward)}
+            </span>
+
+          </div>
 
           ${statusHTML}
-
 
           <button
             class="task-button view-task-button"
@@ -1065,23 +731,21 @@ async function loadTasks() {
         `;
 
 
-        const viewButton =
-          card.querySelector(
+        card
+          .querySelector(
             ".view-task-button"
+          )
+          .addEventListener(
+            "click",
+            function() {
+
+              showTaskDetails(
+                task,
+                submissionStatus
+              );
+
+            }
           );
-
-
-        viewButton.addEventListener(
-          "click",
-          () => {
-
-            showTaskDetails(
-              task,
-              submissionStatus
-            );
-
-          }
-        );
 
 
         taskList.appendChild(
@@ -1100,48 +764,17 @@ async function loadTasks() {
     );
 
 
+    /*
+      Do not leave the user
+      stuck on Loading forever.
+    */
+
     message.innerHTML = `
-
-      <div class="error-box">
-
-        <strong>
-          Unable to load tasks
-        </strong>
-
-        <br><br>
-
-        ${escapeHTML(
-          error.message
-        )}
-
-        <br><br>
-
-        <button
-          id="retryButton"
-          class="task-button"
-        >
-          Try Again
-        </button>
-
+      <div class="no-tasks error">
+        Unable to load tasks.<br><br>
+        ${escapeHTML(error.message)}
       </div>
-
     `;
-
-
-    const retryButton =
-      document.getElementById(
-        "retryButton"
-      );
-
-
-    if (retryButton) {
-
-      retryButton.addEventListener(
-        "click",
-        loadTasks
-      );
-
-    }
 
   }
 
@@ -1149,7 +782,7 @@ async function loadTasks() {
 
 
 /* =========================
-   SHOW TASK DETAILS
+   SHOW DETAILS
 ========================= */
 
 function showTaskDetails(
@@ -1167,7 +800,7 @@ function showTaskDetails(
   document.getElementById(
     "detailTitle"
   ).textContent =
-    task.title || "Task";
+    task.title;
 
 
   document.getElementById(
@@ -1189,34 +822,14 @@ function showTaskDetails(
     "detailDescription"
   ).textContent =
     task.description ||
-    "Follow the task instructions carefully.";
+    "No instructions provided.";
 
 
-  const taskButton =
-    document.getElementById(
-      "openTaskButton"
-    );
-
-
-  if (
-    task.task_url
-  ) {
-
-    taskButton.href =
-      task.task_url;
-
-    taskButton.style.display =
-      "block";
-
-  } else {
-
-    taskButton.href =
-      "#";
-
-    taskButton.style.display =
-      "none";
-
-  }
+  document.getElementById(
+    "openTaskButton"
+  ).href =
+    task.task_url ||
+    "#";
 
 
   document.getElementById(
@@ -1228,13 +841,6 @@ function showTaskDetails(
   proofMessage.textContent =
     "";
 
-  proofMessage.className =
-    "";
-
-
-  /*
-    PENDING
-  */
 
   if (
     submissionStatus ===
@@ -1242,10 +848,10 @@ function showTaskDetails(
   ) {
 
     proofMessage.textContent =
-      "Your proof is currently pending admin review.";
+      "Your proof is pending admin review.";
 
     proofMessage.className =
-      "warning";
+      "pending-status";
 
     submitProofButton.disabled =
       true;
@@ -1255,18 +861,13 @@ function showTaskDetails(
 
   }
 
-
-  /*
-    REJECTED
-  */
-
   else if (
     submissionStatus ===
     "rejected"
   ) {
 
     proofMessage.textContent =
-      "Your previous proof was rejected. Upload a new screenshot to try again.";
+      "Your previous proof was rejected. You can submit a new proof.";
 
     proofMessage.className =
       "error";
@@ -1278,11 +879,6 @@ function showTaskDetails(
       "Submit New Proof";
 
   }
-
-
-  /*
-    NEW
-  */
 
   else {
 
@@ -1301,7 +897,6 @@ function showTaskDetails(
   taskDetailsSection.style.display =
     "block";
 
-
   window.scrollTo(
     0,
     0
@@ -1311,15 +906,12 @@ function showTaskDetails(
 
 
 /* =========================
-   BACK
+   BACK BUTTON
 ========================= */
 
 backButton.addEventListener(
   "click",
-  function(event) {
-
-    event.preventDefault();
-
+  function() {
 
     selectedTask =
       null;
@@ -1327,17 +919,14 @@ backButton.addEventListener(
     selectedSubmissionStatus =
       null;
 
-
     taskDetailsSection.style.display =
       "none";
 
     taskListSection.style.display =
       "block";
 
-
     proofMessage.textContent =
       "";
-
 
     loadTasks();
 
@@ -1353,16 +942,22 @@ submitProofButton.addEventListener(
   "click",
   async function() {
 
+    proofMessage.textContent =
+      "";
+
+    proofMessage.className =
+      "";
+
+
     if (!selectedTask) {
 
       proofMessage.textContent =
-        "Please select a task first.";
+        "Please select a task.";
 
       proofMessage.className =
         "error";
 
       return;
-
     }
 
 
@@ -1381,7 +976,6 @@ submitProofButton.addEventListener(
         "error";
 
       return;
-
     }
 
 
@@ -1398,7 +992,6 @@ submitProofButton.addEventListener(
         "error";
 
       return;
-
     }
 
 
@@ -1411,21 +1004,25 @@ submitProofButton.addEventListener(
         "Submitting...";
 
 
-      const user =
+      /*
+        Confirm logged-in user.
+      */
+
+      currentUser =
         await getCurrentUser();
 
 
-      if (!user) {
+      if (!currentUser) {
         return;
       }
 
 
       /*
-        Check latest submission.
+        Check previous submissions.
       */
 
       const {
-        data: existingSubmissions,
+        data: existing,
         error: existingError
       } =
       await supabaseClient
@@ -1439,7 +1036,7 @@ submitProofButton.addEventListener(
         )
         .eq(
           "worker_id",
-          user.id
+          currentUser.id
         )
         .order(
           "created_at",
@@ -1450,13 +1047,213 @@ submitProofButton.addEventListener(
 
 
       if (existingError) {
-
-        throw new Error(
-          "Could not check your previous submission: " +
-          existingError.message
-        );
-
+        throw existingError;
       }
 
 
-      const lat
+      const latest =
+        existing &&
+        existing.length
+          ? existing[0]
+          : null;
+
+
+      if (
+        latest &&
+        String(
+          latest.status
+        ).toLowerCase() ===
+        "pending"
+      ) {
+
+        proofMessage.textContent =
+          "Your previous submission is still pending review.";
+
+        proofMessage.className =
+          "error";
+
+        submitProofButton.disabled =
+          true;
+
+        submitProofButton.textContent =
+          "Pending Review";
+
+        return;
+      }
+
+
+      if (
+        latest &&
+        String(
+          latest.status
+        ).toLowerCase() ===
+        "approved"
+      ) {
+
+        proofMessage.textContent =
+          "You have already completed this task.";
+
+        proofMessage.className =
+          "error";
+
+        submitProofButton.disabled =
+          true;
+
+        submitProofButton.textContent =
+          "Already Completed";
+
+        return;
+      }
+
+
+      /*
+        Create safe file name.
+      */
+
+      const safeName =
+        file.name.replace(
+          /[^a-zA-Z0-9._-]/g,
+          "_"
+        );
+
+
+      const filePath =
+        currentUser.id +
+        "/" +
+        selectedTask.id +
+        "-" +
+        Date.now() +
+        "-" +
+        safeName;
+
+
+      /*
+        Upload screenshot.
+      */
+
+      const {
+        error: uploadError
+      } =
+      await supabaseClient.storage
+        .from("task-proofs")
+        .upload(
+          filePath,
+          file
+        );
+
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+
+      /*
+        Get public URL.
+      */
+
+      const {
+        data: publicData
+      } =
+      supabaseClient.storage
+        .from("task-proofs")
+        .getPublicUrl(
+          filePath
+        );
+
+
+      const proofUrl =
+        publicData.publicUrl;
+
+
+      /*
+        Insert submission.
+      */
+
+      const {
+        error: insertError
+      } =
+      await supabaseClient
+        .from("task_submissions")
+        .insert({
+
+          task_id:
+            selectedTask.id,
+
+          worker_id:
+            currentUser.id,
+
+          proof_url:
+            proofUrl,
+
+          reward_amount:
+            Number(
+              selectedTask.reward || 0
+            ),
+
+          status:
+            "pending"
+
+        });
+
+
+      if (insertError) {
+        throw insertError;
+      }
+
+
+      proofMessage.textContent =
+        "Proof submitted successfully. Waiting for admin review.";
+
+      proofMessage.className =
+        "success";
+
+
+      submitProofButton.disabled =
+        true;
+
+      submitProofButton.textContent =
+        "Pending Review";
+
+
+      selectedSubmissionStatus =
+        "pending";
+
+
+    } catch (error) {
+
+      console.error(
+        "PROOF SUBMISSION ERROR:",
+        error
+      );
+
+
+      proofMessage.textContent =
+        "Error: " +
+        error.message;
+
+      proofMessage.className =
+        "error";
+
+
+      submitProofButton.disabled =
+        false;
+
+      submitProofButton.textContent =
+        "Submit Proof";
+
+    }
+
+  }
+);
+
+
+/* =========================
+   START
+========================= */
+
+loadTasks();
+
+</script>
+
+</body>
+</html>

@@ -1,146 +1,840 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TaskVexa - Workers Diagnostic</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TaskVexa - Workers</title>
+
+<style>
 * {
   box-sizing: border-box;
 }
 
+:root {
+  --bg: #070a10;
+  --sidebar: #0b0f17;
+  --card: #111722;
+  --card2: #0d131e;
+  --border: #202b3b;
+  --text: #f8fafc;
+  --muted: #7f8da3;
+  --soft: #cbd5e1;
+  --green: #4ade80;
+  --red: #f87171;
+  --yellow: #facc15;
+}
+
+html,
 body {
   margin: 0;
-  background: #070a10;
-  color: #f8fafc;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
   font-family: Arial, Helvetica, sans-serif;
 }
 
-header {
+body {
+  min-height: 100vh;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 245px;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
+  padding: 22px 14px;
+  z-index: 1000;
+  overflow-y: auto;
+}
+
+.logo {
+  padding: 8px 14px 22px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+}
+
+.logo h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.logo span {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.nav-title {
+  color: #4f5d73;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.3px;
+  padding: 10px 14px 7px;
+  text-transform: uppercase;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 12px 14px;
+  margin: 4px 0;
+  border-radius: 11px;
+  color: #aeb9c9;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: #171d2a;
+  color: white;
+}
+
+.nav-icon {
+  width: 23px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.logout {
+  margin-top: 20px;
+  border-top: 1px solid var(--border);
+  padding-top: 18px;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main {
+  margin-left: 245px;
+  min-height: 100vh;
+}
+
+/* =========================
+   TOPBAR
+========================= */
+
+.topbar {
   height: 70px;
-  background: #0b0f17;
-  border-bottom: 1px solid #202b3b;
-  border-bottom: 1px solid #202b3b;
+  background: rgba(7,10,16,.94);
+  border-bottom: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
+  padding: 0 28px;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  backdrop-filter: blur(12px);
 }
 
-header h1 {
-  margin: 0;
-  font-size: 21px;
+.topbar-title {
+  font-size: 17px;
+  font-weight: 700;
 }
 
-header a {
-  color: #cbd5e1;
-  text-decoration: none;
-  font-size: 14px;
+.admin-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
 }
 
-main {
-  max-width: 1100px;
+.online-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.content {
+  max-width: 1250px;
   margin: auto;
-  padding: 25px 16px 50px;
+  padding: 28px;
 }
 
-h2 {
-  margin-bottom: 7px;
+.heading {
+  margin-bottom: 22px;
 }
 
-.subtitle {
-  color: #7f8da3;
-  font-size: 14px;
-  margin-bottom: 25px;
+.heading h2 {
+  margin: 0 0 7px;
+  font-size: 28px;
 }
 
-button {
-  padding: 11px 17px;
-  border: 1px solid #293548;
+.heading p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* =========================
+   MESSAGE
+========================= */
+
+.message {
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.success {
+  color: var(--green);
+}
+
+.error {
+  color: var(--red);
+}
+
+/* =========================
+   STAT CARDS
+========================= */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 22px;
+}
+
+.stat-card {
+  background: linear-gradient(145deg, #131a27, #0d121b);
+  border: 1px solid var(--border);
+  border-radius: 17px;
+  padding: 19px;
+}
+
+.stat-label {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.stat-value {
+  margin-top: 10px;
+  font-size: 25px;
+  font-weight: 800;
+}
+
+/* =========================
+   TOOLBAR
+========================= */
+
+.toolbar {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 15px;
+  margin-bottom: 18px;
+
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.search-box {
+  flex: 1;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 12px 14px;
   border-radius: 10px;
+  border: 1px solid #293548;
+  background: #090e16;
+  color: white;
+  outline: none;
+  font-size: 13px;
+}
+
+.search-box input:focus {
+  border-color: #59677e;
+}
+
+.search-box input::placeholder {
+  color: #4f5c70;
+}
+
+.refresh-button {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #293548;
   background: #151d2a;
   color: white;
   cursor: pointer;
   font-weight: 700;
-  margin-bottom: 20px;
+  white-space: nowrap;
 }
 
-button:disabled {
-  opacity: .6;
+.refresh-button:disabled {
+  opacity: .5;
 }
 
-#message {
-  padding: 15px;
-  border-radius: 12px;
-  background: #111722;
-  border: 1px solid #202b3b;
-  margin-bottom: 20px;
-  white-space: pre-wrap;
-  word-break: break-word;
-}
+/* =========================
+   WORKER LIST
+========================= */
 
-.success {
-  color: #4ade80;
-}
-
-.error {
-  color: #f87171;
+.worker-list {
+  display: grid;
+  gap: 14px;
 }
 
 .worker-card {
-  background: #111722;
-  border: 1px solid #202b3b;
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 17px;
-  padding: 20px;
-  margin-bottom: 15px;
+  padding: 19px;
 }
 
-.worker-card h3 {
-  margin-top: 0;
+.worker-card:hover {
+  border-color: #334158;
+}
+
+.worker-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 16px;
+}
+
+.worker-title {
+  font-size: 17px;
+  font-weight: 800;
 }
 
 .worker-id {
-  color: #7f8da3;
-  font-size: 12px;
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 5px;
   word-break: break-all;
 }
 
+.status {
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.status.active {
+  color: var(--green);
+  background: #102d20;
+}
+
+.status.inactive {
+  color: var(--red);
+  background: #32191d;
+}
+
+/* =========================
+   WORKER INFORMATION
+========================= */
+
+.worker-info {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
 .info {
-  background: #0d131e;
+  background: var(--card2);
   border: 1px solid #1d2838;
   border-radius: 11px;
-  padding: 13px;
-  margin-top: 10px;
+  padding: 12px;
 }
 
 .info small {
   display: block;
   color: #64748b;
   font-size: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
 
 .info strong {
   font-size: 13px;
+  word-break: break-word;
 }
-</style></head><body><header>  <h1>TaskVexa</h1>  <a href="admin.html">
-    ← Admin Dashboard
-  </a></header><main>  <h2>Workers</h2>  <p class="subtitle">
-    View registered worker accounts and their account information.
-  </p><button
-id="refreshButton"
 
-«»
+/* =========================
+   VIEW BUTTON
+========================= */
 
-↻ Refresh Workers
+.view-button {
+  margin-top: 15px;
+  padding: 10px 14px;
+  border: 1px solid #293548;
+  background: #171f2e;
+  color: white;
+  border-radius: 9px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 12px;
+}
 
-  </button>  <div id="message">
-    Starting...
-  </div>  <div id="workerList"></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
+.view-button:hover {
+  background: #202a3b;
+}
+
+/* =========================
+   EMPTY
+========================= */
+
+.empty {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 35px 20px;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.72);
+  z-index: 2000;
+  padding: 20px;
+  overflow-y: auto;
+}
+
+.modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-box {
+  width: 100%;
+  max-width: 550px;
+  background: #101722;
+  border: 1px solid #293548;
+  border-radius: 18px;
+  padding: 22px;
+}
+
+.modal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 18px;
+}
+
+.modal-head h3 {
+  margin: 0;
+}
+
+.close-button {
+  background: transparent;
+  border: 0;
+  color: #94a3b8;
+  font-size: 23px;
+  cursor: pointer;
+}
+
+.modal-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.modal-info {
+  background: #0b111b;
+  border: 1px solid #202b3b;
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.modal-info small {
+  display: block;
+  color: #64748b;
+  margin-bottom: 5px;
+  font-size: 10px;
+}
+
+.modal-info strong {
+  font-size: 12px;
+  word-break: break-word;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-menu {
+  display: none;
+  border: 1px solid var(--border);
+  background: #151b28;
+  color: white;
+  border-radius: 9px;
+  padding: 8px 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+@media (max-width: 950px) {
+
+  .worker-info {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
+
+@media (max-width: 750px) {
+
+  .sidebar {
+    transform: translateX(-100%);
+    transition: .25s;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main {
+    margin-left: 0;
+  }
+
+  .mobile-menu {
+    display: block;
+  }
+
+  .topbar {
+    padding: 0 15px;
+  }
+
+  .content {
+    padding: 22px 15px 40px;
+  }
+
+}
+
+@media (max-width: 550px) {
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .worker-info {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .worker-top {
+    align-items: flex-start;
+  }
+
+  .modal-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside id="sidebar" class="sidebar">
+
+  <div class="logo">
+    <h1>TaskVexa</h1>
+    <span>Administration Panel</span>
+  </div>
+
+  <div class="nav-title">
+    Main
+  </div>
+
+  <a href="admin.html" class="nav-link">
+    <span class="nav-icon">⌂</span>
+    Dashboard
+  </a>
+
+  <a href="worker.html" class="nav-link active">
+    <span class="nav-icon">👥</span>
+    Workers
+  </a>
+
+  <a href="promoters.html" class="nav-link">
+    <span class="nav-icon">📣</span>
+    Promoters
+  </a>
+
+  <div class="nav-title">
+    Management
+  </div>
+
+  <a href="tasks.html" class="nav-link">
+    <span class="nav-icon">✓</span>
+    Tasks
+  </a>
+
+  <a href="admin-submissions.html" class="nav-link">
+    <span class="nav-icon">📋</span>
+    Submissions
+  </a>
+
+  <a href="admin-withdrawals.html" class="nav-link">
+    <span class="nav-icon">💳</span>
+    Withdrawals
+  </a>
+
+  <a href="admin-promoter-wallet.html" class="nav-link">
+    <span class="nav-icon">💰</span>
+    Promoter Wallet
+  </a>
+
+  <div class="nav-title">
+    Account
+  </div>
+
+  <button
+    id="logoutButton"
+    class="nav-link logout"
+  >
+    <span class="nav-icon">↪</span>
+    Logout
+  </button>
+
+</aside>
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="main">
+
+  <div class="topbar">
+
+    <div style="display:flex;align-items:center;gap:12px;">
+
+      <button
+        id="mobileMenu"
+        class="mobile-menu"
+      >
+        ☰
+      </button>
+
+      <div class="topbar-title">
+        Workers
+      </div>
+
+    </div>
+
+    <div class="admin-status">
+      <span class="online-dot"></span>
+      Admin
+    </div>
+
+  </div>
+
+
+  <main class="content">
+
+    <div class="heading">
+
+      <h2>
+        Workers
+      </h2>
+
+      <p>
+        View and manage registered worker accounts.
+      </p>
+
+    </div>
+
+
+    <div
+      id="message"
+      class="message"
+    >
+      Loading workers...
+    </div>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================== -->
+
+    <div class="stats">
+
+      <div class="stat-card">
+
+        <div class="stat-label">
+          Total Workers
+        </div>
+
+        <div
+          id="totalWorkers"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-label">
+          Active Workers
+        </div>
+
+        <div
+          id="activeWorkers"
+          class="stat-value"
+        >
+          0
+        </div>
+
+      </div>
+
+
+      <div class="stat-card">
+
+        <div class="stat-label">
+          Total Worker Balance
+        </div>
+
+        <div
+          id="totalBalance"
+          class="stat-value"
+        >
+          ₦0.00
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         SEARCH / REFRESH
+    ========================== -->
+
+    <div class="toolbar">
+
+      <div class="search-box">
+
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="Search by worker ID or account type..."
+        >
+
+      </div>
+
+
+      <button
+        id="refreshButton"
+        class="refresh-button"
+      >
+        ↻ Refresh Workers
+      </button>
+
+    </div>
+
+
+    <!-- =========================
+         WORKER LIST
+    ========================== -->
+
+    <div
+      id="workerList"
+      class="worker-list"
+    ></div>
+
+  </main>
+
+</div>
+
+
+<!-- =========================
+     WORKER DETAILS MODAL
+========================= -->
+
+<div
+  id="workerModal"
+  class="modal"
+>
+
+  <div class="modal-box">
+
+    <div class="modal-head">
+
+      <h3>
+        Worker Details
+      </h3>
+
+      <button
+        id="closeModal"
+        class="close-button"
+      >
+        ×
+      </button>
+
+    </div>
+
+    <div
+      id="modalContent"
+      class="modal-grid"
+    ></div>
+
+  </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+/* =========================
+   SUPABASE
+========================= */
 
 const SUPABASE_URL =
   "https://dxtlnrthlpdaobnbazny.supabase.co";
 
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
-
 
 const supabaseClient =
   window.supabase.createClient(
@@ -149,27 +843,82 @@ const supabaseClient =
   );
 
 
+/* =========================
+   ELEMENTS
+========================= */
+
 const message =
-  document.getElementById("message");
+  document.getElementById(
+    "message"
+  );
 
 const workerList =
-  document.getElementById("workerList");
+  document.getElementById(
+    "workerList"
+  );
 
 const refreshButton =
-  document.getElementById("refreshButton");
+  document.getElementById(
+    "refreshButton"
+  );
+
+const searchInput =
+  document.getElementById(
+    "searchInput"
+  );
+
+const totalWorkers =
+  document.getElementById(
+    "totalWorkers"
+  );
+
+const activeWorkers =
+  document.getElementById(
+    "activeWorkers"
+  );
+
+const totalBalance =
+  document.getElementById(
+    "totalBalance"
+  );
+
+const workerModal =
+  document.getElementById(
+    "workerModal"
+  );
+
+const modalContent =
+  document.getElementById(
+    "modalContent"
+  );
+
+const closeModal =
+  document.getElementById(
+    "closeModal"
+  );
+
+const logoutButton =
+  document.getElementById(
+    "logoutButton"
+  );
+
+const mobileMenu =
+  document.getElementById(
+    "mobileMenu"
+  );
+
+const sidebar =
+  document.getElementById(
+    "sidebar"
+  );
 
 
-function showMessage(
-  text,
-  type = ""
-) {
+let allWorkers = [];
 
-  message.textContent = text;
 
-  message.className = type;
-
-}
-
+/* =========================
+   ESCAPE HTML
+========================= */
 
 function escapeHTML(value) {
 
@@ -182,6 +931,10 @@ function escapeHTML(value) {
 
 }
 
+
+/* =========================
+   MONEY
+========================= */
 
 function formatMoney(amount) {
 
@@ -197,66 +950,83 @@ function formatMoney(amount) {
 }
 
 
-async function loadWorkers() {
+/* =========================
+   DATE
+========================= */
 
-  refreshButton.disabled = true;
+function formatDate(value) {
 
-  workerList.innerHTML = "";
+  if (!value) {
+    return "-";
+  }
 
-  showMessage(
-    "STEP 1: Checking login..."
+  const date =
+    new Date(value);
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+    return "-";
+  }
+
+  return date.toLocaleString(
+    "en-NG"
   );
 
+}
+
+
+/* =========================
+   LOAD WORKERS
+========================= */
+
+async function loadWorkers() {
 
   try {
 
+    refreshButton.disabled = true;
+
+    refreshButton.textContent =
+      "Loading...";
+
+    message.textContent =
+      "Loading workers...";
+
+    message.className =
+      "message";
+
+    workerList.innerHTML = "";
+
+
     /* =========================
-       STEP 1
-    ========================= */
+       CHECK LOGIN
+    ========================== */
 
     const {
-      data: sessionData,
-      error: sessionError
+      data: { user },
+      error: authError
     } =
-      await supabaseClient.auth.getSession();
+      await supabaseClient.auth.getUser();
 
 
-    if (sessionError) {
+    if (
+      authError ||
+      !user
+    ) {
 
-      throw new Error(
-        "SESSION ERROR: " +
-        sessionError.message
-      );
-
-    }
-
-
-    const session =
-      sessionData.session;
-
-
-    if (!session) {
-
-      showMessage(
-        "NO ACTIVE SESSION.\n\nYou are not logged in as an admin in this browser.",
-        "error"
-      );
+      window.location.href =
+        "login.html";
 
       return;
 
     }
 
 
-    showMessage(
-      "STEP 2: Logged in successfully.\n\nUser ID:\n" +
-      session.user.id +
-      "\n\nChecking admin profile..."
-    );
-
-
     /* =========================
-       STEP 2
-    ========================= */
+       CHECK ADMIN
+    ========================== */
 
     const {
       data: profile,
@@ -264,64 +1034,41 @@ async function loadWorkers() {
     } =
       await supabaseClient
         .from("profiles")
-        .select("id, role")
+        .select("role")
         .eq(
           "id",
-          session.user.id
+          user.id
         )
         .maybeSingle();
 
 
     if (profileError) {
 
-      throw new Error(
-        "PROFILE ERROR: " +
-        profileError.message +
-        "\n\nCode: " +
-        (profileError.code || "none")
-      );
-
-    }
-
-
-    if (!profile) {
-
-      showMessage(
-        "PROFILE NOT FOUND.\n\nLogged-in User ID:\n" +
-        session.user.id,
-        "error"
-      );
-
-      return;
+      throw profileError;
 
     }
 
 
     if (
-      String(profile.role).toLowerCase() !==
-      "admin"
+      !profile ||
+      profile.role !== "admin"
     ) {
 
-      showMessage(
-        "ACCESS DENIED.\n\nYour profile role is:\n" +
-        profile.role +
-        "\n\nAn admin account is required.",
-        "error"
-      );
+      message.textContent =
+        "Access denied. Admin account required.";
+
+      message.className =
+        "message error";
 
       return;
 
     }
 
 
-    showMessage(
-      "STEP 3: Admin verified.\n\nCalling admin_get_workers()..."
-    );
-
-
     /* =========================
-       STEP 3
-    ========================= */
+       LOAD WORKERS
+       USING WORKING RPC
+    ========================== */
 
     const {
       data: workers,
@@ -334,83 +1081,239 @@ async function loadWorkers() {
 
     if (workersError) {
 
-      throw new Error(
-        "RPC ERROR: " +
-        workersError.message +
-        "\n\nCode: " +
-        (workersError.code || "none") +
-        "\n\nDetails: " +
-        (workersError.details || "none") +
-        "\n\nHint: " +
-        (workersError.hint || "none")
-      );
+      throw workersError;
 
     }
 
 
-    /* =========================
-       STEP 4
-    ========================= */
+    allWorkers =
+      workers || [];
 
-    showMessage(
-      "STEP 4: RPC worked.\n\nWorkers returned: " +
-      (workers ? workers.length : 0)
+
+    updateStatistics(
+      allWorkers
     );
 
 
-    if (
-      !workers ||
-      workers.length === 0
-    ) {
-
-      showMessage(
-        "RPC WORKED BUT RETURNED 0 WORKERS.\n\nThe database contains a worker, but the function is not returning it.",
-        "error"
-      );
-
-      return;
-
-    }
+    renderWorkers(
+      allWorkers
+    );
 
 
-    /* =========================
-       DISPLAY
-    ========================= */
+    message.textContent =
+      `SUCCESS: ${allWorkers.length} worker account(s) loaded successfully.`;
 
-    workers.forEach(
-      worker => {
-
-        const card =
-          document.createElement(
-            "div"
-          );
-
-        card.className =
-          "worker-card";
+    message.className =
+      "message success";
 
 
-        card.innerHTML = `
+  } catch (error) {
 
-          <h3>
-            Worker Account
-          </h3>
+    console.error(
+      "WORKERS ERROR:",
+      error
+    );
 
-          <div class="worker-id">
-            ${escapeHTML(worker.id)}
+    message.textContent =
+      "Unable to load workers: " +
+      error.message;
+
+    message.className =
+      "message error";
+
+  } finally {
+
+    refreshButton.disabled =
+      false;
+
+    refreshButton.textContent =
+      "↻ Refresh Workers";
+
+  }
+
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
+
+function updateStatistics(
+  workers
+) {
+
+  const total =
+    workers.length;
+
+
+  const active =
+    workers.filter(
+      worker =>
+        String(
+          worker.status ||
+          "active"
+        ).toLowerCase() ===
+        "active"
+    ).length;
+
+
+  const balance =
+    workers.reduce(
+      (sum, worker) =>
+        sum +
+        Number(
+          worker.balance || 0
+        ),
+      0
+    );
+
+
+  totalWorkers.textContent =
+    total.toLocaleString(
+      "en-NG"
+    );
+
+
+  activeWorkers.textContent =
+    active.toLocaleString(
+      "en-NG"
+    );
+
+
+  totalBalance.textContent =
+    formatMoney(
+      balance
+    );
+
+}
+
+
+/* =========================
+   RENDER WORKERS
+========================= */
+
+function renderWorkers(
+  workers
+) {
+
+  workerList.innerHTML = "";
+
+
+  if (
+    !workers ||
+    workers.length === 0
+  ) {
+
+    workerList.innerHTML = `
+
+      <div class="empty">
+
+        No worker accounts have been registered yet.
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  workers.forEach(
+    worker => {
+
+      const card =
+        document.createElement(
+          "section"
+        );
+
+      card.className =
+        "worker-card";
+
+
+      const workerId =
+        worker.id ||
+        "Unavailable";
+
+
+      const role =
+        worker.role ||
+        "worker";
+
+
+      const balance =
+        Number(
+          worker.balance || 0
+        );
+
+
+      const created =
+        formatDate(
+          worker.created_at
+        );
+
+
+      const updated =
+        formatDate(
+          worker.updated_at
+        );
+
+
+      const level =
+        worker.activation_level ||
+        worker.level ||
+        "Not activated";
+
+
+      const rawStatus =
+        worker.status ||
+        "active";
+
+
+      const isActive =
+        String(
+          rawStatus
+        ).toLowerCase() ===
+        "active";
+
+
+      card.innerHTML = `
+
+        <div class="worker-top">
+
+          <div>
+
+            <div class="worker-title">
+              Worker Account
+            </div>
+
+            <div class="worker-id">
+              ${escapeHTML(
+                workerId
+              )}
+            </div>
+
           </div>
 
-          <div class="info">
 
-            <small>
-              Account Type
-            </small>
+          <span class="status ${
+            isActive
+              ? "active"
+              : "inactive"
+          }">
 
-            <strong>
-              ${escapeHTML(worker.role)}
-            </strong>
+            ${
+              isActive
+                ? "Active"
+                : "Inactive"
+            }
 
-          </div>
+          </span>
 
+        </div>
+
+
+        <div class="worker-info">
 
           <div class="info">
 
@@ -419,7 +1322,39 @@ async function loadWorkers() {
             </small>
 
             <strong>
-              ${formatMoney(worker.balance)}
+              ${formatMoney(
+                balance
+              )}
+            </strong>
+
+          </div>
+
+
+          <div class="info">
+
+            <small>
+              Activation Level
+            </small>
+
+            <strong>
+              ${escapeHTML(
+                level
+              )}
+            </strong>
+
+          </div>
+
+
+          <div class="info">
+
+            <small>
+              Account Type
+            </small>
+
+            <strong>
+              ${escapeHTML(
+                role
+              )}
             </strong>
 
           </div>
@@ -433,60 +1368,10 @@ async function loadWorkers() {
 
             <strong>
               ${escapeHTML(
-                worker.created_at
+                created
               )}
             </strong>
 
           </div>
 
-        `;
-
-
-        workerList.appendChild(
-          card
-        );
-
-      }
-    );
-
-
-    showMessage(
-      "SUCCESS: Worker accounts loaded successfully.",
-      "success"
-    );
-
-
-  } catch (error) {
-
-    console.error(
-      "WORKER PAGE ERROR:",
-      error
-    );
-
-
-    showMessage(
-      "EXACT ERROR:\n\n" +
-      error.message,
-      "error"
-    );
-
-
-  } finally {
-
-    refreshButton.disabled = false;
-
-  }
-
-}
-
-
-refreshButton.addEventListener(
-  "click",
-  loadWorkers
-);
-
-
-loadWorkers();
-
-</script></body>
-</html>
+    

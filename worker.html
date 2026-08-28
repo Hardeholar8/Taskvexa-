@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TaskVexa - Workers</title><style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TaskVexa - Workers Diagnostic</title><style>
 * {
   box-sizing: border-box;
 }
@@ -16,6 +16,7 @@ body {
 header {
   height: 70px;
   background: #0b0f17;
+  border-bottom: 1px solid #202b3b;
   border-bottom: 1px solid #202b3b;
   display: flex;
   align-items: center;
@@ -40,21 +41,39 @@ main {
   padding: 25px 16px 50px;
 }
 
-.page-title h2 {
-  margin: 0 0 7px;
-  font-size: 27px;
+h2 {
+  margin-bottom: 7px;
 }
 
-.page-title p {
+.subtitle {
   color: #7f8da3;
-  margin: 0 0 25px;
   font-size: 14px;
+  margin-bottom: 25px;
 }
 
-.message {
-  color: #7f8da3;
-  font-size: 14px;
-  margin-bottom: 18px;
+button {
+  padding: 11px 17px;
+  border: 1px solid #293548;
+  border-radius: 10px;
+  background: #151d2a;
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+button:disabled {
+  opacity: .6;
+}
+
+#message {
+  padding: 15px;
+  border-radius: 12px;
+  background: #111722;
+  border: 1px solid #202b3b;
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .success {
@@ -73,39 +92,14 @@ main {
   margin-bottom: 15px;
 }
 
-.worker-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 15px;
-  margin-bottom: 18px;
-}
-
-.worker-name {
-  font-size: 17px;
-  font-weight: 800;
+.worker-card h3 {
+  margin-top: 0;
 }
 
 .worker-id {
   color: #7f8da3;
-  font-size: 11px;
-  margin-top: 6px;
+  font-size: 12px;
   word-break: break-all;
-}
-
-.status {
-  padding: 7px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  background: #102d20;
-  color: #4ade80;
-}
-
-.worker-info {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
 }
 
 .info {
@@ -113,76 +107,32 @@ main {
   border: 1px solid #1d2838;
   border-radius: 11px;
   padding: 13px;
+  margin-top: 10px;
 }
 
 .info small {
   display: block;
   color: #64748b;
   font-size: 10px;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .info strong {
   font-size: 13px;
-  word-break: break-word;
 }
-
-.refresh-button {
-  margin-bottom: 20px;
-  padding: 11px 17px;
-  border: 1px solid #293548;
-  border-radius: 10px;
-  background: #151d2a;
-  color: #fff;
-  cursor: pointer;
-  font-weight: 700;
-}
-
-.refresh-button:disabled {
-  opacity: .6;
-  cursor: wait;
-}
-
-.empty {
-  background: #111722;
-  border: 1px solid #202b3b;
-  border-radius: 16px;
-  padding: 25px;
-  color: #7f8da3;
-}
-
-@media (max-width: 650px) {
-  .worker-info {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .worker-top {
-    align-items: flex-start;
-  }
-}
-</style></head><body><header>
-  <h1>TaskVexa</h1>  <a href="admin.html">
+</style></head><body><header>  <h1>TaskVexa</h1>  <a href="admin.html">
     ← Admin Dashboard
-  </a>
-</header><main>  <div class="page-title"><h2>Workers</h2>
-
-<p>
-  View registered worker accounts and their account information.
-</p>
-
-  </div><button
+  </a></header><main>  <h2>Workers</h2>  <p class="subtitle">
+    View registered worker accounts and their account information.
+  </p><button
 id="refreshButton"
-class="refresh-button"
 
 «»
 
 ↻ Refresh Workers
 
-  </button>  <div
-    id="message"
-    class="message"
-  >
-    Loading workers...
+  </button>  <div id="message">
+    Starting...
   </div>  <div id="workerList"></div></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
 
 const SUPABASE_URL =
@@ -190,6 +140,7 @@ const SUPABASE_URL =
 
 const SUPABASE_KEY =
   "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
 
 const supabaseClient =
   window.supabase.createClient(
@@ -208,9 +159,17 @@ const refreshButton =
   document.getElementById("refreshButton");
 
 
-/* =========================
-   ESCAPE HTML
-========================= */
+function showMessage(
+  text,
+  type = ""
+) {
+
+  message.textContent = text;
+
+  message.className = type;
+
+}
+
 
 function escapeHTML(value) {
 
@@ -223,10 +182,6 @@ function escapeHTML(value) {
 
 }
 
-
-/* =========================
-   MONEY
-========================= */
 
 function formatMoney(amount) {
 
@@ -242,203 +197,184 @@ function formatMoney(amount) {
 }
 
 
-/* =========================
-   LOAD WORKERS
-========================= */
-
 async function loadWorkers() {
 
   refreshButton.disabled = true;
-  refreshButton.textContent = "Loading...";
-
-  message.textContent = "Loading workers...";
-  message.className = "message";
 
   workerList.innerHTML = "";
+
+  showMessage(
+    "STEP 1: Checking login..."
+  );
+
 
   try {
 
     /* =========================
-       CHECK LOGIN
+       STEP 1
     ========================= */
 
     const {
-      data: { user },
-      error: authError
+      data: sessionData,
+      error: sessionError
     } =
-      await supabaseClient.auth.getUser();
+      await supabaseClient.auth.getSession();
 
 
-    if (authError) {
-      throw authError;
+    if (sessionError) {
+
+      throw new Error(
+        "SESSION ERROR: " +
+        sessionError.message
+      );
+
     }
 
 
-    if (!user) {
+    const session =
+      sessionData.session;
 
-      window.location.href = "login.html";
+
+    if (!session) {
+
+      showMessage(
+        "NO ACTIVE SESSION.\n\nYou are not logged in as an admin in this browser.",
+        "error"
+      );
 
       return;
 
     }
 
 
+    showMessage(
+      "STEP 2: Logged in successfully.\n\nUser ID:\n" +
+      session.user.id +
+      "\n\nChecking admin profile..."
+    );
+
+
     /* =========================
-       CHECK ADMIN
+       STEP 2
     ========================= */
 
     const {
-      data: adminProfile,
-      error: adminError
+      data: profile,
+      error: profileError
     } =
       await supabaseClient
         .from("profiles")
         .select("id, role")
-        .eq("id", user.id)
-        .eq("role", "admin")
+        .eq(
+          "id",
+          session.user.id
+        )
         .maybeSingle();
 
 
-    if (adminError) {
-      throw adminError;
+    if (profileError) {
+
+      throw new Error(
+        "PROFILE ERROR: " +
+        profileError.message +
+        "\n\nCode: " +
+        (profileError.code || "none")
+      );
+
     }
 
 
-    if (!adminProfile) {
+    if (!profile) {
 
-      message.textContent =
-        "Access denied. Admin account required.";
-
-      message.className =
-        "message error";
+      showMessage(
+        "PROFILE NOT FOUND.\n\nLogged-in User ID:\n" +
+        session.user.id,
+        "error"
+      );
 
       return;
 
     }
 
 
+    if (
+      String(profile.role).toLowerCase() !==
+      "admin"
+    ) {
+
+      showMessage(
+        "ACCESS DENIED.\n\nYour profile role is:\n" +
+        profile.role +
+        "\n\nAn admin account is required.",
+        "error"
+      );
+
+      return;
+
+    }
+
+
+    showMessage(
+      "STEP 3: Admin verified.\n\nCalling admin_get_workers()..."
+    );
+
+
     /* =========================
-       LOAD WORKERS DIRECTLY
-       FROM PROFILES
+       STEP 3
     ========================= */
 
     const {
       data: workers,
-      error: workerError
+      error: workersError
     } =
-      await supabaseClient
-        .from("profiles")
-        .select(
-          "id, role, created_at, updated_at"
-        )
-        .eq("role", "worker")
-        .order(
-          "created_at",
-          {
-            ascending: false
-          }
-        );
+      await supabaseClient.rpc(
+        "admin_get_workers"
+      );
 
 
-    if (workerError) {
-      throw workerError;
+    if (workersError) {
+
+      throw new Error(
+        "RPC ERROR: " +
+        workersError.message +
+        "\n\nCode: " +
+        (workersError.code || "none") +
+        "\n\nDetails: " +
+        (workersError.details || "none") +
+        "\n\nHint: " +
+        (workersError.hint || "none")
+      );
+
     }
 
 
-    workerList.innerHTML = "";
-
-
     /* =========================
-       NO WORKERS
+       STEP 4
     ========================= */
 
-    if (!workers || workers.length === 0) {
+    showMessage(
+      "STEP 4: RPC worked.\n\nWorkers returned: " +
+      (workers ? workers.length : 0)
+    );
 
-      message.textContent =
-        "No worker accounts found.";
 
-      workerList.innerHTML = `
-        <div class="empty">
-          No worker accounts have been registered yet.
-        </div>
-      `;
+    if (
+      !workers ||
+      workers.length === 0
+    ) {
+
+      showMessage(
+        "RPC WORKED BUT RETURNED 0 WORKERS.\n\nThe database contains a worker, but the function is not returning it.",
+        "error"
+      );
 
       return;
 
     }
 
 
-    message.textContent =
-      `${workers.length} worker account(s) found.`;
-
-    message.className =
-      "message success";
-
-
     /* =========================
-       LOAD WALLET BALANCES
-    ========================= */
-
-    const workerIds =
-      workers.map(
-        worker => worker.id
-      );
-
-
-    let walletMap = {};
-
-
-    if (workerIds.length > 0) {
-
-      const {
-        data: wallets,
-        error: walletError
-      } =
-        await supabaseClient
-          .from("wallets")
-          .select(
-            "user_id, balance"
-          )
-          .in(
-            "user_id",
-            workerIds
-          );
-
-
-      /*
-        Wallet is optional.
-
-        If wallet loading fails,
-        workers should still appear.
-      */
-
-      if (!walletError) {
-
-        (wallets || []).forEach(
-          wallet => {
-
-            walletMap[
-              wallet.user_id
-            ] =
-              wallet.balance || 0;
-
-          }
-        );
-
-      } else {
-
-        console.warn(
-          "Wallet loading warning:",
-          walletError
-        );
-
-      }
-
-    }
-
-
-    /* =========================
-       DISPLAY WORKERS
+       DISPLAY
     ========================= */
 
     workers.forEach(
@@ -446,180 +382,103 @@ async function loadWorkers() {
 
         const card =
           document.createElement(
-            "section"
+            "div"
           );
 
         card.className =
           "worker-card";
 
 
-        const workerId =
-          worker.id ||
-          "Unavailable";
-
-
-        const created =
-          worker.created_at
-            ? new Date(
-                worker.created_at
-              ).toLocaleString(
-                "en-NG"
-              )
-            : "-";
-
-
-        const updated =
-          worker.updated_at
-            ? new Date(
-                worker.updated_at
-              ).toLocaleString(
-                "en-NG"
-              )
-            : "-";
-
-
-        const balance =
-          walletMap[
-            worker.id
-          ] || 0;
-
-
         card.innerHTML = `
 
-          <div class="worker-top">
+          <h3>
+            Worker Account
+          </h3>
 
-            <div>
+          <div class="worker-id">
+            ${escapeHTML(worker.id)}
+          </div>
 
-              <div class="worker-name">
-                Worker Account
-              </div>
+          <div class="info">
 
-              <div class="worker-id">
-                ID: ${escapeHTML(workerId)}
-              </div>
+            <small>
+              Account Type
+            </small>
 
-            </div>
-
-            <span class="status">
-              Worker
-            </span>
+            <strong>
+              ${escapeHTML(worker.role)}
+            </strong>
 
           </div>
 
 
-          <div class="worker-info">
+          <div class="info">
 
-            <div class="info">
+            <small>
+              Balance
+            </small>
 
-              <small>
-                Balance
-              </small>
+            <strong>
+              ${formatMoney(worker.balance)}
+            </strong>
 
-              <strong>
-                ${formatMoney(balance)}
-              </strong>
-
-            </div>
+          </div>
 
 
-            <div class="info">
+          <div class="info">
 
-              <small>
-                Account Type
-              </small>
+            <small>
+              Registered
+            </small>
 
-              <strong>
-                ${escapeHTML(
-                  worker.role || "worker"
-                )}
-              </strong>
-
-            </div>
-
-
-            <div class="info">
-
-              <small>
-                Registered
-              </small>
-
-              <strong>
-                ${escapeHTML(created)}
-              </strong>
-
-            </div>
-
-
-            <div class="info">
-
-              <small>
-                Last Updated
-              </small>
-
-              <strong>
-                ${escapeHTML(updated)}
-              </strong>
-
-            </div>
-
-
-            <div class="info">
-
-              <small>
-                Worker ID
-              </small>
-
-              <strong>
-                ${escapeHTML(workerId)}
-              </strong>
-
-            </div>
+            <strong>
+              ${escapeHTML(
+                worker.created_at
+              )}
+            </strong>
 
           </div>
 
         `;
 
 
-        workerList.appendChild(card);
+        workerList.appendChild(
+          card
+        );
 
       }
+    );
+
+
+    showMessage(
+      "SUCCESS: Worker accounts loaded successfully.",
+      "success"
     );
 
 
   } catch (error) {
 
     console.error(
-      "WORKERS PAGE ERROR:",
+      "WORKER PAGE ERROR:",
       error
     );
 
 
-    message.textContent =
-      "Unable to load workers: " +
-      (
-        error.message ||
-        "Unknown error"
-      );
-
-    message.className =
-      "message error";
+    showMessage(
+      "EXACT ERROR:\n\n" +
+      error.message,
+      "error"
+    );
 
 
   } finally {
 
     refreshButton.disabled = false;
 
-    refreshButton.textContent =
-      "↻ Refresh Workers";
-
   }
 
 }
 
-
-/* =========================
-   REFRESH
-========================= */
 
 refreshButton.addEventListener(
   "click",
@@ -627,11 +486,7 @@ refreshButton.addEventListener(
 );
 
 
-/* =========================
-   START
-========================= */
-
 loadWorkers();
 
 </script></body>
-  </html>
+</html>

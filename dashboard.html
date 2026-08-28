@@ -1,513 +1,946 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>TaskVexa - Worker Dashboard</title>
+<title>TaskVexa - Worker Dashboard</title>
 
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
 
-  <style>
-    .balance-card {
-      padding: 24px;
-      margin: 20px 0;
-      border-radius: 18px;
-      background: #111827;
-      color: white;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-      text-align: center;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    .balance-card p {
-      margin: 5px 0;
-      font-size: 15px;
-      opacity: 0.8;
-    }
+body {
+  margin: 0;
+  background: #f5f7fb;
+  font-family: Arial, sans-serif;
+  color: #172033;
+}
 
-    .balance-card h2 {
-      font-size: 34px;
-      margin: 12px 0;
-      font-weight: 700;
-      color: white;
-    }
+/* HEADER */
 
-    .button-group {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+.topbar {
+  height: 64px;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 18px;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
 
-    button {
-      cursor: pointer;
-    }
+.brand {
+  font-size: 22px;
+  font-weight: 800;
+  color: #111827;
+}
 
-    #message {
-      margin-top: 10px;
-    }
+.menu-btn {
+  background: #111827;
+  color: white;
+  border: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
 
-    #dashboardContent {
-      display: none;
-    }
-  </style>
+/* SIDEBAR */
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 64px;
+  width: 245px;
+  height: calc(100vh - 64px);
+  background: #111827;
+  padding: 20px 14px;
+  z-index: 90;
+  transition: transform .25s ease;
+}
+
+.sidebar-title {
+  color: #9ca3af;
+  font-size: 12px;
+  text-transform: uppercase;
+  margin: 5px 12px 12px;
+  letter-spacing: .8px;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #d1d5db;
+  text-decoration: none;
+  padding: 13px 14px;
+  border-radius: 10px;
+  margin-bottom: 5px;
+  font-size: 15px;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  background: #1f2937;
+  color: white;
+}
+
+.logout-link {
+  margin-top: 20px;
+  width: 100%;
+  border: 0;
+  background: #dc2626;
+  color: white;
+  padding: 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+}
+
+/* MAIN */
+
+.main {
+  margin-left: 245px;
+  padding: 25px;
+  max-width: 1250px;
+}
+
+/* WELCOME */
+
+.welcome {
+  margin-bottom: 22px;
+}
+
+.welcome h1 {
+  margin: 0 0 7px;
+  font-size: 25px;
+}
+
+.welcome p {
+  margin: 0;
+  color: #6b7280;
+}
+
+/* BALANCE */
+
+.balance-card {
+  background: #111827;
+  color: white;
+  border-radius: 18px;
+  padding: 25px;
+  margin-bottom: 22px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.12);
+}
+
+.balance-label {
+  color: #cbd5e1;
+  font-size: 14px;
+  margin: 0;
+}
+
+.balance {
+  font-size: 36px;
+  font-weight: 800;
+  margin: 10px 0;
+}
+
+.balance-status {
+  color: #a7f3d0;
+  font-size: 13px;
+}
+
+/* QUICK ACTIONS */
+
+.section-title {
+  font-size: 19px;
+  margin: 25px 0 13px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.action-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 18px;
+  text-decoration: none;
+  color: #111827;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+
+.action-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+}
+
+.action-icon {
+  font-size: 25px;
+  margin-bottom: 12px;
+}
+
+.action-card strong {
+  display: block;
+  font-size: 15px;
+  margin-bottom: 5px;
+}
+
+.action-card span {
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* INFO CARDS */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.info-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.info-card h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+
+.info-card p {
+  margin: 0;
+  color: #6b7280;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.account-badge {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 6px 10px;
+  background: #eef2ff;
+  color: #3730a3;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* MESSAGE */
+
+#message {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+/* MOBILE */
+
+@media (max-width: 850px) {
+
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .main {
+    margin-left: 0;
+    padding: 18px;
+  }
+
+  .actions {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+
+  .welcome h1 {
+    font-size: 22px;
+  }
+
+  .balance {
+    font-size: 30px;
+  }
+
+  .actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .action-card {
+    padding: 15px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>TaskVexa</h1>
+<!-- TOP BAR -->
 
-    <button id="logoutButton">
-      Logout
-    </button>
-  </header>
+<header class="topbar">
 
+  <div class="brand">
+    TaskVexa
+  </div>
 
-  <!-- WORKER DASHBOARD CONTENT -->
+  <button
+    class="menu-btn"
+    id="menuButton"
+    type="button"
+  >
+    ☰
+  </button>
 
-  <main id="dashboardContent">
-
-    <section>
-
-      <h2>
-        Welcome,
-        <span id="userName">Worker</span>!
-      </h2>
-
-      <p>
-        Account type:
-        <strong id="userType">Worker</strong>
-      </p>
-
-    </section>
+</header>
 
 
-    <!-- BALANCE -->
+<!-- SIDEBAR -->
 
-    <section class="balance-card">
+<aside
+  class="sidebar"
+  id="sidebar"
+>
 
-      <p>Available Balance</p>
+  <div class="sidebar-title">
+    Worker Menu
+  </div>
 
-      <h2 id="balance">
-        ₦0.00
-      </h2>
+  <a
+    href="dashboard.html"
+    class="nav-link active"
+  >
+    🏠 Dashboard
+  </a>
 
-      <p id="message">
-        Loading balance...
-      </p>
+  <a
+    href="tasks.html"
+    class="nav-link"
+  >
+    📋 Available Tasks
+  </a>
 
-    </section>
+  <a
+    href="withdraw.html"
+    class="nav-link"
+  >
+    💰 Withdraw
+  </a>
+
+  <a
+    href="referrals.html"
+    class="nav-link"
+  >
+    👥 My Referrals
+  </a>
+
+  <a
+    href="profile.html"
+    class="nav-link"
+  >
+    👤 My Profile
+  </a>
+
+  <button
+    class="logout-link"
+    id="logoutButton"
+  >
+    🚪 Logout
+  </button>
+
+</aside>
 
 
-    <!-- WORKER BUTTONS -->
+<!-- MAIN -->
 
-    <section>
+<main
+  class="main"
+  id="dashboardContent"
+  style="display:none;"
+>
 
-      <div class="button-group">
+  <!-- WELCOME -->
 
-        <button
-          onclick="window.location.href='tasks.html'"
-        >
-          View Tasks
-        </button>
+  <section class="welcome">
 
-        <button
-          onclick="window.location.href='withdraw.html'"
-        >
-          Withdraw
-        </button>
+    <h1>
+      Welcome,
+      <span id="userName">
+        Worker
+      </span>
+    </h1>
 
-        <button
-          onclick="window.location.href='referrals.html'"
-        >
-          My Referrals
-        </button>
+    <p>
+      Complete tasks and manage your TaskVexa account.
+    </p>
 
-        <button
-          onclick="window.location.href='profile.html'"
-        >
-          My Profile
-        </button>
+  </section>
 
+
+  <!-- BALANCE -->
+
+  <section class="balance-card">
+
+    <p class="balance-label">
+      Available Balance
+    </p>
+
+    <div
+      class="balance"
+      id="balance"
+    >
+      ₦0.00
+    </div>
+
+    <div
+      class="balance-status"
+      id="message"
+    >
+      Loading balance...
+    </div>
+
+  </section>
+
+
+  <!-- QUICK ACTIONS -->
+
+  <h2 class="section-title">
+    Quick Actions
+  </h2>
+
+  <section class="actions">
+
+    <a
+      href="tasks.html"
+      class="action-card"
+    >
+
+      <div class="action-icon">
+        📋
       </div>
 
-    </section>
+      <strong>
+        View Tasks
+      </strong>
 
-  </main>
+      <span>
+        Find available tasks
+      </span>
 
-
-  <!-- SUPABASE -->
-
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
-
-    const SUPABASE_URL =
-      "https://dxtlnrthlpdaobnbazny.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+    </a>
 
 
-    const supabaseClient =
-      window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-      );
+    <a
+      href="withdraw.html"
+      class="action-card"
+    >
+
+      <div class="action-icon">
+        💰
+      </div>
+
+      <strong>
+        Withdraw
+      </strong>
+
+      <span>
+        Request a withdrawal
+      </span>
+
+    </a>
 
 
-    const dashboardContent =
-      document.getElementById(
-        "dashboardContent"
-      );
+    <a
+      href="referrals.html"
+      class="action-card"
+    >
+
+      <div class="action-icon">
+        👥
+      </div>
+
+      <strong>
+        My Referrals
+      </strong>
+
+      <span>
+        View your referrals
+      </span>
+
+    </a>
 
 
-    /*
-      LOGOUT
-    */
+    <a
+      href="profile.html"
+      class="action-card"
+    >
+
+      <div class="action-icon">
+        👤
+      </div>
+
+      <strong>
+        My Profile
+      </strong>
+
+      <span>
+        Manage your account
+      </span>
+
+    </a>
+
+  </section>
+
+
+  <!-- ACCOUNT INFORMATION -->
+
+  <h2 class="section-title">
+    Account
+  </h2>
+
+  <section class="info-grid">
+
+    <div class="info-card">
+
+      <h3>
+        Account Type
+      </h3>
+
+      <p>
+        You are currently registered as a worker and can perform available tasks.
+      </p>
+
+      <span class="account-badge">
+        <span id="userType">
+          Worker
+        </span>
+      </span>
+
+    </div>
+
+
+    <div class="info-card">
+
+      <h3>
+        Start Earning
+      </h3>
+
+      <p>
+        Visit Available Tasks to see tasks you can perform and submit for review.
+      </p>
+
+    </div>
+
+  </section>
+
+</main>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://dxtlnrthlpdaobnbazny.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
+
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+
+const dashboardContent =
+document.getElementById(
+  "dashboardContent"
+);
+
+
+/* ================================
+   MOBILE MENU
+================================ */
+
+document
+.getElementById("menuButton")
+.addEventListener(
+  "click",
+  function() {
 
     document
-      .getElementById("logoutButton")
-      .addEventListener(
-        "click",
-        async function() {
+      .getElementById("sidebar")
+      .classList.toggle("open");
 
-          await supabaseClient.auth.signOut();
+  }
+);
 
-          window.location.href =
-            "login.html";
 
-        }
-      );
+/* ================================
+   LOGOUT
+================================ */
 
+document
+.getElementById("logoutButton")
+.addEventListener(
+  "click",
+  async function() {
 
-    /*
-      CHECK USER AND ROLE
-    */
+    await supabaseClient.auth.signOut();
 
-    async function checkWorkerAccess() {
+    window.location.href =
+      "login.html";
 
-      try {
+  }
+);
 
-        const {
-          data: {
-            user
-          },
-          error: userError
-        } =
-          await supabaseClient.auth.getUser();
 
+/* ================================
+   CHECK WORKER ACCESS
+================================ */
 
-        if (
-          userError ||
-          !user
-        ) {
+async function checkWorkerAccess() {
 
-          window.location.href =
-            "login.html";
+  try {
 
-          return null;
-
-        }
-
-
-        /*
-          GET PROFILE ROLE
-        */
-
-        const {
-          data: profile,
-          error: profileError
-        } =
-          await supabaseClient
-            .from("profiles")
-            .select("role, full_name")
-            .eq(
-              "id",
-              user.id
-            )
-            .maybeSingle();
-
-
-        if (profileError) {
-
-          console.error(
-            "Profile error:",
-            profileError
-          );
-
-          window.location.href =
-            "login.html";
-
-          return null;
-
-        }
-
-
-        if (!profile) {
-
-          await supabaseClient.auth.signOut();
-
-          window.location.href =
-            "login.html";
-
-          return null;
-
-        }
-
-
-        const role =
-          String(
-            profile.role || ""
-          ).toLowerCase();
-
-
-        /*
-          PROMOTER CANNOT ACCESS
-          WORKER DASHBOARD
-        */
-
-        if (
-          role === "promoter"
-        ) {
-
-          window.location.href =
-            "promoter-dashboard.html";
-
-          return null;
-
-        }
-
-
-        /*
-          ADMIN CANNOT ACCESS
-          WORKER DASHBOARD
-        */
-
-        if (
-          role === "admin"
-        ) {
-
-          window.location.href =
-            "admin.html";
-
-          return null;
-
-        }
-
-
-        /*
-          ONLY WORKER CAN CONTINUE
-        */
-
-        if (
-          role !== "worker"
-        ) {
-
-          await supabaseClient.auth.signOut();
-
-          window.location.href =
-            "login.html";
-
-          return null;
-
-        }
-
-
-        /*
-          SHOW WORKER DASHBOARD
-        */
-
-        const name =
-          profile.full_name ||
-          user.email
-            .split("@")[0];
-
-
-        document.getElementById(
-          "userName"
-        ).textContent =
-          name;
-
-
-        document.getElementById(
-          "userType"
-        ).textContent =
-          "Worker";
-
-
-        dashboardContent.style.display =
-          "block";
-
-
-        return user;
-
-      } catch (error) {
-
-        console.error(
-          "Worker access error:",
-          error
-        );
-
-        window.location.href =
-          "login.html";
-
-        return null;
-
-      }
-
-    }
-
-
-    /*
-      LOAD WORKER WALLET
-    */
-
-    async function loadWalletBalance(user) {
-
-      const balanceElement =
-        document.getElementById(
-          "balance"
-        );
-
-      const messageElement =
-        document.getElementById(
-          "message"
-        );
-
-
-      try {
-
-        const {
-          data: wallet,
-          error
-        } =
-          await supabaseClient
-            .from("wallets")
-            .select("balance")
-            .eq(
-              "user_id",
-              user.id
-            )
-            .maybeSingle();
-
-
-        if (error) {
-
-          throw error;
-
-        }
-
-
-        /*
-          CREATE WORKER WALLET
-          IF IT DOES NOT EXIST
-        */
-
-        if (!wallet) {
-
-          const {
-            data: newWallet,
-            error: createError
-          } =
-            await supabaseClient
-              .from("wallets")
-              .insert({
-
-                user_id:
-                  user.id,
-
-                balance:
-                  0
-
-              })
-              .select("balance")
-              .single();
-
-
-          if (createError) {
-
-            throw createError;
-
-          }
-
-
-          balanceElement.textContent =
-            "₦" +
-            Number(
-              newWallet.balance || 0
-            ).toLocaleString(
-              "en-NG",
-              {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              }
-            );
-
-        } else {
-
-          balanceElement.textContent =
-            "₦" +
-            Number(
-              wallet.balance || 0
-            ).toLocaleString(
-              "en-NG",
-              {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-              }
-            );
-
-        }
-
-
-        messageElement.textContent =
-          "Balance updated.";
-
-
-      } catch (error) {
-
-        console.error(
-          "Wallet error:",
-          error
-        );
-
-
-        messageElement.textContent =
-          "Unable to load balance.";
-
-      }
-
-    }
-
-
-    /*
-      START
-    */
-
-    async function initializeDashboard() {
-
-      const user =
-        await checkWorkerAccess();
-
-
-      if (!user) {
-
-        return;
-
-      }
-
-
-      await loadWalletBalance(
+    const {
+      data: {
         user
-      );
+      },
+      error: userError
+    } =
+      await supabaseClient.auth.getUser();
+
+
+    if (
+      userError ||
+      !user
+    ) {
+
+      window.location.href =
+        "login.html";
+
+      return null;
 
     }
 
 
-    initializeDashboard();
+    const {
+      data: profile,
+      error: profileError
+    } =
+      await supabaseClient
+        .from("profiles")
+        .select(
+          "role, full_name"
+        )
+        .eq(
+          "id",
+          user.id
+        )
+        .maybeSingle();
 
-  </script>
+
+    if (profileError) {
+
+      console.error(
+        "Profile error:",
+        profileError
+      );
+
+      window.location.href =
+        "login.html";
+
+      return null;
+
+    }
+
+
+    if (!profile) {
+
+      await supabaseClient.auth.signOut();
+
+      window.location.href =
+        "login.html";
+
+      return null;
+
+    }
+
+
+    const role =
+      String(
+        profile.role || ""
+      ).toLowerCase();
+
+
+    /*
+      PROMOTER
+    */
+
+    if (
+      role === "promoter"
+    ) {
+
+      window.location.href =
+        "promoter-dashboard.html";
+
+      return null;
+
+    }
+
+
+    /*
+      ADMIN
+    */
+
+    if (
+      role === "admin"
+    ) {
+
+      window.location.href =
+        "admin.html";
+
+      return null;
+
+    }
+
+
+    /*
+      ONLY WORKER
+    */
+
+    if (
+      role !== "worker"
+    ) {
+
+      await supabaseClient.auth.signOut();
+
+      window.location.href =
+        "login.html";
+
+      return null;
+
+    }
+
+
+    const name =
+      profile.full_name ||
+      user.email
+        .split("@")[0];
+
+
+    document.getElementById(
+      "userName"
+    ).textContent =
+      name;
+
+
+    document.getElementById(
+      "userType"
+    ).textContent =
+      "Worker";
+
+
+    dashboardContent.style.display =
+      "block";
+
+
+    return user;
+
+
+  } catch (error) {
+
+    console.error(
+      "Worker access error:",
+      error
+    );
+
+    window.location.href =
+      "login.html";
+
+    return null;
+
+  }
+
+}
+
+
+/* ================================
+   LOAD WALLET
+================================ */
+
+async function loadWalletBalance(
+  user
+) {
+
+  const balanceElement =
+    document.getElementById(
+      "balance"
+    );
+
+  const messageElement =
+    document.getElementById(
+      "message"
+    );
+
+
+  try {
+
+    const {
+      data: wallet,
+      error
+    } =
+      await supabaseClient
+        .from("wallets")
+        .select("balance")
+        .eq(
+          "user_id",
+          user.id
+        )
+        .maybeSingle();
+
+
+    if (error) {
+
+      throw error;
+
+    }
+
+
+    /*
+      CREATE WALLET IF MISSING
+    */
+
+    if (!wallet) {
+
+      const {
+        data: newWallet,
+        error: createError
+      } =
+        await supabaseClient
+          .from("wallets")
+          .insert({
+
+            user_id:
+              user.id,
+
+            balance:
+              0
+
+          })
+          .select("balance")
+          .single();
+
+
+      if (createError) {
+
+        throw createError;
+
+      }
+
+
+      balanceElement.textContent =
+        "₦" +
+        Number(
+          newWallet.balance || 0
+        ).toLocaleString(
+          "en-NG",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        );
+
+
+    } else {
+
+      balanceElement.textContent =
+        "₦" +
+        Number(
+          wallet.balance || 0
+        ).toLocaleString(
+          "en-NG",
+          {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          }
+        );
+
+    }
+
+
+    messageElement.textContent =
+      "Balance updated.";
+
+
+  } catch (error) {
+
+    console.error(
+      "Wallet error:",
+      error
+    );
+
+
+    messageElement.textContent =
+      "Unable to load balance.";
+
+  }
+
+}
+
+
+/* ================================
+   START
+================================ */
+
+async function initializeDashboard() {
+
+  const user =
+    await checkWorkerAccess();
+
+
+  if (!user) {
+
+    return;
+
+  }
+
+
+  await loadWalletBalance(
+    user
+  );
+
+}
+
+
+initializeDashboard();
+
+</script>
 
 </body>
 </html>

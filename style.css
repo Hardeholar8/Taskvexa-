@@ -1,91 +1,720 @@
+/* =========================================
+   TASKVEXA GLOBAL STYLE
+   Mobile + Desktop Responsive
+========================================= */
+
 * {
   box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
   margin: 0;
   padding: 0;
 }
 
 body {
-  font-family: Arial, sans-serif;
-  background: #0b0f19;
-  color: #ffffff;
+  width: 100%;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  background: #080d18;
+  color: #f5f7fa;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-x: hidden;
 }
 
+/* =========================================
+   HEADER
+========================================= */
+
 header {
-  padding: 20px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 20px;
+  background: #0b101c;
+  border-bottom: 1px solid #1d2635;
+
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #202838;
+  justify-content: space-between;
+  gap: 15px;
+
+  flex-wrap: wrap;
 }
 
 header h1 {
+  margin: 0;
+  color: #4ade80;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+header a {
+  color: #e5e7eb;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+header a:hover {
   color: #4ade80;
 }
 
-nav a {
-  color: #ffffff;
-  text-decoration: none;
-  margin-left: 12px;
+/* =========================================
+   NAVIGATION
+========================================= */
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
 }
+
+nav a {
+  color: #e5e7eb;
+  text-decoration: none;
+}
+
+nav a:hover {
+  color: #4ade80;
+}
+
+/* =========================================
+   MAIN CONTENT
+========================================= */
 
 main {
-  width: 90%;
-  max-width: 500px;
-  margin: 50px auto;
+  width: 100%;
+  max-width: 1200px;
+
+  margin: 0 auto;
+
+  padding: 24px 20px 50px;
 }
 
-section,
-form,
-.task-card {
-  background: #121827;
-  padding: 25px;
-  border-radius: 14px;
-  margin-bottom: 25px;
-}
+/* =========================================
+   HEADINGS
+========================================= */
 
 h1,
 h2,
+h3,
+h4 {
+  color: #f8fafc;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-top: 0;
+}
+
 h3 {
-  margin-bottom: 15px;
+  font-size: 19px;
 }
 
 p {
-  color: #aeb7c8;
-  line-height: 1.6;
-  margin-bottom: 15px;
+  color: #cbd5e1;
 }
 
-label {
-  display: block;
-  margin: 15px 0 7px;
-}
-
-input,
-select {
-  width: 100%;
-  padding: 13px;
-  border: 1px solid #30394d;
-  border-radius: 8px;
-  background: #0b0f19;
-  color: white;
-}
-
-button,
-.task-button {
-  display: inline-block;
-  width: 100%;
-  padding: 13px;
-  margin-top: 20px;
-  border: none;
-  border-radius: 8px;
-  background: #4ade80;
-  color: #06100a;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-}
+/* =========================================
+   LINKS
+========================================= */
 
 a {
   color: #4ade80;
 }
+
+a:hover {
+  color: #86efac;
+}
+
+/* =========================================
+   CARDS / SECTIONS
+========================================= */
+
+section,
+.card,
+.task-card,
+.admin-card,
+.wallet-box,
+.payment-box,
+.deposit-box,
+.history-box {
+  width: 100%;
+  max-width: 100%;
+}
+
+.card,
+.task-card,
+.admin-card {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 18px;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+button,
+.btn {
+  display: inline-block;
+
+  min-height: 44px;
+
+  padding: 11px 18px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #4ade80;
+  color: #06110a;
+
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.1s ease;
+}
+
+button:hover,
+.btn:hover {
+  opacity: 0.9;
+}
+
+button:active,
+.btn:active {
+  transform: scale(0.98);
+}
+
+button:disabled,
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =========================================
+   FORMS
+========================================= */
+
+form {
+  width: 100%;
+}
+
+.form-group {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+label {
+  display: block;
+  margin-bottom: 7px;
+
+  color: #f1f5f9;
+
+  font-weight: 600;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  max-width: 100%;
+
+  min-height: 44px;
+
+  padding: 11px 13px;
+
+  background: #0b1220;
+  color: #f8fafc;
+
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 15px;
+
+  outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #4ade80;
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.12);
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+select {
+  cursor: pointer;
+}
+
+/* =========================================
+   INPUT PLACEHOLDER
+========================================= */
+
+input::placeholder,
+textarea::placeholder {
+  color: #64748b;
+}
+
+/* =========================================
+   TABLES
+========================================= */
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #263244;
+}
+
+th {
+  color: #f8fafc;
+  background: #111827;
+}
+
+td {
+  color: #cbd5e1;
+}
+
+/* =========================================
+   STATUS
+========================================= */
+
+.success {
+  color: #4ade80 !important;
+}
+
+.error {
+  color: #f87171 !important;
+}
+
+.pending {
+  color: #fbbf24 !important;
+}
+
+.live {
+  color: #4ade80 !important;
+}
+
+.status {
+  font-weight: 700;
+}
+
+/* =========================================
+   ALERT / MESSAGE
+========================================= */
+
+.message,
+.alert {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 12px 0;
+
+  border-radius: 8px;
+
+  background: #111827;
+  border: 1px solid #263244;
+}
+
+/* =========================================
+   WALLET
+========================================= */
+
+.wallet-box {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 14px;
+
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.balance,
+.wallet-balance {
+  font-size: 30px;
+  font-weight: 700;
+  color: #4ade80;
+}
+
+/* =========================================
+   PAYMENT BOX
+========================================= */
+
+.payment-box {
+  background: #101827;
+  border: 1px solid #263b55;
+
+  border-radius: 14px;
+
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.payment-detail {
+  width: 100%;
+
+  background: #0b1220;
+
+  border: 1px solid #263244;
+
+  padding: 14px;
+
+  border-radius: 9px;
+
+  margin: 10px 0;
+}
+
+.payment-detail strong {
+  display: block;
+  margin-bottom: 5px;
+  color: #f8fafc;
+}
+
+.account-number {
+  display: inline-block;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  color: #4ade80;
+
+  word-break: break-word;
+}
+
+/* =========================================
+   DEPOSIT / HISTORY
+========================================= */
+
+.deposit-box,
+.history-box {
+  background: #111827;
+  border: 1px solid #1f2937;
+
+  border-radius: 14px;
+
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.deposit-item {
+  width: 100%;
+
+  background: #0b1220;
+
+  border: 1px solid #263244;
+
+  padding: 14px;
+
+  border-radius: 9px;
+
+  margin-bottom: 10px;
+}
+
+/* =========================================
+   IMAGES
+========================================= */
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+.screenshot-preview {
+  width: 100%;
+  max-width: 500px;
+  max-height: 350px;
+
+  object-fit: contain;
+
+  margin-top: 10px;
+
+  border-radius: 8px;
+}
+
+/* =========================================
+   FILE INPUT
+========================================= */
+
+input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  background: #0b1220;
+}
+
+/* =========================================
+   COPY BUTTON
+========================================= */
+
+.copy-button {
+  min-height: 38px;
+
+  padding: 8px 12px;
+
+  font-size: 13px;
+}
+
+/* =========================================
+   DASHBOARD GRID
+========================================= */
+
+.dashboard-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+.dashboard-card {
+  width: 100%;
+
+  background: #111827;
+
+  border: 1px solid #1f2937;
+
+  border-radius: 14px;
+
+  padding: 20px;
+}
+
+/* =========================================
+   ADMIN GRID
+========================================= */
+
+.admin-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 18px;
+}
+
+/* =========================================
+   FULL WIDTH ELEMENT
+========================================= */
+
+.full-width {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* =========================================
+   HORIZONTAL SCROLL PROTECTION
+========================================= */
+
+pre,
+code {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+iframe {
+  max-width: 100%;
+}
+
+/* =========================================
+   MOBILE RESPONSIVE
+========================================= */
+
+@media (max-width: 768px) {
+
+  body {
+    font-size: 15px;
+  }
+
+  header {
+    min-height: auto;
+
+    padding: 13px 14px;
+
+    flex-direction: column;
+    align-items: stretch;
+
+    text-align: center;
+  }
+
+  header h1 {
+    font-size: 21px;
+  }
+
+  nav {
+    width: 100%;
+
+    justify-content: center;
+
+    gap: 10px;
+  }
+
+  nav a,
+  nav button {
+    font-size: 14px;
+  }
+
+  main {
+    width: 100%;
+
+    max-width: none;
+
+    margin: 0;
+
+    padding: 18px 12px 40px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  .card,
+  .task-card,
+  .admin-card,
+  .wallet-box,
+  .payment-box,
+  .deposit-box,
+  .history-box {
+    width: 100%;
+
+    padding: 16px;
+
+    border-radius: 12px;
+  }
+
+  .dashboard-grid,
+  .admin-grid {
+    grid-template-columns: 1fr;
+  }
+
+  button,
+  .btn {
+    width: 100%;
+    min-height: 44px;
+  }
+
+  input,
+  textarea,
+  select {
+    font-size: 16px;
+  }
+
+  .balance,
+  .wallet-balance {
+    font-size: 27px;
+  }
+
+  .account-number {
+    font-size: 18px;
+  }
+
+}
+
+/* =========================================
+   SMALL PHONES
+========================================= */
+
+@media (max-width: 480px) {
+
+  header {
+    padding: 12px 10px;
+  }
+
+  main {
+    padding: 15px 10px 35px;
+  }
+
+  .card,
+  .task-card,
+  .admin-card,
+  .wallet-box,
+  .payment-box,
+  .deposit-box,
+  .history-box {
+    padding: 14px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  h3 {
+    font-size: 17px;
+  }
+
+  p {
+    font-size: 14px;
+  }
+
+  .balance,
+  .wallet-balance {
+    font-size: 25px;
+  }
+
+}
+
+/* =========================================
+   VERY SMALL PHONES
+========================================= */
+
+@media (max-width: 360px) {
+
+  main {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  header {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .card,
+  .task-card,
+  .admin-card,
+  .wallet-box,
+  .payment-box,
+  .deposit-box,
+  .history-box {
+    padding: 12px;
+  }
+
+  }

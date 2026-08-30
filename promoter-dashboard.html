@@ -1,1 +1,313 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>TaskVexa - Promoter Dashboard</title><style>*{box-sizing:border-box} :root{--bg:#070a10;--panel:#0e1521;--panel2:#111a28;--border:#202c3d;--text:#f8fafc;--muted:#8997aa;--green:#4ade80;--blue:#60a5fa;--yellow:#facc15;--red:#f87171}body{margin:0;background:radial-gradient(circle at 80% -10%,#17243a 0,#070a10 38%);color:var(--text);font-family:Inter,Arial,sans-serif}.app{display:flex;min-height:100vh}.sidebar{position:fixed;left:0;top:0;bottom:0;width:250px;background:rgba(8,12,19,.96);border-right:1px solid var(--border);padding:20px 14px;z-index:50}.brand{padding:8px 12px 20px;border-bottom:1px solid var(--border);margin-bottom:18px}.brand b{font-size:23px}.brand small{display:block;color:var(--muted);margin-top:5px}.section-title{font-size:10px;color:#59687c;font-weight:800;letter-spacing:1.4px;margin:20px 12px 8px}.nav{display:flex;align-items:center;gap:12px;width:100%;padding:12px 13px;margin:4px 0;border:0;border-radius:12px;background:transparent;color:#aeb9c9;cursor:pointer;text-align:left;font-size:14px}.nav:hover,.nav.active{background:#171f2d;color:#fff}.nav i{font-style:normal;width:22px;text-align:center;font-size:17px}.logout{margin-top:18px;padding-top:15px;border-top:1px solid var(--border)}.logout .nav{color:var(--red)}.main{margin-left:250px;width:calc(100% - 250px);min-width:0}.top{height:70px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;background:rgba(7,10,16,.9);backdrop-filter:blur(14px);z-index:20}.top h2{margin:0;font-size:18px}.top-right{display:flex;align-items:center;gap:15px;color:var(--muted);font-size:12px}.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#60a5fa,#4ade80);display:flex;align-items:center;justify-content:center;color:#061018;font-weight:900}.menu{display:none}.content{max-width:1400px;margin:auto;padding:28px}.page{display:none}.page.active{display:block}.hero{display:flex;justify-content:space-between;gap:20px;align-items:center;margin-bottom:24px}.hero h1{font-size:30px;margin:0 0 7px}.hero p{margin:0;color:var(--muted);font-size:14px}.status{padding:9px 13px;border:1px solid #24412f;background:#102419;border-radius:20px;color:var(--green);font-size:12px;font-weight:700}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}.stat,.card{background:linear-gradient(145deg,rgba(17,25,38,.96),rgba(12,18,28,.96));border:1px solid var(--border);border-radius:18px}.stat{padding:19px}.stat-label{color:var(--muted);font-size:11px}.stat-value{font-size:25px;font-weight:850;margin-top:9px}.stat-icon{float:right;font-size:20px}.layout{display:grid;grid-template-columns:1.35fr .65fr;gap:18px}.card{padding:21px;margin-bottom:18px}.head{display:flex;align-items:center;gap:12px;margin-bottom:18px}.head-icon{width:40px;height:40px;border-radius:12px;background:#182131;border:1px solid #29364a;display:flex;align-items:center;justify-content:center}.head h3{margin:0;font-size:16px}.head p{margin:4px 0 0;color:var(--muted);font-size:11px}.wallet{background:linear-gradient(145deg,#17253a,#0d141f)}.balance{font-size:35px;font-weight:900;margin:8px 0 18px}.muted{color:var(--muted)}.btn{border:0;border-radius:11px;padding:12px 16px;background:#f8fafc;color:#080c12;font-weight:800;cursor:pointer}.btn.secondary{background:#182131;color:#fff;border:1px solid #2a374a}.btn:disabled{opacity:.55;cursor:not-allowed}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}label{display:block;font-size:11px;font-weight:700;color:#b8c3d2;margin-bottom:6px}input,textarea,select{width:100%;padding:12px;background:#090e16;color:#fff;border:1px solid #293548;border-radius:10px;outline:0}textarea{min-height:115px;resize:vertical}.full{grid-column:1/-1}.cost{margin-top:15px;padding:14px;background:#0a111b;border:1px solid #202d40;border-radius:13px}.row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;font-size:13px}.total{font-size:21px;color:var(--green);font-weight:900}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}.list{border-top:1px solid var(--border);padding:15px 0}.list:first-child{border-top:0}.list h4{margin:0 0 7px}.badge{display:inline-block;padding:5px 9px;border-radius:8px;font-size:10px;font-weight:800}.live{background:#12331f;color:var(--green)}.pending{background:#332b16;color:var(--yellow)}.rejected{background:#32191d;color:var(--red)}.empty,.loading{text-align:center;padding:25px;color:var(--muted);font-size:13px}.payment{line-height:1.8;font-size:13px}.bottom{display:none}.profile-card{display:flex;align-items:center;gap:16px}.big-avatar{width:68px;height:68px;border-radius:20px;background:linear-gradient(135deg,#60a5fa,#4ade80);display:flex;align-items:center;justify-content:center;color:#061018;font-size:25px;font-weight:900}.profile-card h2{margin:0 0 5px}.profile-card p{margin:0;color:var(--muted);font-size:13px}#accessMessage{font-size:13px}.success{color:var(--green)}.error{color:var(--red)}.hidden{display:none!important}@media(max-width:1050px){.stats{grid-template-columns:repeat(2,1fr)}.layout{grid-template-columns:1fr}}@media(max-width:800px){.sidebar{transform:translateX(-100%);transition:.25s}.sidebar.open{transform:translateX(0)}.main{margin-left:0;width:100%}.menu{display:block;background:#151d2b;color:#fff;border:1px solid var(--border);border-radius:9px;padding:8px 11px}.top{padding:0 15px}.content{padding:20px 14px 85px}.top-right span{display:none}.hero h1{font-size:25px}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.bottom{display:flex;position:fixed;bottom:0;left:0;right:0;height:65px;background:rgba(9,13,20,.97);border-top:1px solid var(--border);z-index:40;justify-content:space-around}.bottom button{background:none;border:0;color:#8190a5;font-size:10px}.bottom button.active{color:#fff}.bottom i{display:block;font-style:normal;font-size:19px;margin-bottom:3px}}@media(max-width:500px){.stats{grid-template-columns:1fr 1fr}.stat{padding:15px}.stat-value{font-size:20px}.hero{align-items:flex-start}.status{display:none}}</style></head><body><div class="app"><aside class="sidebar" id="sidebar"><div class="brand"><b>TaskVexa</b><small>Promoter Hub</small></div><div class="section-title">MAIN</div><button class="nav active" data-page="home"><i>⌂</i>Dashboard</button><button class="nav" data-page="create"><i>＋</i>Create Task</button><button class="nav" data-page="tasks"><i>✓</i>My Tasks</button><button class="nav" data-page="wallet"><i>₦</i>Wallet & Activity</button><div class="section-title">ACCOUNT</div><button class="nav" data-page="profile"><i>👤</i>Profile</button><button class="nav" data-page="settings"><i>⚙</i>Settings</button><div class="logout"><button class="nav" id="logoutButton"><i>↪</i>Logout</button></div></aside><div class="main"><header class="top"><div style="display:flex;align-items:center;gap:12px"><button class="menu" id="mobileMenu">☰</button><h2 id="topTitle">Dashboard</h2></div><div class="top-right"><span>Promoter account</span><div class="avatar" id="topAvatar">P</div></div></header><main class="content"><div id="accessMessage">Checking promoter access...</div><section id="dashboardContent" class="hidden"><div class="page active" id="page-home"><div class="hero"><div><h1>Welcome back, Promoter 👋</h1><p>Manage your campaigns, tasks and promoter activity.</p></div><div class="status">● Account Active</div></div><div class="stats"><div class="stat"><span class="stat-icon">💰</span><div class="stat-label">Wallet Balance</div><div class="stat-value">₦<span id="walletBalance">0</span></div></div><div class="stat"><span class="stat-icon">📋</span><div class="stat-label">My Tasks</div><div class="stat-value" id="taskCount">0</div></div><div class="stat"><span class="stat-icon">📣</span><div class="stat-label">Campaign Status</div><div class="stat-value">Active</div></div><div class="stat"><span class="stat-icon">⚡</span><div class="stat-label">Quick Action</div><div class="stat-value" style="font-size:16px">Create Task</div></div></div><div class="layout"><div><section class="card"><div class="head"><div class="head-icon">🚀</div><div><h3>Create a Campaign</h3><p>Launch a new task for workers</p></div></div><p class="muted" style="font-size:13px;line-height:1.7">Create tasks, choose your platform and workers needed. Admin pricing and publishing rules remain in control.</p><button class="btn" onclick="showPage('create')">＋ Create New Task</button></section><section class="card"><div class="head"><div class="head-icon">✓</div><div><h3>Recent Tasks</h3><p>Your latest promoter activity</p></div></div><div id="homeTasks"><div class="loading">Loading your tasks...</div></div></section></div><div><section class="card wallet"><div class="head"><div class="head-icon">💰</div><div><h3>Promoter Wallet</h3><p>Available balance</p></div></div><div class="muted" style="font-size:11px">Current balance</div><div class="balance">₦<span id="walletBalanceSide">0</span></div><button class="btn" onclick="showPage('wallet')">Manage Wallet</button></section><section class="card"><div class="head"><div class="head-icon">ℹ</div><div><h3>How it works</h3><p>Simple promoter workflow</p></div></div><div class="muted" style="font-size:13px;line-height:1.9">1. Create your task.<br>2. Review the admin-controlled price.<br>3. Submit for processing.<br>4. Track approval and activity.</div></section></div></div></div><div class="page" id="page-create"><div class="hero"><div><h1>Create Task</h1><p>Build a campaign for workers.</p></div></div><section class="card"><div class="head"><div class="head-icon">＋</div><div><h3>New Task</h3><p>Admin controls promoter pricing.</p></div></div><div class="form-grid"><div class="full"><label>Task Title</label><input id="taskTitle" maxlength="150" placeholder="Enter task title"></div><div class="full"><label>Task Instructions</label><textarea id="taskDescription" placeholder="Enter the instructions workers should follow"></textarea></div><div><label>Platform</label><select id="taskPlatform"><option value="">Loading platforms...</option></select></div><div><label>Workers Needed</label><input id="workersNeeded" type="number" min="1" step="1" value="1"></div><div class="full"><label>Task Link</label><input id="taskUrl" type="url" placeholder="https://example.com/task"></div></div><div id="priceBox" class="cost hidden"><div class="row"><span class="muted">Price Per Worker</span><b>₦<span id="pricePerWorker">0</span></b></div><div class="row"><span class="muted">Total Campaign Cost</span><b class="total">₦<span id="totalCost">0</span></b></div></div><div class="actions"><button id="submitTaskButton" class="btn" disabled>Submit Task</button><button class="btn secondary" onclick="showPage('wallet')">Add Funds</button></div><p id="taskMessage"></p></section></div><div class="page" id="page-tasks"><div class="hero"><div><h1>My Tasks</h1><p>Track every campaign you have submitted.</p></div></div><section class="card"><div id="myTasksMessage" class="loading">Loading your tasks...</div><div id="myTasksList"></div></section></div><div class="page" id="page-wallet"><div class="hero"><div><h1>Wallet & Activity</h1><p>Manage your promoter balance and view activity.</p></div></div><div class="layout"><div><section class="card wallet"><div class="head"><div class="head-icon">💰</div><div><h3>Available Balance</h3><p>Promoter wallet</p></div></div><div class="balance">₦<span id="walletWallet">0</span></div><a class="btn" href="promoter-wallet.html" style="display:inline-block;text-decoration:none">Manage Wallet</a></section><section class="card"><div class="head"><div class="head-icon">↕</div><div><h3>Transactions</h3><p>Recent wallet activity</p></div></div><div id="transactionsMessage" class="loading">Loading transactions...</div><div id="transactionsList"></div></section></div><div><section class="card"><div class="head"><div class="head-icon">🏦</div><div><h3>Payment Details</h3><p>Admin payment information</p></div></div><div id="paymentDetails" class="payment"><span class="muted">Loading payment details...</span></div></section></div></div></div><div class="page" id="page-profile"><div class="hero"><div><h1>Profile</h1><p>Your TaskVexa promoter account.</p></div></div><section class="card profile-card"><div class="big-avatar" id="profileAvatar">P</div><div><h2 id="profileName">Promoter</h2><p id="profileEmail">Signed-in account</p><p style="margin-top:7px"><span class="badge live">PROMOTER</span></p></div></section><section class="card"><div class="head"><div class="head-icon">🛡</div><div><h3>Account status</h3><p>Access information</p></div></div><div class="row"><span class="muted">Account type</span><b>Promoter</b></div><div class="row"><span class="muted">Status</span><b class="success">Active</b></div></section></div><div class="page" id="page-settings"><div class="hero"><div><h1>Settings</h1><p>Dashboard preferences and account controls.</p></div></div><section class="card"><div class="head"><div class="head-icon">⚙</div><div><h3>Account</h3><p>Manage your session</p></div></div><button class="btn secondary" id="settingsLogout">Logout from TaskVexa</button></section></div></section></main><nav class="bottom"><button class="active" data-page="home"><i>⌂</i>Home</button><button data-page="create"><i>＋</i>Create</button><button data-page="tasks"><i>✓</i>Tasks</button><button data-page="wallet"><i>₦</i>Wallet</button><button data-page="profile"><i>👤</i>Profile</button></nav></div></div><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>'use strict';const supabaseClient=window.supabase.createClient('https://dxtlnrthlpdaobnbazny.supabase.co','sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY');const $=id=>document.getElementById(id);let currentUser=null,settings=[];const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));const money=v=>Number(v||0).toLocaleString('en-NG');function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));$('page-'+name).classList.add('active');document.querySelectorAll('.nav[data-page],.bottom button[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));const titles={home:'Dashboard',create:'Create Task',tasks:'My Tasks',wallet:'Wallet & Activity',profile:'Profile',settings:'Settings'};$('topTitle').textContent=titles[name]||'Dashboard';$('sidebar').classList.remove('open');if(name==='wallet')loadWallet();if(name==='tasks')loadMyTasks()}document.querySelectorAll('[data-page]').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));$('mobileMenu').addEventListener('click',()=>$('sidebar').classList.toggle('open'));async function checkPromoter(){try{const{data,error}=await supabaseClient.auth.getUser();if(error)throw error;if(!data?.user){location.href='login.html';return false}currentUser=data.user;const r=await supabaseClient.from('profiles').select('role').eq('id',currentUser.id).maybeSingle();if(r.error)throw r.error;if(String(r.data?.role||'').toLowerCase()!=='promoter')throw new Error('Access denied. Promoter account required.');$('accessMessage').textContent='Promoter account ready.';$('accessMessage').className='success';$('dashboardContent').classList.remove('hidden');const initial=(currentUser.email||'P').charAt(0).toUpperCase();$('topAvatar').textContent=initial;$('profileAvatar').textContent=initial;$('profileEmail').textContent=currentUser.email||'Signed-in account';return true}catch(e){console.error(e);$('accessMessage').textContent=e.message||'Unable to verify promoter account.';$('accessMessage').className='error';return false}}async function loadWallet(){try{const{data,error}=await supabaseClient.rpc('get_my_promoter_wallet');if(error)throw error;const b=Array.isArray(data)?data[0]?.balance:data?.balance;const x=money(b);$('walletBalance').textContent=x;$('walletBalanceSide').textContent=x;$('walletWallet').textContent=x}catch(e){console.error('wallet',e);['walletBalance','walletBalanceSide','walletWallet'].forEach(id=>$(id).textContent='0')}}async function loadSettings(){const el=$('taskPlatform');try{el.innerHTML='<option>Loading platforms...</option>';const{data,error}=await supabaseClient.rpc('get_promoter_task_settings');if(error)throw error;settings=Array.isArray(data)?data:[];el.innerHTML=settings.length?'<option value="">Select platform</option>':'<option value="">No platforms configured</option>';settings.forEach(s=>{const o=document.createElement('option');o.value=s.platform;o.textContent=s.platform;el.appendChild(o)});updateCost()}catch(e){console.error('settings',e);el.innerHTML='<option value="">Unable to load platforms</option>'}}function updateCost(){const s=settings.find(x=>String(x.platform)===String($('taskPlatform').value)),w=Number($('workersNeeded').value);if(!s||!Number.isInteger(w)||w<1){$('priceBox').classList.add('hidden');$('submitTaskButton').disabled=true;return}const p=Number(s.promoter_price||0);$('pricePerWorker').textContent=money(p);$('totalCost').textContent=money(p*w);$('priceBox').classList.remove('hidden');$('submitTaskButton').disabled=false}async function loadMyTasks(){try{$('myTasksMessage').textContent='Loading your tasks...';const{data,error}=await supabaseClient.rpc('get_my_promoter_tasks');if(error)throw error;const rows=Array.isArray(data)?data:[];$('taskCount').textContent=rows.length;renderTasks(rows)}catch(e){console.error('tasks',e);$('myTasksMessage').textContent='Unable to load your tasks.'}}function renderTasks(rows){if(!rows.length){$('myTasksMessage').textContent='No promoter tasks found.';$('myTasksList').innerHTML='';$('homeTasks').innerHTML='<div class="empty">No tasks yet. Create your first campaign.</div>';return}$('myTasksMessage').textContent='';$('myTasksList').innerHTML=rows.map(t=>`<div class="list"><h4>${esc(t.title)}</h4><div class="muted" style="font-size:12px">${esc(t.platform)} · <span class="badge ${String(t.status).toLowerCase()==='active'?'live':String(t.status).toLowerCase().includes('reject')?'rejected':'pending'}">${esc(t.status)}</span></div><p class="muted" style="font-size:12px">${esc(t.description)}</p><div class="row"><span>Workers: ${esc(t.workers_needed)}</span><b>₦${money(t.promoter_charge)}</b></div></div>`).join('');$('homeTasks').innerHTML=rows.slice(0,3).map(t=>`<div class="list"><div class="row"><b>${esc(t.title)}</b><span class="badge ${String(t.status).toLowerCase()==='active'?'live':String(t.status).toLowerCase().includes('reject')?'rejected':'pending'}">${esc(t.status)}</span></div><div class="muted" style="font-size:11px;margin-top:5px">${esc(t.platform)} · ${esc(t.workers_needed)} workers</div></div>`).join('')}async function loadTransactions(){try{$('transactionsMessage').textContent='Loading transactions...';const{data,error}=await supabaseClient.rpc('get_my_promoter_transactions');if(error)throw error;const rows=Array.isArray(data)?data:[];if(!rows.length){$('transactionsMessage').textContent='No transactions found.';$('transactionsList').innerHTML='';return}$('transactionsMessage').textContent='';$('transactionsList').innerHTML=rows.map(t=>`<div class="list"><div class="row"><b>${esc(t.transaction_type||'Transaction')}</b><b>₦${money(t.amount)}</b></div><div class="muted" style="font-size:11px">${esc(t.description||'')}</div></div>`).join('')}catch(e){console.error('transactions',e);$('transactionsMessage').textContent='Unable to load transactions.'}}async function loadPaymentDetails(){try{const{data,error}=await supabaseClient.rpc('get_promoter_payment_details');if(error)throw error;const d=Array.isArray(data)?data[0]:data;if(!d){$('paymentDetails').innerHTML='<span class="muted">No payment details configured.</span>';return}$('paymentDetails').innerHTML=`<div class="row"><span class="muted">Bank</span><b>${esc(d.bank_name)}</b></div><div class="row"><span class="muted">Account Name</span><b>${esc(d.account_name)}</b></div><div class="row"><span class="muted">Account Number</span><b>${esc(d.account_number)}</b></div>${d.instructions?`<p class="muted">${esc(d.instructions)}</p>`:''}`}catch(e){console.error('payment',e);$('paymentDetails').innerHTML='<span class="error">Unable to load payment details.</span>'}}async function submitTask(){const title=$('taskTitle').value.trim(),description=$('taskDescription').value.trim(),platform=$('taskPlatform').value,url=$('taskUrl').value.trim(),workers=Number($('workersNeeded').value);if(!title||!description||!platform||!url||!Number.isInteger(workers)||workers<1){$('taskMessage').textContent='Please complete all task fields correctly.';$('taskMessage').className='error';return}try{$('submitTaskButton').disabled=true;$('submitTaskButton').textContent='Submitting...';const{data,error}=await supabaseClient.rpc('create_promoter_task_v2',{p_title:title,p_description:description,p_platform:platform,p_task_url:url,p_workers_needed:workers});if(error)throw error;if(!data?.success)throw new Error(data?.message||'Task could not be created.');$('taskMessage').textContent=`Task submitted successfully. Status: ${data.status==='active'?'LIVE':'Pending Admin Review'}`;$('taskMessage').className='success';$('taskTitle').value='';$('taskDescription').value='';$('taskUrl').value='';$('workersNeeded').value='1';$('taskPlatform').value='';$('priceBox').classList.add('hidden');await Promise.allSettled([loadWallet(),loadMyTasks(),loadTransactions()])}catch(e){console.error('submit',e);$('taskMessage').textContent=e.message||'Task could not be created.';$('taskMessage').className='error'}finally{$('submitTaskButton').textContent='Submit Task';updateCost()}}$('taskPlatform').addEventListener('change',updateCost);$('workersNeeded').addEventListener('input',updateCost);$('submitTaskButton').addEventListener('click',submitTask);async function logout(){await supabaseClient.auth.signOut();location.href='login.html'}$('logoutButton').addEventListener('click',logout);$('settingsLogout').addEventListener('click',logout);(async()=>{if(await checkPromoter())await Promise.allSettled([loadWallet(),loadSettings(),loadPaymentDetails(),loadMyTasks(),loadTransactions()])})();</script></body></html>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>TaskVexa - Promoter Dashboard</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #070a10;
+            --panel: #0e1521;
+            --panel2: #111a28;
+            --border: #202c3d;
+            --text: #f8fafc;
+            --muted: #8997aa;
+            --green: #4ade80;
+            --blue: #60a5fa;
+            --yellow: #facc15;
+            --red: #f87171;
+        }
+
+        body {
+            margin: 0;
+            background: radial-gradient(
+                circle at 80% -10%,
+                #17243a 0,
+                #070a10 38%
+            );
+            color: var(--text);
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background: rgba(8, 12, 19, .96);
+            border-right: 1px solid var(--border);
+            padding: 20px 14px;
+            z-index: 50;
+        }
+
+        .brand {
+            padding: 8px 12px 20px;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 18px;
+        }
+
+        .brand b {
+            font-size: 23px;
+        }
+
+        .brand small {
+            display: block;
+            color: var(--muted);
+            margin-top: 5px;
+        }
+
+        .section-title {
+            font-size: 10px;
+            color: #59687c;
+            font-weight: 800;
+            letter-spacing: 1.4px;
+            margin: 20px 12px 8px;
+        }
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 12px 13px;
+            margin: 4px 0;
+            border: 0;
+            border-radius: 12px;
+            background: transparent;
+            color: #aeb9c9;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .nav:hover,
+        .nav.active {
+            background: #171f2d;
+            color: #fff;
+        }
+
+        .nav i {
+            font-style: normal;
+            width: 22px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .logout {
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .logout .nav {
+            color: var(--red);
+        }
+
+        .main {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            min-width: 0;
+        }
+
+        .top {
+            height: 70px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            background: rgba(7, 10, 16, .9);
+            backdrop-filter: blur(14px);
+            z-index: 20;
+        }
+
+        .top h2 {
+            margin: 0;
+            font-size: 18px;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #60a5fa, #4ade80);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #061018;
+            font-weight: 900;
+        }
+
+        .menu {
+            display: none;
+        }
+
+        .content {
+            max-width: 1400px;
+            margin: auto;
+            padding: 28px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .hero {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 {
+            font-size: 30px;
+            margin: 0 0 7px;
+        }
+
+        .hero p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .status {
+            padding: 9px 13px;
+            border: 1px solid #24412f;
+            background: #102419;
+            border-radius: 20px;
+            color: var(--green);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .stat,
+        .card {
+            background: linear-gradient(
+                145deg,
+                rgba(17, 25, 38, .96),
+                rgba(12, 18, 28, .96)
+            );
+            border: 1px solid var(--border);
+            border-radius: 18px;
+        }
+
+        .stat {
+            padding: 19px;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .stat-value {
+            font-size: 25px;
+            font-weight: 850;
+            margin-top: 9px;
+        }
+
+        .stat-icon {
+            float: right;
+            font-size: 20px;
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 1.35fr .65fr;
+            gap: 18px;
+        }
+
+        .card {
+            padding: 21px;
+            margin-bottom: 18px;
+        }
+
+        .head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .head-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #182131;
+            border: 1px solid #29364a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .head h3 {
+            margin: 0;
+            font-size: 16px;
+        }
+
+        .head p {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 11px;
+        }
+
+        .wallet {
+            background: linear-gradient(145deg, #17253a, #0d141f);
+        }
+
+        .balance {
+            font-size: 35px;
+            font-weight: 900;
+            margin: 8px 0 18px;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .btn {
+            border: 0;
+            border-radius: 11px;
+            padding: 12px 16px;
+            background: #f8fafc;
+            color: #080c12;
+            font-weight: 800;
+            cursor: pointer;
+        }
+
+        .btn.secondary {
+            background: #

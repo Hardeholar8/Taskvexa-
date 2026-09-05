@@ -1,5 +1,15 @@
-const CACHE_NAME='taskvexa-theme-v1';
-const THEME_CODE=`<style id="taskvexa-global-theme">body.tvx-light{background:#f5f7fb!important;color:#111827!important;filter:invert(1) hue-rotate(180deg)}body.tvx-light img,body.tvx-light video,body.tvx-light iframe,body.tvx-light canvas,body.tvx-light svg{filter:invert(1) hue-rotate(180deg)}body.tvx-light #taskvexa-theme-global{filter:none!important}#taskvexa-theme-global{position:fixed!important;right:14px!important;bottom:76px!important;width:42px!important;height:42px!important;border-radius:50%!important;border:1px solid #d9e0ea!important;background:#fff!important;color:#111827!important;font-size:19px!important;z-index:2147483647!important;box-shadow:0 6px 18px rgba(0,0,0,.2)!important;cursor:pointer!important;filter:none!important}</style><button id="taskvexa-theme-global" type="button" aria-label="Change theme" title="Change theme">☀️</button><script>(function(){function a(t){document.body.classList.toggle('tvx-light',t==='light');var b=document.getElementById('taskvexa-theme-global');if(b){b.textContent=t==='light'?'🌙':'☀️';b.title=t==='light'?'Switch to dark':'Switch to light'}localStorage.setItem('taskvexa-theme',t)}var t=localStorage.getItem('taskvexa-theme')||'dark';document.body.classList.toggle('tvx-light',t==='light');var b=document.getElementById('taskvexa-theme-global');if(b){b.textContent=t==='light'?'🌙':'☀️';b.onclick=function(){a(document.body.classList.contains('tvx-light')?'dark':'light')}}})();</script>`;
 self.addEventListener('install',()=>self.skipWaiting());
 self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
-self.addEventListener('fetch',e=>{const r=e.request;if(r.mode!=='navigate')return;e.respondWith(fetch(r).then(async res=>{const ct=res.headers.get('content-type')||'';if(!ct.includes('text/html'))return res;const text=await res.text();const out=text.includes('</body>')?text.replace('</body>',THEME_CODE+'</body>'):text+THEME_CODE;return new Response(out,{status:res.status,statusText:res.statusText,headers:res.headers})}).catch(()=>caches.match(r)))})
+self.addEventListener('fetch',e=>{
+  const r=e.request;
+  if(r.mode!=='navigate')return;
+  e.respondWith(fetch(r).then(async res=>{
+    const ct=res.headers.get('content-type')||'';
+    if(!ct.includes('text/html'))return res;
+    const text=await res.text();
+    if(text.includes('/theme.js'))return new Response(text,{status:res.status,statusText:res.statusText,headers:res.headers});
+    const code='<script src="/theme.js"></script>';
+    const out=text.includes('</body>')?text.replace('</body>',code+'</body>'):text+code;
+    return new Response(out,{status:res.status,statusText:res.statusText,headers:res.headers});
+  }).catch(()=>caches.match(r)));
+});

@@ -24,7 +24,7 @@
       b=document.createElement('button');b.id='taskvexa-theme-global';b.type='button';b.setAttribute('aria-label','Change theme');b.className='taskvexa-theme-button';document.body.appendChild(b);
     }
     apply(getTheme());
-    if(window.isSecureContext&&'serviceWorker' in navigator){navigator.serviceWorker.register('/theme-sw.js?v=4',{scope:'/'}).catch(function(e){console.warn('Theme service worker:',e)});}
+    if(window.isSecureContext&&'serviceWorker' in navigator){navigator.serviceWorker.register('/theme-sw.js?v=5',{scope:'/'}).catch(function(e){console.warn('Theme service worker:',e)});}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
   document.addEventListener('click',function(e){

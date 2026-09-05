@@ -1,0 +1,55 @@
+name: Apply Global Theme
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  theme:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add global theme loader to every HTML page
+        shell: bash
+        run: |
+          set -e
+          changed=0
+          for file in *.html; do
+            [ -f "$file" ] || continue
+            if ! grep -q 'theme.js?v=6' "$file"; then
+              python3 - "$file" <<'PY'
+import sys
+from pathlib import Path
+p=Path(sys.argv[1])
+s=p.read_text(encoding='utf-8')
+loader='<script src="/theme.js?v=6"></script>'
+if loader not in s:
+    if '</head>' in s:
+        s=s.replace('</head>', loader+'</head>', 1)
+    elif '</body>' in s:
+        s=s.replace('</body>', loader+'</body>', 1)
+    else:
+        s += loader
+    p.write_text(s, encoding='utf-8')
+PY
+              changed=1
+            fi
+          done
+          if [ "$changed" -eq 0 ]; then
+            echo "All HTML pages already have the global theme loader."
+            exit 0
+          fi
+
+      - name: Commit theme updates
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add '*.html'
+          git diff --cached --quiet && exit 0
+          git commit -m "Apply global theme to all pages"
+          git push

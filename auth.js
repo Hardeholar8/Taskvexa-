@@ -1,3 +1,16 @@
+// TASKVEXA GLOBAL THEME BOOTSTRAP — loaded on auth pages before auth logic
+(function(){
+  try{
+    if(!document.querySelector('script[data-taskvexa-theme]')){
+      var s=document.createElement('script');
+      s.src='/theme.js?v=6';
+      s.async=false;
+      s.dataset.taskvexaTheme='1';
+      document.head.appendChild(s);
+    }
+  }catch(e){console.warn('TaskVexa theme bootstrap:',e)}
+})();
+
 // TASKVEXA AUTHENTICATION
 const SUPABASE_URL="https://dxtlnrthlpdaobnbazny.supabase.co";
 const SUPABASE_KEY="sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";

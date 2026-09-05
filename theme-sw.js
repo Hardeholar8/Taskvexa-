@@ -1,15 +1,19 @@
-self.addEventListener('install',()=>self.skipWaiting());
-self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
-self.addEventListener('fetch',e=>{
-  const r=e.request;
-  if(r.mode!=='navigate')return;
-  e.respondWith(fetch(r).then(async res=>{
-    const ct=res.headers.get('content-type')||'';
-    if(!ct.includes('text/html'))return res;
-    const text=await res.text();
-    if(text.includes('/theme.js'))return new Response(text,{status:res.status,statusText:res.statusText,headers:res.headers});
-    const code='<script src="/theme.js"></script>';
-    const out=text.includes('</body>')?text.replace('</body>',code+'</body>'):text+code;
-    return new Response(out,{status:res.status,statusText:res.statusText,headers:res.headers});
-  }).catch(()=>caches.match(r)));
+const VERSION='taskvexa-theme-v3';
+self.addEventListener('install',event=>{self.skipWaiting()});
+self.addEventListener('activate',event=>{event.waitUntil(self.clients.claim())});
+self.addEventListener('fetch',event=>{
+  const request=event.request;
+  if(request.mode!=='navigate') return;
+  event.respondWith((async()=>{
+    try{
+      const response=await fetch(request,{cache:'no-store'});
+      const type=response.headers.get('content-type')||'';
+      if(!type.includes('text/html')) return response;
+      const html=await response.text();
+      if(html.includes('src="/theme.js"')||html.includes("src='/theme.js'")) return new Response(html,{status:response.status,statusText:response.statusText,headers:response.headers});
+      const injected='<script src="/theme.js?v=3"></script>';
+      const result=html.includes('</body>')?html.replace('</body>',injected+'</body>'):html+injected;
+      return new Response(result,{status:response.status,statusText:response.statusText,headers:response.headers});
+    }catch(e){return caches.match(request)}
+  })());
 });

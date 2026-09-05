@@ -14,13 +14,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Add global theme loader to every HTML page
+      - name: Apply global theme loader to every HTML page
         shell: bash
         run: |
           set -e
           changed=0
-          for file in *.html; do
-            [ -f "$file" ] || continue
+          while IFS= read -r -d '' file; do
             if ! grep -q 'theme.js?v=6' "$file"; then
               python3 - "$file" <<'PY'
 import sys
@@ -38,12 +37,31 @@ if loader not in s:
     p.write_text(s, encoding='utf-8')
 PY
               changed=1
+              echo "Added global theme loader: $file"
             fi
-          done
-          if [ "$changed" -eq 0 ]; then
-            echo "All HTML pages already have the global theme loader."
-            exit 0
+          done < <(find . -type f -name '*.html' -not -path './.git/*' -print0)
+
+          if [ "$changed" -eq 1 ]; then
+            echo "HTML pages updated with global TaskVexa theme loader."
+          else
+            echo "All HTML pages already have the global TaskVexa theme loader."
           fi
+
+      - name: Verify global theme coverage
+        shell: bash
+        run: |
+          set -e
+          missing=0
+          while IFS= read -r -d '' file; do
+            if ! grep -q 'theme.js?v=6' "$file"; then
+              echo "Missing global theme loader: $file"
+              missing=1
+            fi
+          done < <(find . -type f -name '*.html' -not -path './.git/*' -print0)
+          if [ "$missing" -ne 0 ]; then
+            exit 1
+          fi
+          echo "Verified: every HTML page loads the global TaskVexa theme."
 
       - name: Commit theme updates
         run: |

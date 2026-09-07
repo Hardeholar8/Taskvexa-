@@ -13,11 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Restore known-good promoter dashboard and attach task types
         shell: bash
         run: |
           set -e
-          echo "Repairing promoter dashboard"
           git show dd81deec67a45fd4feb73a248e43dc20ddf70912:promoter-dashboard.html > promoter-dashboard.html
           python3 - <<'PY'
           p='promoter-dashboard.html'

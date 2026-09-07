@@ -43,3 +43,25 @@ PY
             git diff --cached --quiet || git commit -m 'Apply premium light theme across all admin pages'
             git push
           fi
+      - name: Attach promoter task type selector
+        shell: bash
+        run: |
+          set -e
+          f=promoter-dashboard.html
+          [ -f "$f" ] || exit 0
+          python3 - "$f" <<'PY'
+import sys
+p=sys.argv[1]
+s=open(p,encoding='utf-8').read()
+needle='</body>'
+link='<script src="/promoter-task-types.js?v=1"></script>'
+if 'promoter-task-types.js' not in s and needle in s:
+    s=s.replace(needle,link+needle,1)
+    open(p,'w',encoding='utf-8').write(s)
+    print('updated',p)
+PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add promoter-dashboard.html
+          git diff --cached --quiet || git commit -m 'Enable platform-specific promoter task types'
+          git push

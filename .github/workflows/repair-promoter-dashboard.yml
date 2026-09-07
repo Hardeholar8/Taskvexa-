@@ -17,6 +17,7 @@ jobs:
         shell: bash
         run: |
           set -e
+          echo "Repairing promoter dashboard"
           git show dd81deec67a45fd4feb73a248e43dc20ddf70912:promoter-dashboard.html > promoter-dashboard.html
           python3 - <<'PY'
           p='promoter-dashboard.html'

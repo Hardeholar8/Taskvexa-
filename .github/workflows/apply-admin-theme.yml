@@ -26,7 +26,7 @@ import sys
 p=sys.argv[1]
 s=open(p,encoding='utf-8').read()
 needle='</head>'
-link='<link rel="stylesheet" href="/admin-theme.css?v=1">'
+link='<link rel="stylesheet" href="/admin-theme.css?v=2">'
 if 'admin-theme.css' not in s and needle in s:
     s=s.replace(needle,link+needle,1)
     open(p,'w',encoding='utf-8').write(s)
@@ -54,11 +54,13 @@ import sys
 p=sys.argv[1]
 s=open(p,encoding='utf-8').read()
 needle='</body>'
-link='<script src="/promoter-task-types.js?v=1"></script>'
+link='<script src="/promoter-task-types.js?v=2"></script>'
 if 'promoter-task-types.js' not in s and needle in s:
     s=s.replace(needle,link+needle,1)
     open(p,'w',encoding='utf-8').write(s)
     print('updated',p)
+else:
+    print('ok',p)
 PY
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'

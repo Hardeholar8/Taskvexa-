@@ -1,0 +1,32 @@
+name: Repair Promoter Dashboard
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore known-good promoter dashboard and attach task types
+        shell: bash
+        run: |
+          set -e
+          git show dd81deec67a45fd4feb73a248e43dc20ddf70912:promoter-dashboard.html > promoter-dashboard.html
+          python3 - <<'PY'
+          p='promoter-dashboard.html'
+          s=open(p,encoding='utf-8').read()
+          if 'promoter-task-types.js' not in s:
+              s=s.replace('</body>','<script src="/promoter-task-types.js?v=2"></script>\n</body>',1)
+          open(p,'w',encoding='utf-8').write(s)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add promoter-dashboard.html
+          git diff --cached --quiet || git commit -m 'Restore promoter dashboard and task type selector'
+          git push

@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Add shared admin theme to admin pages
+      - name: Apply shared premium light theme
         shell: bash
         run: |
           set -e
@@ -21,8 +21,7 @@ jobs:
           changed=0
           for f in "${files[@]}"; do
             [ -f "$f" ] || continue
-            if ! grep -q 'admin-theme.css' "$f"; then
-              python3 - "$f" <<'PY'
+            python3 - "$f" <<'PY'
 import sys
 p=sys.argv[1]
 s=open(p,encoding='utf-8').read()
@@ -31,14 +30,19 @@ link='<link rel="stylesheet" href="/admin-theme.css?v=1">'
 if 'admin-theme.css' not in s and needle in s:
     s=s.replace(needle,link+needle,1)
     open(p,'w',encoding='utf-8').write(s)
+    print('updated',p)
+    raise SystemExit(10)
+print('ok',p)
 PY
-              changed=1
-            fi
+            rc=$?
+            if [ "$rc" -eq 10 ]; then changed=1; fi
           done
           if [ "$changed" -eq 1 ]; then
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git add admin.html admin-worker-activations.html admin-data-history.html admin-data-plans.html admin-promo-flyers.html admin-promoter-wallet.html admin-submissions.html admin-tasks.html admin-withdrawals.html promoters.html worker.html settings.html
-            git commit -m 'Apply premium admin theme across account pages'
+            git commit -m 'Apply premium light theme across admin account pages'
             git push
+          else
+            echo 'All listed admin pages already use the shared theme.'
           fi

@@ -8,41 +8,15 @@ function start(){
  let wrap=document.getElementById('taskTypeWrap');
  if(!wrap){wrap=document.createElement('div');wrap.id='taskTypeWrap';wrap.style.display='none';wrap.innerHTML='<label>Task Type</label><select id="taskType"><option value="">Select task type</option></select>';p.parentElement.insertAdjacentElement('afterend',wrap)}
  const t=document.getElementById('taskType');
- function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
- function fillPlatforms(){
-  const names=[...types.map(x=>x.platform),...settings.map(x=>x.platform)].filter(Boolean).map(x=>String(x).trim()).filter((x,i,a)=>a.findIndex(y=>y.toLowerCase()===x.toLowerCase())===i);
-  const old=p.value;
-  p.innerHTML='<option value="">Select platform</option>'+names.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');
-  if(names.some(x=>x.toLowerCase()===String(old).toLowerCase()))p.value=old;
-  updateTypes();
- }
- function updateTypes(){
-  const list=types.filter(x=>String(x.platform).toLowerCase()===String(p.value).toLowerCase());
-  if(!list.length){wrap.style.display='none';t.innerHTML='<option value="">General task</option>'}
-  else{wrap.style.display='block';t.innerHTML='<option value="">Select task type</option>'+list.map(x=>'<option value="'+esc(x.task_type)+'">'+esc(x.task_type)+'</option>').join('')}
-  updateCost();
- }
+ function esc(x){return String(x??'').replace(/[&<>\"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[c]))}
+ function fillPlatforms(){const names=[...types.map(x=>x.platform),...settings.map(x=>x.platform)].filter(Boolean).map(x=>String(x).trim()).filter((x,i,a)=>a.findIndex(y=>y.toLowerCase()===x.toLowerCase())===i);const old=p.value;p.innerHTML='<option value="">Select platform</option>'+names.map(x=>'<option value="'+esc(x)+'">'+esc(x)+'</option>').join('');if(names.some(x=>x.toLowerCase()===String(old).toLowerCase()))p.value=old;updateTypes()}
+ function updateTypes(){const list=types.filter(x=>String(x.platform).toLowerCase()===String(p.value).toLowerCase());if(!list.length){wrap.style.display='none';t.innerHTML='<option value="">General task</option>'}else{wrap.style.display='block';t.innerHTML='<option value="">Select task type</option>'+list.map(x=>'<option value="'+esc(x.task_type)+'">'+esc(x.task_type)+'</option>').join('')}updateCost()}
  function chosen(){return types.find(x=>String(x.platform).toLowerCase()===String(p.value).toLowerCase()&&String(x.task_type).toLowerCase()===String(t.value).toLowerCase())}
- function updateCost(){
-  const c=chosen(),s=settings.find(x=>String(x.platform).toLowerCase()===String(p.value).toLowerCase()),n=Number(w.value);
-  if(!p.value||!Number.isInteger(n)||n<1||(!c&&!s)){box.classList.add('hidden');btn.disabled=true;return}
-  const q=Number(c?.promoter_price??s?.promoter_price??0);price.textContent=q.toLocaleString('en-NG');total.textContent=(q*n).toLocaleString('en-NG');box.classList.remove('hidden');btn.disabled=!!(types.some(x=>String(x.platform).toLowerCase()===String(p.value).toLowerCase())&&!c);
- }
+ function updateCost(){const c=chosen(),s=settings.find(x=>String(x.platform).toLowerCase()===String(p.value).toLowerCase()),n=Number(w.value);if(!p.value||!Number.isInteger(n)||n<1||(!c&&!s)){box.classList.add('hidden');btn.disabled=true;return}const q=Number(c?.promoter_price??s?.promoter_price??0);price.textContent=q.toLocaleString('en-NG');total.textContent=(q*n).toLocaleString('en-NG');box.classList.remove('hidden');btn.disabled=!!(types.some(x=>String(x.platform).toLowerCase()===String(p.value).toLowerCase())&&!c)}
  p.addEventListener('change',updateTypes);t.addEventListener('change',updateCost);w.addEventListener('input',updateCost);
  const b=btn.cloneNode(true);btn.replaceWith(b);
- b.addEventListener('click',async()=>{
-  const title=document.getElementById('taskTitle').value.trim(),desc=document.getElementById('taskDescription').value.trim(),url=document.getElementById('taskUrl').value.trim(),n=Number(w.value),c=chosen(),hasTypes=types.some(x=>String(x.platform).toLowerCase()===String(p.value).toLowerCase());
-  if(!title||!desc||!p.value||!url||!Number.isInteger(n)||n<1||(hasTypes&&!c)){document.getElementById('taskMessage').textContent='Please complete all task fields correctly.';document.getElementById('taskMessage').className='error';return}
-  b.disabled=true;b.textContent='Submitting...';
-  try{const r=await sb.rpc('create_promoter_task_v2',{p_title:title,p_description:desc,p_platform:p.value,p_task_url:url,p_workers_needed:n,p_task_type:c?.task_type||null});if(r.error)throw r.error;if(!r.data?.success)throw Error(r.data?.message||'Task could not be created.');document.getElementById('taskMessage').textContent='Task submitted successfully. Status: '+(r.data.status==='active'?'LIVE':'Pending Admin Review');document.getElementById('taskMessage').className='success';document.getElementById('taskTitle').value='';document.getElementById('taskDescription').value='';document.getElementById('taskUrl').value='';w.value='1';p.value='';t.innerHTML='<option value="">Select task type</option>';wrap.style.display='none';box.classList.add('hidden')}
-  catch(e){document.getElementById('taskMessage').textContent=e.message||'Task could not be created.';document.getElementById('taskMessage').className='error'}
-  finally{b.textContent='Submit Task';updateTypes()}
- });
- (async()=>{
-  try{const a=await sb.rpc('get_promoter_task_types');if(a.error)console.error('task types',a.error);else types=Array.isArray(a.data)?a.data:[]}catch(e){console.error('task types',e)}
-  try{const a=await sb.rpc('get_promoter_task_settings');if(a.error)console.error('platform settings',a.error);else settings=Array.isArray(a.data)?a.data:[]}catch(e){console.error('platform settings',e)}
-  fillPlatforms();
- })();
+ b.addEventListener('click',async()=>{const title=document.getElementById('taskTitle').value.trim(),desc=document.getElementById('taskDescription').value.trim(),url=document.getElementById('taskUrl').value.trim(),n=Number(w.value),c=chosen(),hasTypes=types.some(x=>String(x.platform).toLowerCase()===String(p.value).toLowerCase());if(!title||!desc||!p.value||!url||!Number.isInteger(n)||n<1||(hasTypes&&!c)){document.getElementById('taskMessage').textContent='Please complete all task fields correctly.';document.getElementById('taskMessage').className='error';return}b.disabled=true;b.textContent='Submitting...';try{const s=await sb.auth.getSession();if(s.error)throw s.error;if(!s.data?.session){document.getElementById('taskMessage').textContent='Your login session has expired. Please log in again.';document.getElementById('taskMessage').className='error';return}const r=await sb.rpc('create_promoter_task_v2',{p_title:title,p_description:desc,p_platform:p.value,p_task_url:url,p_workers_needed:n,p_task_type:c?.task_type||null});if(r.error)throw r.error;if(!r.data?.success)throw Error(r.data?.message||'Task could not be created.');document.getElementById('taskMessage').textContent='Task submitted successfully. Status: '+(r.data.status==='active'?'LIVE':'Pending Admin Review');document.getElementById('taskMessage').className='success';document.getElementById('taskTitle').value='';document.getElementById('taskDescription').value='';document.getElementById('taskUrl').value='';w.value='1';p.value='';t.innerHTML='<option value="">Select task type</option>';wrap.style.display='none';box.classList.add('hidden')}catch(e){document.getElementById('taskMessage').textContent=e.message||'Task could not be created.';document.getElementById('taskMessage').className='error'}finally{b.textContent='Submit Task';updateTypes()}});
+ (async()=>{try{const a=await sb.rpc('get_promoter_task_types');if(!a.error)types=Array.isArray(a.data)?a.data:[];else console.error('task types',a.error)}catch(e){console.error('task types',e)}try{const a=await sb.rpc('get_promoter_task_settings');if(!a.error)settings=Array.isArray(a.data)?a.data:[];else console.error('platform settings',a.error)}catch(e){console.error('platform settings',e)}fillPlatforms()})();
  return true;
 }
 function boot(){if(start())return;setTimeout(boot,250)}

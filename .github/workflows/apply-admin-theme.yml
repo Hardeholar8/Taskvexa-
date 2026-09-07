@@ -1,0 +1,44 @@
+name: Apply TaskVexa Admin Theme
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  theme:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add shared admin theme to admin pages
+        shell: bash
+        run: |
+          set -e
+          files=(admin.html admin-worker-activations.html admin-data-history.html admin-data-plans.html admin-promo-flyers.html admin-promoter-wallet.html admin-submissions.html admin-tasks.html admin-withdrawals.html promoters.html worker.html settings.html)
+          changed=0
+          for f in "${files[@]}"; do
+            [ -f "$f" ] || continue
+            if ! grep -q 'admin-theme.css' "$f"; then
+              python3 - "$f" <<'PY'
+import sys
+p=sys.argv[1]
+s=open(p,encoding='utf-8').read()
+needle='</head>'
+link='<link rel="stylesheet" href="/admin-theme.css?v=1">'
+if 'admin-theme.css' not in s and needle in s:
+    s=s.replace(needle,link+needle,1)
+    open(p,'w',encoding='utf-8').write(s)
+PY
+              changed=1
+            fi
+          done
+          if [ "$changed" -eq 1 ]; then
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git add admin.html admin-worker-activations.html admin-data-history.html admin-data-plans.html admin-promo-flyers.html admin-promoter-wallet.html admin-submissions.html admin-tasks.html admin-withdrawals.html promoters.html worker.html settings.html
+            git commit -m 'Apply premium admin theme across account pages'
+            git push
+          fi

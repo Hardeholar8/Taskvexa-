@@ -3,7 +3,7 @@ export default async function handler(req, res) {
   try {
     const { transaction_id } = req.body || {};
     if (!transaction_id) return res.status(400).json({ error: 'Missing transaction ID' });
-    const secret = process.env.FLW_SECRET_KEY;
+    const secret = process.env.SECRET_KEY;
     if (!secret) return res.status(500).json({ error: 'Payment service is not configured' });
     const r = await fetch(`https://api.flutterwave.com/v3/transactions/${encodeURIComponent(transaction_id)}/verify`, { headers: { Authorization: `Bearer ${secret}` } });
     const j = await r.json();

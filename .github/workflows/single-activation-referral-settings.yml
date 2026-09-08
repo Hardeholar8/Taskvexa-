@@ -1,0 +1,29 @@
+name: Single activation and referral settings
+on:
+  push:
+    branches: [main]
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Replace admin settings
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('settings.html')
+          s=p.read_text()
+          import re
+          s=re.sub(r'<div id="activation" class="view">.*?</div><div id="payment"', '<div id="activation" class="view"><button class="back" onclick="back()">← Back</button><div class="box"><h2>⚡ Worker Activation</h2><p class="muted">One activation amount applies to every worker.</p><div class="row"><label>Activation amount</label><input class="input" id="activationAmount" type="number" min="0" step="0.01" inputmode="decimal"></div><button class="btn" onclick="saveActivation()">Save Changes</button><div class="msg" id="am"></div></div></div><div id="payment"', s, count=1, flags=re.S)
+          s=s.replace('<div id="referral" class="view"><button class="back" onclick="back()">← Back</button><div class="box"><h2>👥 Referral Settings</h2><p class="muted">Referral configuration is preserved.</p></div></div>', '<div id="referral" class="view"><button class="back" onclick="back()">← Back</button><div class="box"><h2>👥 Referral Commission</h2><p class="muted">One referral commission percentage applies to every eligible referral. No referral levels.</p><div class="row"><label>Commission percentage</label><input class="input" id="referralPercent" type="number" min="0" max="100" step="0.01"></div><button class="btn" onclick="saveReferral()">Save Referral Commission</button><div class="msg" id="rm"></div></div></div>')
+          s=s.replace("if(id==='support')loadSupport()", "if(id==='support')loadSupport();if(id==='referral')loadReferral()")
+          s=s.replace("async function loadActivation(){", "async function loadReferral(){const r=await sb.from('platform_settings').select('value').eq('key','referral').maybeSingle();referralPercent.value=Number(r.data?.value?.percent??10)}async function saveReferral(){const percent=Number(referralPercent.value);if(!Number.isFinite(percent)||percent<0||percent>100){rm.textContent='Enter a percentage from 0 to 100.';return}const r=await sb.from('platform_settings').upsert({key:'referral',value:{enabled:true,percent},updated_at:new Date().toISOString()});rm.textContent=r.error?r.error.message:'Referral commission saved ✓'}async function loadActivation(){")
+          p.write_text(s)
+          PY
+      - name: Commit cleanup
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add settings.html
+          git diff --cached --quiet || git commit -m 'Make admin activation and referral settings single-plan'
+          git push

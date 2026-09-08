@@ -21,6 +21,39 @@ else{
  window.supabaseClient=supabaseClient;
  const msg=t=>{const el=document.getElementById("message");if(el)el.textContent=t;else console.log(t)};
 
+ const showTelegramBeforeDashboard=async(role)=>{
+  if(role!=="worker"&&role!=="promoter")return false;
+  try{
+   const {data,error}=await supabaseClient.from("platform_settings").select("value").eq("key","telegram").maybeSingle();
+   if(error)console.warn("Telegram setting load:",error.message);
+   const value=data?.value;
+   const link=typeof value==="string"?value:value?.group_link;
+   if(!link||!/^https:\/\/(t\.me|telegram\.me)\//i.test(link))return false;
+
+   const old=document.getElementById("taskvexaTelegramLoginModal");if(old)old.remove();
+   const style=document.createElement("style");
+   style.id="taskvexaTelegramLoginStyles";
+   style.textContent=`#taskvexaTelegramLoginModal{position:fixed;inset:0;z-index:999999;background:rgba(3,7,15,.82);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:18px;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#taskvexaTelegramLoginModal .tvx-tg-card{position:relative;width:min(430px,100%);background:#fff;color:#111827;border-radius:22px;padding:30px 24px 24px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,.35)}#taskvexaTelegramLoginModal .tvx-tg-close{position:absolute;right:10px;top:10px;width:30px;height:30px;border:0;border-radius:50%;background:#f1f3f6;color:#667085;font-size:20px;line-height:30px;cursor:pointer}#taskvexaTelegramLoginModal .tvx-tg-icon{width:58px;height:58px;margin:0 auto 14px;border-radius:18px;background:#eaf6ff;display:flex;align-items:center;justify-content:center;font-size:29px}#taskvexaTelegramLoginModal h2{margin:0 0 9px;font-size:23px;font-weight:900}#taskvexaTelegramLoginModal p{margin:0 auto 21px;color:#667085;font-size:14px;line-height:1.6;max-width:340px}#taskvexaTelegramLoginModal .tvx-tg-join{display:block;width:100%;border:0;border-radius:12px;padding:14px 16px;background:#229ed9;color:#fff;font-size:15px;font-weight:850;text-decoration:none;cursor:pointer}#taskvexaTelegramLoginModal .tvx-tg-note{margin-top:12px;font-size:11px;color:#98a2b3}`;
+   document.head.appendChild(style);
+
+   const modal=document.createElement("div");modal.id="taskvexaTelegramLoginModal";modal.setAttribute("role","dialog");modal.setAttribute("aria-modal","true");
+   modal.innerHTML=`<div class="tvx-tg-card"><button class="tvx-tg-close" id="tvxTelegramClose" aria-label="Close">×</button><div class="tvx-tg-icon">✈️</div><h2>Join TaskVexa on Telegram</h2><p>Stay updated with TaskVexa announcements, important information and community updates.</p><a class="tvx-tg-join" id="tvxTelegramJoin" href="${String(link).replace(/&/g,"&amp;").replace(/"/g,"&quot;")}" target="_blank" rel="noopener noreferrer">Join Telegram</a><div class="tvx-tg-note">You can close this message to continue to your dashboard.</div></div>`;
+   document.body.appendChild(modal);
+   document.body.style.overflow="hidden";
+   return await new Promise(resolve=>{
+    const finish=()=>{modal.remove();style.remove();document.body.style.overflow="";resolve(true)};
+    document.getElementById("tvxTelegramClose")?.addEventListener("click",finish,{once:true});
+   });
+  }catch(e){console.warn("Telegram popup error:",e);return false;}
+ };
+
+ const redirectAfterLogin=async(role)=>{
+  if(role==="promoter"){await showTelegramBeforeDashboard(role);return window.location.href="promoter-dashboard.html";}
+  if(role==="worker"){await showTelegramBeforeDashboard(role);return window.location.href="dashboard.html";}
+  if(role==="admin")return window.location.href="admin.html";
+  return false;
+ };
+
  const form=document.getElementById("registerForm");
  if(form){
   form.addEventListener("submit",async e=>{
@@ -70,9 +103,8 @@ else{
    if(pe)throw pe;
    if(!profile){await supabaseClient.auth.signOut();msg("Account profile not found. Please contact support.");if(button){button.disabled=false;button.textContent="Login";}return;}
    const role=String(profile.role||"").toLowerCase();
-   if(role==="promoter")return window.location.href="promoter-dashboard.html";
+   if(role==="promoter"||role==="worker"){if(button){button.textContent="Opening Telegram...";}await redirectAfterLogin(role);return;}
    if(role==="admin")return window.location.href="admin.html";
-   if(role==="worker")return window.location.href="dashboard.html";
    await supabaseClient.auth.signOut();msg("Your account type is not recognized. Please contact support.");if(button){button.disabled=false;button.textContent="Login";}
   }catch(error){console.error("Login error:",error);msg("Login error: "+(error?.message||"Please try again."));if(button){button.disabled=false;button.textContent="Login";}}
  });}

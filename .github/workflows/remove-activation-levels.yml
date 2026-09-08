@@ -1,0 +1,54 @@
+name: Convert TaskVexa to Single Activation
+on:
+  push:
+    branches: [main]
+
+jobs:
+  single-activation:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove activation levels from UI logic
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          # Admin task management: all tasks are for the single worker audience.
+          p = Path('admin-tasks.html')
+          s = p.read_text()
+          s = s.replace('<div><label>Target Level</label><select id="targetLevel"><option value="level_1">Level 1</option><option value="level_2">Level 2</option><option value="both">Both Levels</option></select></div>', '')
+          s = s.replace('function getLevels(levels){if(!Array.isArray(levels))return "Not specified";const level1=levels.includes("level_1"),level2=levels.includes("level_2");if(level1&&level2)return "Level 1 + Level 2";if(level1)return "Level 1";if(level2)return "Level 2";return "Not specified"}\n','')
+          s = s.replace('const levels=getLevels(task.target_levels);', 'const levels="Worker";')
+          s = s.replace('<div class="info-row"><span>Target Level</span><span>${escapeHTML(levels)}</span></div>', '<div class="info-row"><span>Audience</span><span>All Workers</span></div>')
+          old = 'const levels=Array.isArray(task.target_levels)?task.target_levels:[];document.getElementById("targetLevel").value=levels.includes("level_1")&&levels.includes("level_2")?"both":levels.includes("level_2")?"level_2":"level_1";'
+          s = s.replace(old, '')
+          s = s.replace(',targetLevel=document.getElementById("targetLevel").value', '')
+          s = s.replace('const targetLevels=targetLevel==="both"?["level_1","level_2"]:[targetLevel],taskData=', 'const targetLevels=["worker"],taskData=')
+          p.write_text(s)
+
+          # Dashboard: show activation status only, never an activation level.
+          p = Path('dashboard.html')
+          s = p.read_text()
+          old = "const profile=await sb.from('profiles').select('activation_level,activation_status').eq('id',u.id).maybeSingle();\n $('level').textContent=profile.data?.activation_level?('Level '+profile.data.activation_level):(['active','activated','approved','true'].includes(String(profile.data?.activation_status||'').toLowerCase())?'Active':'—');"
+          new = "const profile=await sb.from('profiles').select('activation_status').eq('id',u.id).maybeSingle();\n $('level').textContent=['active','activated','approved','true'].includes(String(profile.data?.activation_status||'').toLowerCase())?'Active':'Inactive';"
+          s = s.replace(old, new)
+          s = s.replace('>Level</', '>Activation Status</')
+          p.write_text(s)
+
+          # Remove any remaining visible level wording from activation-related pages.
+          p = Path('admin-worker-activations.html')
+          s = p.read_text().replace('Review worker activation payment submissions.', 'Review worker activation payment submissions for the single worker activation plan.')
+          p.write_text(s)
+          PY
+
+      - name: Commit changes
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add admin-tasks.html dashboard.html admin-worker-activations.html
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Remove worker activation levels'
+          git push

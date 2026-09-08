@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     if (!email || !user_id || !Number.isFinite(numericAmount) || numericAmount <= 0) {
       return res.status(400).json({ error: 'Invalid payment details' });
     }
-    const secret = process.env.FLW_SECRET_KEY;
+    const secret = process.env.SECRET_KEY;
     if (!secret) return res.status(500).json({ error: 'Payment service is not configured' });
     const base = process.env.NEXT_PUBLIC_SITE_URL || `https://${req.headers.host}`;
     const txRef = `TVX-ACT-${user_id}-${Date.now()}`;

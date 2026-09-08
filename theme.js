@@ -1,30 +1,28 @@
 (function(){
   'use strict';
   var KEY='taskvexa-theme';
-  function getTheme(){return localStorage.getItem(KEY)==='dark'?'dark':'light'}
+  function getTheme(){try{return localStorage.getItem(KEY)==='dark'?'dark':'light'}catch(e){return 'light'}}
   function apply(theme){
     var light=theme!=='dark';
     document.documentElement.classList.toggle('tvx-light',light);
+    document.documentElement.classList.toggle('tvx-dark',!light);
     if(document.body){document.body.classList.toggle('tvx-light',light);document.body.classList.toggle('light',light);document.body.classList.toggle('dark',!light)}
     var meta=document.querySelector('meta[name="theme-color"]');
-    if(meta)meta.setAttribute('content',light?'#f5f7fb':'#070a10');
+    if(meta)meta.setAttribute('content',light?'#f6f7fb':'#0b1020');
     document.querySelectorAll('#themeToggle,#taskvexa-theme-global,#theme').forEach(function(b){b.textContent=light?'🌙':'☀️';b.title=light?'Switch to dark':'Switch to light';b.setAttribute('aria-label',light?'Switch to dark theme':'Switch to light theme')});
   }
-  function toggle(){var next=getTheme()==='light'?'dark':'light';localStorage.setItem(KEY,next);apply(next)}
-  function installStyles(){
-    if(document.getElementById('taskvexa-theme-style'))return;
-    var s=document.createElement('style');s.id='taskvexa-theme-style';
-    s.textContent='html.tvx-light,html.tvx-light body,body.tvx-light,body.light{background:#f5f7fb!important;color:#111827!important;color-scheme:light!important}html.tvx-light header,html.tvx-light nav,body.tvx-light header,body.tvx-light nav,body.light header,body.light nav{background:#fff!important;color:#111827!important;border-color:#d9e0ea!important}html.tvx-light .card,html.tvx-light .task,html.tvx-light .task-card,html.tvx-light .box,html.tvx-light .panel,html.tvx-light .item,html.tvx-light .list,html.tvx-light .row,html.tvx-light .profile,html.tvx-light .stat,html.tvx-light .service,html.tvx-light .plan,html.tvx-light .empty,html.tvx-light .history-card,html.tvx-light .history-item,html.tvx-light .status-card,html.tvx-light .verification-card,html.tvx-light .payment-box,html.tvx-light .deposit-box,html.tvx-light .wallet-box,html.tvx-light .dashboard-card,body.tvx-light .card,body.tvx-light .task,body.tvx-light .task-card,body.tvx-light .box,body.tvx-light .panel,body.tvx-light .item,body.tvx-light .list,body.tvx-light .row,body.tvx-light .profile,body.tvx-light .stat,body.tvx-light .service,body.tvx-light .plan,body.tvx-light .empty,body.tvx-light .history-card,body.tvx-light .history-item,body.tvx-light .status-card,body.tvx-light .verification-card,body.tvx-light .payment-box,body.tvx-light .deposit-box,body.tvx-light .wallet-box,body.tvx-light .dashboard-card,body.light .card,body.light .task,body.light .task-card,body.light .box,body.light .panel,body.light .item,body.light .list,body.light .row,body.light .profile,body.light .stat,body.light .service,body.light .plan,body.light .empty,body.light .history-card,body.light .history-item,body.light .status-card,body.light .verification-card{background:#fff!important;color:#111827!important;border-color:#d9e0ea!important}html.tvx-light .card *,html.tvx-light .task *,html.tvx-light .task-card *,html.tvx-light .box *,html.tvx-light .panel *,html.tvx-light .item *,html.tvx-light .list *,html.tvx-light .row *,html.tvx-light .profile *,html.tvx-light .stat *,html.tvx-light .service *,html.tvx-light .plan *,html.tvx-light .history-card *,html.tvx-light .history-item *,body.tvx-light .card *,body.tvx-light .task *,body.tvx-light .task-card *,body.tvx-light .box *,body.tvx-light .panel *,body.tvx-light .item *,body.tvx-light .list *,body.tvx-light .row *,body.tvx-light .profile *,body.tvx-light .stat *,body.tvx-light .service *,body.tvx-light .plan *,body.tvx-light .history-card *,body.tvx-light .history-item *,body.light .card *,body.light .task *,body.light .task-card *,body.light .box *,body.light .panel *,body.light .item *,body.light .list *,body.light .row *,body.light .profile *,body.light .stat *,body.light .service *,body.light .plan *,body.light .history-card *,body.light .history-item *{color:#111827!important}html.tvx-light input,html.tvx-light textarea,html.tvx-light select,body.tvx-light input,body.tvx-light textarea,body.tvx-light select,body.light input,body.light textarea,body.light select{background:#fff!important;color:#111827!important;border-color:#cbd5e1!important}html.tvx-light .muted,html.tvx-light .desc,html.tvx-light .subtitle,html.tvx-light small,body.tvx-light .muted,body.tvx-light .desc,body.tvx-light .subtitle,body.tvx-light small,body.light .muted,body.light .desc,body.light .subtitle,body.light small{color:#64748b!important}html.tvx-light .bottom a,body.tvx-light .bottom a,body.light .bottom a{color:#64748b!important}html.tvx-light .bottom a.active,body.tvx-light .bottom a.active,body.light .bottom a.active{color:#4f46e5!important}html.tvx-light button:not(.taskvexa-theme-button),body.tvx-light button:not(.taskvexa-theme-button),body.light button:not(.taskvexa-theme-button){color:#111827!important}html.tvx-light .balance,body.tvx-light .balance,body.light .balance{background:linear-gradient(135deg,#4f6cf5,#8b3ff0)!important;color:#fff!important}html.tvx-light .balance *,body.tvx-light .balance *{color:#fff!important}.taskvexa-theme-button,#themeToggle,#theme{cursor:pointer!important;touch-action:manipulation!important;pointer-events:auto!important;z-index:2147483647!important}#themeToggle,#theme{width:42px;height:42px;display:grid;place-items:center}';
-    document.head.appendChild(s);
+  function ensureFilora(){
+    if(document.getElementById('filora-theme-css'))return;
+    var l=document.createElement('link');l.id='filora-theme-css';l.rel='stylesheet';l.href='/filora-theme.css?v=1';
+    (document.head||document.documentElement).appendChild(l);
   }
   function setup(){
-    installStyles();
+    ensureFilora();
     var b=document.getElementById('themeToggle')||document.getElementById('theme');
-    if(!b){b=document.createElement('button');b.id='taskvexa-theme-global';b.type='button';b.className='taskvexa-theme-button';b.setAttribute('aria-label','Change theme');(document.body||document.documentElement).appendChild(b)}
+    if(!b){b=document.createElement('button');b.id='taskvexa-theme-global';b.type='button';b.className='taskvexa-theme-button';b.setAttribute('aria-label','Change theme');b.style.cssText='position:fixed;right:16px;bottom:82px;width:42px;height:42px;border-radius:50%;border:1px solid var(--filora-border,#e2e6ef);background:var(--filora-surface,#fff);z-index:2147483647;cursor:pointer';(document.body||document.documentElement).appendChild(b)}
     apply(getTheme());
-    if(window.isSecureContext&&'serviceWorker' in navigator){navigator.serviceWorker.register('/theme-sw.js?v=8',{scope:'/'}).catch(function(e){console.warn('Theme service worker:',e)})}
   }
   try{if(!localStorage.getItem(KEY))localStorage.setItem(KEY,'light');if(localStorage.getItem(KEY)==='light')document.documentElement.classList.add('tvx-light')}catch(e){}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
-  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#taskvexa-theme-global,#themeToggle,#theme');if(b){e.preventDefault();toggle()}});
+  document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('#taskvexa-theme-global,#themeToggle,#theme');if(b){e.preventDefault();e.stopPropagation();var next=getTheme()==='light'?'dark':'light';try{localStorage.setItem(KEY,next)}catch(err){}apply(next)}});
 })();

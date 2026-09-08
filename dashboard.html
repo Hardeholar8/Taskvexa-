@@ -22,6 +22,7 @@
 </div>
 <nav class="bottom"><a class="active" href="dashboard.html"><b>⌂</b>Home</a><a href="tasks.html"><b>✓</b>Tasks</a><a class="plus" href="activation.html" aria-label="Activation" style="display:grid;place-items:center;text-decoration:none">＋</a><a href="transactions.html"><b>◉</b>Wallet</a><a href="more.html"><b>☰</b>More</a></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="auth.js"></script>
 <script>
 'use strict';
 const sb=window.supabase.createClient('https://dxtlnrthlpdaobnbazny.supabase.co','sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY');
@@ -51,5 +52,6 @@ async function load(){
  const a=$('activity');if(!rows.length){a.innerHTML='<div class="loading">No recent activity yet.</div>'}else{a.innerHTML=rows.slice(0,5).map(x=>'<div class="activity"><b>Task submission</b><span>'+String(x.status||'Pending')+' · '+new Date(x.created_at).toLocaleString()+'</span></div>').join('')}
 }
 loadCommunity().catch(()=>{});load().catch(()=>{});
+setTimeout(()=>window.showTelegramLoginPopupIfNeeded?.(),300);
 </script>
 </body></html>

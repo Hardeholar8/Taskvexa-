@@ -1,125 +1,29 @@
 // TASKVEXA GLOBAL THEME BOOTSTRAP — loaded on auth pages before auth logic
-(function(){
-  try{
-    if(!document.querySelector('script[data-taskvexa-theme]')){
-      var s=document.createElement('script');
-      s.src='/theme.js?v=6';
-      s.async=false;
-      s.dataset.taskvexaTheme='1';
-      document.head.appendChild(s);
-    }
-  }catch(e){console.warn('TaskVexa theme bootstrap:',e)}
-})();
+(function(){try{if(!document.querySelector('script[data-taskvexa-theme]')){var s=document.createElement('script');s.src='/theme.js?v=6';s.async=false;s.dataset.taskvexaTheme='1';document.head.appendChild(s)}}catch(e){console.warn('TaskVexa theme bootstrap:',e)}})();
 
-// TASKVEXA AUTHENTICATION
 const SUPABASE_URL="https://dxtlnrthlpdaobnbazny.supabase.co";
 const SUPABASE_KEY="sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
-if(!window.supabase){console.error("Supabase library did not load.");}
+if(!window.supabase){console.error("Supabase library did not load.")}
 else{
  const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
  window.supabaseClient=supabaseClient;
  const msg=t=>{const el=document.getElementById("message");if(el)el.textContent=t;else console.log(t)};
-
- const prepareTelegramPopup=async(role)=>{
-  if(role!=="worker"&&role!=="promoter")return;
-  try{
-   const {data,error}=await supabaseClient.from("platform_settings").select("value").eq("key","telegram").maybeSingle();
-   if(error){console.warn("Telegram setting load:",error.message);return;}
-   const value=data?.value;
-   const link=typeof value==="string"?value:value?.group_link;
-   if(!link||!/^https:\/\/(t\.me|telegram\.me)\//i.test(link))return;
-   sessionStorage.setItem("taskvexa-show-telegram-popup","1");
-  }catch(e){console.warn("Telegram popup setup:",e)}
- };
-
- const redirectAfterLogin=async(role)=>{
-  if(role==="promoter"){await prepareTelegramPopup(role);return window.location.href="promoter-dashboard.html";}
-  if(role==="worker"){await prepareTelegramPopup(role);return window.location.href="dashboard.html";}
-  if(role==="admin")return window.location.href="admin.html";
-  return false;
- };
-
+ const prepareTelegramPopup=async role=>{if(role!=="worker"&&role!=="promoter")return;try{const{data,error}=await supabaseClient.from("platform_settings").select("value").eq("key","telegram").maybeSingle();if(error){console.warn("Telegram setting load:",error.message);return}const value=data?.value;const link=typeof value==="string"?value:value?.group_link;if(!link||!/^https:\/\/(t\.me|telegram\.me)\//i.test(link))return;sessionStorage.setItem("taskvexa-show-telegram-popup","1")}catch(e){console.warn("Telegram popup setup:",e)}};
+ const redirectAfterLogin=async role=>{if(role==="promoter"){await prepareTelegramPopup(role);return window.location.href="promoter-dashboard.html"}if(role==="worker"){await prepareTelegramPopup(role);return window.location.href="dashboard.html"}if(role==="admin")return window.location.href="admin.html";return false};
  const form=document.getElementById("registerForm");
- if(form){
-  form.addEventListener("submit",async e=>{
-   e.preventDefault();
-   const button=document.getElementById("registerButton");
-   const firstName=document.getElementById("firstName")?.value.trim()||"";
-   const lastName=document.getElementById("lastName")?.value.trim()||"";
-   const legacyFull=document.getElementById("fullName")?.value.trim()||"";
-   const fullName=[firstName,lastName].filter(Boolean).join(" ")||legacyFull;
-   const username=document.getElementById("username")?.value.trim()||"";
-   const email=document.getElementById("email")?.value.trim().toLowerCase()||"";
-   const referralCode=document.getElementById("referralCode")?.value.trim()||"";
-   const password=document.getElementById("password")?.value||"";
-   const confirm=document.getElementById("confirmPassword")?.value||"";
-   const accountType=document.getElementById("accountType")?.value||"";
-
-   if(!firstName||!lastName||!email||!password||!confirm||!accountType||(!username&&document.getElementById("username"))){msg("Please complete all required fields.");return;}
-   if(password.length<6){msg("Password must be at least 6 characters.");return;}
-   if(password!==confirm){msg("Passwords do not match.");return;}
-   if(button){button.disabled=true;button.textContent="Creating Account...";}
-
-   try{
-    const metadata={full_name:fullName,first_name:firstName,last_name:lastName,username,account_type:accountType,role:accountType};
-    if(referralCode)metadata.referral_code=referralCode;
-    const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:metadata}});
-    if(error){msg(error.message);if(button){button.disabled=false;button.textContent="Create Account";}return;}
-    if(data?.user){
-     form.style.display="none";
-     const box=document.getElementById("successBox");if(box)box.style.display="block";else msg("Account created successfully. Please check your email.");
-     return;
-    }
-    msg("Registration could not be completed. Please try again.");
-    if(button){button.disabled=false;button.textContent="Create Account";}
-   }catch(error){console.error("Registration error:",error);msg("Registration error: "+(error?.message||"Please try again."));if(button){button.disabled=false;button.textContent="Create Account";}}
-  });
- }
-
+ if(form)form.addEventListener("submit",async e=>{e.preventDefault();const button=document.getElementById("registerButton");const firstName=document.getElementById("firstName")?.value.trim()||"";const lastName=document.getElementById("lastName")?.value.trim()||"";const legacyFull=document.getElementById("fullName")?.value.trim()||"";const fullName=[firstName,lastName].filter(Boolean).join(" ")||legacyFull;const username=document.getElementById("username")?.value.trim()||"";const email=document.getElementById("email")?.value.trim().toLowerCase()||"";const referralCode=document.getElementById("referralCode")?.value.trim()||"";const password=document.getElementById("password")?.value||"";const confirm=document.getElementById("confirmPassword")?.value||"";const accountType=document.getElementById("accountType")?.value||"";if(!firstName||!lastName||!email||!password||!confirm||!accountType||(!username&&document.getElementById("username"))){msg("Please complete all required fields.");return}if(password.length<6){msg("Password must be at least 6 characters.");return}if(password!==confirm){msg("Passwords do not match.");return}if(button){button.disabled=true;button.textContent="Creating Account..."}try{const metadata={full_name:fullName,first_name:firstName,last_name:lastName,username,account_type:accountType,role:accountType};if(referralCode)metadata.referral_code=referralCode;const{data,error}=await supabaseClient.auth.signUp({email,password,options:{data:metadata}});if(error){msg(error.message);if(button){button.disabled=false;button.textContent="Create Account"}return}if(data?.user){form.style.display="none";const box=document.getElementById("successBox");if(box)box.style.display="block";else msg("Account created successfully. Please check your email.");return}msg("Registration could not be completed. Please try again.");if(button){button.disabled=false;button.textContent="Create Account"}}catch(error){console.error("Registration error:",error);msg("Registration error: "+(error?.message||"Please try again."));if(button){button.disabled=false;button.textContent="Create Account"}}});
  const loginForm=document.getElementById("loginForm");
- if(loginForm){loginForm.addEventListener("submit",async e=>{
-  e.preventDefault();const email=document.getElementById("loginEmail")?.value.trim().toLowerCase()||"";const password=document.getElementById("loginPassword")?.value||"";const button=document.getElementById("loginButton");
-  if(button){button.disabled=true;button.textContent="Logging in...";}
-  try{
-   const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
-   if(error){msg(error.message);if(button){button.disabled=false;button.textContent="Login";}return;}
-   if(!data?.user)throw new Error("Login could not be completed.");
-   const {data:profile,error:pe}=await supabaseClient.from("profiles").select("role").eq("id",data.user.id).maybeSingle();
-   if(pe)throw pe;
-   if(!profile){await supabaseClient.auth.signOut();msg("Account profile not found. Please contact support.");if(button){button.disabled=false;button.textContent="Login";}return;}
-   const role=String(profile.role||"").toLowerCase();
-   if(role==="promoter"||role==="worker"){if(button){button.textContent="Opening dashboard...";}await redirectAfterLogin(role);return;}
-   if(role==="admin")return window.location.href="admin.html";
-   await supabaseClient.auth.signOut();msg("Your account type is not recognized. Please contact support.");if(button){button.disabled=false;button.textContent="Login";}
-  }catch(error){console.error("Login error:",error);msg("Login error: "+(error?.message||"Please try again."));if(button){button.disabled=false;button.textContent="Login";}}
- });}
-
+ if(loginForm)loginForm.addEventListener("submit",async e=>{e.preventDefault();const email=document.getElementById("loginEmail")?.value.trim().toLowerCase()||"";const password=document.getElementById("loginPassword")?.value||"";const button=document.getElementById("loginButton");if(button){button.disabled=true;button.textContent="Logging in..."}try{const{data,error}=await supabaseClient.auth.signInWithPassword({email,password});if(error){msg(error.message);if(button){button.disabled=false;button.textContent="Login"}return}if(!data?.user)throw new Error("Login could not be completed.");const{data:profile,error:pe}=await supabaseClient.from("profiles").select("role").eq("id",data.user.id).maybeSingle();if(pe)throw pe;if(!profile){await supabaseClient.auth.signOut();msg("Account profile not found. Please contact support.");if(button){button.disabled=false;button.textContent="Login"}return}const role=String(profile.role||"").toLowerCase();if(role==="promoter"||role==="worker"){if(button)button.textContent="Opening dashboard...";await redirectAfterLogin(role);return}if(role==="admin")return window.location.href="admin.html";await supabaseClient.auth.signOut();msg("Your account type is not recognized. Please contact support.");if(button){button.disabled=false;button.textContent="Login"}}catch(error){console.error("Login error:",error);msg("Login error: "+(error?.message||"Please try again."));if(button){button.disabled=false;button.textContent="Login"}}});
  const forgotButton=document.getElementById("forgotPassword");
- if(forgotButton){forgotButton.addEventListener("click",async e=>{e.preventDefault();const email=prompt("Enter your registered email:");if(!email)return;try{forgotButton.disabled=true;forgotButton.textContent="Sending...";const {error}=await supabaseClient.auth.resetPasswordForEmail(email.trim().toLowerCase(),{redirectTo:window.location.origin+"/reset-password.html"});if(error)msg(error.message);else msg("Password reset link sent. Please check your email.");}catch(error){msg("Password reset error: "+(error?.message||"Please try again."));}finally{forgotButton.disabled=false;forgotButton.textContent="Forgot Password?";}});}
-
- window.logoutUser=async()=>{try{await supabaseClient.auth.signOut();}catch(e){console.error("Logout error:",e)}window.location.href="login.html";};
- window.requireLogin=async()=>{const {data}=await supabaseClient.auth.getSession();if(!data.session){window.location.href="login.html";return false}return true;};
- window.getCurrentUserRole=async()=>{try{const {data:{user}}=await supabaseClient.auth.getUser();if(!user)return null;const {data,error}=await supabaseClient.from("profiles").select("role").eq("id",user.id).maybeSingle();if(error)return null;return data?.role||null;}catch(e){console.error("GET ROLE ERROR:",e);return null;}};
-
- // Dashboard pages call this after they have loaded. The popup therefore appears AFTER login,
- // on top of the actual dashboard, rather than on the login screen.
- window.showTelegramLoginPopupIfNeeded=async()=>{
-  if(sessionStorage.getItem("taskvexa-show-telegram-popup")!=="1")return;
-  sessionStorage.removeItem("taskvexa-show-telegram-popup");
-  try{
-   const {data}=await supabaseClient.from("platform_settings").select("value").eq("key","telegram").maybeSingle();
-   const value=data?.value;const link=typeof value==="string"?value:value?.group_link;
-   if(!link||!/^https:\/\/(t\.me|telegram\.me)\//i.test(link))return;
-   const style=document.createElement("style");
-   style.textContent=`#taskvexaTelegramLoginModal{position:fixed;inset:0;z-index:999999;background:rgba(3,7,15,.82);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:18px;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#taskvexaTelegramLoginModal .tvx-tg-card{position:relative;width:min(430px,100%);background:#fff;color:#111827;border-radius:22px;padding:30px 24px 24px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,.35)}#taskvexaTelegramLoginModal .tvx-tg-close{position:absolute;right:10px;top:10px;width:30px;height:30px;border:0;border-radius:50%;background:#f1f3f6;color:#667085;font-size:20px;line-height:30px;cursor:pointer}#taskvexaTelegramLoginModal .tvx-tg-icon{width:58px;height:58px;margin:0 auto 14px;border-radius:18px;background:#eaf6ff;display:flex;align-items:center;justify-content:center;font-size:29px}#taskvexaTelegramLoginModal h2{margin:0 0 9px;font-size:23px;font-weight:900}#taskvexaTelegramLoginModal p{margin:0 auto 21px;color:#667085;font-size:14px;line-height:1.6;max-width:340px}#taskvexaTelegramLoginModal .tvx-tg-join{display:block;width:100%;border:0;border-radius:12px;padding:14px 16px;background:#229ed9;color:#fff;font-size:15px;font-weight:850;text-decoration:none;cursor:pointer}#taskvexaTelegramLoginModal .tvx-tg-note{margin-top:12px;font-size:11px;color:#98a2b3}`;
-   document.head.appendChild(style);
-   const modal=document.createElement("div");modal.id="taskvexaTelegramLoginModal";modal.setAttribute("role","dialog");modal.setAttribute("aria-modal","true");
-   const safeLink=String(link).replace(/&/g,"&amp;").replace(/"/g,"&quot;");
-   modal.innerHTML=`<div class="tvx-tg-card"><button class="tvx-tg-close" id="tvxTelegramClose" aria-label="Close">×</button><div class="tvx-tg-icon">✈️</div><h2>Join TaskVexa on Telegram</h2><p>Stay updated with TaskVexa announcements, important information and community updates.</p><a class="tvx-tg-join" href="${safeLink}" target="_blank" rel="noopener noreferrer">Join Telegram</a><div class="tvx-tg-note">Close this message to continue to your dashboard.</div></div>`;
-   document.body.appendChild(modal);document.body.style.overflow="hidden";
-   const finish=()=>{modal.remove();style.remove();document.body.style.overflow="";};
-   document.getElementById("tvxTelegramClose")?.addEventListener("click",finish,{once:true});
-  }catch(e){console.warn("Telegram popup error:",e)}
- };
+ if(forgotButton)forgotButton.addEventListener("click",async e=>{e.preventDefault();const email=prompt("Enter your registered email:");if(!email)return;try{forgotButton.disabled=true;forgotButton.textContent="Sending...";const{error}=await supabaseClient.auth.resetPasswordForEmail(email.trim().toLowerCase(),{redirectTo:window.location.origin+"/reset-password.html"});if(error)msg(error.message);else msg("Password reset link sent. Please check your email.")}catch(error){msg("Password reset error: "+(error?.message||"Please try again."))}finally{forgotButton.disabled=false;forgotButton.textContent="Forgot Password?"}});
+ window.logoutUser=async()=>{try{await supabaseClient.auth.signOut()}catch(e){console.error("Logout error:",e)}window.location.href="login.html"};
+ window.requireLogin=async()=>{const{data}=await supabaseClient.auth.getSession();if(!data.session){window.location.href="login.html";return false}return true};
+ window.getCurrentUserRole=async()=>{try{const{data:{user}}=await supabaseClient.auth.getUser();if(!user)return null;const{data,error}=await supabaseClient.from("profiles").select("role").eq("id",user.id).maybeSingle();if(error)return null;return data?.role||null}catch(e){console.error("GET ROLE ERROR:",e);return null}};
+ window.showTelegramLoginPopupIfNeeded=async()=>{if(sessionStorage.getItem("taskvexa-show-telegram-popup")!=="1")return;sessionStorage.removeItem("taskvexa-show-telegram-popup");try{const{data}=await supabaseClient.from("platform_settings").select("value").eq("key","telegram").maybeSingle();const value=data?.value;const link=typeof value==="string"?value:value?.group_link;if(!link||!/^https:\/\/(t\.me|telegram\.me)\//i.test(link))return;const style=document.createElement("style");style.id="taskvexaTelegramLoginStyles";style.textContent=`#taskvexaTelegramLoginModal{position:fixed;inset:0;z-index:999999;background:rgba(3,7,15,.82);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:18px;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}#taskvexaTelegramLoginModal .tvx-tg-card{position:relative;width:min(430px,100%);background:#fff;color:#111827;border-radius:22px;padding:30px 24px 24px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,.35)}#taskvexaTelegramLoginModal .tvx-tg-close{position:absolute;right:10px;top:10px;width:30px;height:30px;border:0;border-radius:50%;background:#f1f3f6;color:#667085;font-size:20px;line-height:30px;cursor:pointer}#taskvexaTelegramLoginModal .tvx-tg-icon{width:58px;height:58px;margin:0 auto 14px;border-radius:18px;background:#eaf6ff;display:flex;align-items:center;justify-content:center;font-size:29px}#taskvexaTelegramLoginModal h2{margin:0 0 9px;font-size:23px;font-weight:900}#taskvexaTelegramLoginModal p{margin:0 auto 21px;color:#667085;font-size:14px;line-height:1.6;max-width:340px}#taskvexaTelegramLoginModal .tvx-tg-join{display:block;width:100%;border:0;border-radius:12px;padding:14px 16px;background:#229ed9;color:#fff;font-size:15px;font-weight:850;text-decoration:none;cursor:pointer}#taskvexaTelegramLoginModal .tvx-tg-note{margin-top:12px;font-size:11px;color:#98a2b3}`;document.head.appendChild(style);const modal=document.createElement("div");modal.id="taskvexaTelegramLoginModal";modal.setAttribute("role","dialog");modal.setAttribute("aria-modal","true");const safeLink=String(link).replace(/&/g,"&amp;").replace(/"/g,"&quot;");modal.innerHTML=`<div class="tvx-tg-card"><button class="tvx-tg-close" id="tvxTelegramClose" aria-label="Close">×</button><div class="tvx-tg-icon">✈️</div><h2>Join TaskVexa on Telegram</h2><p>Stay updated with TaskVexa announcements, important information and community updates.</p><a class="tvx-tg-join" href="${safeLink}" target="_blank" rel="noopener noreferrer">Join Telegram</a><div class="tvx-tg-note">Close this message to continue to your dashboard.</div></div>`;document.body.appendChild(modal);document.body.style.overflow="hidden";const finish=()=>{modal.remove();style.remove();document.body.style.overflow=""};document.getElementById("tvxTelegramClose")?.addEventListener("click",finish,{once:true})}catch(e){console.warn("Telegram popup error:",e)}};
 }
+
+// Promoter dashboard loads this file and has its own Supabase client declaration.
+// Trigger the post-login popup here so it still appears even if the dashboard's
+// inline application script is delayed or cached.
+if(window.location.pathname.endsWith("/promoter-dashboard.html")){const open=()=>window.showTelegramLoginPopupIfNeeded?.();if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",open,{once:true});else setTimeout(open,0)}

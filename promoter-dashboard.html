@@ -42,7 +42,6 @@
 <nav class="bottom"><button class="active" data-page="home"><i>⌂</i>Home</button><button data-page="create"><i>＋</i>Create</button><button data-page="tasks"><i>✓</i>Tasks</button><button data-page="wallet"><i>₦</i>Wallet</button><button data-page="profile"><i>👤</i>Profile</button></nav>
 </div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="auth.js"></script>
 <script>
 'use strict';
 const supabaseClient=window.supabase.createClient('https://dxtlnrthlpdaobnbazny.supabase.co','sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY');
@@ -66,6 +65,5 @@ async function logout(){await supabaseClient.auth.signOut();location.href='login
 (async()=>{if(await checkPromoter())await Promise.allSettled([loadWallet(),loadSettings(),loadPaymentDetails(),loadMyTasks(),loadTransactions()])})();
 </script>
 <script src="/promoter-task-types.js?v=2"></script>
-<script>setTimeout(()=>window.showTelegramLoginPopupIfNeeded?.(),350);</script>
 </body>
 </html>

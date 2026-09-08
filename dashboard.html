@@ -36,14 +36,15 @@ async function load(){
  const wallet=await sb.from('wallets').select('balance').eq('user_id',u.id).maybeSingle();
  const bal=Number(wallet.data?.balance||0);$('balance').textContent='₦'+bal.toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
  let rows=[];
- const sub=await sb.from('task_submissions').select('status,created_at').eq('user_id',u.id).order('created_at',{ascending:false}).limit(100);
+ const sub=await sb.from('task_submissions').select('status,created_at').eq('worker_id',u.id).order('created_at',{ascending:false}).limit(100);
  if(!sub.error)rows=sub.data||[];
  const completed=s=>['approved','completed','paid'].includes(String(s||'').toLowerCase());
  const pending=s=>['pending','submitted','review'].includes(String(s||'').toLowerCase());
  $('done').textContent=rows.filter(x=>completed(x.status)).length;
  $('pending').textContent=rows.filter(x=>pending(x.status)).length;
- const ref=await sb.from('referrals').select('id',{count:'exact',head:true}).eq('referrer_id',u.id);$('refs').textContent=ref.count||0;
- $('level').textContent=m.level||m.activation_level||'Active';
+ const ref=await sb.from('profiles').select('id,role').eq('referred_by',u.id);$('refs').textContent=ref.error?0:(ref.data||[]).length;
+ const profile=await sb.from('profiles').select('activation_level,activation_status').eq('id',u.id).maybeSingle();
+ $('level').textContent=profile.data?.activation_level?('Level '+profile.data.activation_level):(['active','activated','approved','true'].includes(String(profile.data?.activation_status||'').toLowerCase())?'Active':'—');
  const today=new Date().toISOString().slice(0,10);const todayDone=rows.filter(x=>String(x.created_at||'').slice(0,10)===today&&completed(x.status)).length;const target=Math.max(1,Number(m.daily_task_limit||5));const pct=Math.min(100,Math.round(todayDone/target*100));
  $('dailyText').textContent=todayDone+' / '+target;$('dailyPct').textContent=pct+'%';$('fill').style.width=pct+'%';
  const a=$('activity');if(!rows.length){a.innerHTML='<div class="loading">No recent activity yet.</div>'}else{a.innerHTML=rows.slice(0,5).map(x=>'<div class="activity"><b>Task submission</b><span>'+String(x.status||'Pending')+' · '+new Date(x.created_at).toLocaleString()+'</span></div>').join('')}

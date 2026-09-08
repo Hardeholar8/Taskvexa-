@@ -1,0 +1,65 @@
+/* TaskVexa FILORA design system — one visual language for Worker, Promoter and Admin */
+:root{
+  --filora-bg:#f6f7fb;--filora-surface:#ffffff;--filora-surface-2:#f8f9fd;
+  --filora-text:#111827;--filora-muted:#64748b;--filora-border:#e2e6ef;
+  --filora-primary:#6d5dfc;--filora-primary-2:#8b5cf6;--filora-primary-soft:#f0edff;
+  --filora-shadow:0 8px 28px rgba(17,24,39,.07);--filora-radius:16px;
+}
+html,body{background:var(--filora-bg)!important;color:var(--filora-text)!important;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important;color-scheme:light!important}
+body{min-height:100vh}
+body *{box-sizing:border-box}
+/* Shared surfaces */
+.card,.box,.panel,.stat,.task,.task-card,.item,.list,.row,.profile,.profile-card,.service,.plan,.empty,.history-card,.history-item,.status-card,.verification-card,.payment-box,.deposit-box,.wallet-box,.dashboard-card,.form-card,.request,.table-wrap,.modal,.data-card,.withdrawal-card,.submission-card,.admin-card,.inner-card,.cost,.payment,.preview,.section-card{background:var(--filora-surface)!important;color:var(--filora-text)!important;border:1px solid var(--filora-border)!important;box-shadow:var(--filora-shadow)!important;border-radius:var(--filora-radius)!important}
+.card *, .box *, .panel *, .stat *, .task *, .task-card *, .item *, .list *, .row *, .profile *, .profile-card *, .service *, .plan *, .history-card *, .history-item *, .status-card *, .verification-card *, .payment-box *, .deposit-box *, .wallet-box *, .dashboard-card *, .form-card *, .request *, .table-wrap *, .modal *, .data-card *, .withdrawal-card *, .submission-card *, .admin-card *{color:inherit}
+/* Headers / bars / navigation */
+header,.top,.topbar,.header,.navbar,.app-header{background:rgba(255,255,255,.96)!important;color:var(--filora-text)!important;border-color:var(--filora-border)!important;box-shadow:0 1px 10px rgba(17,24,39,.04)!important}
+.sidebar,.side{background:#fff!important;color:var(--filora-text)!important;border-color:var(--filora-border)!important}
+.brand,.logo,.logo h1,.brand b,.top h1,.top h2,.top h3{color:var(--filora-text)!important}
+.brand span,.logo span,a,.back{color:var(--filora-primary)!important}
+.nav,.nav-link,.nav a{color:#475569!important;background:transparent!important;border-color:transparent!important}
+.nav:hover,.nav.active,.nav-link:hover,.nav-link.active,.nav a:hover,.nav a.active{background:var(--filora-primary-soft)!important;color:var(--filora-primary)!important}
+.nav-title,.section-title,.nav-title *{color:#94a3b8!important}
+.bottom{background:rgba(255,255,255,.98)!important;border-color:var(--filora-border)!important}
+.bottom a,.bottom button{color:#64748b!important}.bottom a.active,.bottom button.active{color:var(--filora-primary)!important}
+/* Typography */
+h1,h2,h3,h4,h5,h6,strong,b,.stat-value,.balance,.amount{color:var(--filora-text)!important}
+p,.muted,.small,.loading,.empty,.desc,.subtitle,.section,.task-description,.admin,.meta,.hero p,.head p,.profile-card p,.stat-label,.row small,.username{color:var(--filora-muted)!important}
+/* Inputs */
+input,textarea,select,.input{background:#fff!important;color:var(--filora-text)!important;border:1px solid #d7dce6!important;border-radius:11px!important;outline:none!important}
+input::placeholder,textarea::placeholder{color:#94a3b8!important}
+input:focus,textarea:focus,select:focus,.input:focus{border-color:var(--filora-primary)!important;box-shadow:0 0 0 3px rgba(109,93,252,.12)!important}
+label{color:#475569!important}
+/* Buttons */
+button,.btn,.button{font-family:inherit!important;border-radius:11px!important;cursor:pointer!important;touch-action:manipulation!important}
+.btn,.button,.btn.primary,.button.primary{background:linear-gradient(135deg,var(--filora-primary),var(--filora-primary-2))!important;color:#fff!important;border:0!important;box-shadow:0 7px 18px rgba(109,93,252,.18)!important}
+.btn *, .button *{color:inherit!important}
+.btn.secondary,.button.secondary,.secondary{background:#fff!important;color:#334155!important;border:1px solid #d7dce6!important;box-shadow:none!important}
+.btn:disabled,.button:disabled{opacity:.55!important}
+/* Preserve semantic status colors */
+.success,.live,.approved,.status-active{color:#15803d!important}.error,.danger,.rejected{color:#dc2626!important}.pending,.status-paused,.warning{color:#a16207!important}
+.badge.live,.approved,.status-active{background:#ecfdf3!important}.pending,.status.pending,.status-paused{background:#fffbeb!important}.rejected,.status-closed{background:#fef2f2!important}
+/* Purple accent surfaces */
+.price,.accent,.total{color:var(--filora-primary)!important}
+.net.active{background:var(--filora-primary-soft)!important;color:#5b4ae8!important;border-color:#b9b0ff!important}
+.balance,.wallet{background:linear-gradient(135deg,#6d5dfc,#8b5cf6)!important;color:#fff!important;border:0!important}
+.balance *,.wallet *{color:#fff!important}
+/* Admin-specific structures */
+.main,.content,.wrap{background:var(--filora-bg)!important;color:var(--filora-text)!important}
+.mobile-menu,.mobile{background:#fff!important;color:var(--filora-text)!important;border:1px solid var(--filora-border)!important}
+/* Dark FILORA */
+html:not(.tvx-light),body.dark,html:has(body.dark){--filora-bg:#0b1020;--filora-surface:#121a2a;--filora-surface-2:#0f1727;--filora-text:#f8fafc;--filora-muted:#9aa8bc;--filora-border:#253149;--filora-primary:#8b7cf6;--filora-primary-2:#a78bfa;--filora-primary-soft:#201b3d;color-scheme:dark!important}
+html:not(.tvx-light),html:not(.tvx-light) body{background:var(--filora-bg)!important;color:var(--filora-text)!important}
+body.dark{background:var(--filora-bg)!important;color:var(--filora-text)!important}
+html:not(.tvx-light) header,html:not(.tvx-light) .top,html:not(.tvx-light) .topbar,html:not(.tvx-light) .header,html:not(.tvx-light) .navbar,html:not(.tvx-light) .app-header,.dark header,.dark .top,.dark .topbar{background:#0d1424!important;color:var(--filora-text)!important;border-color:var(--filora-border)!important;box-shadow:none!important}
+html:not(.tvx-light) .sidebar,html:not(.tvx-light) .side,.dark .sidebar,.dark .side{background:#0d1424!important;color:var(--filora-text)!important;border-color:var(--filora-border)!important}
+html:not(.tvx-light) .card,html:not(.tvx-light) .box,html:not(.tvx-light) .panel,html:not(.tvx-light) .stat,html:not(.tvx-light) .task,html:not(.tvx-light) .task-card,html:not(.tvx-light) .item,html:not(.tvx-light) .list,html:not(.tvx-light) .row,html:not(.tvx-light) .profile,html:not(.tvx-light) .profile-card,html:not(.tvx-light) .service,html:not(.tvx-light) .plan,html:not(.tvx-light) .history-card,html:not(.tvx-light) .history-item,html:not(.tvx-light) .status-card,html:not(.tvx-light) .verification-card,html:not(.tvx-light) .payment-box,html:not(.tvx-light) .deposit-box,html:not(.tvx-light) .wallet-box,html:not(.tvx-light) .dashboard-card,html:not(.tvx-light) .form-card,html:not(.tvx-light) .request,html:not(.tvx-light) .table-wrap,html:not(.tvx-light) .modal,html:not(.tvx-light) .data-card,html:not(.tvx-light) .withdrawal-card,html:not(.tvx-light) .submission-card,html:not(.tvx-light) .admin-card,.dark .card,.dark .box,.dark .panel,.dark .stat,.dark .task,.dark .task-card,.dark .item,.dark .list,.dark .row,.dark .profile,.dark .profile-card,.dark .service,.dark .plan,.dark .history-card,.dark .history-item,.dark .status-card,.dark .verification-card,.dark .payment-box,.dark .deposit-box,.dark .wallet-box,.dark .dashboard-card,.dark .form-card,.dark .request,.dark .table-wrap,.dark .modal,.dark .data-card,.dark .withdrawal-card,.dark .submission-card,.dark .admin-card{background:var(--filora-surface)!important;color:var(--filora-text)!important;border-color:var(--filora-border)!important;box-shadow:0 8px 28px rgba(0,0,0,.18)!important}
+html:not(.tvx-light) h1,html:not(.tvx-light) h2,html:not(.tvx-light) h3,html:not(.tvx-light) h4,html:not(.tvx-light) h5,html:not(.tvx-light) h6,html:not(.tvx-light) strong,html:not(.tvx-light) b,.dark h1,.dark h2,.dark h3,.dark h4,.dark h5,.dark h6,.dark strong,.dark b{color:var(--filora-text)!important}
+html:not(.tvx-light) p,html:not(.tvx-light) .muted,html:not(.tvx-light) .small,html:not(.tvx-light) .loading,html:not(.tvx-light) .empty,html:not(.tvx-light) .desc,html:not(.tvx-light) .subtitle,html:not(.tvx-light) .section,html:not(.tvx-light) label,.dark p,.dark .muted,.dark .small,.dark .loading,.dark .empty,.dark .desc,.dark .subtitle,.dark .section,.dark label{color:var(--filora-muted)!important}
+html:not(.tvx-light) input,html:not(.tvx-light) textarea,html:not(.tvx-light) select,html:not(.tvx-light) .input,.dark input,.dark textarea,.dark select,.dark .input{background:#0f1727!important;color:var(--filora-text)!important;border-color:#2d3a52!important}
+html:not(.tvx-light) input::placeholder,html:not(.tvx-light) textarea::placeholder,.dark input::placeholder,.dark textarea::placeholder{color:#6f7e95!important}
+html:not(.tvx-light) .nav:hover,html:not(.tvx-light) .nav.active,html:not(.tvx-light) .nav-link:hover,html:not(.tvx-light) .nav-link.active,.dark .nav:hover,.dark .nav.active,.dark .nav-link:hover,.dark .nav-link.active{background:#201b3d!important;color:#fff!important}
+html:not(.tvx-light) .nav,html:not(.tvx-light) .nav-link,html:not(.tvx-light) .nav a,.dark .nav,.dark .nav-link,.dark .nav a{color:#b7c2d3!important}
+html:not(.tvx-light) .bottom,.dark .bottom{background:#0d1424!important;border-color:var(--filora-border)!important}
+html:not(.tvx-light) .btn.secondary,html:not(.tvx-light) .button.secondary,html:not(.tvx-light) .secondary,.dark .btn.secondary,.dark .button.secondary,.dark .secondary{background:#121a2a!important;color:#e5e7eb!important;border-color:#344158!important}
+html:not(.tvx-light) .mobile-menu,html:not(.tvx-light) .mobile,.dark .mobile-menu,.dark .mobile{background:#121a2a!important;color:#f8fafc!important;border-color:#344158!important}
+@media(max-width:800px){.sidebar,.side{z-index:100}.content,.wrap{padding-bottom:86px!important}}

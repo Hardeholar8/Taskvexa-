@@ -17,6 +17,8 @@ export default async function handler(req, res) {
         tx_ref: txRef,
         amount: numericAmount,
         currency: 'NGN',
+        payment_options: 'banktransfer',
+        bank_transfer_options: { expires: 3600 },
         redirect_url: `${base}/activation-callback.html`,
         customer: { email },
         meta: { user_id, purpose: 'worker_activation' },
@@ -25,7 +27,7 @@ export default async function handler(req, res) {
     });
     const data = await response.json();
     if (!response.ok || data.status !== 'success' || !data.data?.link) {
-      return res.status(502).json({ error: data.message || 'Flutterwave checkout failed' });
+      return res.status(502).json({ error: data.message || 'Flutterwave bank transfer checkout failed' });
     }
     return res.status(200).json({ checkout_url: data.data.link, tx_ref: txRef });
   } catch (error) {

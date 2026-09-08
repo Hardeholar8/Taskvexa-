@@ -41,8 +41,10 @@ export default async function handler(req, res) {
       description,
       return_path
     });
+    const paymentUrl = `${base}/payment-transfer.html?${params.toString()}`;
     return res.status(200).json({
-      payment_url: `${base}/payment-transfer.html?${params.toString()}`,
+      payment_url: paymentUrl,
+      checkout_url: paymentUrl,
       tx_ref: txRef,
       bank: auth.transfer_bank,
       account_number: auth.transfer_account,

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TaskVexa - Bank Transfer</title>
+<link rel="stylesheet" href="/filora-theme.css?v=1"><script src="/theme.js?v=9"></script>
+<style>body{font-family:Inter,Arial,sans-serif}.wrap{max-width:620px;margin:40px auto;padding:20px}.card{padding:24px;border-radius:18px;border:1px solid #ddd;background:#fff}.row{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid #eee}.value{font-weight:800;text-align:right;word-break:break-word}.amount{font-size:28px}.copy{border:0;border-radius:10px;padding:9px 12px;font-weight:800;cursor:pointer}.status{margin-top:18px;padding:14px;border-radius:12px;background:#f4f7f8}.btn{width:100%;margin-top:14px;padding:14px;border:0;border-radius:12px;font-weight:800;cursor:pointer}</style>
+</head>
+<body><main class="wrap"><section class="card">
+<h1 id="title">TaskVexa Payment</h1><p id="desc">Transfer the exact amount to the account below.</p>
+<div class="row"><span>Amount</span><span class="value amount" id="amount">₦0</span></div>
+<div class="row"><span>Bank</span><span class="value" id="bank">—</span></div>
+<div class="row"><span>Account Number</span><span class="value"><span id="account">—</span> <button class="copy" onclick="copyAccount()">Copy</button></span></div>
+<div class="row"><span>Reference</span><span class="value" id="ref">—</span></div>
+<div class="row"><span>Expires</span><span class="value" id="expires">—</span></div>
+<div class="status" id="status">Waiting for your transfer…</div>
+<button class="btn" id="check" onclick="checkPayment()">I've Completed the Transfer — Check Payment</button>
+</section></main>
+<script>
+const p=new URLSearchParams(location.search);const tx=p.get('tx_ref');const purpose=p.get('purpose')||'platform_payment';const amount=Number(p.get('amount')||0);const returnPath=p.get('return_path')||'dashboard.html';
+const $=id=>document.getElementById(id); $('title').textContent=p.get('title')||'TaskVexa Payment';$('desc').textContent=p.get('description')||'Transfer the exact amount to the account below.';$('amount').textContent='₦'+amount.toLocaleString('en-NG');$('bank').textContent=p.get('bank')||'—';$('account').textContent=p.get('account')||'—';$('ref').textContent=tx||'—';$('expires').textContent=p.get('expires')||'—';
+async function copyAccount(){try{await navigator.clipboard.writeText(p.get('account')||'');$('status').textContent='Account number copied.'}catch(e){$('status').textContent='Copy failed. Please copy the account number manually.'}}
+async function checkPayment(){if(!tx)return;const b=$('check');b.disabled=true;b.textContent='Checking…';$('status').textContent='Checking Flutterwave for your payment…';try{const r=await fetch('/api/flutterwave/verify',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tx_ref:tx,expected_amount:amount,purpose})});const j=await r.json();if(!r.ok||!j.verified)throw new Error(j.error||'Payment not confirmed yet.');$('status').textContent='Payment confirmed successfully.';b.textContent='Payment Confirmed';setTimeout(()=>{location.href='/'+returnPath+'?transaction_id='+encodeURIComponent(j.transaction_id)+'&tx_ref='+encodeURIComponent(j.tx_ref)+'&status=successful&purpose='+encodeURIComponent(j.purpose)},500)}catch(e){$('status').textContent=e.message||'Payment not confirmed yet. Try again after the transfer is completed.';b.disabled=false;b.textContent='Check Payment Again'}}
+</script></body></html>

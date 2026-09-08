@@ -1,4 +1,5 @@
 (function(){'use strict';
+const popup=document.createElement('script');popup.src='/telegram-login-popup.js?v=1';popup.async=false;document.head.appendChild(popup);
 const U='https://dxtlnrthlpdaobnbazny.supabase.co',K='sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY';
 function start(){
  const p=document.getElementById('taskPlatform'),w=document.getElementById('workersNeeded'),box=document.getElementById('priceBox'),price=document.getElementById('pricePerWorker'),total=document.getElementById('totalCost'),btn=document.getElementById('submitTaskButton');

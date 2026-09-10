@@ -16,8 +16,9 @@ function ensureFilora(){
 }
 function ensurePromoterAccountTheme(){
  if(!/promoter-(dashboard|settings|submissions|wallet)\.html$/i.test(location.pathname)) return;
- if(document.getElementById('promoter-account-theme-css')) return;
- var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=1';(document.head||document.documentElement).appendChild(l);
+ var old=document.getElementById('promoter-account-theme-css');
+ if(old) old.remove();
+ var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=2';(document.head||document.documentElement).appendChild(l);
 }
 function addPromoterReviewShortcut(){
  if(!/promoter-dashboard\.html$/i.test(location.pathname)) return;

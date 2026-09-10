@@ -5,7 +5,7 @@ export default async function handler(req, res) {
     const { transaction_id, tx_ref, expected_amount, purpose } = req.body || {};
     if (!transaction_id && !tx_ref) return res.status(400).json({ error: 'Missing transaction ID or reference', verified: false });
 
-    const secret = process.env.SECRET_KEY;
+    const secret = process.env.FLW_SECRET_KEY || process.env.FLUTTERWAVE_SECRET_KEY || process.env.SECRET_KEY;
     if (!secret) return res.status(500).json({ error: 'Payment service is not configured', verified: false });
 
     const url = transaction_id

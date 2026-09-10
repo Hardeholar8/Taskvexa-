@@ -1,0 +1,26 @@
+/* TaskVexa Promoter Account — layout-only polish. Existing HTML, IDs and functionality remain untouched. */
+.promoter-account-theme{ }
+@media(min-width:801px){
+  body:has(.app) .sidebar{width:245px!important;padding:22px 14px!important}
+  body:has(.app) .main{margin-left:245px!important;width:calc(100% - 245px)!important}
+  body:has(.app) .content{width:100%!important;max-width:1280px!important;margin-left:auto!important;margin-right:auto!important;padding:28px 30px 50px!important}
+  body:has(.app) .card{border-radius:16px!important}
+  body:has(.app) .stat{border-radius:14px!important}
+}
+@media(max-width:800px){
+  body:has(.app){width:100%!important;overflow-x:hidden!important}
+  body:has(.app) .app{width:100%!important;min-width:0!important;display:block!important}
+  body:has(.app) .main{margin-left:0!important;width:100%!important;max-width:100%!important;min-width:0!important}
+  body:has(.app) .top{width:100%!important;max-width:none!important}
+  body:has(.app) .content{width:100%!important;max-width:none!important;margin:0!important;padding:20px 14px 85px!important}
+  body:has(.app) .sidebar{width:min(245px,82vw)!important;max-width:245px!important}
+  body:has(.app) .card{width:100%!important;max-width:none!important;border-radius:15px!important}
+  body:has(.app) .layout{width:100%!important}
+  body:has(.app) .stat{min-width:0!important}
+  body:has(.app) .hero{width:100%!important}
+}
+@media(max-width:500px){
+  body:has(.app) .content{padding-left:12px!important;padding-right:12px!important}
+  body:has(.app) .stat{padding:14px!important}
+  body:has(.app) .card{padding:17px!important}
+}

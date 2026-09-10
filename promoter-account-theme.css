@@ -1,49 +1,71 @@
-/* TASKVEXA PROMOTER — FILORA PREMIUM ACCOUNT */
-*{box-sizing:border-box}:root{--bg:#080d18;--panel:#101827;--line:#26334a;--muted:#8e9bb0;--purple:#8b72ff}
-body:has(.app){min-height:100vh!important;overflow-x:hidden!important;background:radial-gradient(800px 420px at 75% -15%,rgba(115,79,210,.2),transparent 65%),#080d18!important;color:#f8fafc!important;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important}
+/* TASKVEXA — COMPLETE PROMOTER ACCOUNT REDESIGN */
+*{box-sizing:border-box}
+:root{--tvx-bg:#070b14;--tvx-panel:#0d1522;--tvx-panel2:#111b2b;--tvx-line:#223047;--tvx-muted:#8290a5;--tvx-text:#f7f8fc;--tvx-purple:#8b6cff;--tvx-purple2:#b17cff;--tvx-green:#49df83}
+body:has(.app){margin:0!important;min-height:100vh!important;background:radial-gradient(900px 500px at 70% -15%,rgba(111,76,214,.23),transparent 65%),linear-gradient(180deg,#070b14,#080d17)!important;color:var(--tvx-text)!important;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important}
 body:has(.app) .app{min-height:100vh!important;background:transparent!important}
-body:has(.app) .sidebar{background:rgba(10,16,29,.98)!important;border-color:var(--line)!important}
-body:has(.app) .main{background:transparent!important}
-body:has(.app) .top{height:74px!important;padding:0 32px!important;background:rgba(8,13,24,.84)!important;backdrop-filter:blur(20px)!important;border-color:var(--line)!important}
-body:has(.app) .avatar,body:has(.app) .big-avatar{background:linear-gradient(135deg,#765ff2,#b184ff)!important;color:#fff!important}
-body:has(.app) .content{max-width:1480px!important;margin:0 auto!important;padding:30px 32px 54px!important}
-body:has(.app) .stat,body:has(.app) .card{background:linear-gradient(145deg,#111a29,#0b121f)!important;border:1px solid var(--line)!important;border-radius:20px!important;box-shadow:0 12px 34px rgba(0,0,0,.18)!important}
-body:has(.app) .stat{min-height:104px!important;padding:17px!important}.stat-value{font-weight:900!important}
-body:has(.app) .card{padding:20px!important;margin-bottom:16px!important}
-body:has(.app) .wallet{background:linear-gradient(135deg,#24104c,#4d1e98)!important;border:0!important;box-shadow:0 18px 42px rgba(88,40,180,.25)!important}
-body:has(.app) .balance{font-size:32px!important;color:#fff!important;font-weight:950!important}
-body:has(.app) .btn{background:linear-gradient(135deg,#705df4,#a06fff)!important;color:#fff!important;border:0!important;border-radius:12px!important;box-shadow:0 8px 22px rgba(124,92,255,.24)!important;min-height:43px!important}
-body:has(.app) input,body:has(.app) textarea,body:has(.app) select{background:#0a1220!important;color:#fff!important;border:1px solid #2d3b53!important;border-radius:12px!important;min-height:44px!important}
+body:has(.app) .sidebar{width:252px!important;padding:22px 14px!important;background:rgba(8,13,23,.97)!important;border-right:1px solid var(--tvx-line)!important;box-shadow:15px 0 45px rgba(0,0,0,.18)!important}
+body:has(.app) .brand{padding:8px 13px 22px!important;margin-bottom:18px!important;border-bottom:1px solid var(--tvx-line)!important}
+body:has(.app) .brand b{font-size:23px!important;font-weight:900!important;color:#fff!important;letter-spacing:-.5px!important}
+body:has(.app) .brand small{display:block!important;color:var(--tvx-muted)!important;margin-top:5px!important;font-size:11px!important}
+body:has(.app) .section-title{margin:20px 12px 8px!important;color:#5e6b80!important;font-size:10px!important;font-weight:850!important;letter-spacing:1.5px!important}
+body:has(.app) .sidebar .nav{display:flex!important;align-items:center!important;gap:12px!important;width:100%!important;margin:3px 0!important;padding:12px 13px!important;border:0!important;border-radius:13px!important;background:transparent!important;color:#91a0b5!important;font-size:13px!important;font-weight:700!important;transition:.18s!important}
+body:has(.app) .sidebar .nav i{width:22px!important;font-size:18px!important;text-align:center!important;font-style:normal!important}
+body:has(.app) .sidebar .nav:hover,body:has(.app) .sidebar .nav.active{background:linear-gradient(90deg,rgba(139,108,255,.20),rgba(139,108,255,.055))!important;color:#fff!important}
+body:has(.app) .sidebar .nav.active{box-shadow:inset 3px 0 0 var(--tvx-purple)!important}
+body:has(.app) .logout{margin-top:18px!important;padding-top:15px!important;border-top:1px solid var(--tvx-line)!important}
+body:has(.app) .logout .nav{color:#f47c8a!important}
+body:has(.app) .main{margin-left:252px!important;width:calc(100% - 252px)!important;min-width:0!important;background:transparent!important}
+body:has(.app) .top{height:72px!important;padding:0 30px!important;background:rgba(7,11,20,.80)!important;border-bottom:1px solid var(--tvx-line)!important;backdrop-filter:blur(22px)!important;position:sticky!important;top:0!important;z-index:100!important}
+body:has(.app) .top h2{font-size:16px!important;font-weight:850!important;letter-spacing:-.2px!important}
+body:has(.app) .top-right{display:flex!important;align-items:center!important;gap:13px!important;color:var(--tvx-muted)!important;font-size:11px!important}
+body:has(.app) .avatar,body:has(.app) .big-avatar{background:linear-gradient(135deg,#7359ef,#b47dff)!important;color:#fff!important;box-shadow:0 8px 25px rgba(130,91,255,.24)!important}
+body:has(.app) .avatar{width:37px!important;height:37px!important}
+body:has(.app) .content{max-width:1450px!important;margin:0 auto!important;padding:30px 32px 55px!important}
+body:has(.app) #accessMessage{margin:0 0 16px!important;color:var(--tvx-muted)!important;font-size:12px!important}
+body:has(.app) .hero{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:20px!important;margin:0 0 22px!important;padding:0!important}
+body:has(.app) .hero h1{margin:0 0 6px!important;font-size:29px!important;line-height:1.15!important;font-weight:900!important;letter-spacing:-.9px!important}
+body:has(.app) .hero p{margin:0!important;color:var(--tvx-muted)!important;font-size:13px!important;line-height:1.6!important}
+body:has(.app) .status{padding:8px 12px!important;border:1px solid #27563b!important;border-radius:999px!important;background:#10261a!important;color:var(--tvx-green)!important;font-size:11px!important;font-weight:800!important}
+body:has(.app) .stats{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;margin:0 0 16px!important}
+body:has(.app) .stat{position:relative!important;min-height:100px!important;padding:17px!important;background:linear-gradient(145deg,#111a29,#0c1420)!important;border:1px solid var(--tvx-line)!important;border-radius:18px!important;box-shadow:0 12px 35px rgba(0,0,0,.17)!important}
+body:has(.app) .stat-icon{float:right!important;font-size:18px!important;opacity:.95!important}
+body:has(.app) .stat-label{color:var(--tvx-muted)!important;font-size:10px!important;font-weight:700!important}
+body:has(.app) .stat-value{margin-top:9px!important;font-size:22px!important;font-weight:900!important;letter-spacing:-.4px!important}
+body:has(.app) .card{padding:19px!important;margin:0 0 12px!important;background:linear-gradient(145deg,#111a29,#0b121e)!important;border:1px solid var(--tvx-line)!important;border-radius:19px!important;box-shadow:0 12px 35px rgba(0,0,0,.16)!important}
+body:has(.app) .head{display:flex!important;align-items:center!important;gap:11px!important;margin:0 0 15px!important}
+body:has(.app) .head-icon{width:40px!important;height:40px!important;flex:0 0 40px!important;display:grid!important;place-items:center!important;border-radius:12px!important;background:linear-gradient(145deg,#241d42,#141d2e)!important;border:1px solid #3a315b!important;color:#b58cff!important}
+body:has(.app) .head h3{margin:0!important;font-size:15px!important;font-weight:850!important}
+body:has(.app) .head p{margin:4px 0 0!important;color:var(--tvx-muted)!important;font-size:10px!important}
+body:has(.app) .muted,body:has(.app) label{color:var(--tvx-muted)!important}
+/* Dashboard is intentionally rebuilt: wallet first, then campaign, tasks and guide. */
+body:has(.app) #page-home .promoter-redesign-wallet{width:100%!important;background:linear-gradient(135deg,#24104b 0%,#492096 52%,#2b1762 100%)!important;border:0!important;box-shadow:0 18px 50px rgba(82,35,180,.25)!important;margin-bottom:14px!important}
+body:has(.app) #page-home .promoter-redesign-wallet .head-icon{background:rgba(255,255,255,.11)!important;border-color:rgba(255,255,255,.15)!important;color:#fff!important}
+body:has(.app) .wallet{background:linear-gradient(135deg,#24104b,#4c2098)!important;border:0!important;box-shadow:0 18px 48px rgba(83,39,180,.24)!important}
+body:has(.app) .balance{margin:7px 0 17px!important;font-size:32px!important;font-weight:950!important;letter-spacing:-1px!important;color:#fff!important;background:transparent!important;box-shadow:none!important}
+body:has(.app) .btn{min-height:43px!important;padding:11px 16px!important;border:0!important;border-radius:12px!important;background:linear-gradient(135deg,#725cf4,#a170ff)!important;color:#fff!important;font-weight:850!important;box-shadow:0 8px 24px rgba(116,89,246,.24)!important}
+body:has(.app) .btn.secondary{background:#151f30!important;border:1px solid #344159!important;box-shadow:none!important}
+body:has(.app) .layout{display:grid!important;grid-template-columns:minmax(0,1.5fr) minmax(280px,.8fr)!important;gap:14px!important}
+body:has(.app) #page-home .layout{margin-top:0!important}
+body:has(.app) #page-home .layout>div:first-child,body:has(.app) #page-home .layout>div:last-child{min-width:0!important}
+body:has(.app) .list{padding:14px 0!important;border-top:1px solid var(--tvx-line)!important}
+body:has(.app) .list:first-child{border-top:0!important}
+body:has(.app) .badge{padding:5px 8px!important;border-radius:8px!important;font-size:9px!important;font-weight:850!important}
+body:has(.app) .live{background:#123522!important;color:var(--tvx-green)!important}
+body:has(.app) .pending{background:#352d16!important;color:#facc15!important}
+body:has(.app) .rejected{background:#35191e!important;color:#f87171!important}
+body:has(.app) .empty,body:has(.app) .loading{text-align:center!important;padding:25px!important;color:var(--tvx-muted)!important;font-size:12px!important}
+body:has(.app) input,body:has(.app) textarea,body:has(.app) select{width:100%!important;min-height:45px!important;padding:11px 12px!important;background:#09111e!important;color:#fff!important;border:1px solid #2b3951!important;border-radius:12px!important;outline:0!important}
+body:has(.app) input:focus,body:has(.app) textarea:focus,body:has(.app) select:focus{border-color:#765df4!important;box-shadow:0 0 0 3px rgba(118,93,244,.12)!important}
+body:has(.app) textarea{min-height:125px!important}
+body:has(.app) .form-grid{gap:13px!important}
+body:has(.app) .cost{margin-top:14px!important;padding:13px!important;background:#09111e!important;border:1px solid #27364e!important;border-radius:13px!important}
+body:has(.app) .row{padding:7px 0!important;font-size:12px!important}
+body:has(.app) .total{color:var(--tvx-green)!important}
+body:has(.app) .profile-card{min-height:112px!important;background:linear-gradient(135deg,#141e30,#0f1725)!important}
+body:has(.app) .big-avatar{width:66px!important;height:66px!important;border-radius:19px!important}
+body:has(.app) .payment{line-height:1.8!important;font-size:12px!important}
 body:has(.app) .bottom{display:none!important}
-/* MOBILE: wallet first, then campaign, recent tasks, how it works */
-@media(max-width:800px){
- body:has(.app) .app{display:block!important;width:100%!important}
- body:has(.app) .sidebar{width:min(278px,86vw)!important;transform:translateX(-105%)!important;background:#0c1423!important;z-index:1100!important}
- body:has(.app) .sidebar.open{transform:translateX(0)!important}
- body:has(.app) .main{margin-left:0!important;width:100%!important}
- body:has(.app) .top{height:64px!important;padding:0 14px!important}
- body:has(.app) .top-right span{display:none!important}
- body:has(.app) .content{padding:19px 13px 104px!important}
- body:has(.app) .hero{margin-bottom:14px!important}
- body:has(.app) .hero h1{font-size:24px!important}
- body:has(.app) .hero p{font-size:12px!important}
- body:has(.app) .stats{grid-template-columns:1fr 1fr!important;gap:9px!important;margin-bottom:12px!important}
- body:has(.app) .stat{min-height:92px!important;padding:14px!important;border-radius:17px!important}
- body:has(.app) .stat-value{font-size:19px!important}
- /* Flatten the two desktop columns and explicitly order the cards. */
- body:has(.app) #page-home .layout{display:flex!important;flex-direction:column!important;gap:0!important}
- body:has(.app) #page-home .layout>div{display:contents!important}
- body:has(.app) #page-home .layout>div:last-child .wallet{order:1!important;min-height:170px!important}
- body:has(.app) #page-home .layout>div:first-child .card:first-child{order:2!important;min-height:auto!important}
- body:has(.app) #page-home .layout>div:first-child .card:nth-child(2){order:3!important}
- body:has(.app) #page-home .layout>div:last-child .card:not(.wallet){order:4!important}
- body:has(.app) .card{padding:16px!important;margin-bottom:11px!important;border-radius:18px!important}
- body:has(.app) .head-icon{width:38px!important;height:38px!important;border-radius:12px!important}
- body:has(.app) .balance{font-size:29px!important}
- body:has(.app) .form-grid{grid-template-columns:1fr!important}
- body:has(.app) .bottom{display:flex!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;height:76px!important;padding:0 10px env(safe-area-inset-bottom)!important;background:rgba(12,20,35,.97)!important;backdrop-filter:blur(20px)!important;border-top:1px solid #27344a!important;z-index:1000!important;align-items:center!important;justify-content:space-around!important}
- body:has(.app) .bottom button{flex:1!important;max-width:70px!important;height:61px!important;background:transparent!important;border:0!important;color:#7f8da4!important;font-size:10px!important}
- body:has(.app) .bottom button.active{color:#a88cff!important}
- body:has(.app) .bottom button:nth-child(3){flex:0 0 58px!important;width:58px!important;height:58px!important;margin:-25px 5px 0!important;border-radius:50%!important;background:linear-gradient(135deg,#705df4,#a06fff)!important;color:#fff!important;border:5px solid #080d18!important;box-shadow:0 8px 27px rgba(109,93,252,.46)!important}
-}
-@media(max-width:430px){body:has(.app) .content{padding-left:11px!important;padding-right:11px!important}}
+body:has(.app) .hidden{display:none!important}
+@media(max-width:1050px){body:has(.app) .stats{grid-template-columns:1fr 1fr!important}body:has(.app) .layout{grid-template-columns:1fr!important}}
+@media(max-width:800px){body:has(.app) .sidebar{width:min(280px,86vw)!important;transform:translateX(-105%)!important;background:#0b1321!important;z-index:1100!important;transition:transform .22s ease!important}body:has(.app) .sidebar.open{transform:translateX(0)!important}body:has(.app) .main{margin-left:0!important;width:100%!important}body:has(.app) .top{height:63px!important;padding:0 13px!important}body:has(.app) .top-right span{display:none!important}body:has(.app) .menu{display:block!important;padding:8px 10px!important;border:1px solid #2b3950!important;border-radius:11px!important;background:#131d2d!important;color:#fff!important}body:has(.app) .content{padding:18px 12px 104px!important}body:has(.app) .hero{display:block!important;margin-bottom:16px!important}body:has(.app) .hero h1{font-size:24px!important;letter-spacing:-.6px!important}body:has(.app) .hero p{font-size:11px!important}body:has(.app) .status{display:inline-block!important;margin-top:10px!important}body:has(.app) .stats{grid-template-columns:1fr 1fr!important;gap:9px!important;margin-bottom:11px!important}body:has(.app) .stat{min-height:88px!important;padding:14px!important;border-radius:16px!important}body:has(.app) .stat-label{font-size:9px!important}body:has(.app) .stat-value{font-size:18px!important;margin-top:8px!important}body:has(.app) .card{padding:15px!important;border-radius:17px!important;margin-bottom:10px!important}body:has(.app) .head-icon{width:37px!important;height:37px!important;flex-basis:37px!important;border-radius:11px!important}body:has(.app) .head h3{font-size:14px!important}body:has(.app) .balance{font-size:29px!important}body:has(.app) .layout{display:block!important}body:has(.app) .form-grid{grid-template-columns:1fr!important}body:has(.app) .full{grid-column:auto!important}body:has(.app) .bottom{display:flex!important;position:fixed!important;left:0!important;right:0!important;bottom:0!important;height:76px!important;padding:0 9px env(safe-area-inset-bottom)!important;align-items:center!important;justify-content:space-around!important;gap:2px!important;background:rgba(10,16,28,.97)!important;border-top:1px solid #27344a!important;backdrop-filter:blur(20px)!important;box-shadow:0 -14px 35px rgba(0,0,0,.30)!important;z-index:1000!important}body:has(.app) .bottom button{flex:1!important;max-width:70px!important;height:61px!important;padding:6px 2px!important;border:0!important;background:transparent!important;color:#78869c!important;font-size:9px!important;font-weight:750!important}body:has(.app) .bottom button i{display:block!important;font-style:normal!important;font-size:21px!important;line-height:25px!important;margin-bottom:3px!important}body:has(.app) .bottom button.active{color:#a98cff!important}body:has(.app) .bottom button:nth-child(3){flex:0 0 58px!important;width:58px!important;height:58px!important;margin:-25px 5px 0!important;border-radius:50%!important;background:linear-gradient(135deg,#705bf2,#a170ff)!important;color:#fff!important;border:5px solid #080d17!important;box-shadow:0 8px 28px rgba(112,91,242,.48),0 0 0 1px #47377e!important;display:grid!important;place-items:center!important;font-size:0!important}body:has(.app) .bottom button:nth-child(3) i{font-size:29px!important;line-height:1!important;margin:0!important}}
+@media(max-width:430px){body:has(.app) .content{padding-left:10px!important;padding-right:10px!important}body:has(.app) .bottom button{max-width:65px!important}}

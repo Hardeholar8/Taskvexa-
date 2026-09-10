@@ -1,39 +1,50 @@
-/* TASKVEXA — PREMIUM DARK DESIGN SYSTEM (dark-only for now) */
+/* TASKVEXA / FILORA — UNIFIED PREMIUM DARK DESIGN SYSTEM */
 :root{
- --filora-bg:#080d18;--filora-surface:#111827;--filora-surface-2:#0d1524;
- --filora-text:#f8fafc;--filora-muted:#94a3b8;--filora-border:#253149;
- --filora-primary:#7c5cff;--filora-primary-2:#9b6cff;--filora-primary-soft:#211a3d;
- --filora-shadow:0 12px 34px rgba(0,0,0,.28);--filora-radius:16px;
+ --filora-bg:#070b14;--filora-bg-2:#0a1020;--filora-surface:#111827;--filora-surface-2:#151e31;
+ --filora-text:#f8fafc;--filora-muted:#94a3b8;--filora-border:#26344d;
+ --filora-primary:#7048ff;--filora-primary-2:#9a62ff;--filora-cyan:#42d8ff;
+ --filora-primary-soft:#211941;--filora-shadow:0 14px 38px rgba(0,0,0,.30);--filora-radius:18px;
  color-scheme:dark;
 }
 *{box-sizing:border-box}
-html,body,html.tvx-dark,body.dark,body.tvx-dark{background:#080d18!important;color:#f8fafc!important;color-scheme:dark}
-body{min-height:100vh;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important}
-/* Force all common surfaces into the premium dark system. */
-.tvx-dark .card,.tvx-dark .box,.tvx-dark .panel,.tvx-dark .stat,.tvx-dark .task,.tvx-dark .task-card,.tvx-dark .item,.tvx-dark .list,.tvx-dark .row,.tvx-dark .profile,.tvx-dark .profile-card,.tvx-dark .service,.tvx-dark .plan,.tvx-dark .history-card,.tvx-dark .history-item,.tvx-dark .status-card,.tvx-dark .verification-card,.tvx-dark .payment-box,.tvx-dark .deposit-box,.tvx-dark .wallet-box,.tvx-dark .dashboard-card,.tvx-dark .form-card,.tvx-dark .request,.tvx-dark .table-wrap,.tvx-dark .modal,.tvx-dark .data-card,.tvx-dark .withdrawal-card,.tvx-dark .submission-card,.tvx-dark .admin-card,.tvx-dark .inner-card,.tvx-dark .cost,.tvx-dark .payment,.tvx-dark .preview,.tvx-dark .section-card,.tvx-dark .dropdown,.tvx-dark .menu,.tvx-dark .popover{background:#111827!important;color:#f8fafc!important;border:1px solid #253149!important;box-shadow:var(--filora-shadow)!important;border-radius:var(--filora-radius)!important}
-.tvx-dark header,.tvx-dark .top,.tvx-dark .topbar,.tvx-dark .header,.tvx-dark .navbar,.tvx-dark .app-header,.tvx-dark .sidebar,.tvx-dark .side,.tvx-dark .bottom,.tvx-dark nav{background:#0d1524!important;color:#f8fafc!important;border-color:#253149!important}
+html,body,html.tvx-dark,body.dark,body.tvx-dark{background:var(--filora-bg)!important;color:var(--filora-text)!important;color-scheme:dark!important}
+body{min-height:100vh;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif!important;-webkit-font-smoothing:antialiased}
+/* Global premium surfaces */
+.tvx-dark .card,.tvx-dark .box,.tvx-dark .panel,.tvx-dark .stat,.tvx-dark .task,.tvx-dark .task-card,.tvx-dark .item,.tvx-dark .list,.tvx-dark .row,.tvx-dark .profile,.tvx-dark .profile-card,.tvx-dark .service,.tvx-dark .plan,.tvx-dark .history-card,.tvx-dark .history-item,.tvx-dark .status-card,.tvx-dark .verification-card,.tvx-dark .payment-box,.tvx-dark .deposit-box,.tvx-dark .wallet-box,.tvx-dark .dashboard-card,.tvx-dark .form-card,.tvx-dark .request,.tvx-dark .table-wrap,.tvx-dark .modal,.tvx-dark .data-card,.tvx-dark .withdrawal-card,.tvx-dark .submission-card,.tvx-dark .admin-card,.tvx-dark .inner-card,.tvx-dark .cost,.tvx-dark .payment,.tvx-dark .preview,.tvx-dark .section-card,.tvx-dark .dropdown,.tvx-dark .menu,.tvx-dark .popover{background:linear-gradient(180deg,#121b2d,#0f1728)!important;color:var(--filora-text)!important;border:1px solid var(--filora-border)!important;box-shadow:var(--filora-shadow)!important;border-radius:var(--filora-radius)!important}
+.tvx-dark header,.tvx-dark .top,.tvx-dark .topbar,.tvx-dark .header,.tvx-dark .navbar,.tvx-dark .app-header,.tvx-dark .sidebar,.tvx-dark .side{background:rgba(9,15,28,.96)!important;color:var(--filora-text)!important;border-color:var(--filora-border)!important}
 .tvx-dark h1,.tvx-dark h2,.tvx-dark h3,.tvx-dark h4,.tvx-dark h5,.tvx-dark h6,.tvx-dark strong,.tvx-dark b,.tvx-dark .stat-value,.tvx-dark .balance,.tvx-dark .amount,.tvx-dark .title{color:#f8fafc!important}
 .tvx-dark p,.tvx-dark .muted,.tvx-dark .small,.tvx-dark .loading,.tvx-dark .empty,.tvx-dark .desc,.tvx-dark .subtitle,.tvx-dark .section,.tvx-dark .task-description,.tvx-dark .meta,.tvx-dark .hero p,.tvx-dark .head p,.tvx-dark .profile-card p,.tvx-dark .stat-label,.tvx-dark .username,.tvx-dark label{color:#9aa8bc!important}
-.tvx-dark input,.tvx-dark textarea,.tvx-dark select,.tvx-dark .input{background:#0b1220!important;color:#f8fafc!important;border:1px solid #2d3a52!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.02)!important}
+.tvx-dark input,.tvx-dark textarea,.tvx-dark select,.tvx-dark .input{background:#0b1220!important;color:#f8fafc!important;border:1px solid #2d3a52!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;border-radius:12px!important}
 .tvx-dark input::placeholder,.tvx-dark textarea::placeholder{color:#66758d!important}
+.tvx-dark a,.tvx-dark .back{color:#a98cff!important}
+/* Navigation links */
 .tvx-dark .nav,.tvx-dark .nav-link,.tvx-dark .nav a{color:#b7c2d3!important;background:transparent!important}
 .tvx-dark .nav:hover,.tvx-dark .nav.active,.tvx-dark .nav-link:hover,.tvx-dark .nav-link.active,.tvx-dark .nav a:hover,.tvx-dark .nav a.active{background:#211b3f!important;color:#fff!important;border-radius:12px!important}
 .tvx-dark .nav-title,.tvx-dark .section-title{color:#71809a!important}
-.tvx-dark a,.tvx-dark .back{color:#a78bfa!important}
-/* Shared controls */
-button,.btn,.button{font-family:inherit!important;border-radius:11px!important;cursor:pointer!important;touch-action:manipulation!important;transition:transform .16s ease,filter .16s ease,box-shadow .16s ease!important}
-button:hover,.btn:hover,.button:hover{filter:brightness(1.08)!important}
+/* Premium controls */
+button,.btn,.button{font-family:inherit!important;border-radius:12px!important;cursor:pointer!important;touch-action:manipulation!important;transition:transform .16s ease,filter .16s ease,box-shadow .16s ease!important}
+button:hover,.btn:hover,.button:hover{filter:brightness(1.07)!important}
 button:active,.btn:active,.button:active{transform:translateY(1px)!important}
-.btn,.button,.btn.primary,.button.primary{background:linear-gradient(135deg,#6d5dfc,#9b6cff)!important;color:#fff!important;border:0!important;box-shadow:0 8px 22px rgba(124,92,255,.24)!important}
+.btn,.button,.btn.primary,.button.primary{background:linear-gradient(135deg,#6947ff,#9b61ff)!important;color:#fff!important;border:0!important;box-shadow:0 9px 24px rgba(112,72,255,.25)!important}
 .btn *,.button *{color:inherit!important}
 .tvx-dark .btn.secondary,.tvx-dark .button.secondary,.tvx-dark .secondary{background:#151e30!important;color:#e5e7eb!important;border:1px solid #344158!important;box-shadow:none!important}
 .btn:disabled,.button:disabled{opacity:.55!important}
 .success,.live,.approved,.status-active{color:#4ade80!important}.error,.danger,.rejected{color:#f87171!important}.pending,.status-paused,.warning{color:#fbbf24!important}
 .badge.live,.approved,.status-active{background:#123323!important}.pending,.status.pending,.status-paused{background:#352b12!important}.rejected,.status-closed{background:#35191d!important}
-.balance,.wallet{background:linear-gradient(135deg,#6d5dfc,#9b6cff)!important;color:#fff!important;border:0!important;box-shadow:0 14px 30px rgba(109,93,252,.22)!important}.balance *,.wallet *{color:#fff!important}
-.tvx-dark .main,.tvx-dark .content,.tvx-dark .wrap{background:#080d18!important;color:#f8fafc!important}
-.tvx-dark .mobile-menu,.tvx-dark .mobile{background:#111827!important;color:#f8fafc!important;border:1px solid #344158!important}
-/* Kill legacy light-mode surfaces even if an old class remains in markup. */
-html.tvx-light,body.light,.tvx-light .main,.tvx-light .content,.tvx-light .wrap,.tvx-light .card,.tvx-light .box,.tvx-light .panel{background:#080d18!important;color:#f8fafc!important;color-scheme:dark}
-html.tvx-light *{color-scheme:dark}
-@media(max-width:800px){.tvx-dark .sidebar,.tvx-dark .side{z-index:100}.tvx-dark .content,.tvx-dark .wrap{padding-bottom:86px!important}}
+.balance,.wallet{background:linear-gradient(135deg,#6947ff,#9b61ff)!important;color:#fff!important;border:0!important;box-shadow:0 14px 32px rgba(105,71,255,.23)!important}.balance *,.wallet *{color:#fff!important}
+.tvx-dark .main,.tvx-dark .content,.tvx-dark .wrap{background:var(--filora-bg)!important;color:#f8fafc!important}
+.tvx-dark .mobile-menu,.tvx-dark .mobile{background:#111827!important;color:#f8fafc!important;border:1px solid #344158!important;border-radius:16px!important}
+/* Filora-style mobile bottom navigation */
+.tvx-dark .bottom{position:fixed!important;left:0!important;right:0!important;bottom:0!important;height:72px!important;padding:0 max(12px,env(safe-area-inset-left)) max(4px,env(safe-area-inset-bottom)) max(12px,env(safe-area-inset-right))!important;background:rgba(10,16,30,.97)!important;border-top:1px solid #26344d!important;box-shadow:0 -12px 34px rgba(0,0,0,.28)!important;backdrop-filter:blur(18px)!important;-webkit-backdrop-filter:blur(18px)!important;display:flex!important;align-items:center!important;justify-content:space-around!important;gap:0!important;z-index:1000!important}
+.tvx-dark .bottom a,.tvx-dark .bottom button{position:relative!important;flex:1 1 0!important;min-width:0!important;height:64px!important;margin:0!important;padding:7px 2px 5px!important;background:transparent!important;border:0!important;border-radius:14px!important;color:#7f8da5!important;text-decoration:none!important;text-align:center!important;font-size:10px!important;font-weight:600!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:2px!important;box-shadow:none!important}
+.tvx-dark .bottom a.active,.tvx-dark .bottom button.active{color:#9a73ff!important}
+.tvx-dark .bottom a.active:before,.tvx-dark .bottom button.active:before{content:""!important;position:absolute!important;top:3px!important;width:28px!important;height:3px!important;border-radius:99px!important;background:linear-gradient(90deg,#7048ff,#9b61ff)!important;box-shadow:0 0 12px rgba(112,72,255,.65)!important}
+.tvx-dark .bottom a b,.tvx-dark .bottom button i,.tvx-dark .bottom button b{display:block!important;margin:0 0 2px!important;font-size:23px!important;line-height:23px!important;font-weight:500!important;font-style:normal!important;color:inherit!important}
+.tvx-dark .bottom .plus{flex:0 0 58px!important;width:58px!important;height:58px!important;min-width:58px!important;margin:-22px 7px 0!important;padding:0!important;border:4px solid #080d18!important;border-radius:50%!important;background:linear-gradient(145deg,#5d35ed,#8c45ff)!important;color:#fff!important;box-shadow:0 7px 22px rgba(90,48,236,.48),0 0 0 1px rgba(255,255,255,.08) inset!important;font-size:27px!important;display:grid!important;place-items:center!important}
+.tvx-dark .bottom .plus:before{display:none!important}
+.tvx-dark .bottom .plus b{font-size:0!important}.tvx-dark .bottom .plus b:after{content:"+"!important;font-size:30px!important;line-height:1!important;color:#fff!important}
+@media(max-width:430px){.tvx-dark .bottom{height:70px!important}.tvx-dark .bottom a,.tvx-dark .bottom button{height:62px!important;font-size:9px!important}.tvx-dark .bottom .plus{width:56px!important;height:56px!important;min-width:56px!important;margin-top:-20px!important}.tvx-dark .bottom a b,.tvx-dark .bottom button i,.tvx-dark .bottom button b{font-size:21px!important}}
+/* Remove old light appearance even when legacy classes remain */
+html.tvx-light,body.light,.tvx-light .main,.tvx-light .content,.tvx-light .wrap,.tvx-light .card,.tvx-light .box,.tvx-light .panel{background:var(--filora-bg)!important;color:#f8fafc!important;color-scheme:dark!important}
+html.tvx-light *{color-scheme:dark!important}
+@media(max-width:800px){.tvx-dark .sidebar,.tvx-dark .side{z-index:100}.tvx-dark .content,.tvx-dark .wrap{padding-bottom:92px!important}}

@@ -15,13 +15,13 @@ function ensureFilora(){
  if(!l){l=document.createElement('link');l.id='filora-theme-css';l.rel='stylesheet';l.href='/filora-theme.css?v=5';(document.head||document.documentElement).appendChild(l)}else l.href='/filora-theme.css?v=5';
 }
 function ensurePromoterAccountTheme(){
- if(!/promoter-(dashboard|settings|submissions|wallet)\\.html$/i.test(location.pathname)) return;
+ if(!/promoter-(dashboard|settings|submissions|wallet)\.html$/i.test(location.pathname)) return;
  var old=document.getElementById('promoter-account-theme-css');
  if(old)old.remove();
- var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=5';(document.head||document.documentElement).appendChild(l);
+ var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=6';(document.head||document.documentElement).appendChild(l);
 }
 function addPromoterReviewShortcut(){
- if(!/promoter-dashboard\\.html$/i.test(location.pathname))return;
+ if(!/promoter-dashboard\.html$/i.test(location.pathname))return;
  var sidebar=document.getElementById('sidebar');
  if(!sidebar)return;
  if(!document.getElementById('tvxPromoterReviewSection')){
@@ -34,7 +34,7 @@ function addPromoterReviewShortcut(){
  if(settings)settings.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();location.href='promoter-settings.html';},true);
 }
 function setupPromoterMobileNav(){
- if(!/promoter-dashboard\\.html$/i.test(location.pathname))return;
+ if(!/promoter-dashboard\.html$/i.test(location.pathname))return;
  var bottom=document.querySelector('.bottom');
  if(!bottom)return;
  var buttons=bottom.querySelectorAll('button');

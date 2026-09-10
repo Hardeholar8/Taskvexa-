@@ -17,7 +17,7 @@ function ensurePromoterAccountTheme(){
  if(!/promoter-(dashboard|settings|submissions|wallet)\.html$/i.test(location.pathname))return;
  var old=document.getElementById('promoter-account-theme-css');
  if(old)old.remove();
- var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=7';(document.head||document.documentElement).appendChild(l);
+ var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=8';(document.head||document.documentElement).appendChild(l);
 }
 function addPromoterReviewShortcut(){
  if(!/promoter-dashboard\.html$/i.test(location.pathname))return;
@@ -42,7 +42,6 @@ function rebuildPromoterDashboard(){
  var wallet=right.querySelector('.wallet');
  var campaign=left.children[0],recent=left.children[1],guide=right.querySelector('.card:not(.wallet)');
  if(wallet){wallet.classList.add('promoter-redesign-wallet');home.insertBefore(wallet,stats)}
- /* Replace the old two-column dashboard with a clean content stack while preserving every existing element/id. */
  var newLayout=document.createElement('div');newLayout.className='layout promoter-redesign-grid';
  var mainCol=document.createElement('div'),sideCol=document.createElement('div');
  if(campaign)mainCol.appendChild(campaign);
@@ -51,6 +50,17 @@ function rebuildPromoterDashboard(){
  newLayout.appendChild(mainCol);newLayout.appendChild(sideCol);
  layout.replaceWith(newLayout);
  home.dataset.tvxRebuilt='1';
+}
+function replaceManualPaymentDetails(){
+ if(!/promoter-dashboard\.html$/i.test(location.pathname))return;
+ var page=document.getElementById('page-wallet');
+ if(!page||page.dataset.tvxAutomaticDeposit==='1')return;
+ var old=page.querySelector('#paymentDetails');
+ if(!old)return;
+ var card=old.closest('.card');
+ if(!card)return;
+ card.innerHTML='<div class="head"><div class="head-icon">⚡</div><div><h3>Automatic Deposit</h3><p>Fund your promoter wallet instantly</p></div></div><p class="muted" style="font-size:13px;line-height:1.8">Choose the amount you want to add and continue to the secure payment checkout. Your payment is verified automatically and your wallet is updated after confirmation.</p><a class="btn" href="promoter-wallet.html" style="display:inline-block;text-decoration:none">＋ Deposit Automatically</a>';
+ page.dataset.tvxAutomaticDeposit='1';
 }
 function setupPromoterMobileNav(){
  if(!/promoter-dashboard\.html$/i.test(location.pathname))return;
@@ -73,6 +83,7 @@ function setup(){
  apply();ensureFilora();ensurePromoterAccountTheme();
  addPromoterReviewShortcut();
  rebuildPromoterDashboard();
+ replaceManualPaymentDetails();
  setupPromoterMobileNav();
 }
 try{localStorage.setItem(KEY,'dark')}catch(e){}

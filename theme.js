@@ -14,6 +14,11 @@ function ensureFilora(){
  var l=document.getElementById('filora-theme-css');
  if(!l){l=document.createElement('link');l.id='filora-theme-css';l.rel='stylesheet';l.href='/filora-theme.css?v=4';(document.head||document.documentElement).appendChild(l)}else{l.href='/filora-theme.css?v=4'}
 }
+function ensurePromoterAccountTheme(){
+ if(!/promoter-(dashboard|settings|submissions|wallet)\.html$/i.test(location.pathname)) return;
+ if(document.getElementById('promoter-account-theme-css')) return;
+ var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=1';(document.head||document.documentElement).appendChild(l);
+}
 function addPromoterReviewShortcut(){
  if(!/promoter-dashboard\.html$/i.test(location.pathname)) return;
  var sidebar=document.getElementById('sidebar');
@@ -25,11 +30,7 @@ function addPromoterReviewShortcut(){
   if(logout){sidebar.insertBefore(section,logout);sidebar.insertBefore(link,logout)}else{sidebar.appendChild(section);sidebar.appendChild(link)}
  }
  var settings=sidebar.querySelector('[data-page="settings"]');
- if(settings){
-  settings.addEventListener('click',function(e){
-   e.preventDefault();e.stopImmediatePropagation();location.href='promoter-settings.html';
-  },true);
- }
+ if(settings){settings.addEventListener('click',function(e){e.preventDefault();e.stopImmediatePropagation();location.href='promoter-settings.html';},true)}
 }
 function promoteMobileShortcut(){
  if(!/promoter-dashboard\.html$/i.test(location.pathname)) return;
@@ -37,7 +38,7 @@ function promoteMobileShortcut(){
  if(!bottom||document.getElementById('tvxBottomReview')) return;
  var b=document.createElement('button');b.id='tvxBottomReview';b.innerHTML='<i>✓</i>Review';b.onclick=function(){location.href='promoter-submissions.html'};bottom.appendChild(b);
 }
-function setup(){ensureFilora();apply();addPromoterReviewShortcut();promoteMobileShortcut();}
+function setup(){ensureFilora();apply();ensurePromoterAccountTheme();addPromoterReviewShortcut();promoteMobileShortcut();}
 try{localStorage.setItem(KEY,'dark')}catch(e){}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
 })();

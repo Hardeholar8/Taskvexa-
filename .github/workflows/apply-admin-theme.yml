@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Apply shared premium light theme to every admin page
+      - name: Apply shared premium dark theme to every admin page
         shell: bash
         run: |
           set -e
@@ -40,7 +40,7 @@ PY
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
             git add admin.html admin-worker-activations.html admin-data-history.html admin-data-plans.html admin-promo-flyers.html admin-promoter-wallet.html admin-submissions.html admin-tasks.html admin-withdrawals.html promoters.html worker.html settings.html
-            git diff --cached --quiet || git commit -m 'Apply premium light theme across all admin pages'
+            git diff --cached --quiet || git commit -m 'Apply premium dark theme across all admin pages'
             git push
           fi
       - name: Attach promoter task type selector

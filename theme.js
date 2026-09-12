@@ -12,13 +12,13 @@ function apply(){
 }
 function ensureFilora(){
  var l=document.getElementById('filora-theme-css');
- if(!l){l=document.createElement('link');l.id='filora-theme-css';l.rel='stylesheet';l.href='/filora-theme.css?v=6';(document.head||document.documentElement).appendChild(l)}else l.href='/filora-theme.css?v=6';
+ if(!l){l=document.createElement('link');l.id='filora-theme-css';l.rel='stylesheet';l.href='/filora-theme.css?v=7';(document.head||document.documentElement).appendChild(l)}else l.href='/filora-theme.css?v=7';
 }
 function ensurePromoterAccountTheme(){
  if(!/promoter-(dashboard|settings|submissions|wallet)\.html$/i.test(location.pathname))return;
  var old=document.getElementById('promoter-account-theme-css');
  if(old)old.remove();
- var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=8';(document.head||document.documentElement).appendChild(l);
+ var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=9';(document.head||document.documentElement).appendChild(l);
 }
 function addPromoterReviewShortcut(){
  if(!/promoter-dashboard\.html$/i.test(location.pathname))return;
@@ -91,6 +91,34 @@ function setupWorkerMobileNav(){
  var moreActive=['more.html','profile.html','plan.html','security.html','activation.html','support.html','terms.html','privacy.html'].includes(p);
  bottom.innerHTML='<a class="'+(homeActive?'active':'')+'" href="dashboard.html"><b>⌂</b>Home</a><a class="'+(walletActive?'active':'')+'" href="wallet.html"><b>◉</b>Wallet</a><a class="plus" href="tasks.html" aria-label="Tasks"><b>✓</b></a><a class="'+(referralActive?'active':'')+'" href="referrals.html"><b>👥</b>Referral</a><a class="'+(moreActive?'active':'')+'" href="more.html"><b>☰</b>More</a>';
 }
+function setupRoleProtection(){
+ var path=(location.pathname||'').split('/').pop().toLowerCase();
+ var workerOnly=['plan.html','security.html','activation.html','worker-activation.html','activation-callback.html','worker-tasks.html'];
+ var promoterOnly=['promoter-dashboard.html','promoter-wallet.html','promoter-submissions.html','promoter-settings.html'];
+ if(workerOnly.indexOf(path)<0&&promoterOnly.indexOf(path)<0)return;
+ var tries=0;
+ function check(){
+  tries++;
+  try{
+   var client=window.supabaseClient;
+   if(!client||!client.auth){if(tries<120)setTimeout(check,50);return;}
+   client.auth.getUser().then(function(r){
+    if(r.error||!r.data||!r.data.user){location.replace('login.html');return;}
+    var uid=r.data.user.id;
+    client.from('profiles').select('role').eq('id',uid).maybeSingle().then(function(p){
+     var role=String(p.data&&p.data.role||'worker').toLowerCase();
+     if(workerOnly.indexOf(path)>=0&&role!=='worker'){
+      location.replace('promoter-dashboard.html');return;
+     }
+     if(promoterOnly.indexOf(path)>=0&&role!=='promoter'){
+      location.replace('dashboard.html');return;
+     }
+    });
+   });
+  }catch(e){if(tries<120)setTimeout(check,50)}
+ }
+ check();
+}
 function setup(){
  apply();ensureFilora();ensurePromoterAccountTheme();
  addPromoterReviewShortcut();
@@ -98,6 +126,7 @@ function setup(){
  replaceManualPaymentDetails();
  setupPromoterMobileNav();
  setupWorkerMobileNav();
+ setupRoleProtection();
 }
 function setupLoginSession(){
  var p=(location.pathname||'/').toLowerCase();

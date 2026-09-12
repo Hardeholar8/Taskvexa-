@@ -63,11 +63,15 @@
     <input
       type="file"
       id="proofFile"
-      accept="image/*"
+      accept="image/jpeg,image/png,image/webp"
       required
     >
 
-    <br><br>
+    <p id="proofInfo" style="font-size:13px;opacity:.75;">
+      Screenshot will be automatically compressed before upload.
+    </p>
+
+    <br>
 
     <button id="submitButton">
       Submit Proof
@@ -101,6 +105,12 @@ const taskDetails =
 
 const submitButton =
   document.getElementById("submitButton");
+
+const proofInfo =
+  document.getElementById("proofInfo");
+
+const MAX_PROOF_SIZE = 500 * 1024;
+const MAX_IMAGE_DIMENSION = 1800;
 
 
 const params =
@@ -175,6 +185,84 @@ async function loadTask() {
 }
 
 
+function loadImage(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const image = new Image();
+
+    image.onload = () => {
+      URL.revokeObjectURL(url);
+      resolve(image);
+    };
+
+    image.onerror = () => {
+      URL.revokeObjectURL(url);
+      reject(new Error("Unable to read the screenshot."));
+    };
+
+    image.src = url;
+  });
+}
+
+
+function canvasBlob(canvas, type, quality) {
+  return new Promise((resolve, reject) => {
+    canvas.toBlob(blob => {
+      if (blob) resolve(blob);
+      else reject(new Error("Unable to compress the screenshot."));
+    }, type, quality);
+  });
+}
+
+
+async function compressProof(file) {
+
+  if (!file.type.startsWith("image/")) {
+    throw new Error("Please upload an image screenshot.");
+  }
+
+  const image = await loadImage(file);
+
+  let width = image.naturalWidth || image.width;
+  let height = image.naturalHeight || image.height;
+
+  const scale = Math.min(
+    1,
+    MAX_IMAGE_DIMENSION / Math.max(width, height)
+  );
+
+  width = Math.max(1, Math.round(width * scale));
+  height = Math.max(1, Math.round(height * scale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const ctx = canvas.getContext("2d");
+  ctx.drawImage(image, 0, 0, width, height);
+
+  const types = ["image/webp", "image/jpeg"];
+  const qualities = [0.82, 0.72, 0.62, 0.52, 0.42, 0.32];
+
+  for (const type of types) {
+    for (const quality of qualities) {
+      const blob = await canvasBlob(canvas, type, quality);
+
+      if (blob.size <= MAX_PROOF_SIZE) {
+        const extension = type === "image/webp" ? "webp" : "jpg";
+        return new File(
+          [blob],
+          `proof-${Date.now()}.${extension}`,
+          { type }
+        );
+      }
+    }
+  }
+
+  throw new Error("This screenshot is too large. Please use a smaller screenshot.");
+}
+
+
 submitButton.addEventListener("click", async () => {
 
   const file =
@@ -189,7 +277,7 @@ submitButton.addEventListener("click", async () => {
   }
 
   submitButton.disabled = true;
-  submitButton.textContent = "Submitting...";
+  submitButton.textContent = "Preparing proof...";
 
   try {
 
@@ -203,13 +291,23 @@ submitButton.addEventListener("click", async () => {
       return;
     }
 
+    const compressedFile = await compressProof(file);
+
+    proofInfo.textContent =
+      `Proof compressed to ${Math.round(compressedFile.size / 1024)} KB.`;
+
+    submitButton.textContent = "Submitting...";
+
     const fileName =
-      `${user.id}/${taskId}-${Date.now()}-${file.name}`;
+      `${user.id}/${taskId}-${Date.now()}-${compressedFile.name}`;
 
     const { error: uploadError } =
       await supabaseClient.storage
         .from("task-proofs")
-        .upload(fileName, file);
+        .upload(fileName, compressedFile, {
+          contentType: compressedFile.type,
+          upsert: false
+        });
 
     if (uploadError) {
       throw uploadError;
@@ -249,14 +347,13 @@ submitButton.addEventListener("click", async () => {
     console.error(error);
 
     message.textContent =
-      "Error: " + error.message;
+      error.message || "Unable to submit proof.";
 
     submitButton.disabled = false;
     submitButton.textContent = "Submit Proof";
   }
 
 });
-
 
 loadTask();
 

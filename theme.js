@@ -1,6 +1,7 @@
 (function(){
 'use strict';
 var KEY='taskvexa-theme';
+var SESSION_KEY='taskvexa-login-session';
 function apply(){
  var root=document.documentElement,body=document.body;
  root.classList.remove('tvx-light');root.classList.add('tvx-dark');
@@ -86,6 +87,31 @@ function setup(){
  replaceManualPaymentDetails();
  setupPromoterMobileNav();
 }
+function setupLoginSession(){
+ var p=(location.pathname||'/').toLowerCase();
+ var publicPage=p==='/'||p===''||/\/(index|login|register|forgot-password|reset-password)\.html$/i.test(p);
+ if(!publicPage && sessionStorage.getItem(SESSION_KEY)!=='1'){
+  location.replace('login.html');
+  return;
+ }
+ var tries=0;
+ function bind(){
+  tries++;
+  try{
+   var client=window.supabaseClient;
+   if(client&&client.auth&&typeof client.auth.onAuthStateChange==='function'){
+    client.auth.onAuthStateChange(function(event){
+     if(event==='SIGNED_IN')sessionStorage.setItem(SESSION_KEY,'1');
+     if(event==='SIGNED_OUT')sessionStorage.removeItem(SESSION_KEY);
+    });
+    return;
+   }
+  }catch(e){}
+  if(tries<100)setTimeout(bind,50);
+ }
+ bind();
+}
 try{localStorage.setItem(KEY,'dark')}catch(e){}
+setupLoginSession();
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup);else setup();
 })();

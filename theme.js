@@ -2,6 +2,18 @@
 'use strict';
 var KEY='taskvexa-theme';
 var SESSION_KEY='taskvexa-login-session';
+var SUPABASE_URL='https://dxtlnrthlpdaobnbazny.supabase.co';
+var SUPABASE_KEY='sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY';
+function getClient(){
+ try{
+  if(window.supabaseClient&&window.supabaseClient.auth)return window.supabaseClient;
+  if(window.supabase&&typeof window.supabase.createClient==='function'){
+   if(!window.__tvxThemeClient)window.__tvxThemeClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+   return window.__tvxThemeClient;
+  }
+ }catch(e){}
+ return null;
+}
 function apply(){
  var root=document.documentElement,body=document.body;
  root.classList.remove('tvx-light');root.classList.add('tvx-dark');
@@ -12,13 +24,13 @@ function apply(){
 }
 function ensureFilora(){
  var l=document.getElementById('filora-theme-css');
- if(!l){l=document.createElement('link');l.id='filora-theme-css';l.rel='stylesheet';l.href='/filora-theme.css?v=7';(document.head||document.documentElement).appendChild(l)}else l.href='/filora-theme.css?v=7';
+ if(!l){l=document.createElement('link');l.id='filora-theme-css';l.rel='stylesheet';l.href='/filora-theme.css?v=8';(document.head||document.documentElement).appendChild(l)}else l.href='/filora-theme.css?v=8';
 }
 function ensurePromoterAccountTheme(){
  if(!/promoter-(dashboard|settings|submissions|wallet)\.html$/i.test(location.pathname))return;
  var old=document.getElementById('promoter-account-theme-css');
  if(old)old.remove();
- var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=9';(document.head||document.documentElement).appendChild(l);
+ var l=document.createElement('link');l.id='promoter-account-theme-css';l.rel='stylesheet';l.href='/promoter-account-theme.css?v=10';(document.head||document.documentElement).appendChild(l);
 }
 function addPromoterReviewShortcut(){
  if(!/promoter-dashboard\.html$/i.test(location.pathname))return;
@@ -100,22 +112,27 @@ function setupRoleProtection(){
  function check(){
   tries++;
   try{
-   var client=window.supabaseClient;
-   if(!client||!client.auth){if(tries<120)setTimeout(check,50);return;}
+   var client=getClient();
+   if(!client){if(tries<160)setTimeout(check,50);return;}
    client.auth.getUser().then(function(r){
     if(r.error||!r.data||!r.data.user){location.replace('login.html');return;}
     var uid=r.data.user.id;
-    client.from('profiles').select('role').eq('id',uid).maybeSingle().then(function(p){
-     var role=String(p.data&&p.data.role||'worker').toLowerCase();
-     if(workerOnly.indexOf(path)>=0&&role!=='worker'){
-      location.replace('promoter-dashboard.html');return;
-     }
-     if(promoterOnly.indexOf(path)>=0&&role!=='promoter'){
-      location.replace('dashboard.html');return;
-     }
-    });
+    return client.from('profiles').select('role').eq('id',uid).maybeSingle();
+   }).then(function(p){
+    if(!p)return;
+    var role=String(p.data&&p.data.role||'').toLowerCase();
+    if(workerOnly.indexOf(path)>=0&&role!=='worker'){
+     location.replace('promoter-dashboard.html');return;
+    }
+    if(promoterOnly.indexOf(path)&&role!=='promoter'){
+     location.replace('dashboard.html');return;
+    }
+   }).catch(function(){
+    /* fail closed for protected account pages */
+    if(workerOnly.indexOf(path)>=0)location.replace('dashboard.html');
+    if(promoterOnly.indexOf(path)>=0)location.replace('login.html');
    });
-  }catch(e){if(tries<120)setTimeout(check,50)}
+  }catch(e){if(tries<160)setTimeout(check,50)}
  }
  check();
 }
@@ -139,7 +156,7 @@ function setupLoginSession(){
  function bind(){
   tries++;
   try{
-   var client=window.supabaseClient;
+   var client=getClient();
    if(client&&client.auth&&typeof client.auth.onAuthStateChange==='function'){
     client.auth.onAuthStateChange(function(event){
      if(event==='SIGNED_IN')sessionStorage.setItem(SESSION_KEY,'1');
@@ -148,7 +165,7 @@ function setupLoginSession(){
     return;
    }
   }catch(e){}
-  if(tries<100)setTimeout(bind,50);
+  if(tries<160)setTimeout(bind,50);
  }
  bind();
 }

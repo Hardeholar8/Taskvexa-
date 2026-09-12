@@ -80,12 +80,24 @@ function setupPromoterMobileNav(){
   buttons[4].dataset.page='profile';buttons[4].innerHTML='<i>☰</i>More';buttons[4].setAttribute('aria-label','More');
  }
 }
+function setupWorkerMobileNav(){
+ if(/^\/promoter-(dashboard|settings|submissions|wallet)\.html$/i.test(location.pathname))return;
+ var bottom=document.querySelector('nav.bottom');
+ if(!bottom)return;
+ var p=(location.pathname||'').split('/').pop().toLowerCase();
+ var homeActive=p==='dashboard.html'||p==='';
+ var walletActive=p==='wallet.html'||p==='withdraw.html'||p==='payout-settings.html';
+ var referralActive=p==='referrals.html';
+ var moreActive=['more.html','profile.html','plan.html','security.html','activation.html','support.html','terms.html','privacy.html'].includes(p);
+ bottom.innerHTML='<a class="'+(homeActive?'active':'')+'" href="dashboard.html"><b>⌂</b>Home</a><a class="'+(walletActive?'active':'')+'" href="wallet.html"><b>◉</b>Wallet</a><a class="plus" href="tasks.html" aria-label="Tasks"><b>✓</b></a><a class="'+(referralActive?'active':'')+'" href="referrals.html"><b>👥</b>Referral</a><a class="'+(moreActive?'active':'')+'" href="more.html"><b>☰</b>More</a>';
+}
 function setup(){
  apply();ensureFilora();ensurePromoterAccountTheme();
  addPromoterReviewShortcut();
  rebuildPromoterDashboard();
  replaceManualPaymentDetails();
  setupPromoterMobileNav();
+ setupWorkerMobileNav();
 }
 function setupLoginSession(){
  var p=(location.pathname||'/').toLowerCase();

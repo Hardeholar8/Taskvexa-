@@ -1,10 +1,8 @@
 {
   "redirects": [
-    {"source":"/r/:code","destination":"/register.html?ref=:code","permanent":false}
-  ],
-  "rewrites": [
-    {"source":"/register","destination":"/register.html"},
-    {"source":"/register/","destination":"/register.html"}
+    {"source":"/r/:code","destination":"/register.html?ref=:code","permanent":false},
+    {"source":"/register","destination":"/register.html","permanent":false},
+    {"source":"/register/","destination":"/register.html","permanent":false}
   ],
   "headers": [
     {"source":"/withdraw.html","headers":[{"key":"Cache-Control","value":"no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0"}]},

@@ -1,6 +1,8 @@
 {
+  "redirects": [
+    {"source":"/r/:code","destination":"/register.html?ref=:code","permanent":false}
+  ],
   "rewrites": [
-    {"source":"/r/:code","destination":"/register.html?ref=:code"},
     {"source":"/register","destination":"/register.html"},
     {"source":"/register/","destination":"/register.html"}
   ],

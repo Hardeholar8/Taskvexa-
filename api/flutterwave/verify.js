@@ -43,7 +43,25 @@ export default async function handler(req, res) {
     if (currency !== 'NGN' || !Number.isFinite(amount) || amount <= 0) return res.status(400).json({ error: 'Invalid payment amount', verified: false });
     if (expected_amount != null && Number(expected_amount) !== amount) return res.status(400).json({ error: 'Payment amount mismatch', verified: false });
 
-    return res.status(200).json({ verified: true, user_id: userId, purpose: transactionPurpose, amount, transaction_id: data.id, tx_ref: verifiedRef });
+    let walletFunded = false;
+    if (transactionPurpose === 'promoter_wallet_funding') {
+      const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
+      const supabaseUrl = process.env.SUPABASE_URL || 'https://dxtlnrthlpdaobnbazny.supabase.co';
+      if (!serviceKey) return res.status(500).json({ error: 'Promoter payment settlement is not configured', verified: false });
+      const settle = await fetch(`${supabaseUrl}/rest/v1/rpc/record_promoter_funding_for_user`, {
+        method: 'POST',
+        headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p_user_id: userId, p_amount: amount, p_reference: verifiedRef })
+      });
+      const settled = await settle.json().catch(() => false);
+      if (!settle.ok || settled !== true) {
+        console.error('Promoter funding settlement failed:', settle.status, settled);
+        return res.status(502).json({ error: 'Payment verified but wallet settlement failed. Please contact support.', verified: false });
+      }
+      walletFunded = true;
+    }
+
+    return res.status(200).json({ verified: true, wallet_funded: walletFunded, user_id: userId, purpose: transactionPurpose, amount, transaction_id: data.id, tx_ref: verifiedRef });
   } catch (error) {
     console.error('Flutterwave verification error', error);
     return res.status(500).json({ error: 'Unable to verify payment', verified: false });

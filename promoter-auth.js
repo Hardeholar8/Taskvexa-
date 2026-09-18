@@ -1,3 +1,4 @@
+// TaskVexa Promoter authentication — cache version 20260918b.
 // TaskVexa Promoter authentication — isolated from Worker auth.
 (function(){
   const SUPABASE_URL='https://dxtlnrthlpdaobnbazny.supabase.co';

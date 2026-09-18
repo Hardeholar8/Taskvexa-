@@ -25,7 +25,7 @@ export default async function handler(req, res) {
     let transactionPurpose = meta.purpose || null;
 
     const activationMatch = verifiedRef.match(/^TVX-ACT-([0-9a-fA-F-]{20,})-(\d+)$/);
-    const walletMatch = verifiedRef.match(/^TVX-WALLET-([0-9a-fA-F-]{20,})-(\d+)$/);
+    const walletMatch = verifiedRef.match(/^TVX-WALLET-([0-9a-fA-F-]{20,})-(\d+)$/);\n    const depositMatch = verifiedRef.match(/^TVX-DEPOSIT-([0-9a-fA-F-]{20,})-(\d+)$/);
     if (activationMatch) {
       userId = userId || activationMatch[1];
       transactionPurpose = transactionPurpose || 'worker_activation';
@@ -116,7 +116,7 @@ export default async function handler(req, res) {
       }
       membershipActivated = true;
     }
-    if (transactionPurpose === 'promoter_wallet_funding') {
+    if (transactionPurpose === 'worker_wallet_funding') {\n      const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;\n      const supabaseUrl = process.env.SUPABASE_URL || 'https://dxtlnrthlpdaobnbazny.supabase.co';\n      if (!serviceKey) return res.status(500).json({ error: 'Worker wallet settlement is not configured', verified: false });\n      const settle = await fetch(`${supabaseUrl}/rest/v1/rpc/record_worker_deposit_for_user`, {\n        method: 'POST',\n        headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}`, 'Content-Type': 'application/json' },\n        body: JSON.stringify({ p_user_id: userId, p_amount: amount, p_reference: verifiedRef })\n      });\n      const settled = await settle.json().catch(() => false);\n      if (!settle.ok || settled !== true) {\n        console.error('Worker wallet settlement failed:', settle.status, settled);\n        return res.status(502).json({ error: 'Payment verified but wallet deposit failed. Please contact support.', verified: false });\n      }\n      walletFunded = true;\n    }\n    if (transactionPurpose === 'promoter_wallet_funding') {
       const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SERVICE_KEY;
       const supabaseUrl = process.env.SUPABASE_URL || 'https://dxtlnrthlpdaobnbazny.supabase.co';
       if (!serviceKey) return res.status(500).json({ error: 'Promoter payment settlement is not configured', verified: false });

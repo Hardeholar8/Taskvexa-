@@ -1,4 +1,5 @@
 {
+  "ignoreCommand": "if [[ \"$VERCEL_GIT_COMMIT_MESSAGE\" == *\"[skip ci]\"* ]]; then echo 'TaskVexa batch commit: skipping deployment'; exit 0; else exit 1; fi",
   "redirects": [
     {"source":"/r/:code","destination":"/register.html?ref=:code","permanent":false},
     {"source":"/register","destination":"/register.html","permanent":false},

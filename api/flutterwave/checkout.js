@@ -3,7 +3,7 @@ export default async function handler(req, res) {
   try {
     const { email, user_id, amount, purpose = 'promoter_wallet_funding', title = 'TaskVexa Wallet Funding', description = 'Promoter wallet funding' } = req.body || {};
     const numericAmount = Math.round(Number(amount));
-    const allowedPurpose = purpose === 'promoter_wallet_funding' || purpose === 'worker_activation';
+    const allowedPurpose = purpose === 'promoter_wallet_funding' || purpose === 'worker_activation' || purpose === 'worker_wallet_funding';
 
     if (!email || !user_id || !Number.isFinite(numericAmount) || numericAmount <= 0 || !allowedPurpose) {
       return res.status(400).json({ error: 'Enter a valid deposit amount.' });
@@ -18,9 +18,9 @@ export default async function handler(req, res) {
     }
 
     const base = (process.env.NEXT_PUBLIC_SITE_URL || `https://${req.headers.host || 'taskvexa-delta.vercel.app'}`).replace(/\/$/, '');
-    const prefix = purpose === 'promoter_wallet_funding' ? 'TVX-WALLET' : 'TVX-ACT';
+    const prefix = purpose === 'promoter_wallet_funding' ? 'TVX-WALLET' : purpose === 'worker_wallet_funding' ? 'TVX-DEPOSIT' : 'TVX-ACT';
     const txRef = `${prefix}-${user_id}-${Date.now()}`;
-    const callback = purpose === 'promoter_wallet_funding' ? 'promoter-payment-callback.html' : 'activation-callback.html';
+    const callback = purpose === 'promoter_wallet_funding' ? 'promoter-payment-callback.html' : purpose === 'worker_wallet_funding' ? 'deposit-callback.html' : 'activation-callback.html';
 
     const response = await fetch('https://api.flutterwave.com/v3/payments', {
       method: 'POST',

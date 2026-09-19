@@ -5,17 +5,17 @@ async function getSession(){for(let i=0;i<40;i++){const r=await sb.auth.getSessi
 function money(v){return Number(v||0).toLocaleString('en-NG',{maximumFractionDigits:2})}
 function statusLabel(s){return s==='selected'?'Selected':s==='completed'?'Completed':s==='rejected'?'Not selected':s==='withdrawn'?'Withdrawn':'Application pending'}
 async function load(){
- const session=await getSession(); if(!session?.user){location.href='login.html';return}
- const r=await sb.from('opportunities').select('id,title,description,category,reward,slots,application_deadline,created_at').eq('status','active').order('created_at',{ascending:false});
+ const userRes=await sb.auth.getUser(); if(userRes.error)throw userRes.error; const user=userRes.data?.user; if(!user){location.href='login.html';return}
+ const r=await sb.from('opportunities').select('id,title,description,category,reward,slots,application_deadline,created_at,status').eq('status','active');
  if(r.error)throw r.error;
- const rows=(r.data||[]).filter(x=>!x.application_deadline||new Date(x.application_deadline)>new Date());
+ const rows=(r.data||[]).filter(x=>x.status==='active'&&(!x.application_deadline||new Date(x.application_deadline)>new Date()));
  if(!rows.length){grid.innerHTML='<div class="intro">No open opportunities right now. New opportunities will appear here when they become available.</div>';return}
  const ids=rows.map(x=>x.id);
  const ar=await sb.from('opportunity_applications').select('opportunity_id,status,worker_id').in('opportunity_id',ids);
  if(ar.error)throw ar.error;
  const apps=ar.data||[],mine=new Map(),counts=new Map();
  apps.forEach(a=>{
-   if(a.worker_id===session.user.id) mine.set(a.opportunity_id,a.status);
+   if(a.worker_id===user.id) mine.set(a.opportunity_id,a.status);
    if(['pending','selected','completed'].includes(a.status)) counts.set(a.opportunity_id,(counts.get(a.opportunity_id)||0)+1);
  });
  const open=rows.filter(x=>(counts.get(x.id)||0)<Number(x.slots||0));
@@ -24,7 +24,7 @@ async function load(){
    const st=mine.get(x.id),filled=counts.get(x.id)||0,deadline=x.application_deadline?new Date(x.application_deadline).toLocaleString('en-NG',{dateStyle:'medium',timeStyle:'short'}):'No deadline';
    return '<article class="card"><div class="title">'+esc(x.title)+'</div><div class="cat">'+esc(x.category||'General')+'</div><p class="desc">'+esc(x.description||'No description provided.')+'</p><div class="meta"><span>Reward: '+money(x.reward)+' credits</span><span>'+Math.max(Number(x.slots)-filled,0)+' slot(s) left</span></div><div class="meta"><span>Deadline</span><span>'+esc(deadline)+'</span></div><button class="btn" data-id="'+x.id+'" '+(st?'disabled':'')+'>'+ (st?esc(statusLabel(st)):'Apply now')+'</button></article>'
  }).join('');
- document.querySelectorAll('.btn').forEach(b=>b.onclick=()=>apply(b,session.user.id));
+ document.querySelectorAll('.btn').forEach(b=>b.onclick=()=>apply(b,user.id));
 }
 async function apply(b,user){
  const message=prompt('Tell the promoter briefly why you are suitable for this opportunity:');

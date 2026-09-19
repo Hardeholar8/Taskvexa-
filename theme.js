@@ -1,8 +1,6 @@
 (function(){
 'use strict';
-var KEY='taskvexa-theme',SESSION_KEY='taskvexa-login-session';
-var SUPABASE_URL='https://dxtlnrthlpdaobnbazny.supabase.co';
-var SUPABASE_KEY='sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY';
+var KEY='taskvexa-theme';
 window.$=window.$||function(id){return document.getElementById(id)};
 function isPromoterPage(){return /^promoter-.*\.html$/i.test((location.pathname||'').split('/').pop()||'')}
 function getClient(){try{if(window.supabaseClient&&window.supabaseClient.auth)return window.supabaseClient;if(window.supabase&&typeof window.supabase.createClient==='function'){if(!window.__tvxThemeClient)window.__tvxThemeClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,storageKey:'taskvexa-worker-auth'}});return window.__tvxThemeClient}}catch(e){}return null}

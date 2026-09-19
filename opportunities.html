@@ -5,9 +5,9 @@ async function getSession(){for(let i=0;i<40;i++){const r=await sb.auth.getSessi
 function money(v){return Number(v||0).toLocaleString('en-NG',{maximumFractionDigits:2})}
 function statusLabel(s){return s==='selected'?'Selected':s==='completed'?'Completed':s==='rejected'?'Not selected':s==='withdrawn'?'Withdrawn':'Application pending'}
 async function load(){
- const userRes=await sb.auth.getUser(); if(userRes.error)throw userRes.error; const user=userRes.data?.user; if(!user){location.href='login.html';return}
+ const userRes=await sb.auth.getUser(); if(userRes.error){grid.innerHTML='<div class="intro">Unable to check login: '+esc(userRes.error.message||'Authentication error')+'</div>';return} const user=userRes.data?.user; if(!user){location.href='login.html';return}
  const r=await sb.from('opportunities').select('id,title,description,category,reward,slots,application_deadline,created_at,status').eq('status','active');
- if(r.error)throw r.error;
+ if(r.error){grid.innerHTML='<div class="intro">Unable to load opportunities: '+esc(r.error.message||r.error.code||'Database error')+'</div>';return;}
  const rows=(r.data||[]).filter(x=>x.status==='active'&&(!x.application_deadline||new Date(x.application_deadline)>new Date()));
  if(!rows.length){grid.innerHTML='<div class="intro">No open opportunities right now. New opportunities will appear here when they become available.</div>';return}
  const ids=rows.map(x=>x.id);
@@ -40,5 +40,5 @@ async function apply(b,user){
  }
  msg.textContent='Application submitted successfully ✓';msg.style.color='#86efac';await load();
 }
-load().catch(e=>{console.error('Opportunities load error:',e);grid.innerHTML='<div class="intro">Unable to load opportunities. Please refresh.</div>'});
+load().catch(e=>{console.error('Opportunities load error:',e);grid.innerHTML='<div class="intro">Opportunities error: '+esc(e?.message||String(e)||'Unknown error')+'</div>'});
 </script></body></html>

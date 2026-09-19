@@ -21,7 +21,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 'use strict';
-const sb=window.supabase.createClient('https://dxtlnrthlpdaobnbazny.supabase.co','sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY'),{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'taskvexa-worker-auth'}};
+const sb=window.supabase.createClient('https://dxtlnrthlpdaobnbazny.supabase.co','sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY',{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'taskvexa-worker-auth'}});
 const money=v=>'₦'+Number(v||0).toLocaleString('en-NG',{minimumFractionDigits:2,maximumFractionDigits:2});
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
 const state=document.getElementById('state');

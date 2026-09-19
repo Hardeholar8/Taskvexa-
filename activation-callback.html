@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TaskVexa - Payment Verification</title><link rel="stylesheet" href="/filora-theme.css?v=1"><script src="/theme.js?v=9"></script></head><body><main style="max-width:680px;margin:60px auto;padding:20px;text-align:center"><h1 id="title">Verifying payment…</h1><p id="msg">Please wait while we confirm your payment.</p><a id="back" href="dashboard.html" style="display:none">Return to Dashboard</a></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-const sb=window.supabase.createClient('https://dxtlnrthlpdaobnbazny.supabase.co','sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY');
+const sb=window.supabase.createClient('https://dxtlnrthlpdaobnbazny.supabase.co','sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY'),{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'taskvexa-worker-auth'}};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 (async()=>{try{
   const p=new URLSearchParams(location.search);

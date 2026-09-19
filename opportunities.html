@@ -2,20 +2,42 @@
 const sb=window.supabaseClient||window.supabase.createClient('https://dxtlnrthlpdaobnbazny.supabase.co','sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY'),grid=document.getElementById('grid'),msg=document.getElementById('msg'),esc=v=>String(v??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 async function getSession(){for(let i=0;i<40;i++){const r=await sb.auth.getSession();if(r.error)throw r.error;if(r.data?.session)return r.data.session;await sleep(150)}return null}
+function money(v){return Number(v||0).toLocaleString('en-NG',{maximumFractionDigits:2})}
+function statusLabel(s){return s==='selected'?'Selected':s==='completed'?'Completed':s==='rejected'?'Not selected':s==='withdrawn'?'Withdrawn':'Application pending'}
 async function load(){
  const session=await getSession(); if(!session?.user){location.href='login.html';return}
- const mem=await sb.rpc('worker_has_feature',{p_feature:'opportunities'});
- if(mem.error)throw mem.error;
- if(mem.data!==true){grid.innerHTML='<div class="intro">An active TaskVexa membership is required to access Opportunities.</div>';return}
- const r=await sb.from('opportunities').select('id,title,description,category,reward,slots,application_deadline').eq('status','active').or('application_deadline.is.null,application_deadline.gt.'+new Date().toISOString()).order('created_at',{ascending:false});
+ const now=new Date().toISOString();
+ const r=await sb.from('opportunities').select('id,title,description,category,reward,slots,application_deadline,created_at').eq('status','active').or('application_deadline.is.null,application_deadline.gt.'+now).order('created_at',{ascending:false});
  if(r.error)throw r.error;
- if(!r.data?.length){grid.innerHTML='<div class="intro">No open opportunities right now.</div>';return}
- const ids=r.data.map(x=>x.id),ar=await sb.from('opportunity_applications').select('opportunity_id,status').eq('worker_id',session.user.id).in('opportunity_id',ids);
+ const rows=r.data||[];
+ if(!rows.length){grid.innerHTML='<div class="intro">No open opportunities right now. New opportunities will appear here when they become available.</div>';return}
+ const ids=rows.map(x=>x.id);
+ const ar=await sb.from('opportunity_applications').select('opportunity_id,status,worker_id').in('opportunity_id',ids);
  if(ar.error)throw ar.error;
- const mine=new Map((ar.data||[]).map(x=>[x.opportunity_id,x.status]));
- grid.innerHTML=r.data.map(x=>{const st=mine.get(x.id),disabled=!!st;return '<article class="card"><div class="title">'+esc(x.title)+'</div><div class="cat">'+esc(x.category||'General')+'</div><p class="desc">'+esc(x.description||'')+'</p><div class="meta"><span>Reward: '+Number(x.reward).toLocaleString('en-NG')+' credits</span><span>'+x.slots+' slot(s)</span></div><button class="btn" data-id="'+x.id+'" '+(disabled?'disabled':'')+'>'+ (st?('Application: '+esc(st)): 'Apply now')+'</button></article>'}).join('');
- document.querySelectorAll('.btn').forEach(b=>b.onclick=()=>apply(b,session.user.id))
+ const apps=ar.data||[],mine=new Map(),counts=new Map();
+ apps.forEach(a=>{
+   if(a.worker_id===session.user.id) mine.set(a.opportunity_id,a.status);
+   if(['pending','selected','completed'].includes(a.status)) counts.set(a.opportunity_id,(counts.get(a.opportunity_id)||0)+1);
+ });
+ const open=rows.filter(x=>(counts.get(x.id)||0)<Number(x.slots||0));
+ if(!open.length){grid.innerHTML='<div class="intro">All current opportunities have reached their available slots.</div>';return}
+ grid.innerHTML=open.map(x=>{
+   const st=mine.get(x.id),filled=counts.get(x.id)||0,deadline=x.application_deadline?new Date(x.application_deadline).toLocaleString('en-NG',{dateStyle:'medium',timeStyle:'short'}):'No deadline';
+   return '<article class="card"><div class="title">'+esc(x.title)+'</div><div class="cat">'+esc(x.category||'General')+'</div><p class="desc">'+esc(x.description||'No description provided.')+'</p><div class="meta"><span>Reward: '+money(x.reward)+' credits</span><span>'+Math.max(Number(x.slots)-filled,0)+' slot(s) left</span></div><div class="meta"><span>Deadline</span><span>'+esc(deadline)+'</span></div><button class="btn" data-id="'+x.id+'" '+(st?'disabled':'')+'>'+ (st?esc(statusLabel(st)):'Apply now')+'</button></article>'
+ }).join('');
+ document.querySelectorAll('.btn').forEach(b=>b.onclick=()=>apply(b,session.user.id));
 }
-async function apply(b,user){const message=prompt('Tell the promoter briefly why you are suitable for this opportunity:');if(message===null)return;b.disabled=true;b.textContent='Submitting…';const r=await sb.from('opportunity_applications').insert({opportunity_id:b.dataset.id,worker_id:user,message:message.trim()});if(r.error){msg.textContent=r.error.code==='23505'?'You already applied for this opportunity.':r.error.message;msg.style.color='#fda4af';b.disabled=false;b.textContent='Apply now';return}msg.textContent='Application submitted successfully ✓';load()}
+async function apply(b,user){
+ const message=prompt('Tell the promoter briefly why you are suitable for this opportunity:');
+ if(message===null)return;
+ if(!message.trim()){msg.textContent='Please enter a short message before applying.';msg.style.color='#fda4af';return}
+ b.disabled=true;b.textContent='Submitting…';
+ const r=await sb.from('opportunity_applications').insert({opportunity_id:b.dataset.id,worker_id:user,message:message.trim()});
+ if(r.error){
+   msg.textContent=r.error.code==='23505'?'You already applied for this opportunity.':r.error.message;
+   msg.style.color='#fda4af';b.disabled=false;b.textContent='Apply now';return;
+ }
+ msg.textContent='Application submitted successfully ✓';msg.style.color='#86efac';await load();
+}
 load().catch(e=>{console.error('Opportunities load error:',e);grid.innerHTML='<div class="intro">Unable to load opportunities. Please refresh.</div>'});
 </script></body></html>

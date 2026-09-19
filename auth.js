@@ -6,7 +6,7 @@ const SUPABASE_KEY="sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY";
 
 if(!window.supabase){console.error("Supabase library did not load.")}
 else{
- const supabaseClient=window.supabaseClient&&window.supabaseClient.auth?window.supabaseClient:window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'taskvexa-worker-auth'}});
+ const supabaseClient=window.supabaseClient&&window.supabaseClient.auth?window.supabaseClient:window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
  window.supabaseClient=supabaseClient;
  const msg=t=>{const el=document.getElementById("message");if(el)el.textContent=t;else console.log(t)};
 

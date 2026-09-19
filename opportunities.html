@@ -6,10 +6,9 @@ function money(v){return Number(v||0).toLocaleString('en-NG',{maximumFractionDig
 function statusLabel(s){return s==='selected'?'Selected':s==='completed'?'Completed':s==='rejected'?'Not selected':s==='withdrawn'?'Withdrawn':'Application pending'}
 async function load(){
  const session=await getSession(); if(!session?.user){location.href='login.html';return}
- const now=new Date().toISOString();
- const r=await sb.from('opportunities').select('id,title,description,category,reward,slots,application_deadline,created_at').eq('status','active').or('application_deadline.is.null,application_deadline.gt.'+now).order('created_at',{ascending:false});
+ const r=await sb.from('opportunities').select('id,title,description,category,reward,slots,application_deadline,created_at').eq('status','active').order('created_at',{ascending:false});
  if(r.error)throw r.error;
- const rows=r.data||[];
+ const rows=(r.data||[]).filter(x=>!x.application_deadline||new Date(x.application_deadline)>new Date());
  if(!rows.length){grid.innerHTML='<div class="intro">No open opportunities right now. New opportunities will appear here when they become available.</div>';return}
  const ids=rows.map(x=>x.id);
  const ar=await sb.from('opportunity_applications').select('opportunity_id,status,worker_id').in('opportunity_id',ids);
@@ -32,7 +31,9 @@ async function apply(b,user){
  if(message===null)return;
  if(!message.trim()){msg.textContent='Please enter a short message before applying.';msg.style.color='#fda4af';return}
  b.disabled=true;b.textContent='Submitting…';
- const r=await sb.from('opportunity_applications').insert({opportunity_id:b.dataset.id,worker_id:user,message:message.trim()});
+ const opp=await sb.from('opportunities').select('reward').eq('id',b.dataset.id).maybeSingle();
+ if(opp.error||!opp.data){msg.textContent='This opportunity is no longer available.';msg.style.color='#fda4af';b.disabled=false;b.textContent='Apply now';return}
+ const r=await sb.from('opportunity_applications').insert({opportunity_id:b.dataset.id,worker_id:user,message:message.trim(),reward_amount:opp.data.reward});
  if(r.error){
    msg.textContent=r.error.code==='23505'?'You already applied for this opportunity.':r.error.message;
    msg.style.color='#fda4af';b.disabled=false;b.textContent='Apply now';return;

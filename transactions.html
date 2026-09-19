@@ -30,9 +30,14 @@ function setError(message){state.className='error';state.innerHTML=esc(message)+
 async function load(){
  state.className='loading';state.textContent='Loading transactions...';list.innerHTML='';
  try{
-   const {data:{session},error:sessionError}=await sb.auth.getSession();
-   if(sessionError) throw sessionError;
-   if(!session?.user){location.href='login.html';return;}
+   let session=null;
+   for(let i=0;i<40&&!session;i++){
+     const r=await sb.auth.getSession();
+     if(r.error) throw r.error;
+     session=r.data?.session||null;
+     if(!session) await new Promise(r=>setTimeout(r,150));
+   }
+   if(!session?.user){location.replace('login.html');return;}
    const user=session.user;
    const {data,error}=await sb.from('wallet_transactions').select('id,user_id,amount,transaction_type,balance_before,balance_after,description,reference_id,created_at').eq('user_id',user.id).order('created_at',{ascending:false}).limit(200);
    if(error) throw error;

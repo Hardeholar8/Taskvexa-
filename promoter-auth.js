@@ -1,11 +1,5 @@
 // TaskVexa Promoter authentication — stable session guard 20260919f.
 (function(){
-  // Promoter access is intentionally disabled for now. The existing promoter code remains in place for later re-enablement.
-  const PROMOTER_ENABLED=false;
-  if(!PROMOTER_ENABLED){
-    window.location.replace('/register.html');
-    return;
-  }
   const SUPABASE_URL='https://dxtlnrthlpdaobnbazny.supabase.co';
   const SUPABASE_KEY='sb_publishable_UUFlTjQiT3osVMRNFYiNuA_UukQ-9kY';
   const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY,{

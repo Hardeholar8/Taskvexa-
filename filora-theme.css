@@ -48,10 +48,3 @@ button:active,.btn:active,.button:active{transform:translateY(1px)!important}
 html.tvx-light,body.light,.tvx-light .main,.tvx-light .content,.tvx-light .wrap,.tvx-light .card,.tvx-light .box,.tvx-light .panel{background:var(--filora-bg)!important;color:#f8fafc!important;color-scheme:dark!important}
 html.tvx-light *{color-scheme:dark!important}
 @media(max-width:800px){.tvx-dark .sidebar,.tvx-dark .side{z-index:100}.tvx-dark .content,.tvx-dark .wrap{padding-bottom:92px!important}}
-/* 2026-10: enlarge worker bottom-navigation controls for easier mobile tapping. */
-.tvx-dark nav.bottom,.tvx-dark .bottom{height:82px!important;padding-bottom:max(6px,env(safe-area-inset-bottom))!important}
-.tvx-dark nav.bottom a,.tvx-dark nav.bottom button,.tvx-dark .bottom a,.tvx-dark .bottom button{height:74px!important;padding:9px 3px 7px!important;font-size:12px!important;font-weight:700!important;gap:4px!important;border-radius:15px!important}
-.tvx-dark nav.bottom a b,.tvx-dark nav.bottom button i,.tvx-dark nav.bottom button b,.tvx-dark .bottom a b,.tvx-dark .bottom button i,.tvx-dark .bottom button b{font-size:28px!important;line-height:29px!important;margin-bottom:3px!important}
-.tvx-dark nav.bottom .plus,.tvx-dark .bottom .plus{flex-basis:66px!important;width:66px!important;height:66px!important;min-width:66px!important;margin:-25px 7px 0!important;font-size:31px!important}
-.tvx-dark nav.bottom .plus b:after,.tvx-dark .bottom .plus b:after{font-size:34px!important}
-@media(max-width:430px){.tvx-dark nav.bottom,.tvx-dark .bottom{height:80px!important}.tvx-dark nav.bottom a,.tvx-dark nav.bottom button,.tvx-dark .bottom a,.tvx-dark .bottom button{height:72px!important;font-size:11px!important}.tvx-dark nav.bottom .plus,.tvx-dark .bottom .plus{width:62px!important;height:62px!important;min-width:62px!important;margin-top:-23px!important}.tvx-dark nav.bottom a b,.tvx-dark nav.bottom button i,.tvx-dark nav.bottom button b,.tvx-dark .bottom a b,.tvx-dark .bottom button i,.tvx-dark .bottom button b{font-size:26px!important;line-height:27px!important}}
